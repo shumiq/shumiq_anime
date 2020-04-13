@@ -3,3 +3,18 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
+
+window.location.reload = jest.fn();
+
+beforeEach(() => {
+  expect.hasAssertions();
+  jest.resetAllMocks();
+});
+
+process.on('unhandledRejection', error => {
+  console.log('Unhandled Promise Rejection:', error);
+});
