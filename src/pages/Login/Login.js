@@ -1,13 +1,13 @@
 import React from 'react';
 import history from '../../history';
 import GoogleLogin from 'react-google-login';
-import {setLocalStorage} from '../../utils/localstorage'
+import { setLocalStorage } from '../../utils/localstorage';
 
-const GoogleResponse = (response) => {
+const GoogleResponse = response => {
     setLocalStorage('user', response.profileObj);
     setLocalStorage('accessToken', response.accessToken);
     history.push('/');
-}
+};
 
 const Login = () => {
     return (
@@ -18,6 +18,6 @@ const Login = () => {
             isSignedIn={true}
         />
     );
-}
+};
 
 export default Login;
