@@ -1,35 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
+import { onFirebaseDatabaseUpdate } from '../../utils/firebase';
+import { getLocalStorage } from '../../utils/localstorage';
 
 const Home = () => {
-  //   const [user, setUser] = useState('');
-  //   const [accessToken, setAccessToken] = useState('');
+    const [database, setDatabase] = useState(JSON.parse(getLocalStorage('database')));
 
-  //   const fetchAlbums = async () => {
-  //     const albums = await PhotoApi.getAlbums();
-  //     console.log(albums);
-  //   };
+    onFirebaseDatabaseUpdate(db => {
+        setDatabase(db);
+    });
 
-  //   useEffect(() => {
-  //     let user = getUser();
-  //     setUser(user);
-  //     let accessToken = getAccessToken();
-  //     setAccessToken(accessToken);
-  //     fetchAlbums();
-  //   }, []);
+    useEffect(() => { }, [database]);
 
-  return (
-    <div className="Home">
-      <p>this is a home1</p>
-      <p>this is a home2</p>
-      <p>this is a home3</p>
-      <p>this is a home4</p>
-      <p>this is a home5</p>
-      <p>this is a home6</p>
-      <p>this is a home7</p>
-      <p>this is a home8</p>
-    </div>
-  );
+    return (
+        <div className="Home">
+            {database?.animelist?.map(anime =>
+                anime !== null &&
+                (<p key={anime?.key}>{anime?.title}</p>)
+            )}
+        </div>
+    );
 };
 
 export default Home;
