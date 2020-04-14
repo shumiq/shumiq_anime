@@ -1,6 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const SeasonEnum = {
+    '1': 'Winter',
+    '2': 'Spring',
+    '3': 'Summer',
+    '4': 'Fall',
+    'Winter': '1',
+    'Spring': '2',
+    'Summer': '3',
+    'Fall': '4'
+};
+
 const AnimeCard = props => {
     const anime = props.anime;
     return (
@@ -41,7 +52,7 @@ const AnimeCard = props => {
                             </tr>
                             <tr>
                                 <td className="text-left px-3"><small>Season</small></td>
-                                <td className="text-right px-3"><small>season</small></td>
+                                <td className="text-right px-3"><small>{anime.year} {SeasonEnum[anime.season.toString()]}</small></td>
                             </tr>
                             <tr className="adminonly">
                                 <td className="text-left px-3"><small>View</small></td>
