@@ -21,8 +21,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-firebase.analytics();
-
 firebase.database().ref().on('value', function (snapshot) {
     let database = snapshot.val();
     setLocalStorage('database', JSON.stringify(database));

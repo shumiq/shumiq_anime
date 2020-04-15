@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { SeasonEnum } from '../../utils/enum'
 
 const AnimeCard = props => {
@@ -68,9 +67,7 @@ const AnimeCard = props => {
                 <div className="card-footer p-1">
                     <div className="d-flex justify-content-around w-auto">
                         <button className="btn btn-outline-secondary disabled h-auto border-0" type="button">
-                            <Link to=''>
-                                <i className="material-icons align-middle">folder</i>
-                            </Link>
+                            <i className="material-icons align-middle">folder</i>
                         </button>
 
                         {anime.url === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.url} target='blank'>
