@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './Home.css';
 import { onFirebaseDatabaseUpdate } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import AnimeCard from '../../components/Card/AnimeCard'
