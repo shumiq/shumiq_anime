@@ -8,8 +8,9 @@ const defaultFilter = {
 }
 
 export const AnimeFilter = (animelist, inputFilter = defaultFilter) => {
+    animelist = animelist.filter(anime => anime?.key);
     let result = [];
-    const filter = Object.assign(defaultFilter,inputFilter);
+    const filter = Object.assign(defaultFilter, inputFilter);
 
     // Filter by Season
     const seasonList = SeasonList(animelist);
