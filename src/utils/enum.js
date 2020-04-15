@@ -8,3 +8,14 @@ export const SeasonEnum = {
     'Summer': '3',
     'Fall': '4'
 };
+
+export const FilterEnum = {
+    ALL_SEASON: 0,
+    LATEST_SEASON: 1,
+    ALL_ANIME: 2,
+    ONLY_UNSEEN: 3,
+    ONLY_UNFINISH: 4,
+    ONLY_FINISH: 5,
+    SORT_BY_SEASON: 6,
+    SORT_BY_SCORE: 7
+}
