@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { onFirebaseDatabaseUpdate } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import AnimeCard from '../../components/Card/AnimeCard'
-import { AnimeFilter } from '../../components/Card/AnimeCard.filter'
+import { AnimeFilter } from './Anime.filter'
 
-const Home = () => {
+const Anime = () => {
     const [database, setDatabase] = useState(JSON.parse(getLocalStorage('database')));
     const [animelist, setAnimeList] = useState(database?.animelist);
     const [currentPageAnimeList, setCurrentPageAnimeList] = useState(AnimeFilter(animelist));
+    const [filter, setFilter] = useState({});
 
     onFirebaseDatabaseUpdate(db => {
         setDatabase(db);
@@ -15,11 +16,11 @@ const Home = () => {
     });
 
     useEffect(() => {
-        if (animelist) setCurrentPageAnimeList(AnimeFilter(animelist));
-    }, [animelist]);
+        if (animelist) setCurrentPageAnimeList(AnimeFilter(animelist, filter));
+    }, [animelist, filter]);
 
     return (
-        <div className="Home">
+        <div className="Anime">
             <div className="container p-0 my-5">
                 <div className="row text-center w-100 m-0">
                     {currentPageAnimeList.map(anime =>
@@ -32,4 +33,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Anime;

@@ -1,16 +1,16 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import App from './App';
-import Home from './Home/Home';
+import Anime from './Anime/Anime';
 
-jest.mock('./Home/Home');
+jest.mock('./Anime/Anime');
 
 describe('router should redirect to correct path', () => {
 
-    it('should redirect to homepage as default', () => {
-        Home.mockReturnValue(null);
+    it('should redirect to anime as default', () => {
+        Anime.mockReturnValue(null);
         const wrapper = mount(<App />);
-        expect(wrapper.find(Home)).toHaveLength(1);
+        expect(wrapper.find(Anime)).toHaveLength(1);
     });
 
 });

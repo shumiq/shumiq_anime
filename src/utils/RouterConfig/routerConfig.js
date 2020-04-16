@@ -1,11 +1,11 @@
-import Home from '../../pages/Home/Home';
+import Anime from '../../pages/Anime/Anime';
 import Login from '../../pages/Login/Login';
 
 export const ROUTER_CONFIG = [
     {
         path: '/',
         exact: true,
-        component: Home,
+        component: Anime,
     },
     {
         path: '/login',

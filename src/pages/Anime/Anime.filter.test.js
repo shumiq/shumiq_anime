@@ -1,4 +1,4 @@
-import { AnimeFilter, SeasonList } from './AnimeCard.filter'
+import { AnimeFilter, SeasonList } from './Anime.filter'
 import mockDatabase from '../../mock/database'
 import { FilterEnum } from '../../utils/enum'
 
