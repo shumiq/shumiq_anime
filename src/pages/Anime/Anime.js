@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { onFirebaseDatabaseUpdate } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import AnimeCard from '../../components/Card/AnimeCard'
-import { AnimeFilter } from './Anime.filter'
+import Filterbar from '../../components/Filterbar/Filterbar'
+import { AnimeFilter, SeasonList } from './Anime.filter'
 
 const Anime = () => {
     const [database, setDatabase] = useState(JSON.parse(getLocalStorage('database')));
@@ -15,9 +16,12 @@ const Anime = () => {
         setAnimeList(db?.animelist);
     });
 
-    useEffect(() => {
+    useEffect(() => {}, [currentPageAnimeList]);
+
+    const updateFilter = newFilter => {
+        setFilter(newFilter);
         if (animelist) setCurrentPageAnimeList(AnimeFilter(animelist, filter));
-    }, [animelist, filter]);
+    }
 
     return (
         <div className="Anime">
@@ -29,6 +33,9 @@ const Anime = () => {
                     )}
                 </div>
             </div>
+            {animelist && SeasonList(animelist) &&
+                < Filterbar filter={filter} seasonlist={SeasonList(animelist)} setFilter={updateFilter} />
+            }
         </div>
     );
 };

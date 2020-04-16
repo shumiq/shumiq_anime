@@ -1,6 +1,6 @@
 import { FilterEnum } from '../../utils/enum'
 
-const defaultFilter = {
+export const defaultFilter = {
     season: FilterEnum.LATEST_SEASON,
     category: FilterEnum.ALL_ANIME,
     keyword: '',
@@ -53,6 +53,7 @@ export const AnimeFilter = (animelist, inputFilter = defaultFilter) => {
 }
 
 export const SeasonList = animelist => {
+    animelist = animelist.filter(anime => anime?.key);
     let seasonList = {};
     animelist.forEach(anime => {
         const season = anime.year + "," + anime.season;
