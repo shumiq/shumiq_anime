@@ -14,19 +14,19 @@ const Filterbar = props => {
         return year + " " + SeasonEnum[seasonNum];
     }
 
-    const haveNextSeason = Object.keys(seasonList).sort().pop() === currentSeason ? 'invisible' : '';
+    const hasNextSeason = Object.keys(seasonList).sort().pop() === currentSeason ? 'invisible' : '';
 
     const havePreviousSeason = Object.keys(seasonList).sort().reverse().pop() === currentSeason ? 'invisible' : '';
 
-    const nextSeason = () => {
-        if (haveNextSeason === 'invisible') return;
+    const gotoNextSeason = () => {
+        if (hasNextSeason === 'invisible') return;
         const nextSeasonIndex = Object.keys(seasonList).sort().findIndex(season => season === currentSeason)+1;
         const nextSeason = Object.keys(seasonList).sort()[nextSeasonIndex];
         filter.season = nextSeason;
         setFilter(filter);
     }
 
-    const previousSeason = () => {
+    const gotoPreviousSeason = () => {
         if (havePreviousSeason === 'invisible') return;
         const previousSeasonIndex = Object.keys(seasonList).sort().findIndex(season => season === currentSeason)-1;
         const previousSeason = Object.keys(seasonList).sort()[previousSeasonIndex];
@@ -38,7 +38,7 @@ const Filterbar = props => {
         <div className="Filterbar">
             <nav className="navbar navbar-expand-sm fixed-bottom p-0">
                 <div className="text-center w-100">
-                    <button className={"btn btn-secondary p-0 pt-1 mb-2 mr-2 mt-2 " + haveNextSeason} type="button" style={{ width: '48px', height: '48px' }} onClick={nextSeason} id="next-season">
+                    <button className={"btn btn-secondary p-0 pt-1 mb-2 mr-2 mt-2 " + hasNextSeason} type="button" style={{ width: '48px', height: '48px' }} onClick={gotoNextSeason} id="next-season">
                         <i className="material-icons">keyboard_arrow_left</i>
                     </button>
 
@@ -48,7 +48,7 @@ const Filterbar = props => {
                         {seasonToText(currentSeason)}
                     </button>
 
-                    <button className={"btn btn-secondary p-0 pt-1 mb-2 mr-2 mt-2 " + havePreviousSeason} type="button" style={{ width: '48px', height: '48px' }} onClick={previousSeason} id="previous-season">
+                    <button className={"btn btn-secondary p-0 pt-1 mb-2 mr-2 mt-2 " + havePreviousSeason} type="button" style={{ width: '48px', height: '48px' }} onClick={gotoPreviousSeason} id="previous-season">
                         <i className="material-icons">keyboard_arrow_right</i>
                     </button>
                 </div>
