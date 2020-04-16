@@ -38,7 +38,7 @@ const Filterbar = props => {
         <div className="Filterbar">
             <nav className="navbar navbar-expand-sm fixed-bottom p-0">
                 <div className="text-center w-100">
-                    <button className={"btn btn-secondary p-0 pt-1 mb-2 mr-2 mt-2 " + haveNextSeason} type="button" style={{ width: '48px', height: '48px' }} onClick={nextSeason}>
+                    <button className={"btn btn-secondary p-0 pt-1 mb-2 mr-2 mt-2 " + haveNextSeason} type="button" style={{ width: '48px', height: '48px' }} onClick={nextSeason} id="next-season">
                         <i className="material-icons">keyboard_arrow_left</i>
                     </button>
 
@@ -48,7 +48,7 @@ const Filterbar = props => {
                         {seasonToText(currentSeason)}
                     </button>
 
-                    <button className={"btn btn-secondary p-0 pt-1 mb-2 mr-2 mt-2 " + havePreviousSeason} type="button" style={{ width: '48px', height: '48px' }} onClick={previousSeason}>
+                    <button className={"btn btn-secondary p-0 pt-1 mb-2 mr-2 mt-2 " + havePreviousSeason} type="button" style={{ width: '48px', height: '48px' }} onClick={previousSeason} id="previous-season">
                         <i className="material-icons">keyboard_arrow_right</i>
                     </button>
                 </div>
