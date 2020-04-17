@@ -1,4 +1,4 @@
-import { FilterEnum } from '../../utils/enum'
+import { FilterEnum, SeasonEnum } from '../../utils/enum'
 
 export const defaultFilter = {
     season: FilterEnum.LATEST_SEASON,
@@ -7,10 +7,16 @@ export const defaultFilter = {
     orderby: FilterEnum.SORT_BY_SEASON
 }
 
-export const AnimeFilter = (animelist, inputFilter = defaultFilter) => {
+export const AnimeFilter = (animelist, inputFilter = {}) => {
     animelist = animelist.filter(anime => anime?.key);
     let result = [];
-    const filter = Object.assign(defaultFilter, inputFilter);
+    const filter = JSON.parse(JSON.stringify(defaultFilter));
+    Object.assign(filter, inputFilter);
+
+    // Replace season to all season when..
+    if (filter.category === FilterEnum.ONLY_UNFINISH) filter.season = FilterEnum.ALL_SEASON;
+    if (filter.category === FilterEnum.ONLY_UNSEEN) filter.season = FilterEnum.ALL_SEASON;
+    if (filter.keyword.trim().length > 0) filter.season = FilterEnum.ALL_SEASON;
 
     // Filter by Season
     const seasonList = SeasonList(animelist);
@@ -32,6 +38,24 @@ export const AnimeFilter = (animelist, inputFilter = defaultFilter) => {
     }
     if (filter.category === FilterEnum.ONLY_FINISH) {
         result = result.filter(anime => anime.all_episode === anime.download);
+    }
+
+    // Filter by Keyword
+    if (filter.keyword.trim().length > 0) {
+        result = result.filter(anime => {
+            const animeKeywords = [
+                anime.title,
+                anime.studio,
+                anime.genres,
+                anime.year,
+                SeasonEnum[anime.season]
+            ];
+            let isInclude = true;
+            filter.keyword.trim().split(' ').forEach(keyword => {
+                if (!animeKeywords.find(k => k.includes(keyword))) isInclude = false;
+            })
+            return isInclude;
+        });
     }
 
     // Sort Result

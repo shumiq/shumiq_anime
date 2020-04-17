@@ -40,30 +40,35 @@ describe('Anime Filter', () => {
         expect(result.length).toBe(2);
     });
 
-    it('should return only unseen anime', () => {
+    it('should return only unseen anime of all season', () => {
         const result = AnimeFilter(mockAnimeList, {
-            season: FilterEnum.ALL_SEASON,
             category: FilterEnum.ONLY_UNSEEN
         });
         expect(result[0]).toStrictEqual(mockAnimeList[0]);
         expect(result.length).toBe(1);
     });
 
-    it('should return only unfinish anime', () => {
+    it('should return only unfinish anime of all season', () => {
         const result = AnimeFilter(mockAnimeList, {
-            season: FilterEnum.ALL_SEASON,
             category: FilterEnum.ONLY_UNFINISH
         });
         expect(result[0]).toStrictEqual(mockAnimeList[0]);
         expect(result.length).toBe(1);
     });
 
-    it('should return only finish anime', () => {
+    it('should return only finish anime of current season', () => {
         const result = AnimeFilter(mockAnimeList, {
-            season: FilterEnum.ALL_SEASON,
             category: FilterEnum.ONLY_FINISH
         });
         expect(result[0]).toStrictEqual(mockAnimeList[1]);
+        expect(result.length).toBe(1);
+    });
+
+    it('should return only anime with keyword for all season', () => {
+        const result = AnimeFilter(mockAnimeList, {
+            keyword: 'Princess Fantasy Winter'
+        });
+        expect(result[0]).toStrictEqual(mockAnimeList[0]);
         expect(result.length).toBe(1);
     });
 });
