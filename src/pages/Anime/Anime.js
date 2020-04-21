@@ -16,7 +16,9 @@ const Anime = () => {
         setAnimeList(db?.animelist);
     });
 
-    useEffect(() => {}, [currentPageAnimeList]);
+    useEffect(() => {
+        setCurrentPageAnimeList(AnimeFilter(animelist, filter));
+    }, [animelist,filter]);
 
     const updateFilter = newFilter => {
         setFilter(newFilter);
