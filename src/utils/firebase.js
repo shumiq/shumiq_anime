@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import { setLocalStorage } from './localstorage';
+import { setLocalStorage, getLocalStorage } from './localstorage';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyC44si2Y_SRkWS8xvpODaLAm7GgMT35Xl4',
@@ -24,6 +24,12 @@ firebase.initializeApp(firebaseConfig);
 firebase.database().ref().on('value', function (snapshot) {
     let database = snapshot.val();
     setLocalStorage('database', JSON.stringify(database));
+    databaseOnUpdate(database);
+});
+
+firebase.auth().onAuthStateChanged(function (currentUser) {
+    let database = getLocalStorage('database');
+    if (typeof database === 'string') database = JSON.parse(database);
     databaseOnUpdate(database);
 });
 
