@@ -23,13 +23,12 @@ firebase.initializeApp(firebaseConfig);
 
 firebase.database().ref().on('value', function (snapshot) {
     let database = snapshot.val();
-    setLocalStorage('database', JSON.stringify(database));
+    setLocalStorage('database', database);
     databaseOnUpdate(database);
 });
 
 firebase.auth().onAuthStateChanged(function (currentUser) {
-    let database = getLocalStorage('database');
-    if (typeof database === 'string') database = JSON.parse(database);
+    const database = getLocalStorage('database');
     databaseOnUpdate(database);
 });
 

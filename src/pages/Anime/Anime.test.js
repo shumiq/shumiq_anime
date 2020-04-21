@@ -8,7 +8,7 @@ jest.mock('../../utils/localstorage');
 
 describe('<Anime />', () => {
     it('should show latest season anime cards', () => {
-        getLocalStorage.mockReturnValue(JSON.stringify(mockDatabase));
+        getLocalStorage.mockReturnValue(mockDatabase);
         const wrapper = shallow(<Anime />);
         expect(wrapper.find('AnimeCard')).toHaveLength(1);
     });

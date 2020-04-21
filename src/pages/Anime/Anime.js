@@ -6,7 +6,7 @@ import Filterbar from '../../components/Filterbar/Filterbar'
 import { AnimeFilter, SeasonList } from './Anime.filter'
 
 const Anime = () => {
-    const [database, setDatabase] = useState(JSON.parse(getLocalStorage('database')));
+    const [database, setDatabase] = useState(getLocalStorage('database'));
     const [animelist, setAnimeList] = useState(database?.animelist);
     const [currentPageAnimeList, setCurrentPageAnimeList] = useState(AnimeFilter(animelist));
     const [filter, setFilter] = useState({});

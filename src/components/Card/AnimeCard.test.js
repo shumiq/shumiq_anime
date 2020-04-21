@@ -71,7 +71,6 @@ describe('<AnimeCard />', () => {
         const mockAnime = mockDatabase.animelist[1];
         const wrapper = mount(<AnimeCard anime={mockAnime} />);
         const googlePhotoButton = wrapper.find('.btn').at(wrapper.find('.btn').length - 2);
-        console.log(googlePhotoButton.html());
         expect(googlePhotoButton.find('.disabled').length).toBe(1);
     });
 
