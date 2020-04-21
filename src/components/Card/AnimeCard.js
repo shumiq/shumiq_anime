@@ -1,5 +1,6 @@
 import React from 'react';
 import { SeasonEnum } from '../../utils/enum'
+import { IsAdmin } from '../../utils/userDetail';
 
 const AnimeCard = props => {
     const anime = props.anime;
@@ -15,9 +16,11 @@ const AnimeCard = props => {
                         <button className="btn btn-outline-light border-0 p-0 m-0" style={{ height: '24px' }}>
                             <i className="material-icons">share</i>
                         </button>
-                        <button className="btn btn-outline-light border-0 p-0 m-0 ml-3" style={{ height: '24px' }}>
-                            <i className="material-icons">edit</i>
-                        </button>
+                        {IsAdmin() &&
+                            <button className="btn btn-outline-light border-0 p-0 m-0 ml-3" style={{ height: '24px' }}>
+                                <i className="material-icons">edit</i>
+                            </button>
+                        }
                     </div>
                 </div>
                 <div className="card-header position-absolute w-100 text-left p-2 h-auto pr-5"
@@ -43,20 +46,22 @@ const AnimeCard = props => {
                                 <td className="text-left px-3"><small>Season</small></td>
                                 <td className="text-right px-3"><small>{anime.year} {SeasonEnum[anime.season.toString()]}</small></td>
                             </tr>
-                            <tr className="adminonly">
-                                <td className="text-left px-3"><small>View</small></td>
-                                <td className="text-right px-3">
-                                    <small>{anime.view}/{anime.download}</small>
-                                    {anime.view.toString() !== anime.download.toString() &&
-                                        <b className="text-primary" style={{ cursor: 'pointer' }}>+</b>
-                                    }
-                                </td>
-                            </tr>
+                            {IsAdmin() &&
+                                <tr>
+                                    <td className="text-left px-3"><small>View</small></td>
+                                    <td className="text-right px-3">
+                                        <small>{anime.view}/{anime.download}</small>
+                                        {anime.view.toString() !== anime.download.toString() &&
+                                            <b className="text-primary" style={{ cursor: 'pointer' }}>+</b>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                             <tr>
                                 <td className="text-left px-3"><small>Download</small></td>
                                 <td className="text-right px-3">
                                     <small>{anime.download}/{anime.all_episode}</small>
-                                    {anime.download.toString() !== anime.all_episode.toString() &&
+                                    {IsAdmin() && anime.download.toString() !== anime.all_episode.toString() &&
                                         <b className="text-primary" style={{ cursor: 'pointer' }}>+</b>
                                     }
                                 </td>
@@ -66,9 +71,11 @@ const AnimeCard = props => {
                 </div>
                 <div className="card-footer p-1">
                     <div className="d-flex justify-content-around w-auto">
-                        <button className="btn btn-outline-secondary disabled h-auto border-0" type="button">
-                            <i className="material-icons align-middle">folder</i>
-                        </button>
+                        {IsAdmin() &&
+                            <button className="btn btn-outline-secondary disabled h-auto border-0" type="button">
+                                <i className="material-icons align-middle">folder</i>
+                            </button>
+                        }
 
                         {anime.url === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.url} target='blank'>
                             <i className="material-icons align-middle">open_in_browser</i>
@@ -77,10 +84,10 @@ const AnimeCard = props => {
                             <i className="material-icons align-middle">open_in_browser</i>
                         </a>}
 
-                        {anime.download_url === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.download_url} target='blank'>
+                        {IsAdmin() && anime.download_url === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.download_url} target='blank'>
                             <i className="material-icons align-middle">library_add</i>
                         </a>}
-                        {anime.download_url !== '' && <a className="btn btn-outline-light h-auto border-0" role="button" href={anime.download_url} target='blank'>
+                        {IsAdmin() && anime.download_url !== '' && <a className="btn btn-outline-light h-auto border-0" role="button" href={anime.download_url} target='blank'>
                             <i className="material-icons align-middle">library_add</i>
                         </a>}
                     </div>
