@@ -2,6 +2,7 @@ import React from 'react';
 import { getRouterConfig } from '../utils/router';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
+import { removeLocalStorage } from '../utils/localstorage';
 
 const App = () => {
     const getRouters = data => {
@@ -14,6 +15,9 @@ const App = () => {
             return <Route key={index} {...props} />;
         });
     };
+
+    removeLocalStorage('user');
+    removeLocalStorage('accessToken');
 
     return (
         <div className="app">

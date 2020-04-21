@@ -32,3 +32,14 @@ let databaseOnUpdate = () => { };
 export const onFirebaseDatabaseUpdate = callback => {
     databaseOnUpdate = callback;
 };
+
+export const SignIn = tokenId => {
+    const creds = firebase.auth.GoogleAuthProvider.credential(tokenId);
+    firebase.auth().signInWithCredential(creds).then(user => {
+        //console.log(user);
+    });
+}
+
+export const SignOut = () => {
+    firebase.auth().signOut();
+}

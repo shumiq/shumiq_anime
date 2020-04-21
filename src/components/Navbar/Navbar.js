@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Login from '../Login/Login';
 
 const Navbar = () => {
     return (
@@ -31,7 +32,7 @@ const Navbar = () => {
                     </ul>
                     <ul className="navbar-nav text-center ml-auto">
                         <li className="nav-item">
-                            <Link className="nav-link btn" to="/login">Login</Link>
+                            <Login />
                         </li>
                     </ul>
                 </div>
