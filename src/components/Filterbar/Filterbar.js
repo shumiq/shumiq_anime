@@ -1,6 +1,7 @@
 import React from 'react';
 import { SeasonEnum, FilterEnum } from '../../utils/enum'
 import { defaultFilter } from '../../pages/Anime/Anime.filter'
+import { IsAdmin } from '../../utils/userDetail';
 
 const Filterbar = props => {
     const filter = Object.assign(defaultFilter, props.filter);
@@ -10,7 +11,7 @@ const Filterbar = props => {
         Object.keys(seasonList).sort().pop() : filter.season;
 
     const seasonToText = season => {
-        if(season.toString() === FilterEnum.ALL_SEASON.toString()) return "All Season";
+        if (season.toString() === FilterEnum.ALL_SEASON.toString()) return "All Season";
         let [year, seasonNum] = season.split(',');
         return year + " " + SeasonEnum[seasonNum];
     }
@@ -67,8 +68,8 @@ const Filterbar = props => {
                                 <div className="col m-2" style={{ minWidth: '200px' }}>
                                     <select className="form-control" id="filter-category" onChange={changeCategory} value={filter.category}>
                                         <option value={FilterEnum.ALL_ANIME}>All Anime</option>
-                                        <option value={FilterEnum.ONLY_UNSEEN}>Only Unseen</option>
-                                        <option value={FilterEnum.ONLY_UNFINISH}>Only Unfinished</option>
+                                        {IsAdmin() && <option value={FilterEnum.ONLY_UNSEEN}>Only Unseen</option>}
+                                        {IsAdmin() && <option value={FilterEnum.ONLY_UNFINISH}>Only Unfinished</option>}
                                         <option value={FilterEnum.ONLY_FINISH}>Only Finished</option>
                                     </select>
                                 </div>
