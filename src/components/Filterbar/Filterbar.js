@@ -87,7 +87,7 @@ const Filterbar = props => {
                                     </select>
                                 </div>
                                 <div className="col m-2 w-auto" style={{ minWidth: '200px' }}>
-                                    <input type="text" className="form-control" id="filter-text" placeholder="Search..." onKeyUp={changeKey} />
+                                    <input type="text" className="form-control" id="filter-text" placeholder="Search..." onKeyUp={changeKey} defaultValue={filter.keyword} />
                                 </div>
                             </div>
                         </div>
