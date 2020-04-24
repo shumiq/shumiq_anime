@@ -6,18 +6,25 @@ const EditAnimePopup = props => {
     const anime = props.anime;
     let state = JSON.parse(JSON.stringify(anime));
     const closePopup = () => props.setShow(false);
-    const saveAnimeData = () => {
+    const saveAnime = () => {
         SaveAnime(state.key, state);
         closePopup();
     };
+    const deleteAnime = () => {
+        // eslint-disable-next-line no-restricted-globals
+        if (confirm('Do you want to delete "' + anime.title + '" ?')) {
+            SaveAnime(state.key, null);
+            closePopup();
+        }
+    }
     const updateFormData = (event) => {
         state[event.target.name] = event.target.value;
     }
     return (
         <div className="EditAnimePopup">
-            <Modal show={props.show} centered backdrop={true} keyboard={true} animetion={true} onHide={closePopup}>
+            <Modal show={props.show} centered backdrop={true} keyboard={true} animation={true} onHide={closePopup}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit {anime.title}</Modal.Title>
+                    <Modal.Title>Edit (#{anime.key}) {anime.title}</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
@@ -91,8 +98,8 @@ const EditAnimePopup = props => {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <button type="button" className="btn btn-primary" onClick={saveAnimeData}>Save</button>
-                    <button type="button" className="btn btn-primary">Delete</button>
+                    <button type="button" className="btn btn-primary" onClick={saveAnime}>Save</button>
+                    <button type="button" className="btn btn-primary" onClick={deleteAnime}>Delete</button>
                     <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={closePopup}>Close</button>
                 </Modal.Footer>
             </Modal>

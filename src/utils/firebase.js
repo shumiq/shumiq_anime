@@ -50,7 +50,5 @@ export const SignOut = () => {
 }
 
 export const SaveAnime = (key, anime) => {
-    const database = getLocalStorage('database');
-    let original = JSON.parse(JSON.stringify(database.animelist[key]));
-    firebase.database().ref('animelist/' + key).set(Object.assign(original, anime));
+    firebase.database().ref('animelist/' + key).set(anime);
 }
