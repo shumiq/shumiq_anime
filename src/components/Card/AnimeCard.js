@@ -2,10 +2,16 @@ import React, { useState } from 'react';
 import { SeasonEnum } from '../../utils/enum'
 import { IsAdmin } from '../../utils/userDetail';
 import EditAnimePopup from '../../components/Popup/EditAnimePopup';
+import { SaveAnime } from '../../utils/firebase';
 
 const AnimeCard = props => {
     const anime = props.anime;
     const [editPopup, setEditPopup] = useState(false)
+    const increase = field => {
+        let animeCopy = JSON.parse(JSON.stringify(anime));
+        animeCopy[field] = parseInt(animeCopy[field]) + 1;
+        SaveAnime(anime.key, animeCopy);
+    }
     return (
         <div className="anime-card col-12 col-sm-6 col-md-6 col-lg-4 p-3">
             <div className="card">
@@ -54,7 +60,7 @@ const AnimeCard = props => {
                                     <td className="text-right px-3">
                                         <small>{anime.view}/{anime.download}</small>
                                         {anime.view.toString() !== anime.download.toString() &&
-                                            <b className="text-primary" style={{ cursor: 'pointer' }}>+</b>
+                                            <b className="text-primary" style={{ cursor: 'pointer' }} onClick={() => increase('view')}>+</b>
                                         }
                                     </td>
                                 </tr>
@@ -64,7 +70,7 @@ const AnimeCard = props => {
                                 <td className="text-right px-3">
                                     <small>{anime.download}/{anime.all_episode}</small>
                                     {IsAdmin() && anime.download.toString() !== anime.all_episode.toString() &&
-                                        <b className="text-primary" style={{ cursor: 'pointer' }}>+</b>
+                                        <b className="text-primary" style={{ cursor: 'pointer' }} onClick={() => increase('download')}>+</b>
                                     }
                                 </td>
                             </tr>
