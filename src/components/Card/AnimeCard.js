@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SeasonEnum } from '../../utils/enum'
 import { IsAdmin } from '../../utils/userDetail';
+import EditAnimePopup from '../../components/Popup/EditAnimePopup';
 
 const AnimeCard = props => {
     const anime = props.anime;
+    const [editPopup, setEditPopup] = useState(false)
     return (
         <div className="anime-card col-12 col-sm-6 col-md-6 col-lg-4 p-3">
             <div className="card">
@@ -17,7 +19,7 @@ const AnimeCard = props => {
                             <i className="material-icons">share</i>
                         </button>
                         {IsAdmin() &&
-                            <button className="btn btn-outline-light border-0 p-0 m-0 ml-3" style={{ height: '24px' }}>
+                            <button className="btn btn-outline-light border-0 p-0 m-0 ml-3" style={{ height: '24px' }} onClick={() => setEditPopup(true)}>
                                 <i className="material-icons">edit</i>
                             </button>
                         }
@@ -93,6 +95,7 @@ const AnimeCard = props => {
                     </div>
                 </div>
             </div>
+            {editPopup && <EditAnimePopup anime={anime} show={editPopup} setShow={setEditPopup} />}
         </div >
     );
 }
