@@ -1,19 +1,21 @@
 import React from 'react';
 import Modal from "react-bootstrap/Modal";
+import { SaveAnime } from '../../utils/firebase';
 
 const EditAnimePopup = props => {
     const anime = props.anime;
     let state = JSON.parse(JSON.stringify(anime));
     const closePopup = () => props.setShow(false);
     const saveAnimeData = () => {
-        console.log(state);
+        SaveAnime(state.key, state);
+        closePopup();
     };
     const updateFormData = (event) => {
         state[event.target.name] = event.target.value;
     }
     return (
         <div className="EditAnimePopup">
-            <Modal show={props.show} centered backdrop={true} keyboard={true} onHide={closePopup}>
+            <Modal show={props.show} centered backdrop={true} keyboard={true} animetion={true} onHide={closePopup}>
                 <Modal.Header closeButton>
                     <Modal.Title>Edit {anime.title}</Modal.Title>
                 </Modal.Header>

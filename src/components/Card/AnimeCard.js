@@ -95,7 +95,7 @@ const AnimeCard = props => {
                     </div>
                 </div>
             </div>
-            {editPopup && <EditAnimePopup anime={anime} show={editPopup} setShow={setEditPopup} />}
+            <EditAnimePopup anime={anime} show={editPopup} setShow={setEditPopup} />
         </div >
     );
 }

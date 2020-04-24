@@ -48,3 +48,9 @@ export const SignIn = tokenId => {
 export const SignOut = () => {
     firebase.auth().signOut();
 }
+
+export const SaveAnime = (key, anime) => {
+    const database = getLocalStorage('database');
+    let original = JSON.parse(JSON.stringify(database.animelist[key]));
+    firebase.database().ref('animelist/' + key).set(Object.assign(original, anime));
+}
