@@ -3,6 +3,7 @@ import { SeasonEnum } from '../../utils/enum'
 import { IsAdmin } from '../../utils/userDetail';
 import EditAnimePopup from '../../components/Popup/EditAnimePopup';
 import { SaveAnime } from '../../utils/firebase';
+import AnilistApi from '../../api/anilist';
 
 const AnimeCard = props => {
     const anime = props.anime;
@@ -11,6 +12,10 @@ const AnimeCard = props => {
         let animeCopy = JSON.parse(JSON.stringify(anime));
         animeCopy[field] = parseInt(animeCopy[field]) + 1;
         SaveAnime(anime.key, animeCopy);
+    }
+    const animeInfo = async () => {
+        const response = await AnilistApi.getAnime(anime.title);
+        console.log(response);
     }
     return (
         <div className="anime-card col-12 col-sm-6 col-md-6 col-lg-4 p-3">
@@ -38,7 +43,7 @@ const AnimeCard = props => {
                         <small className="text-white-50">{anime.genres}</small>
                     </p>
                     <div className="position-absolute" style={{ top: 'calc(50% - 12px)', right: '10px' }}>
-                        <button className="btn btn-outline-light border-0 p-0 m-0" style={{ height: '24px' }}>
+                        <button className="btn btn-outline-light border-0 p-0 m-0" style={{ height: '24px' }} onClick={animeInfo}>
                             <i className="material-icons">info_outline</i>
                         </button>
                     </div>
