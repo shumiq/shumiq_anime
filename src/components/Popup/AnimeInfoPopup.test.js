@@ -16,7 +16,7 @@ const mockInfo = {
     },
     "season": "SPRING",
     "description": "desc",
-    "startDate": { "year": 2020 },
+    "startDate": { "year": "2020" },
     "episodes": null,
     "source": "VIDEO_GAME",
     "coverImage": {
@@ -41,33 +41,56 @@ const mockInfo = {
 
 describe('<AnimeInfoPopup />', () => {
     it('should show correct info', () => {
-        mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo} show={true} setShow={null} />);
-        const popupElement = document.getElementById("infoPopup");
-        expect(popupElement.innerHTML).toContain(mockAnimeList[0].title);
-        expect(popupElement.innerHTML).toContain(mockInfo.title.romaji);
-        expect(popupElement.innerHTML).toContain(mockInfo.startDate.year);
-        expect(popupElement.innerHTML).toContain(mockInfo.season);
-        expect(popupElement.innerHTML).toContain(mockInfo.studios.nodes[0].name);
-        expect(popupElement.innerHTML).toContain(mockInfo.genres[0]);
-        expect(popupElement.innerHTML).toContain(mockInfo.description);
-        expect(popupElement.innerHTML).toContain(mockInfo.source);
+        const wrapper = mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo} show={true} setShow={null} />);
+        expect(wrapper.find('div.modal').text()).toContain(mockAnimeList[0].title);
+        expect(wrapper.find('div.modal').text()).toContain(mockInfo.title.romaji);
+        expect(wrapper.find('div.modal').text()).toContain(mockInfo.startDate.year);
+        expect(wrapper.find('div.modal').text()).toContain(mockInfo.season);
+        expect(wrapper.find('div.modal').text()).toContain(mockInfo.studios.nodes[0].name);
+        expect(wrapper.find('div.modal').text()).toContain(mockInfo.genres[0]);
+        expect(wrapper.find('div.modal').text()).toContain(mockInfo.description);
+        expect(wrapper.find('div.modal').text()).toContain(mockInfo.source);
     });
 
     it('should not show sync and incorrect button if not admin', () => {
         IsAdmin.mockReturnValue(false);
-        mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo} show={true} setShow={null} />);
-        const syncButton = [].filter.call(document.getElementsByClassName("btn"), button => button.innerHTML === "Sync");
-        const incorrectButton = [].filter.call(document.getElementsByClassName("btn"), button => button.innerHTML === "Incorrect");
-        expect(syncButton.length).toBe(0);
-        expect(incorrectButton.length).toBe(0);
+        const wrapper = mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo} show={true} setShow={null} />);
+        expect(wrapper.find('div.modal').find('button.btn-primary').length).toBe(0);
     });
 
     it('should show sync and incorrect button if admin', () => {
         IsAdmin.mockReturnValue(true);
-        mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo} show={true} setShow={null} />);
-        const syncButton = [].filter.call(document.getElementsByClassName("btn"), button => button.innerHTML === "Sync");
-        const incorrectButton = [].filter.call(document.getElementsByClassName("btn"), button => button.innerHTML === "Incorrect");
-        expect(syncButton.length).toBe(1);
-        expect(incorrectButton.length).toBe(1);
+        const wrapper = mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo} show={true} setShow={null} />);
+        expect(wrapper.find('div.modal').find('button.btn-primary').length).toBe(2);
+    });
+
+    it('should sync with new info when click sync', () => {
+        IsAdmin.mockReturnValue(true);
+        SaveAnime.mockReturnValue(null);
+        const mockSetShow = () => { };
+        const wrapper = mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo} show={true} setShow={mockSetShow} />);
+        const syncButton = wrapper.find('div.modal').find('button.btn-primary').first();
+        syncButton.simulate('click');
+        const expectedResult = Object.assign(JSON.parse(JSON.stringify(mockAnimeList[0])), {
+            cover_url: 'someurl',
+            info: 'desc',
+            score: '6.6',
+            season: 2
+        })
+        expect(SaveAnime).toHaveBeenCalledWith(mockAnimeList[0].key,expectedResult);
+    });
+
+    it('should add to blacklist when click incorrect', () => {
+        IsAdmin.mockReturnValue(true);
+        SaveAnime.mockReturnValue(null);
+        window.confirm = jest.fn(() => true);
+        const mockSetShow = () => { };
+        const wrapper = mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo} show={true} setShow={mockSetShow} />);
+        const incorrectButton = wrapper.find('div.modal').find('button.btn-primary').at(1);
+        incorrectButton.simulate('click');
+        const expectedResult = Object.assign(JSON.parse(JSON.stringify(mockAnimeList[0])), {
+            blacklist: [mockInfo.id]
+        })
+        expect(SaveAnime).toHaveBeenCalledWith(mockAnimeList[0].key,expectedResult);
     });
 });

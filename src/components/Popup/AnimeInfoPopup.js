@@ -32,8 +32,7 @@ const AnimeInfoPopup = props => {
         closePopup();
     };
     const blackListResult = () => {
-        //eslint-disable-next-line no-restricted-globals
-        if (confirm('Are you sure "' + info.title.romaji + '" is incorrect?')) {
+        if (window.confirm('Are you sure "' + info.title.romaji + '" is incorrect?')) {
             let state = JSON.parse(JSON.stringify(anime));
             if (!state.blacklist) state.blacklist = [];
             if (!state.blacklist.includes(info.id)) state.blacklist.push(info.id);
