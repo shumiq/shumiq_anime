@@ -4,18 +4,22 @@ import { IsAdmin } from '../../utils/userDetail';
 import EditAnimePopup from '../../components/Popup/EditAnimePopup';
 import { SaveAnime } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
+import AnimeInfoPopup from '../Popup/AnimeInfoPopup';
 
 const AnimeCard = props => {
     const anime = props.anime;
     const [editPopup, setEditPopup] = useState(false)
+    const [infoPopup, setInfoPopup] = useState(false)
+    const [animeInfo, setAnimeInfo] = useState(null)
     const increase = field => {
         let animeCopy = JSON.parse(JSON.stringify(anime));
         animeCopy[field] = parseInt(animeCopy[field]) + 1;
         SaveAnime(anime.key, animeCopy);
     }
-    const animeInfo = async () => {
-        const response = await AnilistApi.getAnime(anime.title);
-        console.log(response);
+    const showInfoPopup = async () => {
+        const response = await AnilistApi.getAnime(anime.title, anime.blacklist);
+        setAnimeInfo(response);
+        setInfoPopup(true);
     }
     return (
         <div className="anime-card col-12 col-sm-6 col-md-6 col-lg-4 p-3">
@@ -43,7 +47,7 @@ const AnimeCard = props => {
                         <small className="text-white-50">{anime.genres}</small>
                     </p>
                     <div className="position-absolute" style={{ top: 'calc(50% - 12px)', right: '10px' }}>
-                        <button className="btn btn-outline-light border-0 p-0 m-0" style={{ height: '24px' }} onClick={animeInfo}>
+                        <button className="btn btn-outline-light border-0 p-0 m-0" style={{ height: '24px' }} onClick={showInfoPopup}>
                             <i className="material-icons">info_outline</i>
                         </button>
                     </div>
@@ -107,6 +111,7 @@ const AnimeCard = props => {
                 </div>
             </div>
             <EditAnimePopup anime={anime} show={editPopup} setShow={setEditPopup} />
+            <AnimeInfoPopup anime={anime} info={animeInfo} show={infoPopup} setShow={setInfoPopup} />
         </div >
     );
 }
