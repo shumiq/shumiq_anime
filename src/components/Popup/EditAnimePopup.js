@@ -11,8 +11,7 @@ const EditAnimePopup = props => {
         closePopup();
     };
     const deleteAnime = () => {
-        // eslint-disable-next-line no-restricted-globals
-        if (confirm('Do you want to delete "' + anime.title + '" ?')) {
+        if (window.confirm('Do you want to delete "' + anime.title + '" ?')) {
             SaveAnime(state.key, null);
             closePopup();
         }
