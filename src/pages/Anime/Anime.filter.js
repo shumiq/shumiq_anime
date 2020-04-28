@@ -8,6 +8,7 @@ export const defaultFilter = {
 }
 
 export const AnimeFilter = (animelist, inputFilter = {}) => {
+    if (animelist == null) return [];
     animelist = animelist.filter(anime => anime?.key);
     let result = [];
     let filter = JSON.parse(JSON.stringify(defaultFilter));
@@ -81,6 +82,7 @@ export const AnimeFilter = (animelist, inputFilter = {}) => {
 }
 
 export const SeasonList = animelist => {
+    if (animelist == null) return {};
     animelist = animelist.filter(anime => anime?.key);
     let seasonList = {};
     animelist.forEach(anime => {
