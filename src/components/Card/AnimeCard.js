@@ -88,24 +88,26 @@ const AnimeCard = props => {
                 </div>
                 <div className="card-footer p-1">
                     <div className="d-flex justify-content-around w-auto">
-                        {IsAdmin() &&
-                            <button className="btn btn-outline-secondary disabled h-auto border-0" type="button">
-                                <i className="material-icons align-middle">folder</i>
-                            </button>
-                        }
+
+                        {anime.gdriveid === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={'http://drive.google.com/drive/folders/' + anime.gdriveid} target='blank'>
+                            <i className="material-icons align-middle">folder</i>
+                        </a>}
+                        {anime.gdriveid !== '' && <a className="btn btn-outline-light h-auto border-0" role="button" href={'http://drive.google.com/drive/folders/' + anime.gdriveid} target='blank'>
+                            <i className="material-icons align-middle">folder</i>
+                        </a>}
 
                         {anime.url === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.url} target='blank'>
-                            <i className="material-icons align-middle">open_in_browser</i>
+                            <i className="material-icons align-middle">photo_library</i>
                         </a>}
                         {anime.url !== '' && <a className="btn btn-outline-light h-auto border-0" role="button" href={anime.url} target='blank'>
-                            <i className="material-icons align-middle">open_in_browser</i>
+                            <i className="material-icons align-middle">photo_library</i>
                         </a>}
 
                         {IsAdmin() && anime.download_url === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.download_url} target='blank'>
-                            <i className="material-icons align-middle">library_add</i>
+                            <i className="material-icons align-middle">add_box</i>
                         </a>}
                         {IsAdmin() && anime.download_url !== '' && <a className="btn btn-outline-light h-auto border-0" role="button" href={anime.download_url} target='blank'>
-                            <i className="material-icons align-middle">library_add</i>
+                            <i className="material-icons align-middle">add_box</i>
                         </a>}
                     </div>
                 </div>
