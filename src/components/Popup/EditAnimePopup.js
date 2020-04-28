@@ -68,10 +68,10 @@ const EditAnimePopup = props => {
                                 <small className="form-text text-muted">Season</small>
 
                                 <select className="form-control" name="season" defaultValue={anime.season} onChange={updateFormData}>
-                                    <option defaultValue='1'>Winter</option>
-                                    <option defaultValue='2'>Spring</option>
-                                    <option defaultValue='3'>Summer</option>
-                                    <option defaultValue='4'>Fall</option>
+                                    <option value='1'>Winter</option>
+                                    <option value='2'>Spring</option>
+                                    <option value='3'>Summer</option>
+                                    <option value='4'>Fall</option>
                                 </select>
                             </div>
                             <div className="col">
