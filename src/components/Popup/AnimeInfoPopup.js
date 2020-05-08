@@ -51,7 +51,7 @@ const AnimeInfoPopup = props => {
                         <div id="infoPopup">
                             <div className="text-left">
                                 <p className="my-0">
-                                    <b>Title</b>: {info.title.romaji} {info.title.english && info.title.english != info.title.romaji && '/ ' + info.title.english}
+                                    <b>Title</b>: {info.title.romaji} {info.title.english && info.title.english !== info.title.romaji && '/ ' + info.title.english}
                                 </p>
                                 <p className="my-0">
                                     <b>Studio</b>: {info.studios?.nodes[0]?.name}
@@ -78,7 +78,7 @@ const AnimeInfoPopup = props => {
                                 </p>
                                 {info.bannerImage != null &&
                                     <p className="my-0">
-                                        <img src={info.bannerImage} width='100%' />
+                                        <img src={info.bannerImage} width='100%' alt="banner" />
                                     </p>
                                 }
                                 <p>
