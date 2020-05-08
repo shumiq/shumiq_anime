@@ -7,7 +7,7 @@ import { onFirebaseAuthUpdate } from '../../utils/firebase';
 
 const Navbar = () => {
     const [isAnime, setIsAnime] = useState(history.location.pathname === '/' || history.location.pathname === '/sync');
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(IsAdmin());
 
     onFirebaseAuthUpdate(() => {
         setIsAdmin(IsAdmin());

@@ -30,7 +30,7 @@ firebase.database().ref().on('value', function (snapshot) {
 firebase.auth().onAuthStateChanged(function (currentUser) {
     const database = getLocalStorage('database');
     databaseOnUpdate(database);
-    authUpdate();
+    authUpdate(currentUser);
 });
 
 let databaseOnUpdate = () => { };
@@ -49,7 +49,7 @@ export const SignIn = tokenId => {
     firebase.auth().signInWithCredential(creds).then(user => {
         const database = getLocalStorage('database');
         databaseOnUpdate(database);
-        authUpdate();
+        authUpdate(user);
     });
 }
 
