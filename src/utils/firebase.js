@@ -30,18 +30,26 @@ firebase.database().ref().on('value', function (snapshot) {
 firebase.auth().onAuthStateChanged(function (currentUser) {
     const database = getLocalStorage('database');
     databaseOnUpdate(database);
+    authUpdate();
 });
 
 let databaseOnUpdate = () => { };
+let authUpdate = () => { };
 
 export const onFirebaseDatabaseUpdate = callback => {
     databaseOnUpdate = callback;
 };
 
+export const onFirebaseAuthUpdate = callback => {
+    authUpdate = callback;
+};
+
 export const SignIn = tokenId => {
     const creds = firebase.auth.GoogleAuthProvider.credential(tokenId);
     firebase.auth().signInWithCredential(creds).then(user => {
-        //console.log(user);
+        const database = getLocalStorage('database');
+        databaseOnUpdate(database);
+        authUpdate();
     });
 }
 
