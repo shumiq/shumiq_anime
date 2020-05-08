@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Modal from "react-bootstrap/Modal";
 import { SaveAnime } from '../../utils/firebase';
-import AnilistApi from '../../api/anilist';
 import { IsAdmin } from '../../utils/userDetail';
 
 const AnimeInfoPopup = props => {
@@ -113,12 +112,9 @@ const AnimeInfoPopup = props => {
 const secondToDuration = t => {
     const cd = 24 * 60 * 60;
     const ch = 60 * 60;
-    const d = Math.floor(t / cd);
-    const h = Math.floor((t - d * cd) / ch);
-    const m = Math.round((t - d * cd - h * ch) / 60000);
-    const pad = n => {
-        return n < 10 ? "0" + n : n;
-    };
+    let d = Math.floor(t / cd);
+    let h = Math.floor((t - d * cd) / ch);
+    let m = Math.round((t - d * cd - h * ch) / 60000);
     if (m === 60) {
         h++;
         m = 0;
