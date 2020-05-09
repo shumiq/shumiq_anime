@@ -3,6 +3,7 @@ import { getLocalStorage } from '../../utils/localstorage';
 import { onFirebaseDatabaseUpdate } from '../../utils/firebase';
 import PhotoApi from '../../api/photo';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
+import { IsAdmin, getAccessToken } from '../../utils/userDetail';
 
 const Sync = () => {
     const [database, setDatabase] = useState(getLocalStorage('database'));
@@ -14,9 +15,13 @@ const Sync = () => {
     onFirebaseDatabaseUpdate(db => {
         setDatabase(db);
         setAnimeList(db?.animelist.filter(anime => anime != null));
+        if (IsAdmin() && typeof getAccessToken() === 'string') {
+            setNextPageToken('');
+            getAlbums();
+        }
     });
 
-    const getAlbums = async (all) => {
+    const getAlbums = async (all = false) => {
         setLoadingPopup(true);
         const response = await all ? await PhotoApi.getAllAlbums(nextPageToken) : await PhotoApi.getAlbums(nextPageToken);
         setLoadingPopup(false);

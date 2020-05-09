@@ -6,7 +6,7 @@ describe('<Navbar />', () => {
 
     it('should render navbar links', () => {
         const wrapper = shallow(<Navbar />);
-        expect(wrapper.exists('Link')).toEqual(true);
+        expect(wrapper.exists('a')).toEqual(true);
     });
 
     //   describe('not logged in', () => {

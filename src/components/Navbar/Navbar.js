@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Login from '../Login/Login';
 import history from '../../history';
 import { IsAdmin } from '../../utils/userDetail';
@@ -31,18 +30,18 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav text-center mr-auto">
                         <li className="nav-item">
-                            <Link className="nav-link btn" to="/" onClick={() => setIsAnime(true)}>Anime</Link>
+                            <a className="nav-link btn" href="/" onClick={() => setIsAnime(true)}>Anime</a>
                         </li>
                         {isAnime && isAdmin &&
                             <li className="nav-item">
-                                <Link className="nav-link btn" to="/sync" onClick={() => setIsAnime(true)}>Sync Anime</Link>
+                                <a className="nav-link btn" href="/sync" onClick={() => setIsAnime(true)}>Sync Anime</a>
                             </li>
                         }
                         <li className="nav-item">
-                            <Link className="nav-link btn" to="/conan" onClick={() => setIsAnime(false)}>Conan</Link>
+                            <a className="nav-link btn" href="/conan" onClick={() => setIsAnime(false)}>Conan</a>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link btn" to="/keyaki" onClick={() => setIsAnime(false)}>Keyakitte Kakenai</Link>
+                            <a className="nav-link btn" href="/keyaki" onClick={() => setIsAnime(false)}>Keyakitte Kakenai</a>
                         </li>
                     </ul>
                     <ul className="navbar-nav text-center ml-auto">
