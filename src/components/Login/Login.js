@@ -28,7 +28,7 @@ const Login = () => {
                 <GoogleLogin
                     clientId="557663136777-f5pcv9r46pipto60jqmepd6btmmlp86f.apps.googleusercontent.com"
                     onSuccess={login}
-                    scope="profile email https://www.googleapis.com/auth/photoslibrary"
+                    scope="profile email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/photoslibrary.readonly"
                     isSignedIn={true}
                     render={renderProps => (
                         <button className="btn" onClick={renderProps.onClick} disabled={renderProps.disabled}>
