@@ -20,6 +20,23 @@ const PhotoApi = {
             if (!response.nextPageToken) break;
         }
         return { albums: albums, nextPageToken: null };
+    },
+    getMedias: async albumId => {
+        let medias = [];
+        let nextPageToken = '';
+        while (true) {
+            const response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search?access_token=' + getAccessToken(), {
+                albumId: albumId,
+                pageToken: nextPageToken,
+                pageSize: 2
+            });
+            response.data.mediaItems.forEach(media => {
+                medias.push(media);
+            })
+            nextPageToken = response.data.nextPageToken;
+            if (!nextPageToken) break;
+        }
+        return medias;
     }
 }
 
