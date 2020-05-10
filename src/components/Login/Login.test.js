@@ -22,9 +22,9 @@ describe('<Login />', () => {
         expect(wrapper.text()).toContain('Login');
     });
 
-    it('should not show login button when have user', () => {
+    it('should show login button when have user', () => {
         getUser.mockReturnValue(mockUser);
         const wrapper = mount(<Login />);
-        expect(wrapper.text()).not.toContain('Login');
+        expect(wrapper.text()).toContain('Login');
     });
 });

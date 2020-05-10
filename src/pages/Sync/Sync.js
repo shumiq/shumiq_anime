@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { getLocalStorage } from '../../utils/localstorage';
-import { onFirebaseDatabaseUpdate } from '../../utils/firebase';
+import { onFirebaseDatabaseUpdate, SaveAnime } from '../../utils/firebase';
 import PhotoApi from '../../api/photo';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import { IsAdmin, getAccessToken } from '../../utils/userDetail';
+import DriveApi from '../../api/drive';
 
 const Sync = () => {
     const [database, setDatabase] = useState(getLocalStorage('database'));
@@ -15,8 +16,7 @@ const Sync = () => {
     onFirebaseDatabaseUpdate(db => {
         setDatabase(db);
         setAnimeList(db?.animelist.filter(anime => anime != null));
-        if (IsAdmin() && typeof getAccessToken() === 'string') {
-            setNextPageToken('');
+        if (IsAdmin() && typeof getAccessToken() === 'string' && nextPageToken === '') {
             getAlbums();
         }
     });
@@ -32,6 +32,27 @@ const Sync = () => {
         setAlbumList(albums);
         setNextPageToken(response.nextPageToken);
         setAnimeList(animeList);
+    }
+
+    const unsync = (anime) => {
+
+    }
+
+    const update = async (anime) => {
+        setLoadingPopup(true);
+        anime.gdriveid = await DriveApi.getPrivateFolderId(anime);
+        anime.gdriveid_public = await DriveApi.getPublicFolderId(anime);
+        const photo_medias = await PhotoApi.getMedias(anime.gphotoid);
+        const drive_upload = await DriveApi.getUploadFiles();
+        photo_medias.forEach(async media => {
+            const file = drive_upload.filter(file => file.name === media.filename)[0];
+            if (file?.id) {
+                await DriveApi.moveUploadFile(file.id, anime.gdriveid);
+            }
+        });
+        anime.download = photo_medias.length;
+        SaveAnime(anime.key, anime);
+        setLoadingPopup(false);
     }
 
     return (
@@ -63,7 +84,17 @@ const Sync = () => {
                                 </td>
                                 <td className="text-left align-middle">{anime.title}</td>
                                 <td className="text-center align-middle">{anime.download}{albumList[anime.gphotoid] && '/' + albumList[anime.gphotoid]?.mediaItemsCount}</td>
-                                <td className="text-center align-middle"></td>
+                                <td className="text-center align-middle">
+                                    {anime.gphotoid && albumList[anime.gphotoid] && anime.download.toString() !== albumList[anime.gphotoid]?.mediaItemsCount.toString() && !anime.title.includes("Conan") && 
+                                        <button type="button col" className="btn btn-success mx-1" onClick={() => update(anime)}>Update</button>
+                                    }
+                                    {anime.gphotoid &&
+                                        <button type="button col" className="btn btn-danger mx-1" onClick={() => unsync(anime)}>Unsync</button>
+                                    }
+                                    {!anime.gphotoid && 
+                                        <p className="m-0 p-0">Not found</p>
+                                    }
+                                </td>
                             </tr>
                         )}
                     </tbody>
