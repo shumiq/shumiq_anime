@@ -5,7 +5,7 @@ import { SignIn, SignOut } from '../../utils/firebase';
 import { getUser } from '../../utils/userDetail';
 
 const Login = () => {
-    const [user, setUser] = useState(getUser());
+    const [user, setUser] = useState(null);
     useEffect(() => { }, [user]);
 
     const login = response => {
