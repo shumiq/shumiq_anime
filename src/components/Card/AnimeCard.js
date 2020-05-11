@@ -89,10 +89,10 @@ const AnimeCard = props => {
                 <div className="card-footer p-1">
                     <div className="d-flex justify-content-around w-auto">
 
-                        {anime.gdriveid === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={'http://drive.google.com/drive/folders/' + anime.gdriveid} target='blank'>
+                        {!anime.gdriveid_public && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={'http://doc.google.com/drive/folders/' + anime.gdriveid_public} target='blank'>
                             <i className="material-icons align-middle">folder</i>
                         </a>}
-                        {anime.gdriveid !== '' && <a className="btn btn-outline-light h-auto border-0" role="button" href={'http://drive.google.com/drive/folders/' + anime.gdriveid} target='blank'>
+                        {anime.gdriveid_public && <a className="btn btn-outline-light h-auto border-0" role="button" href={'http://doc.google.com/drive/folders/' + anime.gdriveid_public} target='blank'>
                             <i className="material-icons align-middle">folder</i>
                         </a>}
 
