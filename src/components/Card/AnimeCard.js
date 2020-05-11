@@ -47,7 +47,7 @@ const AnimeCard = props => {
                         <small className="text-white-50">{anime.genres}</small>
                     </p>
                     <div className="position-absolute" style={{ top: 'calc(50% - 12px)', right: '10px' }}>
-                        <button className="btn btn-outline-light border-0 p-0 m-0" style={{ height: '24px' }} onClick={showInfoPopup}>
+                        <button className="btn btn-outline-light border-0 p-0 m-0" style={{ height: '24px' }} id="btn-show-info" onClick={showInfoPopup}>
                             <i className="material-icons">info_outline</i>
                         </button>
                     </div>

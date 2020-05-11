@@ -3,10 +3,17 @@ import { mount } from 'enzyme';
 import AnimeCard from './AnimeCard';
 import mockDatabase from '../../mock/database'
 import { IsAdmin } from '../../utils/userDetail';
+import AnilistApi from '../../api/anilist';
+import { SaveAnime } from '../../utils/firebase';
+import { act } from 'react-dom/test-utils';
 
 jest.mock('../../utils/userDetail');
+jest.mock('../../api/anilist');
+jest.mock('../../utils/firebase');
 
 describe('<AnimeCard />', () => {
+
+    const flushPromises = () => new Promise(setImmediate);
 
     it('should show correct infomation', () => {
         const mockAnime = mockDatabase.animelist[0];
@@ -58,6 +65,23 @@ describe('<AnimeCard />', () => {
         expect(wrapper.text()).not.toContain(expectText);
     });
 
+    it('should enable google drive button if there is google drive id', () => {
+        IsAdmin.mockReturnValue(true);
+        let mockAnime = mockDatabase.animelist[0];
+        mockAnime.gdriveid_public = 'driveid'
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        const googleDriveButton = wrapper.find('.btn').at(wrapper.find('.btn').length - 3);
+        expect(googleDriveButton.find('.disabled').length).toBe(0);
+    });
+
+    it('should disable google drive button if there is no google drive id', () => {
+        IsAdmin.mockReturnValue(true);
+        const mockAnime = mockDatabase.animelist[1];
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        const googleDriveButton = wrapper.find('.btn').at(wrapper.find('.btn').length - 3);
+        expect(googleDriveButton.find('.disabled').length).toBe(1);
+    });
+
     it('should enable google photo button if there is google photo url', () => {
         IsAdmin.mockReturnValue(true);
         const mockAnime = mockDatabase.animelist[0];
@@ -88,5 +112,15 @@ describe('<AnimeCard />', () => {
         const wrapper = mount(<AnimeCard anime={mockAnime} />);
         const googlePhotoButton = wrapper.find('.btn').at(wrapper.find('.btn').length - 1);
         expect(googlePhotoButton.find('.disabled').length).toBe(1);
+    });
+
+    it('should show info popup when click show info button', async () => {
+        const mockAnime = mockDatabase.animelist[1];
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        const showInfoButton = wrapper.find('#btn-show-info');
+        await act(async () => {
+            showInfoButton.simulate('click');
+          });
+        expect(AnilistApi.getAnime).toHaveBeenCalledWith(mockAnime.title, mockAnime.blacklist);
     });
 });
