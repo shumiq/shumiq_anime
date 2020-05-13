@@ -11,8 +11,6 @@ jest.mock('../../utils/userDetail');
 jest.mock('../../api/anilist');
 jest.mock('../../utils/firebase');
 
-const mockAnilistApiGetAnime = { "id": 110547, "title": { "romaji": "Arte", "english": "Arte", "native": "\u30a2\u30eb\u30c6", "userPreferred": "Arte" }, "season": "SPRING", "description": "Florence, early 16th century. The birthplace of the renaissance era, where art is thriving. In one small corner of this vast city, one sheltered girl\u2019s journey begins. She dreams of becoming an artist, an impossible career for a girl born into a noble family. In those days, art was an exclusively male profession, with woman facing strong discrimination. In spite of these challenges, Arte perseveres with hard work and a positive attitude!<br>\n<br>\n(Source: Silent Manga Audition)", "startDate": { "year": 2020 }, "episodes": 12, "source": "MANGA", "coverImage": { "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx110547-TjB8wJRdnSaw.jpg", "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx110547-TjB8wJRdnSaw.jpg" }, "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/110547-uB6fv50H0hFU.jpg", "genres": ["Drama", "Romance"], "meanScore": 67, "averageScore": 66, "popularity": 8954, "relations": { "nodes": [{ "title": { "userPreferred": "Arte" }, "type": "MANGA" }] }, "studios": { "nodes": [{ "name": "Seven Arcs" }] }, "nextAiringEpisode": { "timeUntilAiring": 279225, "episode": 7 } }
-
 describe('<AnimeCard />', () => {
 
     it('should show correct infomation', () => {
@@ -173,7 +171,6 @@ describe('<AnimeCard />', () => {
 
     it('should all AnilistApi when click show info button', async () => {
         // Given
-        AnilistApi.getAnime.mockResolvedValue(mockAnilistApiGetAnime);
         const mockAnime = mockDatabase.animelist[1];
         const wrapper = mount(<AnimeCard anime={mockAnime} />);
         const showInfoButton = wrapper.find('#btn-show-info');

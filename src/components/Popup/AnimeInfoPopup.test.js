@@ -40,6 +40,12 @@ const mockInfo = {
 }
 
 describe('<AnimeInfoPopup />', () => {
+
+    it('should not show when show props is false', () => {
+        const wrapper = mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo}  show={false} setShow={null} />);
+        expect(wrapper.find('div.modal')).toHaveLength(0);
+    });
+
     it('should show correct info', () => {
         const wrapper = mount(<AnimeInfoPopup anime={mockAnimeList[0]} info={mockInfo} show={true} setShow={null} />);
         expect(wrapper.find('div.modal').text()).toContain(mockAnimeList[0].title);

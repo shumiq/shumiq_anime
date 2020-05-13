@@ -9,6 +9,11 @@ const mockAnimeList = mockDatabase.animelist;
 
 describe('<EditAnimePopup />', () => {
 
+    it('should not show when show props is false', () => {
+        const wrapper = mount(<EditAnimePopup anime={mockAnimeList[0]} show={false} setShow={null} />);
+        expect(wrapper.find('div.modal')).toHaveLength(0);
+    });
+
     it('should show correct default value', () => {
         const wrapper = mount(<EditAnimePopup anime={mockAnimeList[0]} show={true} setShow={null} />);
         expect(wrapper.find('div.modal').html()).toContain(mockAnimeList[0].title);
