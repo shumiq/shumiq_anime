@@ -2,12 +2,12 @@ import React from 'react';
 import { mount } from 'enzyme';
 import AnimeCard from './AnimeCard';
 import mockDatabase from '../../mock/database'
-import { IsAdmin } from '../../utils/userDetail';
+import { IsAdmin } from '../../utils/userdetail';
 import AnilistApi from '../../api/anilist';
 import { SaveAnime } from '../../utils/firebase';
 import { act } from 'react-dom/test-utils';
 
-jest.mock('../../utils/userDetail');
+jest.mock('../../utils/userdetail');
 jest.mock('../../api/anilist');
 jest.mock('../../utils/firebase');
 

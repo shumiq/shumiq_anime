@@ -2,10 +2,10 @@ import React from 'react';
 import { mount } from 'enzyme';
 import mockDatabase from '../../mock/database'
 import AnimeInfoPopup from './AnimeInfoPopup';
-import { IsAdmin } from '../../utils/userDetail';
+import { IsAdmin } from '../../utils/userdetail';
 import { SaveAnime } from '../../utils/firebase';
 
-jest.mock('../../utils/userDetail');
+jest.mock('../../utils/userdetail');
 jest.mock('../../utils/firebase');
 const mockAnimeList = mockDatabase.animelist;
 const mockInfo = {

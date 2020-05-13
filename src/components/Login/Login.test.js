@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import Login from './Login';
-import { getUser } from '../../utils/userDetail';
+import { getUser } from '../../utils/userdetail';
 
-jest.mock('../../utils/userDetail');
+jest.mock('../../utils/userdetail');
 
 describe('<Login />', () => {
 

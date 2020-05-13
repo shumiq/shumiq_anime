@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SeasonEnum } from '../../utils/enum'
-import { IsAdmin } from '../../utils/userDetail';
+import { IsAdmin } from '../../utils/userdetail';
 import EditAnimePopup from '../../components/Popup/EditAnimePopup';
 import { SaveAnime } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';

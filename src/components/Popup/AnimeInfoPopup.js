@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from "react-bootstrap/Modal";
 import { SaveAnime } from '../../utils/firebase';
-import { IsAdmin } from '../../utils/userDetail';
+import { IsAdmin } from '../../utils/userdetail';
 
 const AnimeInfoPopup = props => {
     const anime = props.anime;

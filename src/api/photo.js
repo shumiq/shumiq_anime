@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAccessToken } from '../utils/userDetail';
+import { getAccessToken } from '../utils/userdetail';
 
 const pageSize = 50;
 

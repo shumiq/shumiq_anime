@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Login from '../Login/Login';
 import history from '../../history';
-import { IsAdmin } from '../../utils/userDetail';
+import { IsAdmin } from '../../utils/userdetail';
 import { onFirebaseAuthUpdate } from '../../utils/firebase';
 
 const Navbar = () => {

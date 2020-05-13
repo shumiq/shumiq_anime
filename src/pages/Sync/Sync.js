@@ -3,7 +3,7 @@ import { getLocalStorage } from '../../utils/localstorage';
 import { onFirebaseDatabaseUpdate, SaveAnime } from '../../utils/firebase';
 import PhotoApi from '../../api/photo';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
-import { IsAdmin, getAccessToken } from '../../utils/userDetail';
+import { IsAdmin, getAccessToken } from '../../utils/userdetail';
 import DriveApi from '../../api/drive';
 
 const Sync = () => {

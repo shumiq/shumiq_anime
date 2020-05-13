@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAccessToken } from '../utils/userDetail';
+import { getAccessToken } from '../utils/userdetail';
 
 const uploadFolderId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
 const privateAnimeFolderId = '1teaWviknfgbuDsoFarRIsnny1HQ8zQe2';

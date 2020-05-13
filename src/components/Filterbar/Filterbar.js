@@ -1,7 +1,7 @@
 import React from 'react';
 import { SeasonEnum, FilterEnum } from '../../utils/enum'
 import { defaultFilter } from '../../pages/Anime/Anime.filter'
-import { IsAdmin } from '../../utils/userDetail';
+import { IsAdmin } from '../../utils/userdetail';
 
 const Filterbar = props => {
     const filter = Object.assign(defaultFilter, props.filter);
