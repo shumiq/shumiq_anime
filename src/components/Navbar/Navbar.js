@@ -15,7 +15,7 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <a className="navbar-brand" href="/">MyAnimeList</a>
+                <a id='link-logo' className="navbar-brand" href="/">MyAnimeList</a>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -30,18 +30,18 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav text-center mr-auto">
                         <li className="nav-item">
-                            <a className="nav-link btn" href="/" onClick={() => setIsAnime(true)}>Anime</a>
+                            <a id='link-anime' className="nav-link btn" href="/" onClick={() => setIsAnime(true)}>Anime</a>
                         </li>
                         {isAnime && isAdmin &&
                             <li className="nav-item">
-                                <a className="nav-link btn" href="/sync" onClick={() => setIsAnime(true)}>Sync Anime</a>
+                                <a id='link-sync' className="nav-link btn" href="/sync" onClick={() => setIsAnime(true)}>Sync Anime</a>
                             </li>
                         }
                         <li className="nav-item">
-                            <a className="nav-link btn" href="/conan" onClick={() => setIsAnime(false)}>Conan</a>
+                            <a id='link-conan' className="nav-link btn" href="/conan" onClick={() => setIsAnime(false)}>Conan</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link btn" href="/keyaki" onClick={() => setIsAnime(false)}>Keyakitte Kakenai</a>
+                            <a id='link-keyaki' className="nav-link btn" href="/keyaki" onClick={() => setIsAnime(false)}>Keyakitte Kakenai</a>
                         </li>
                     </ul>
                     <ul className="navbar-nav text-center ml-auto">
