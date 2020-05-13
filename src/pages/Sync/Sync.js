@@ -44,7 +44,7 @@ const Sync = () => {
         anime.gdriveid_public = await DriveApi.getPublicFolderId(anime);
         const photo_medias = await PhotoApi.getMedias(anime.gphotoid);
         const drive_upload = await DriveApi.getUploadFiles();
-        photo_medias.forEach(async media => {
+        await photo_medias.forEach(async media => {
             const file = drive_upload.filter(file => file.name === media.filename)[0];
             if (file?.id) {
                 await DriveApi.moveUploadFile(file.id, anime.gdriveid);
