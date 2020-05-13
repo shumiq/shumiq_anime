@@ -34,7 +34,7 @@ const AnimeCard = props => {
                             <i className="material-icons">share</i>
                         </button>
                         {IsAdmin() &&
-                            <button className="btn btn-outline-light border-0 p-0 m-0 ml-3" style={{ height: '24px' }} onClick={() => setEditPopup(true)}>
+                            <button id='btn-edit' className="btn btn-outline-light border-0 p-0 m-0 ml-3" style={{ height: '24px' }} onClick={() => setEditPopup(true)}>
                                 <i className="material-icons">edit</i>
                             </button>
                         }
