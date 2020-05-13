@@ -117,7 +117,7 @@ const Sync = () => {
                         }
                     </div>
                 </nav>
-                <GeneralPopup show={loadingPopup} setShow={setLoadingPopup} message='Loading...' />
+                <GeneralPopup show={loadingPopup} message='Loading...' />
             </div>
         </div>
     );
