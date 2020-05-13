@@ -69,7 +69,7 @@ const AnimeCard = props => {
                                     <td className="text-right px-3">
                                         <small>{anime.view}/{anime.download}</small>
                                         {anime.view.toString() !== anime.download.toString() &&
-                                            <b className="text-primary" style={{ cursor: 'pointer' }} onClick={() => increase('view')}>+</b>
+                                            <b id='btn-add-view' className="text-primary" style={{ cursor: 'pointer' }} onClick={() => increase('view')}>+</b>
                                         }
                                     </td>
                                 </tr>
@@ -79,7 +79,7 @@ const AnimeCard = props => {
                                 <td className="text-right px-3">
                                     <small>{anime.download}/{anime.all_episode}</small>
                                     {IsAdmin() && anime.download.toString() !== anime.all_episode.toString() &&
-                                        <b className="text-primary" style={{ cursor: 'pointer' }} onClick={() => increase('download')}>+</b>
+                                        <b id='btn-add-download' className="text-primary" style={{ cursor: 'pointer' }} onClick={() => increase('download')}>+</b>
                                     }
                                 </td>
                             </tr>
@@ -89,24 +89,24 @@ const AnimeCard = props => {
                 <div className="card-footer p-1">
                     <div className="d-flex justify-content-around w-auto">
 
-                        {!anime.gdriveid_public && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={'http://doc.google.com/drive/folders/' + anime.gdriveid_public} target='blank'>
+                        {!anime.gdriveid_public && <a id='btn-gdrive' className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={'http://doc.google.com/drive/folders/' + anime.gdriveid_public} target='blank'>
                             <i className="material-icons align-middle">folder</i>
                         </a>}
-                        {anime.gdriveid_public && <a className="btn btn-outline-light h-auto border-0" role="button" href={'http://doc.google.com/drive/folders/' + anime.gdriveid_public} target='blank'>
+                        {anime.gdriveid_public && <a id='btn-gdrive' className="btn btn-outline-light h-auto border-0" role="button" href={'http://doc.google.com/drive/folders/' + anime.gdriveid_public} target='blank'>
                             <i className="material-icons align-middle">folder</i>
                         </a>}
 
-                        {anime.url === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.url} target='blank'>
+                        {anime.url === '' && <a id='btn-gphoto' className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.url} target='blank'>
                             <i className="material-icons align-middle">photo_library</i>
                         </a>}
-                        {anime.url !== '' && <a className="btn btn-outline-light h-auto border-0" role="button" href={anime.url} target='blank'>
+                        {anime.url !== '' && <a id='btn-gphoto' className="btn btn-outline-light h-auto border-0" role="button" href={anime.url} target='blank'>
                             <i className="material-icons align-middle">photo_library</i>
                         </a>}
 
-                        {IsAdmin() && anime.download_url === '' && <a className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.download_url} target='blank'>
+                        {IsAdmin() && anime.download_url === '' && <a id='btn-download' className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={anime.download_url} target='blank'>
                             <i className="material-icons align-middle">add_box</i>
                         </a>}
-                        {IsAdmin() && anime.download_url !== '' && <a className="btn btn-outline-light h-auto border-0" role="button" href={anime.download_url} target='blank'>
+                        {IsAdmin() && anime.download_url !== '' && <a id='btn-download' className="btn btn-outline-light h-auto border-0" role="button" href={anime.download_url} target='blank'>
                             <i className="material-icons align-middle">add_box</i>
                         </a>}
                     </div>
