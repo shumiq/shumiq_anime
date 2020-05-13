@@ -16,15 +16,15 @@ describe('<Login />', () => {
         "familyName": "Watcharasukchit"
     };
 
-    it('should show login button when no user', () => {
+    it('should see login text when no user', () => {
         getUser.mockReturnValue(null);
         const wrapper = mount(<Login />);
         expect(wrapper.text()).toContain('Login');
     });
 
-    it('should show login button when have user', () => {
+    it('should not see login text when have user', () => {
         getUser.mockReturnValue(mockUser);
         const wrapper = mount(<Login />);
-        expect(wrapper.text()).toContain('Login');
+        expect(wrapper.text()).not.toContain('Login');
     });
 });

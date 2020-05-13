@@ -32,7 +32,10 @@ const Login = () => {
                     isSignedIn={true}
                     render={renderProps => (
                         <button className="btn" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                            Login
+                            {getUser() &&
+                                <img src={getUser().imageUrl} alt={getUser().name} className="rounded-circle" style={{ width: '30px', height: '30px' }} />
+                            }
+                            {!getUser() && <b>Login</b>}
                         </button>
                     )}
                 />
