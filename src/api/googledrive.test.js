@@ -57,12 +57,26 @@ describe('GoogleDriveApi', () => {
     });
 
     describe('Get Folder id', () => {
-        it('should return private folder id', async () => {
+        it('should return private folder id when folder available', async () => {
             //Given
             getAccessToken.mockReturnValue('access_token');
             const mockAnime = { title: 'title' };
             const mockFolderId = 'folder_id';
             axios.get.mockResolvedValue({ data: { files: [{ name: mockAnime.title, id: mockFolderId }] } });
+            // When
+            const response = await GoogleDriveApi.getPrivateFolderId(mockAnime);
+            await flushPromises();
+            // Then
+            expect(response).toBe(mockFolderId);
+        });
+
+        it('should return private folder id when folder not available', async () => {
+            //Given
+            getAccessToken.mockReturnValue('access_token');
+            const mockAnime = { title: 'title' };
+            const mockFolderId = 'folder_id';
+            axios.get.mockResolvedValue({ data: { files: [] } });
+            axios.post.mockResolvedValue({ id: mockFolderId });
             // When
             const response = await GoogleDriveApi.getPrivateFolderId(mockAnime);
             await flushPromises();
@@ -76,6 +90,20 @@ describe('GoogleDriveApi', () => {
             const mockAnime = { title: 'title' };
             const mockFolderId = 'folder_id';
             axios.get.mockResolvedValue({ data: { files: [{ name: mockAnime.title, id: mockFolderId }] } });
+            // When
+            const response = await GoogleDriveApi.getPublicFolderId(mockAnime);
+            await flushPromises();
+            // Then
+            expect(response).toBe(mockFolderId);
+        });
+
+        it('should return public folder id when folder not available', async () => {
+            //Given
+            getAccessToken.mockReturnValue('access_token');
+            const mockAnime = { title: 'title' };
+            const mockFolderId = 'folder_id';
+            axios.get.mockResolvedValue({ data: { files: [] } });
+            axios.post.mockResolvedValue({ id: mockFolderId });
             // When
             const response = await GoogleDriveApi.getPublicFolderId(mockAnime);
             await flushPromises();

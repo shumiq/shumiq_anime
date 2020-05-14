@@ -36,8 +36,7 @@ const GoogleDriveApi = {
         const folderList = await GoogleDriveApi.getPrivateAnimeFolders();
         const animeFolder = folderList.filter(folder => folder.name === anime.title)[0];
         if (animeFolder?.id) return animeFolder?.id;
-        console.log('new folder');
-        const newFolder = GoogleDriveApi.createFolder(anime.title, privateAnimeFolderId);
+        const newFolder = await GoogleDriveApi.createFolder(anime.title, privateAnimeFolderId);
         return newFolder.id;
     },
     getPublicFolderId: async anime => {
@@ -45,7 +44,7 @@ const GoogleDriveApi = {
         const folderList = await GoogleDriveApi.getPublicAnimeFolders();
         const animeFolder = folderList.filter(folder => folder.name === anime.title)[0];
         if (animeFolder?.id) return animeFolder?.id;
-        const newFolder = GoogleDriveApi.createFolder(anime.title, publicAnimeFolderId);
+        const newFolder = await GoogleDriveApi.createFolder(anime.title, publicAnimeFolderId);
         return newFolder.id;
     },
     createFolder: async (name, parentId) => {
