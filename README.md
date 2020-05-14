@@ -16,10 +16,14 @@ You will also see any lint errors in the console.
 
 Launches the test runner in the interactive watch mode.
 
-### `npm run test -- --coverage --watchAll=false`
+### `npm run test-coverage`
 
 Run the coverage test
 
 ### `npm run build`
 
 Builds the app for production to the `build` folder.
+
+### `npm run deploy`
+
+Builds the app for production to the `build` folder and deploy to firebase hosting.
