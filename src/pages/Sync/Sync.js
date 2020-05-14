@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { getLocalStorage } from '../../utils/localstorage';
 import { onFirebaseDatabaseUpdate, SaveAnime } from '../../utils/firebase';
-import PhotoApi from '../../api/photo';
+import GooglePhotoApi from '../../api/googlephoto';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import { IsAdmin, getAccessToken } from '../../utils/userdetail';
-import DriveApi from '../../api/drive';
+import GoogleDriveApi from '../../api/googledrive';
 
 const Sync = () => {
     const [database, setDatabase] = useState(getLocalStorage('database'));
@@ -23,7 +23,7 @@ const Sync = () => {
 
     const getAlbums = async (all = false) => {
         setLoadingPopup(true);
-        const response = await all ? await PhotoApi.getAllAlbums(nextPageToken) : await PhotoApi.getAlbums(nextPageToken);
+        const response = await all ? await GooglePhotoApi.getAllAlbums(nextPageToken) : await GooglePhotoApi.getAlbums(nextPageToken);
         setLoadingPopup(false);
         let albums = albumList;
         response.albums.forEach(album => {
@@ -40,14 +40,14 @@ const Sync = () => {
 
     const update = async (anime) => {
         setLoadingPopup(true);
-        anime.gdriveid = await DriveApi.getPrivateFolderId(anime);
-        anime.gdriveid_public = await DriveApi.getPublicFolderId(anime);
-        const photo_medias = await PhotoApi.getMedias(anime.gphotoid);
-        const drive_upload = await DriveApi.getUploadFiles();
+        anime.gdriveid = await GoogleDriveApi.getPrivateFolderId(anime);
+        anime.gdriveid_public = await GoogleDriveApi.getPublicFolderId(anime);
+        const photo_medias = await GooglePhotoApi.getMedias(anime.gphotoid);
+        const drive_upload = await GoogleDriveApi.getUploadFiles();
         await photo_medias.forEach(async media => {
             const file = drive_upload.filter(file => file.name === media.filename)[0];
             if (file?.id) {
-                await DriveApi.moveUploadFile(file.id, anime.gdriveid);
+                await GoogleDriveApi.moveUploadFile(file.id, anime.gdriveid);
             }
         });
         anime.download = photo_medias.length;

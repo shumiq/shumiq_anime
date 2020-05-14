@@ -3,7 +3,7 @@ import { getAccessToken } from '../utils/userdetail';
 
 const pageSize = 50;
 
-const PhotoApi = {
+const GooglePhotoApi = {
     getAlbums: async nextPageToken => {
         const response = await axios.get('https://photoslibrary.googleapis.com/v1/albums?access_token=' + getAccessToken() + '&pageToken=' + nextPageToken + '&pageSize=' + pageSize);
         return response.data;
@@ -12,7 +12,7 @@ const PhotoApi = {
         let albums = [];
         let nextPageToken = token;
         while (true) {
-            const response = await PhotoApi.getAlbums(nextPageToken);
+            const response = await GooglePhotoApi.getAlbums(nextPageToken);
             response.albums.forEach(album => {
                 albums.push(album);
             })
@@ -40,4 +40,4 @@ const PhotoApi = {
     }
 }
 
-export default PhotoApi;
+export default GooglePhotoApi;

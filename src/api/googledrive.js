@@ -5,7 +5,7 @@ const uploadFolderId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
 const privateAnimeFolderId = '1teaWviknfgbuDsoFarRIsnny1HQ8zQe2';
 const publicAnimeFolderId = '16MJ-jTxpa041WDc4nDjjLpIiSyNCEI4h';
 
-const DriveApi = {
+const GoogleDriveApi = {
     getFiles: async folderId => {
         let files = [];
         let nextPageToken = '';
@@ -20,32 +20,32 @@ const DriveApi = {
         return files;
     },
     getUploadFiles: async () => {
-        const response = await DriveApi.getFiles(uploadFolderId);
+        const response = await GoogleDriveApi.getFiles(uploadFolderId);
         return response;
     },
     getPrivateAnimeFolders: async () => {
-        const response = await DriveApi.getFiles(privateAnimeFolderId);
+        const response = await GoogleDriveApi.getFiles(privateAnimeFolderId);
         return response;
     },
     getPublicAnimeFolders: async () => {
-        const response = await DriveApi.getFiles(publicAnimeFolderId);
+        const response = await GoogleDriveApi.getFiles(publicAnimeFolderId);
         return response;
     },
     getPrivateFolderId: async anime => {
         if (anime.gdriveid) return anime.gdriveid;
-        const folderList = await DriveApi.getPrivateAnimeFolders();
+        const folderList = await GoogleDriveApi.getPrivateAnimeFolders();
         const animeFolder = folderList.filter(folder => folder.name === anime.title)[0];
         if (animeFolder?.id) return animeFolder?.id;
         console.log('new folder');
-        const newFolder = DriveApi.createFolder(anime.title, privateAnimeFolderId);
+        const newFolder = GoogleDriveApi.createFolder(anime.title, privateAnimeFolderId);
         return newFolder.id;
     },
     getPublicFolderId: async anime => {
         if (anime.gdriveid_public) return anime.gdriveid_public;
-        const folderList = await DriveApi.getPublicAnimeFolders();
+        const folderList = await GoogleDriveApi.getPublicAnimeFolders();
         const animeFolder = folderList.filter(folder => folder.name === anime.title)[0];
         if (animeFolder?.id) return animeFolder?.id;
-        const newFolder = DriveApi.createFolder(anime.title, publicAnimeFolderId);
+        const newFolder = GoogleDriveApi.createFolder(anime.title, publicAnimeFolderId);
         return newFolder.id;
     },
     createFolder: async (name, parentId) => {
@@ -61,4 +61,4 @@ const DriveApi = {
     }
 }
 
-export default DriveApi;
+export default GoogleDriveApi;
