@@ -76,7 +76,7 @@ const Sync = () => {
                                 return (b.year * 10 + b.season % 10) - (a.year * 10 + a.season % 10);
                         }).map(anime =>
                             anime !== null &&
-                            <tr key={anime.key}>
+                            <tr key={anime.key} className="row-anime">
                                 <td className="text-center align-middle">
                                     <a href={anime.url} target="blank">
                                         <img src={anime.cover_url} style={{ height: '50px' }} alt="cover" />
@@ -86,10 +86,10 @@ const Sync = () => {
                                 <td className="text-center align-middle">{anime.download}{albumList[anime.gphotoid] && '/' + albumList[anime.gphotoid]?.mediaItemsCount}</td>
                                 <td className="text-center align-middle">
                                     {anime.gphotoid && albumList[anime.gphotoid] && anime.download.toString() !== albumList[anime.gphotoid]?.mediaItemsCount.toString() && !anime.title.includes("Conan") && 
-                                        <button type="button col" className="btn btn-success mx-1" onClick={() => update(anime)}>Update</button>
+                                        <button id='btn-update' type="button col" className="btn btn-success mx-1" onClick={() => update(anime)}>Update</button>
                                     }
                                     {anime.gphotoid &&
-                                        <button type="button col" className="btn btn-danger mx-1" onClick={() => unsync(anime)}>Unsync</button>
+                                        <button id='btn-unsync' type="button col" className="btn btn-danger mx-1" onClick={() => unsync(anime)}>Unsync</button>
                                     }
                                     {!anime.gphotoid && 
                                         <p className="m-0 p-0">Not found</p>
@@ -105,14 +105,14 @@ const Sync = () => {
                         <a className="btn btn-primary m-2" href="https://photos.google.com/search/_tra_">Recent Files</a>
                         {nextPageToken !== null &&
                             <span>
-                                <button type="button" className="btn btn-primary m-2" onClick={() => getAlbums(false)}>Load more..</button>
-                                <button type="button" className="btn btn-primary m-2" onClick={() => getAlbums(true)}>Load all</button>
+                                <button id='btn-load-more' type="button" className="btn btn-primary m-2" onClick={() => getAlbums(false)}>Load more..</button>
+                                <button id='btn-load-all' type="button" className="btn btn-primary m-2" onClick={() => getAlbums(true)}>Load all</button>
                             </span>
                         }
                         {nextPageToken === null &&
                             <span>
-                                <button type="button" className="btn btn-secondary m-2" disabled>Load more..</button>
-                                <button type="button" className="btn btn-secondary m-2" disabled>Load all</button>
+                                <button id='btn-load-more' type="button" className="btn btn-secondary m-2" disabled>Load more..</button>
+                                <button id='btn-load-all' type="button" className="btn btn-secondary m-2" disabled>Load all</button>
                             </span>
                         }
                     </div>
