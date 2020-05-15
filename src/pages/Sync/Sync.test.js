@@ -65,4 +65,24 @@ describe('<Sync />', () => {
         updatedAnime.download = 2
         expect(SaveAnime).toHaveBeenCalledWith(updatedAnime.key, updatedAnime);
     });
+
+    it('should called save anime when unsync', async () => {
+        // Given
+        getLocalStorage.mockReturnValue(mockDatabase);
+        GooglePhotoApi.getAlbums.mockResolvedValue({
+            albums: [
+                { id: mockDatabase.animelist[0].gphotoid, mediaItemsCount: 2 },
+                { id: mockDatabase.animelist[1].gphotoid, mediaItemsCount: 2 }
+            ]
+        });
+        window.confirm = jest.fn(() => true);
+        const wrapper = shallow(<Sync />);
+        // When
+        wrapper.find('.row-anime').at(0).find('#btn-unsync').simulate('click');
+        await flushPromises();
+        // Then
+        let updatedAnime = mockDatabase.animelist[1];
+        updatedAnime.gphotoid = null;
+        expect(SaveAnime).toHaveBeenCalledWith(updatedAnime.key, updatedAnime);
+    });
 });

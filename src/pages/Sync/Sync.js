@@ -35,7 +35,10 @@ const Sync = () => {
     }
 
     const unsync = (anime) => {
-
+        if (window.confirm('Do you want to unsync "' + anime.title + '" ?')) {
+            anime.gphotoid = null
+            SaveAnime(anime.key, anime);
+        }
     }
 
     const update = async (anime) => {
