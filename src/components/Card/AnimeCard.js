@@ -27,7 +27,7 @@ const AnimeCard = props => {
 
     return (
         <div className={'anime-card p-3 ' + CardLayout[layout] }>
-            <div className="card">
+            <div className={'card ' + (IsAdmin() && anime.view.toString() !== anime.download.toString() ? 'border border-primary' : '')} >
                 <div className="card-img-top " style={{ background: 'url(' + anime.cover_url + ') center / cover', height: '360px' }}>
                     <small className="position-absolute align-middle px-1 pb-0 pt-0 text-white rounded" style={{ top: '5px', left: '5px', background: 'rgba(0,0,0,0.5)' }}>
                         <i className="material-icons" style={{ color: 'yellow', fontSize: '9px' }} >star</i>

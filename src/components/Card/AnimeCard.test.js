@@ -45,7 +45,7 @@ describe('<AnimeCard />', () => {
         expect(wrapper.find('#btn-edit')).toHaveLength(0);
     });
 
-    it('should show plus button in view row if there is any unview episode and login as admin', () => {
+    it('should show plus button and glow border in view row if there is any unview episode and login as admin', () => {
         // Given
         IsAdmin.mockReturnValue(true);
         const mockAnime = mockDatabase.animelist[0];
@@ -53,9 +53,10 @@ describe('<AnimeCard />', () => {
         const wrapper = mount(<AnimeCard anime={mockAnime} />);
         // Then
         expect(wrapper.find('#btn-add-view')).toHaveLength(1);
+        expect(wrapper.find('.card').find('.border')).toHaveLength(1);
     });
 
-    it('should not show plus button in view row if all episodes are viewed', () => {
+    it('should not show plus button and glow border in view row if all episodes are viewed', () => {
         // Given
         IsAdmin.mockReturnValue(true);
         const mockAnime = mockDatabase.animelist[1];
@@ -63,9 +64,10 @@ describe('<AnimeCard />', () => {
         const wrapper = mount(<AnimeCard anime={mockAnime} />);
         // Then
         expect(wrapper.find('#btn-add-view')).toHaveLength(0);
+        expect(wrapper.find('.card').find('.border')).toHaveLength(0);
     });
 
-    it('should not show plus button if not admin', () => {
+    it('should not show plus button and glow border if not admin', () => {
         // Given
         IsAdmin.mockReturnValue(false);
         const mockAnime = mockDatabase.animelist[0];
@@ -73,6 +75,7 @@ describe('<AnimeCard />', () => {
         const wrapper = mount(<AnimeCard anime={mockAnime} />);
         // Then
         expect(wrapper.find('#btn-add-view')).toHaveLength(0);
+        expect(wrapper.find('.card').find('.border')).toHaveLength(0);
     });
 
     it('should show plus button in download row if there is any undownload episode and admin', () => {
