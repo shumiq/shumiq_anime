@@ -2,11 +2,17 @@ import axios from 'axios';
 import { getAccessToken } from '../utils/userdetail';
 
 const pageSize = 50;
+const includeAlbum = '[Anime]';
+const excludeAlbum = 'Detective Conan';
 
 const GooglePhotoApi = {
     getAlbums: async nextPageToken => {
         const response = await axios.get('https://photoslibrary.googleapis.com/v1/albums?access_token=' + getAccessToken() + '&pageToken=' + nextPageToken + '&pageSize=' + pageSize);
-        return response.data;
+        let albums = [];
+        response.data.albums.forEach(album => {
+            if (album.title.includes(includeAlbum) && !album.title.includes(excludeAlbum)) albums.push(album);
+        })
+        return { albums: albums, nextPageToken: response.data.nextPageToken };
     },
     getAllAlbums: async token => {
         let albums = [];

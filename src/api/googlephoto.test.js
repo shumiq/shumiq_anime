@@ -13,7 +13,7 @@ describe('GooglePhotoApi', () => {
         it('should call api', async () => {
             // Given
             getAccessToken.mockReturnValue('access_token');
-            axios.get.mockResolvedValue({ data: 'data' })
+            axios.get.mockResolvedValue({ data: { albums: [] } })
             // When
             await GooglePhotoApi.getAlbums('');
             await flushPromises();

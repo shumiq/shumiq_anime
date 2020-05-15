@@ -53,9 +53,14 @@ const Sync = () => {
                 await GoogleDriveApi.moveUploadFile(file.id, anime.gdriveid);
             }
         });
-        anime.download = photo_medias.length;
+        anime.download = albumList[anime.gphotoid].mediaItemsCount;
         SaveAnime(anime.key, anime);
         setLoadingPopup(false);
+    }
+
+    const sync = async (anime) => {
+        anime.gphotoid = Object.entries(albumList).filter(entry => entry[1].title === '[Anime] ' + anime.title)[0]?.[0];
+        SaveAnime(anime.key, anime);
     }
 
     return (
@@ -88,14 +93,14 @@ const Sync = () => {
                                 <td className="text-left align-middle">{anime.title}</td>
                                 <td className="text-center align-middle">{anime.download}{albumList[anime.gphotoid] && '/' + albumList[anime.gphotoid]?.mediaItemsCount}</td>
                                 <td className="text-center align-middle">
-                                    {anime.gphotoid && albumList[anime.gphotoid] && anime.download.toString() !== albumList[anime.gphotoid]?.mediaItemsCount.toString() && !anime.title.includes("Conan") && 
+                                    {anime.gphotoid && albumList[anime.gphotoid] && anime.download.toString() !== albumList[anime.gphotoid]?.mediaItemsCount.toString() && !anime.title.includes("Conan") &&
                                         <button id='btn-update' type="button col" className="btn btn-success mx-1" onClick={() => update(anime)}>Update</button>
                                     }
                                     {anime.gphotoid &&
                                         <button id='btn-unsync' type="button col" className="btn btn-danger mx-1" onClick={() => unsync(anime)}>Unsync</button>
                                     }
-                                    {!anime.gphotoid && 
-                                        <p className="m-0 p-0">Not found</p>
+                                    {!anime.gphotoid && Object.entries(albumList).some(entry => entry[1].title === '[Anime] ' + anime.title) &&
+                                        <button id='btn-sync' type="button col" className="btn btn-primary mx-1" onClick={() => sync(anime)}>Sync</button>
                                     }
                                 </td>
                             </tr>
