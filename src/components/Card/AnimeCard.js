@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { SeasonEnum } from '../../utils/enum'
+import { SeasonEnum, CardLayout } from '../../utils/enum'
 import { IsAdmin } from '../../utils/userdetail';
 import EditAnimePopup from '../../components/Popup/EditAnimePopup';
 import { SaveAnime } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
 import AnimeInfoPopup from '../Popup/AnimeInfoPopup';
+import { getLocalStorage } from '../../utils/localstorage';
 
 const AnimeCard = props => {
     const anime = props.anime;
@@ -21,8 +22,11 @@ const AnimeCard = props => {
         setAnimeInfo(response);
         setInfoPopup(true);
     }
+
+    const layout = JSON.stringify(getLocalStorage('layout')) !== '{}' ? getLocalStorage('layout') : 'auto';
+
     return (
-        <div className="anime-card col-12 col-sm-6 col-md-6 col-lg-4 p-3">
+        <div className={'anime-card p-3 ' + CardLayout[layout] }>
             <div className="card">
                 <div className="card-img-top " style={{ background: 'url(' + anime.cover_url + ') center / cover', height: '360px' }}>
                     <small className="position-absolute align-middle px-1 pb-0 pt-0 text-white rounded" style={{ top: '5px', left: '5px', background: 'rgba(0,0,0,0.5)' }}>

@@ -3,14 +3,26 @@ import Login from '../Login/Login';
 import history from '../../history';
 import { IsAdmin } from '../../utils/userdetail';
 import { onFirebaseAuthUpdate } from '../../utils/firebase';
+import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 
 const Navbar = () => {
     const [isAnime, setIsAnime] = useState(history.location.pathname === '/' || history.location.pathname === '/sync');
     const [isAdmin, setIsAdmin] = useState(IsAdmin());
+    const [cardLayout, setCardLayout] = useState(JSON.stringify(getLocalStorage('layout')) !== '{}' ? getLocalStorage('layout') : 'auto');
 
     onFirebaseAuthUpdate(() => {
         setIsAdmin(IsAdmin());
     });
+
+    const updateCardLayout = () => {
+        let nextLayout = 'auto';
+        if (cardLayout === 'auto') nextLayout = 'small';
+        if (cardLayout === 'small') nextLayout = 'medium';
+        if (cardLayout === 'medium') nextLayout = 'large';
+        if (cardLayout === 'large') nextLayout = 'auto';
+        setCardLayout(nextLayout)
+        setLocalStorage('layout', nextLayout);
+    }
 
     return (
         <div className="navbar">
@@ -45,6 +57,9 @@ const Navbar = () => {
                         </li>
                     </ul>
                     <ul className="navbar-nav text-center ml-auto">
+                        <li className="nav-item">
+                            <p id='btn-layout' className="nav-link btn m-0" onClick={updateCardLayout}>{cardLayout}</p>
+                        </li>
                         <li className="nav-item">
                             <Login />
                         </li>

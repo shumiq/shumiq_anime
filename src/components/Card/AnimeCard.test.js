@@ -6,10 +6,13 @@ import { IsAdmin } from '../../utils/userdetail';
 import AnilistApi from '../../api/anilist';
 import { SaveAnime } from '../../utils/firebase';
 import { act } from 'react-dom/test-utils';
+import { getLocalStorage } from '../../utils/localstorage';
+import { CardLayout } from '../../utils/enum';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../api/anilist');
 jest.mock('../../utils/firebase');
+jest.mock('../../utils/localstorage');
 
 describe('<AnimeCard />', () => {
 
@@ -213,4 +216,44 @@ describe('<AnimeCard />', () => {
         expectedAnime.download++;
         expect(SaveAnime).toHaveBeenCalledWith(mockAnime.key, expectedAnime);
     });
+
+    it('should set auto layout', () => {
+        // Given
+        getLocalStorage.mockReturnValue('auto');
+        const mockAnime = mockDatabase.animelist[0];
+        // When
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        // Then
+        expect(wrapper.html()).toContain(CardLayout.auto);
+    })
+
+    it('should set small layout', () => {
+        // Given
+        getLocalStorage.mockReturnValue('small');
+        const mockAnime = mockDatabase.animelist[0];
+        // When
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        // Then
+        expect(wrapper.html()).toContain(CardLayout.small);
+    })
+
+    it('should set medium layout', () => {
+        // Given
+        getLocalStorage.mockReturnValue('medium');
+        const mockAnime = mockDatabase.animelist[0];
+        // When
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        // Then
+        expect(wrapper.html()).toContain(CardLayout.medium);
+    })
+
+    it('should set large layout', () => {
+        // Given
+        getLocalStorage.mockReturnValue('large');
+        const mockAnime = mockDatabase.animelist[0];
+        // When
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        // Then
+        expect(wrapper.html()).toContain(CardLayout.large);
+    })
 });

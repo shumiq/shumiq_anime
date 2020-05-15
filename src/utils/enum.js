@@ -19,3 +19,10 @@ export const FilterEnum = {
     SORT_BY_SEASON: 6,
     SORT_BY_SCORE: 7
 }
+
+export const CardLayout = {
+    auto: 'col-12 col-sm-6 col-md-6 col-lg-4',
+    small: 'col-4',
+    medium: 'col-6',
+    large: 'col-12'
+}
