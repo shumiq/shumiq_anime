@@ -4,6 +4,7 @@ import history from '../../history';
 import { IsAdmin } from '../../utils/userdetail';
 import { onFirebaseAuthUpdate } from '../../utils/firebase';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [state, setState] = useState({
@@ -44,18 +45,18 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav text-center mr-auto">
                         <li className="nav-item">
-                            <a id='link-anime' className="nav-link btn" href="/" onClick={() => setState({ ...state, isAnime: true })}>Anime</a>
+                            <Link id='link-anime' className="nav-link btn" to="/" onClick={() => setState({ ...state, isAnime: true })}>Anime</Link>
                         </li>
                         {state.isAnime && state.isAdmin &&
                             <li className="nav-item">
-                                <a id='link-sync' className="nav-link btn" href="/sync" onClick={() => setState({ ...state, isAnime: true })}>Sync Anime</a>
+                                <Link id='link-sync' className="nav-link btn" to="/sync" onClick={() => setState({ ...state, isAnime: true })}>Sync Anime</Link>
                             </li>
                         }
                         <li className="nav-item">
-                            <a id='link-conan' className="nav-link btn" href="/conan" onClick={() => setState({ ...state, isAnime: false })}>Conan</a>
+                            <Link id='link-conan' className="nav-link btn" to="/conan" onClick={() => setState({ ...state, isAnime: false })}>Conan</Link>
                         </li>
                         <li className="nav-item">
-                            <a id='link-keyaki' className="nav-link btn" href="/keyaki" onClick={() => setState({ ...state, isAnime: false })}>Keyakitte Kakenai</a>
+                            <Link id='link-keyaki' className="nav-link btn" to="/keyaki" onClick={() => setState({ ...state, isAnime: false })}>Keyakitte Kakenai</Link>
                         </li>
                     </ul>
                     <ul className="navbar-nav text-center ml-auto">
