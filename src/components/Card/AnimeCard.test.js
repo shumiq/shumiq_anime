@@ -8,9 +8,13 @@ import { SaveAnime } from '../../utils/firebase';
 import { act } from 'react-dom/test-utils';
 import { getLocalStorage } from '../../utils/localstorage';
 import { CardLayout } from '../../utils/enum';
+import GoogleDriveApi from '../../api/googledrive';
+import GooglePhotoApi from '../../api/googlephoto';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../api/anilist');
+jest.mock('../../api/googledrive');
+jest.mock('../../api/googlephoto');
 jest.mock('../../utils/firebase');
 jest.mock('../../utils/localstorage');
 
@@ -108,28 +112,46 @@ describe('<AnimeCard />', () => {
         expect(wrapper.find('#btn-add-download')).toHaveLength(0);
     });
 
-    // it('should enable google drive button if there is google drive id', () => {
-    //     // Given
-    //     IsAdmin.mockReturnValue(true);
-    //     let mockAnime = mockDatabase.animelist[0];
-    //     mockAnime.gdriveid_public = 'driveid'
-    //     // When
-    //     const wrapper = mount(<AnimeCard anime={mockAnime} />);
-    //     const googleDriveButton = wrapper.find('#btn-gdrive').first();
-    //     // Then
-    //     expect(googleDriveButton.find('.disabled')).toHaveLength(0);
-    // });
+    it('should enable internal folder button if there is both google drive id and google photo id', () => {
+        // Given
+        IsAdmin.mockReturnValue(true);
+        let mockAnime = mockDatabase.animelist[0];
+        mockAnime.gdriveid_public = 'driveid'
+        // When
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        const internalFolderButton = wrapper.find('#btn-folder-internal').first();
+        // Then
+        expect(internalFolderButton.find('.disabled')).toHaveLength(0);
+    });
 
-    // it('should disable google drive button if there is no google drive id', () => {
-    //     // Given
-    //     IsAdmin.mockReturnValue(true);
-    //     const mockAnime = mockDatabase.animelist[1];
-    //     // When
-    //     const wrapper = mount(<AnimeCard anime={mockAnime} />);
-    //     const googleDriveButton = wrapper.find('#btn-gdrive').first();
-    //     // Then
-    //     expect(googleDriveButton.find('.disabled')).toHaveLength(1);
-    // });
+    it('should call googledrive api and googlephotoapi when click internal folder button', async () => {
+        // Given
+        IsAdmin.mockReturnValue(true);
+        GoogleDriveApi.getFiles.mockResolvedValue([{ name: 'name', id: 'id' }]);
+        GooglePhotoApi.getMedias.mockResolvedValue([{ filename: 'name', productUrl: 'url' }]);
+        let mockAnime = mockDatabase.animelist[0];
+        mockAnime.gdriveid_public = 'driveid'
+        // When
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        // When
+        await act(async () => {
+            wrapper.find('#btn-folder-internal').simulate('click');
+        });
+        // Then
+        expect(GoogleDriveApi.getFiles).toHaveBeenCalledWith('driveid');
+        expect(GooglePhotoApi.getMedias).toHaveBeenCalledWith(mockAnime.gphotoid);
+    });
+
+    it('should disable internal folder button if there is neither google drive id nor google photo id', () => {
+        // Given
+        IsAdmin.mockReturnValue(true);
+        const mockAnime = mockDatabase.animelist[1];
+        // When
+        const wrapper = mount(<AnimeCard anime={mockAnime} />);
+        const internalFolderButton = wrapper.find('#btn-folder-internal').first();
+        // Then
+        expect(internalFolderButton.find('.disabled')).toHaveLength(1);
+    });
 
     // it('should enable google photo button if there is google photo url', () => {
     //     // Given

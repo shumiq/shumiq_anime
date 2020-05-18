@@ -7,29 +7,54 @@ import AnilistApi from '../../api/anilist';
 import AnimeInfoPopup from '../Popup/AnimeInfoPopup';
 import { getLocalStorage } from '../../utils/localstorage';
 import GeneralPopup from '../Popup/GeneralPopup';
+import AnimeFolderPopup from '../Popup/AnimeFolderPopup';
+import GoogleDriveApi from '../../api/googledrive';
+import GooglePhotoApi from '../../api/googlephoto';
 
 const AnimeCard = props => {
     const anime = props.anime;
     const [state, setState] = useState({
         animeInfo: null,
+        folderFiles: {},
         popupEdit: false,
         popupInfo: false,
         popupFolderInternal: false,
-        popupFolderExternal: false
+        popupFolderExternal: false,
     });
-    
+
     const increase = field => {
         let animeCopy = JSON.parse(JSON.stringify(anime));
         animeCopy[field] = parseInt(animeCopy[field]) + 1;
         SaveAnime(anime.key, animeCopy);
     }
-    
+
     const showInfoPopup = async () => {
         const response = await AnilistApi.getAnime(anime.title, anime.blacklist);
         setState({
             ...state,
             animeInfo: response,
             popupInfo: true
+        });
+    }
+
+    const showFolderPopup = async () => {
+        const driveFiles = await GoogleDriveApi.getFiles(anime.gdriveid_public);
+        const photoFiles = await GooglePhotoApi.getMedias(anime.gphotoid);
+        let files = {};
+        driveFiles.forEach(file => {
+            if (!files[file.name]) files[file.name] = {}
+            files[file.name].name = file.name;
+            files[file.name].driveUrl = 'http://doc.google.com/drive/files/' + file.id;
+        });
+        photoFiles.forEach(file => {
+            if (!files[file.filename]) files[file.filename] = {}
+            files[file.filename].name = file.filename;
+            files[file.filename].photoUrl = file.productUrl;
+        });
+        setState({
+            ...state,
+            folderFiles: files,
+            popupFolderInternal: true
         });
     }
 
@@ -106,7 +131,7 @@ const AnimeCard = props => {
                         {(!anime.gdriveid_public || !anime.gphotoid) && <button id='btn-folder-internal' className="btn btn-outline-secondary disabled h-auto border-0">
                             <i className="material-icons align-middle">folder</i>
                         </button>}
-                        {anime.gdriveid_public && anime.gphotoid && <button id='btn-folder-internal' className="btn btn-outline-light h-auto border-0 disabled">
+                        {anime.gdriveid_public && anime.gphotoid && <button id='btn-folder-internal' className="btn btn-outline-light h-auto border-0" onClick={showFolderPopup}>
                             <i className="material-icons align-middle">folder</i>
                         </button>}
 
@@ -125,6 +150,7 @@ const AnimeCard = props => {
             </div>
             <EditAnimePopup anime={anime} show={state.popupEdit} setShow={show => setState({ ...state, popupEdit: show })} />
             <AnimeInfoPopup anime={anime} info={state.animeInfo} show={state.popupInfo} setShow={show => setState({ ...state, popupInfo: show })} />
+            <AnimeFolderPopup folderFiles={state.folderFiles} show={state.popupFolderInternal} setShow={show => setState({ ...state, popupFolderInternal: show })} />
             <GeneralPopup message={
                 [anime.gdriveid_public && <a key={'drive_' + anime.key} id='btn-gdrive' className="btn btn-primary h-auto border-0 m-1" role="button" href={'http://doc.google.com/drive/folders/' + anime.gdriveid_public} target='blank'>
                     Google Drive
