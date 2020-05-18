@@ -3,7 +3,6 @@ import { getLocalStorage } from '../../utils/localstorage';
 import { onFirebaseDatabaseUpdate, SaveAnime } from '../../utils/firebase';
 import GooglePhotoApi from '../../api/googlephoto';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
-import { IsAdmin, getAccessToken } from '../../utils/userdetail';
 import GoogleDriveApi from '../../api/googledrive';
 
 const Sync = () => {
@@ -19,9 +18,6 @@ const Sync = () => {
             ...state,
             animeList: db?.animelist.filter(anime => anime != null)
         })
-        if (IsAdmin() && typeof getAccessToken() === 'string' && state.nextPageToken === '') {
-            getAlbums();
-        }
     });
 
     const getAlbums = async (all = false) => {
