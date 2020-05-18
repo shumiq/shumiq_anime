@@ -44,7 +44,7 @@ const AnimeCard = props => {
         driveFiles.forEach(file => {
             if (!files[file.name]) files[file.name] = {}
             files[file.name].name = file.name;
-            files[file.name].driveUrl = 'http://doc.google.com/drive/files/' + file.id;
+            files[file.name].driveUrl = 'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
         });
         photoFiles.forEach(file => {
             if (!files[file.filename]) files[file.filename] = {}
@@ -158,10 +158,10 @@ const AnimeCard = props => {
                 !anime.gdriveid_public && <a key={'drive_' + anime.key} id='btn-gdrive' className="btn btn-primary h-auto border-0 m-1 disabled" role="button" href={'http://doc.google.com/drive/folders/' + anime.gdriveid_public} target='blank'>
                     Google Drive
                 </a>,
-                anime.url === '' && <a key={'photo_' + anime.key} id='btn-gphoto' className="btn btn-primary disabled h-auto border-0" type="button" href={anime.url} target='blank'>
+                anime.url === '' && <a key={'photo_' + anime.key} id='btn-gphoto' className="btn btn-primary disabled h-auto border-0 m-1" type="button" href={anime.url} target='blank'>
                     Google Photo
                 </a>,
-                anime.url !== '' && <a key={'photo_' + anime.key} id='btn-gphoto' className="btn btn-primary h-auto border-0" type="button" href={anime.url} target='blank'>
+                anime.url !== '' && <a key={'photo_' + anime.key} id='btn-gphoto' className="btn btn-primary h-auto border-0 m-1" type="button" href={anime.url} target='blank'>
                     Google Photo
                 </a>]
             }
