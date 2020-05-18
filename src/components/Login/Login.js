@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import GoogleLogin, { GoogleLogout } from 'react-google-login';
 import { setLocalStorage, removeLocalStorage } from '../../utils/localstorage';
 import { SignIn, SignOut } from '../../utils/firebase';
@@ -6,7 +6,6 @@ import { getUser } from '../../utils/userdetail';
 
 const Login = () => {
     const [user, setUser] = useState(null);
-    useEffect(() => { }, [user]);
 
     const login = response => {
         setLocalStorage('user', response.profileObj);

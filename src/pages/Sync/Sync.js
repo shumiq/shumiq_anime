@@ -7,31 +7,38 @@ import { IsAdmin, getAccessToken } from '../../utils/userdetail';
 import GoogleDriveApi from '../../api/googledrive';
 
 const Sync = () => {
-    const [database, setDatabase] = useState(getLocalStorage('database'));
-    const [animeList, setAnimeList] = useState(database?.animelist.filter(anime => anime != null));
-    const [albumList, setAlbumList] = useState([]);
-    const [nextPageToken, setNextPageToken] = useState('');
-    const [loadingPopup, setLoadingPopup] = useState(false);
+    const [state, setState] = useState({
+        animeList: getLocalStorage('database')?.animelist.filter(anime => anime != null),
+        albumList: [],
+        nextPageToken: '',
+        popup: {
+            loading: false
+        }
+    });
 
     onFirebaseDatabaseUpdate(db => {
-        setDatabase(db);
-        setAnimeList(db?.animelist.filter(anime => anime != null));
-        if (IsAdmin() && typeof getAccessToken() === 'string' && nextPageToken === '') {
+        setState({
+            ...state,
+            animeList: db?.animelist.filter(anime => anime != null)
+        })
+        if (IsAdmin() && typeof getAccessToken() === 'string' && state.nextPageToken === '') {
             getAlbums();
         }
     });
 
     const getAlbums = async (all = false) => {
-        setLoadingPopup(true);
-        const response = await all ? await GooglePhotoApi.getAllAlbums(nextPageToken) : await GooglePhotoApi.getAlbums(nextPageToken);
-        setLoadingPopup(false);
-        let albums = albumList;
+        setState({ ...state, popup: { loading: true } });
+        const response = await all ? await GooglePhotoApi.getAllAlbums(state.nextPageToken) : await GooglePhotoApi.getAlbums(state.nextPageToken);
+        setState({ ...state, popup: { loading: false } });
+        let albums = state.albumList;
         response.albums.forEach(album => {
             if (album?.id) albums[album.id] = album;
         });
-        setAlbumList(albums);
-        setNextPageToken(response.nextPageToken);
-        setAnimeList(animeList);
+        setState({
+            ...state,
+            albumList: albums,
+            nextPageToken: response.nextPageToken
+        })
     }
 
     const unsync = (anime) => {
@@ -42,7 +49,7 @@ const Sync = () => {
     }
 
     const update = async (anime) => {
-        setLoadingPopup(true);
+        setState({ ...state, popup: { loading: true } });
         anime.gdriveid = await GoogleDriveApi.getPrivateFolderId(anime);
         anime.gdriveid_public = await GoogleDriveApi.getPublicFolderId(anime);
         const photo_medias = await GooglePhotoApi.getMedias(anime.gphotoid);
@@ -53,13 +60,13 @@ const Sync = () => {
                 await GoogleDriveApi.moveUploadFile(file.id, anime.gdriveid);
             }
         });
-        anime.download = albumList[anime.gphotoid].mediaItemsCount;
+        anime.download = state.albumList[anime.gphotoid].mediaItemsCount;
         SaveAnime(anime.key, anime);
-        setLoadingPopup(false);
+        setState({ ...state, popup: { loading: false } });
     }
 
     const sync = async (anime) => {
-        anime.gphotoid = Object.entries(albumList).filter(entry => entry[1].title === '[Anime] ' + anime.title)[0]?.[0];
+        anime.gphotoid = Object.entries(state.albumList).filter(entry => entry[1].title === '[Anime] ' + anime.title)[0]?.[0];
         SaveAnime(anime.key, anime);
     }
 
@@ -77,7 +84,7 @@ const Sync = () => {
                     </thead>
                     <tbody>
 
-                        {animeList.sort((a, b) => {
+                        {state.animeList.sort((a, b) => {
                             if ((b.year * 10 + b.season % 10) - (a.year * 10 + a.season % 10) === 0)
                                 return a.title < b.title ? -1 : 1;
                             else
@@ -91,15 +98,15 @@ const Sync = () => {
                                     </a>
                                 </td>
                                 <td className="text-left align-middle">{anime.title}</td>
-                                <td className="text-center align-middle">{anime.download}{albumList[anime.gphotoid] && '/' + albumList[anime.gphotoid]?.mediaItemsCount}</td>
+                                <td className="text-center align-middle">{anime.download}{state.albumList[anime.gphotoid] && '/' + state.albumList[anime.gphotoid]?.mediaItemsCount}</td>
                                 <td className="text-center align-middle">
-                                    {anime.gphotoid && albumList[anime.gphotoid] && anime.download.toString() !== albumList[anime.gphotoid]?.mediaItemsCount.toString() && !anime.title.includes("Conan") &&
+                                    {anime.gphotoid && state.albumList[anime.gphotoid] && anime.download.toString() !== state.albumList[anime.gphotoid]?.mediaItemsCount.toString() && !anime.title.includes("Conan") &&
                                         <button id='btn-update' type="button col" className="btn btn-success mx-1" onClick={() => update(anime)}>Update</button>
                                     }
                                     {anime.gphotoid &&
                                         <button id='btn-unsync' type="button col" className="btn btn-danger mx-1" onClick={() => unsync(anime)}>Unsync</button>
                                     }
-                                    {!anime.gphotoid && Object.entries(albumList).some(entry => entry[1].title === '[Anime] ' + anime.title) &&
+                                    {!anime.gphotoid && Object.entries(state.albumList).some(entry => entry[1].title === '[Anime] ' + anime.title) &&
                                         <button id='btn-sync' type="button col" className="btn btn-primary mx-1" onClick={() => sync(anime)}>Sync</button>
                                     }
                                 </td>
@@ -111,13 +118,13 @@ const Sync = () => {
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
                     <div className="w-100 text-center">
                         <a className="btn btn-primary m-2" href="https://photos.google.com/search/_tra_">Recent Files</a>
-                        {nextPageToken !== null &&
+                        {state.nextPageToken !== null &&
                             <span>
                                 <button id='btn-load-more' type="button" className="btn btn-primary m-2" onClick={() => getAlbums(false)}>Load more..</button>
                                 <button id='btn-load-all' type="button" className="btn btn-primary m-2" onClick={() => getAlbums(true)}>Load all</button>
                             </span>
                         }
-                        {nextPageToken === null &&
+                        {state.nextPageToken === null &&
                             <span>
                                 <button id='btn-load-more' type="button" className="btn btn-secondary m-2" disabled>Load more..</button>
                                 <button id='btn-load-all' type="button" className="btn btn-secondary m-2" disabled>Load all</button>
@@ -125,7 +132,7 @@ const Sync = () => {
                         }
                     </div>
                 </nav>
-                <GeneralPopup show={loadingPopup} message='Loading...' />
+                <GeneralPopup show={state.loadingPopup} message='Loading...' />
             </div>
         </div>
     );

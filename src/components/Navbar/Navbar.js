@@ -6,21 +6,23 @@ import { onFirebaseAuthUpdate } from '../../utils/firebase';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 
 const Navbar = () => {
-    const [isAnime, setIsAnime] = useState(history.location.pathname === '/' || history.location.pathname === '/sync');
-    const [isAdmin, setIsAdmin] = useState(IsAdmin());
-    const [cardLayout, setCardLayout] = useState(JSON.stringify(getLocalStorage('layout')) !== '{}' ? getLocalStorage('layout') : 'auto');
+    const [state, setState] = useState({
+        isAnime: history.location.pathname === '/' || history.location.pathname === '/sync',
+        isAdmin: IsAdmin(),
+        cardLayout: JSON.stringify(getLocalStorage('layout')) !== '{}' ? getLocalStorage('layout') : 'auto'
+    });
 
     onFirebaseAuthUpdate(() => {
-        setIsAdmin(IsAdmin());
+        setState({ ...state, isAdmin: IsAdmin() });
     });
 
     const updateCardLayout = () => {
         let nextLayout = 'auto';
-        if (cardLayout === 'auto') nextLayout = 'small';
-        if (cardLayout === 'small') nextLayout = 'medium';
-        if (cardLayout === 'medium') nextLayout = 'large';
-        if (cardLayout === 'large') nextLayout = 'auto';
-        setCardLayout(nextLayout)
+        if (state.cardLayout === 'auto') nextLayout = 'small';
+        if (state.cardLayout === 'small') nextLayout = 'medium';
+        if (state.cardLayout === 'medium') nextLayout = 'large';
+        if (state.cardLayout === 'large') nextLayout = 'auto';
+        setState({ ...state, cardLayout: nextLayout });
         setLocalStorage('layout', nextLayout);
     }
 
@@ -42,24 +44,26 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav text-center mr-auto">
                         <li className="nav-item">
-                            <a id='link-anime' className="nav-link btn" href="/" onClick={() => setIsAnime(true)}>Anime</a>
+                            <a id='link-anime' className="nav-link btn" href="/" onClick={() => setState({ ...state, isAnime: true })}>Anime</a>
                         </li>
-                        {isAnime && isAdmin &&
+                        {state.isAnime && state.isAdmin &&
                             <li className="nav-item">
-                                <a id='link-sync' className="nav-link btn" href="/sync" onClick={() => setIsAnime(true)}>Sync Anime</a>
+                                <a id='link-sync' className="nav-link btn" href="/sync" onClick={() => setState({ ...state, isAnime: true })}>Sync Anime</a>
                             </li>
                         }
                         <li className="nav-item">
-                            <a id='link-conan' className="nav-link btn" href="/conan" onClick={() => setIsAnime(false)}>Conan</a>
+                            <a id='link-conan' className="nav-link btn" href="/conan" onClick={() => setState({ ...state, isAnime: false })}>Conan</a>
                         </li>
                         <li className="nav-item">
-                            <a id='link-keyaki' className="nav-link btn" href="/keyaki" onClick={() => setIsAnime(false)}>Keyakitte Kakenai</a>
+                            <a id='link-keyaki' className="nav-link btn" href="/keyaki" onClick={() => setState({ ...state, isAnime: false })}>Keyakitte Kakenai</a>
                         </li>
                     </ul>
                     <ul className="navbar-nav text-center ml-auto">
-                        <li className="nav-item">
-                            <p id='btn-layout' className="nav-link btn m-0" onClick={updateCardLayout}>{cardLayout}</p>
-                        </li>
+                        {state.isAnime &&
+                            <li className="nav-item">
+                                <p id='btn-layout' className="nav-link btn m-0" onClick={updateCardLayout}>{state.cardLayout}</p>
+                            </li>
+                        }
                         <li className="nav-item">
                             <Login />
                         </li>
