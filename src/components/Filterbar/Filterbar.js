@@ -7,8 +7,9 @@ const Filterbar = props => {
     const filter = Object.assign(defaultFilter, props.filter);
     const setFilter = f => props.setFilter(f);
     const seasonList = props.seasonlist;
-    const currentSeason = filter?.season === FilterEnum.LATEST_SEASON ?
-        Object.keys(seasonList).sort().pop() : filter.season;
+    const currentSeason = filter.category.toString() === FilterEnum.ONLY_UNSEEN.toString() || filter.category.toString() === FilterEnum.ONLY_UNFINISH.toString() ?
+        FilterEnum.ALL_SEASON : filter?.season === FilterEnum.LATEST_SEASON ?
+            Object.keys(seasonList).sort().pop() : filter.season;
 
     const seasonToText = season => {
         if (season.toString() === FilterEnum.ALL_SEASON.toString()) return "All Season";
