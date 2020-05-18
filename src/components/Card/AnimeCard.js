@@ -11,10 +11,8 @@ const AnimeCard = props => {
     const [state, setState] = useState({
         anime: props.anime,
         animeInfo: null,
-        popup: {
-            edit: false,
-            info: false
-        }
+        popupEdit: false,
+        popupInfo: false
     });
     const increase = field => {
         let animeCopy = JSON.parse(JSON.stringify(state.anime));
@@ -27,10 +25,7 @@ const AnimeCard = props => {
         setState({
             ...state,
             animeInfo: response,
-            popup: {
-                edit: false,
-                info: true
-            }
+            popupInfo: true
         });
     }
 
@@ -49,7 +44,7 @@ const AnimeCard = props => {
                             <i className="material-icons">share</i>
                         </button>
                         {IsAdmin() &&
-                            <button id='btn-edit' className="btn btn-outline-light border-0 p-0 m-0 ml-3" style={{ height: '24px' }} onClick={() => setState({ ...state, popup: { info: false, edit: true } })}>
+                            <button id='btn-edit' className="btn btn-outline-light border-0 p-0 m-0 ml-3" style={{ height: '24px' }} onClick={() => setState({ ...state, popupEdit: true })}>
                                 <i className="material-icons">edit</i>
                             </button>
                         }
@@ -127,8 +122,8 @@ const AnimeCard = props => {
                     </div>
                 </div>
             </div>
-            <EditAnimePopup anime={state.anime} show={state.popup.edit} setShow={show => setState({ ...state, popup: { info: false, edit: show } })} />
-            <AnimeInfoPopup anime={state.anime} info={state.animeInfo} show={state.popup.info} setShow={show => setState({ ...state, popup: { info: show, edit: false } })} />
+            <EditAnimePopup anime={state.anime} show={state.popupEdit} setShow={show => setState({ ...state, popupEdit: show })} />
+            <AnimeInfoPopup anime={state.anime} info={state.animeInfo} show={state.popupInfo} setShow={show => setState({ ...state, popupInfo: show })} />
         </div >
     );
 }

@@ -11,9 +11,7 @@ const Sync = () => {
         animeList: getLocalStorage('database')?.animelist.filter(anime => anime != null),
         albumList: [],
         nextPageToken: '',
-        popup: {
-            loading: false
-        }
+        popupLoading: false
     });
 
     onFirebaseDatabaseUpdate(db => {
@@ -27,9 +25,9 @@ const Sync = () => {
     });
 
     const getAlbums = async (all = false) => {
-        setState({ ...state, popup: { loading: true } });
+        setState({ ...state, popupLoading: true });
         const response = await all ? await GooglePhotoApi.getAllAlbums(state.nextPageToken) : await GooglePhotoApi.getAlbums(state.nextPageToken);
-        setState({ ...state, popup: { loading: false } });
+        setState({ ...state, popupLoading: false });
         let albums = state.albumList;
         response.albums.forEach(album => {
             if (album?.id) albums[album.id] = album;
@@ -49,7 +47,7 @@ const Sync = () => {
     }
 
     const update = async (anime) => {
-        setState({ ...state, popup: { loading: true } });
+        setState({ ...state, popupLoading: true });
         anime.gdriveid = await GoogleDriveApi.getPrivateFolderId(anime);
         anime.gdriveid_public = await GoogleDriveApi.getPublicFolderId(anime);
         const photo_medias = await GooglePhotoApi.getMedias(anime.gphotoid);
@@ -62,7 +60,7 @@ const Sync = () => {
         });
         anime.download = state.albumList[anime.gphotoid].mediaItemsCount;
         SaveAnime(anime.key, anime);
-        setState({ ...state, popup: { loading: false } });
+        setState({ ...state, popupLoading: false });
     }
 
     const sync = async (anime) => {
