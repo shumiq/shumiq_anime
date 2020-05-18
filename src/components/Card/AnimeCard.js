@@ -128,10 +128,10 @@ const AnimeCard = props => {
                 <div className="card-footer p-1">
                     <div className="d-flex justify-content-around w-auto">
 
-                        {(!anime.gdriveid_public || !anime.gphotoid) && <button id='btn-folder-internal' className="btn btn-outline-secondary disabled h-auto border-0">
+                        {IsAdmin() && (!anime.gdriveid_public || !anime.gphotoid) && <button id='btn-folder-internal' className="btn btn-outline-secondary disabled h-auto border-0">
                             <i className="material-icons align-middle">folder</i>
                         </button>}
-                        {anime.gdriveid_public && anime.gphotoid && <button id='btn-folder-internal' className="btn btn-outline-light h-auto border-0" onClick={showFolderPopup}>
+                        {IsAdmin() && anime.gdriveid_public && anime.gphotoid && <button id='btn-folder-internal' className="btn btn-outline-light h-auto border-0" onClick={showFolderPopup}>
                             <i className="material-icons align-middle">folder</i>
                         </button>}
 
