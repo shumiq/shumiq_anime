@@ -6,13 +6,16 @@ import { SaveAnime } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
 import AnimeInfoPopup from '../Popup/AnimeInfoPopup';
 import { getLocalStorage } from '../../utils/localstorage';
+import GeneralPopup from '../Popup/GeneralPopup';
 
 const AnimeCard = props => {
     const [state, setState] = useState({
         anime: props.anime,
         animeInfo: null,
         popupEdit: false,
-        popupInfo: false
+        popupInfo: false,
+        popupFolderInternal: false,
+        popupFolderExternal: false
     });
     const increase = field => {
         let animeCopy = JSON.parse(JSON.stringify(state.anime));
@@ -99,19 +102,16 @@ const AnimeCard = props => {
                 <div className="card-footer p-1">
                     <div className="d-flex justify-content-around w-auto">
 
-                        {!state.anime.gdriveid_public && <a id='btn-gdrive' className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={'http://doc.google.com/drive/folders/' + state.anime.gdriveid_public} target='blank'>
+                        {(!state.anime.gdriveid_public || !state.anime.gphotoid) && <button id='btn-folder-internal' className="btn btn-outline-secondary disabled h-auto border-0">
                             <i className="material-icons align-middle">folder</i>
-                        </a>}
-                        {state.anime.gdriveid_public && <a id='btn-gdrive' className="btn btn-outline-light h-auto border-0" role="button" href={'http://doc.google.com/drive/folders/' + state.anime.gdriveid_public} target='blank'>
+                        </button>}
+                        {state.anime.gdriveid_public && state.anime.gphotoid && <button id='btn-folder-internal' className="btn btn-outline-light h-auto border-0 disabled">
                             <i className="material-icons align-middle">folder</i>
-                        </a>}
+                        </button>}
 
-                        {state.anime.url === '' && <a id='btn-gphoto' className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={state.anime.url} target='blank'>
+                        <button id='btn-folder-external' className="btn btn-outline-light h-auto border-0" onClick={() => setState({ ...state, popupFolderExternal: true })}>
                             <i className="material-icons align-middle">photo_library</i>
-                        </a>}
-                        {state.anime.url !== '' && <a id='btn-gphoto' className="btn btn-outline-light h-auto border-0" role="button" href={state.anime.url} target='blank'>
-                            <i className="material-icons align-middle">photo_library</i>
-                        </a>}
+                        </button>
 
                         {IsAdmin() && state.anime.download_url === '' && <a id='btn-download' className="btn btn-outline-secondary disabled h-auto border-0" type="button" href={state.anime.download_url} target='blank'>
                             <i className="material-icons align-middle">add_box</i>
@@ -124,6 +124,21 @@ const AnimeCard = props => {
             </div>
             <EditAnimePopup anime={state.anime} show={state.popupEdit} setShow={show => setState({ ...state, popupEdit: show })} />
             <AnimeInfoPopup anime={state.anime} info={state.animeInfo} show={state.popupInfo} setShow={show => setState({ ...state, popupInfo: show })} />
+            <GeneralPopup message={
+                [state.anime.gdriveid_public && <a key={'drive_' + state.anime.key} id='btn-gdrive' className="btn btn-primary h-auto border-0 m-1" role="button" href={'http://doc.google.com/drive/folders/' + state.anime.gdriveid_public} target='blank'>
+                    Google Drive
+                </a>,
+                !state.anime.gdriveid_public && <a key={'drive_' + state.anime.key} id='btn-gdrive' className="btn btn-primary h-auto border-0 m-1 disabled" role="button" href={'http://doc.google.com/drive/folders/' + state.anime.gdriveid_public} target='blank'>
+                    Google Drive
+                </a>,
+                state.anime.url === '' && <a key={'photo_' + state.anime.key} id='btn-gphoto' className="btn btn-primary disabled h-auto border-0" type="button" href={state.anime.url} target='blank'>
+                    Google Photo
+                </a>,
+                state.anime.url !== '' && <a key={'photo_' + state.anime.key} id='btn-gphoto' className="btn btn-primary h-auto border-0" type="button" href={state.anime.url} target='blank'>
+                    Google Photo
+                </a>]
+            }
+                show={state.popupFolderExternal} setShow={show => setState({ ...state, popupFolderExternal: show })} canClose={true} />
         </div >
     );
 }

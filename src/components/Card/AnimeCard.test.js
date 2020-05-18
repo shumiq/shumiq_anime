@@ -108,50 +108,50 @@ describe('<AnimeCard />', () => {
         expect(wrapper.find('#btn-add-download')).toHaveLength(0);
     });
 
-    it('should enable google drive button if there is google drive id', () => {
-        // Given
-        IsAdmin.mockReturnValue(true);
-        let mockAnime = mockDatabase.animelist[0];
-        mockAnime.gdriveid_public = 'driveid'
-        // When
-        const wrapper = mount(<AnimeCard anime={mockAnime} />);
-        const googleDriveButton = wrapper.find('#btn-gdrive').first();
-        // Then
-        expect(googleDriveButton.find('.disabled')).toHaveLength(0);
-    });
+    // it('should enable google drive button if there is google drive id', () => {
+    //     // Given
+    //     IsAdmin.mockReturnValue(true);
+    //     let mockAnime = mockDatabase.animelist[0];
+    //     mockAnime.gdriveid_public = 'driveid'
+    //     // When
+    //     const wrapper = mount(<AnimeCard anime={mockAnime} />);
+    //     const googleDriveButton = wrapper.find('#btn-gdrive').first();
+    //     // Then
+    //     expect(googleDriveButton.find('.disabled')).toHaveLength(0);
+    // });
 
-    it('should disable google drive button if there is no google drive id', () => {
-        // Given
-        IsAdmin.mockReturnValue(true);
-        const mockAnime = mockDatabase.animelist[1];
-        // When
-        const wrapper = mount(<AnimeCard anime={mockAnime} />);
-        const googleDriveButton = wrapper.find('#btn-gdrive').first();
-        // Then
-        expect(googleDriveButton.find('.disabled')).toHaveLength(1);
-    });
+    // it('should disable google drive button if there is no google drive id', () => {
+    //     // Given
+    //     IsAdmin.mockReturnValue(true);
+    //     const mockAnime = mockDatabase.animelist[1];
+    //     // When
+    //     const wrapper = mount(<AnimeCard anime={mockAnime} />);
+    //     const googleDriveButton = wrapper.find('#btn-gdrive').first();
+    //     // Then
+    //     expect(googleDriveButton.find('.disabled')).toHaveLength(1);
+    // });
 
-    it('should enable google photo button if there is google photo url', () => {
-        // Given
-        IsAdmin.mockReturnValue(true);
-        const mockAnime = mockDatabase.animelist[0];
-        // When
-        const wrapper = mount(<AnimeCard anime={mockAnime} />);
-        const googlePhotoButton = wrapper.find('#btn-gphoto').first();
-        // Then
-        expect(googlePhotoButton.find('.disabled')).toHaveLength(0);
-    });
+    // it('should enable google photo button if there is google photo url', () => {
+    //     // Given
+    //     IsAdmin.mockReturnValue(true);
+    //     const mockAnime = mockDatabase.animelist[0];
+    //     // When
+    //     const wrapper = mount(<AnimeCard anime={mockAnime} />);
+    //     const googlePhotoButton = wrapper.find('#btn-gphoto').first();
+    //     // Then
+    //     expect(googlePhotoButton.find('.disabled')).toHaveLength(0);
+    // });
 
-    it('should disable google photo button if there is no google photo url', () => {
-        // Given
-        IsAdmin.mockReturnValue(true);
-        const mockAnime = mockDatabase.animelist[1];
-        // When
-        const wrapper = mount(<AnimeCard anime={mockAnime} />);
-        const googlePhotoButton = wrapper.find('#btn-gphoto').first();
-        // Then
-        expect(googlePhotoButton.find('.disabled')).toHaveLength(1);
-    });
+    // it('should disable google photo button if there is no google photo url', () => {
+    //     // Given
+    //     IsAdmin.mockReturnValue(true);
+    //     const mockAnime = mockDatabase.animelist[1];
+    //     // When
+    //     const wrapper = mount(<AnimeCard anime={mockAnime} />);
+    //     const googlePhotoButton = wrapper.find('#btn-gphoto').first();
+    //     // Then
+    //     expect(googlePhotoButton.find('.disabled')).toHaveLength(1);
+    // });
 
     it('should enable download button if there is download url', () => {
         // Given

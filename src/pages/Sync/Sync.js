@@ -130,7 +130,7 @@ const Sync = () => {
                         }
                     </div>
                 </nav>
-                <GeneralPopup show={state.loadingPopup} message='Loading...' />
+                <GeneralPopup show={state.popupLoading} message='Loading...' canClose={false} setShow={show => setState({ ...state, popupLoading: show })} />
             </div>
         </div>
     );
