@@ -72,3 +72,7 @@ export const SaveAnime = (key, anime) => {
     .ref('animelist/' + key)
     .set(anime);
 };
+
+export const SaveConan = (conanList) => {
+  firebase.database().ref('conanlist/').set(conanList);
+};
