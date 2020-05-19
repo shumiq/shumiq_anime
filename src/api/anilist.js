@@ -1,24 +1,27 @@
 import axios from 'axios';
 
 const AnilistApi = {
-    searchAnime: async keyword => {
-        const response = await axios.post('https://graphql.anilist.co', { query: searchAnimeQueryBuilder(keyword) })
-        return response?.data?.data?.Page?.media;
-    },
-    getAnime: async (keyword, blacklist = []) => {
-        const searchResult = await AnilistApi.searchAnime(keyword);
-        for (const key in searchResult) {
-            let anime = searchResult[key];
-            if (!blacklist.includes(anime.id)) {
-                return anime;
-            }
-        }
-        return null;
+  searchAnime: async (keyword) => {
+    const response = await axios.post('https://graphql.anilist.co', {
+      query: searchAnimeQueryBuilder(keyword),
+    });
+    return response?.data?.data?.Page?.media;
+  },
+  getAnime: async (keyword, blacklist = []) => {
+    const searchResult = await AnilistApi.searchAnime(keyword);
+    for (const key in searchResult) {
+      let anime = searchResult[key];
+      if (!blacklist.includes(anime.id)) {
+        return anime;
+      }
     }
+    return null;
+  },
 };
 
-export const searchAnimeQueryBuilder = keyword => {
-    return `{
+export const searchAnimeQueryBuilder = (keyword) => {
+  return (
+    `{
         Page(page: 1, perPage: 100) {
             pageInfo {
                 total
@@ -27,7 +30,9 @@ export const searchAnimeQueryBuilder = keyword => {
                 lastPage
                 hasNextPage
             }
-            media(search: "` + keyword + `",
+            media(search: "` +
+    keyword +
+    `",
             type:ANIME,
             sort:SEARCH_MATCH) {
                 id
@@ -73,6 +78,7 @@ export const searchAnimeQueryBuilder = keyword => {
             }
         }
     }`
-}
+  );
+};
 
 export default AnilistApi;

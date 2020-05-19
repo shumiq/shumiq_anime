@@ -11,10 +11,10 @@ configure({ adapter: new Adapter() });
 window.location.reload = jest.fn();
 
 beforeEach(() => {
-    expect.hasAssertions();
-    jest.resetAllMocks();
+  expect.hasAssertions();
+  jest.resetAllMocks();
 });
 
-process.on('unhandledRejection', error => {
-    console.log('Unhandled Promise Rejection:', error);
+process.on('unhandledRejection', (error) => {
+  console.log('Unhandled Promise Rejection:', error);
 });

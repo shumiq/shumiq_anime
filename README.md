@@ -27,3 +27,8 @@ Builds the app for production to the `build` folder.
 ### `npm run deploy`
 
 Builds the app for production to the `build` folder and deploy to firebase hosting.
+
+### `npm run lint`
+### `npm run lint:fix`
+
+Run ESLint and fix
