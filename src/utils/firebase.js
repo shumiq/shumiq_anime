@@ -52,14 +52,7 @@ export const onFirebaseAuthUpdate = (callback) => {
 
 export const SignIn = (tokenId) => {
   const creds = firebase.auth.GoogleAuthProvider.credential(tokenId);
-  firebase
-    .auth()
-    .signInWithCredential(creds)
-    .then((user) => {
-      const database = getLocalStorage('database');
-      databaseOnUpdate(database);
-      authUpdate(user);
-    });
+  firebase.auth().signInWithCredential(creds);
 };
 
 export const SignOut = () => {

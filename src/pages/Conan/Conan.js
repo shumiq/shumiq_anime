@@ -4,48 +4,59 @@ import GeneralPopup from '../../components/Popup/GeneralPopup';
 import { IsAdmin } from '../../utils/userdetail';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
-import React, { useState, createRef } from 'react';
+import FilesPopup from '../../components/Popup/FilesPopup';
+import React, { useState, createRef, useEffect, useCallback } from 'react';
 
 const driveFolderId = '1ZXug0hPb-_ylKa45LX7H42cLLTvLiBdy';
 const photoAlbumId =
   'ACKboXA-SW1-hje13C1evPH_HlgHlP9UasTb7u5ECLT2ds1ufDzcH9gDrL-XXAT3_mveyhNr_ELI';
 
 const Conan = () => {
-  const [state, setState] = useState({
-    conanList: getLocalStorage('database')?.conanlist,
-    conanRef: [],
-    currentEp: 0,
-    currentUrl: '',
-    currentPhotoUrl: '',
-    popupFiles: false,
-    popupLoading: false,
-  });
+  const [conanList, setConanList] = useState(
+    getLocalStorage('database')?.conanlist
+  );
+  const [conanRef, setConanRef] = useState([]);
+  const [popup, setPopup] = useState('');
 
-  onFirebaseDatabaseUpdate((db) => {
-    let conanRef = [];
-    Object.keys(db?.conanlist).forEach((cs) => {
-      conanRef[cs] = createRef();
+  useEffect(() => {
+    function UpdateConanRef() {
+      let ref = [];
+      Object.keys(conanList).forEach((cs) => {
+        ref[cs] = createRef();
+      });
+      setConanRef(ref);
+    }
+    onFirebaseDatabaseUpdate((db) => {
+      UpdateConanRef();
+      setConanList(db?.conanlist);
     });
-    setState({
-      ...state,
-      conanList: db?.conanlist,
-      conanRef: conanRef,
-    });
-  });
+    UpdateConanRef();
+  }, [conanList]);
 
-  const showFiles = (ep, files) => {
-    setState({
-      ...state,
-      currentEp: ep,
-      currentUrl: files.url ? files.url : '',
-      currentPhotoUrl: files.photoUrl ? files.photoUrl : '',
-      popupFiles: true,
-    });
-  };
+  const showFiles = useCallback((ep, files) => {
+    const url = files.url ? files.url : '';
+    const photoUrl = files.photoUrl ? files.photoUrl : '';
+    const showFilesPopup = (show) => {
+      setPopup(
+        <FilesPopup
+          driveUrl={url}
+          photoUrl={photoUrl}
+          show={show}
+          setShow={showFilesPopup}
+        />
+      );
+    };
+    showFilesPopup(true);
+  }, []);
 
-  const update = async () => {
-    setState({ ...state, popupLoading: true });
-    let conanList = JSON.parse(JSON.stringify(state.conanList));
+  const update = useCallback(async () => {
+    const showLoadingPopup = (show) => {
+      setPopup(
+        <GeneralPopup show={show} message="Loading..." canClose={false} />
+      );
+    };
+    showLoadingPopup(true);
+    let newConanList = JSON.parse(JSON.stringify(conanList));
     const driveFiles = await GoogleDriveApi.getFiles(driveFolderId);
     const photoFiles = await GooglePhotoApi.getMedias(photoAlbumId);
     driveFiles.forEach((file) => {
@@ -55,42 +66,42 @@ const Conan = () => {
         'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
       const photoUrl = photoFiles.filter((f) => f.filename === file.name)[0]
         ?.productUrl;
-      if (conanList[cs]) {
-        conanList[cs].episodes[ep] = {
+      if (newConanList[cs]) {
+        newConanList[cs].episodes[ep] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
         };
       } else {
-        conanList[cs] = {
+        newConanList[cs] = {
           case: cs.toString(),
           name: 'แก้ไข',
         };
-        conanList[cs].episodes[ep] = {
+        newConanList[cs].episodes[ep] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
         };
       }
     });
-    SaveConan(conanList);
-    setState({ ...state, popupLoading: false });
-  };
+    SaveConan(newConanList);
+    showLoadingPopup(false);
+  }, [conanList]);
 
-  const randomEp = () => {
+  const randomEp = useCallback(() => {
     let ep = 0;
-    while (ep === 0 || state.conanList[ep] === null) {
-      ep = Math.floor(Math.random() * Object.keys(state.conanList).length);
+    while (ep === 0 || conanList[ep] === null) {
+      ep = Math.floor(Math.random() * Object.keys(conanList).length);
     }
-    if (state.conanRef[ep]?.current) {
-      state.conanRef.map((ref) =>
+    if (conanRef[ep]?.current) {
+      conanRef.map((ref) =>
         ref.current?.className ? (ref.current.className = '') : ''
       );
-      state.conanRef[ep].current.className = 'bg-dark';
-      state.conanRef[ep].current.scrollIntoView({
+      conanRef[ep].current.className = 'bg-dark';
+      conanRef[ep].current.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
       });
     }
-  };
+  }, [conanList, conanRef]);
 
   return (
     <div className="Anime">
@@ -104,10 +115,10 @@ const Conan = () => {
               </tr>
             </thead>
             <tbody>
-              {state.conanList.map(
+              {conanList.map(
                 (conan) =>
                   conan !== null && (
-                    <tr key={conan.case} ref={state.conanRef[conan.case]}>
+                    <tr key={conan.case} ref={conanRef[conan.case]}>
                       <td>{conan.case}</td>
                       <td className="text-left">{conan.name}</td>
                       <td>
@@ -115,7 +126,7 @@ const Conan = () => {
                           (episode) =>
                             conan.episodes[episode]?.url && (
                               <button
-                                className="btn btn-primary mx-1"
+                                className="btn btn-primary m-1"
                                 onClick={() =>
                                   showFiles(episode, conan.episodes[episode])
                                 }
@@ -153,45 +164,7 @@ const Conan = () => {
               )}
             </div>
           </nav>
-          <GeneralPopup
-            message={[
-              <a
-                key={'drive_' + state.currentEp}
-                id="btn-gdrive"
-                className={
-                  'btn btn-primary h-auto border-0 m-1' +
-                  (state.currentUrl === '' ? ' disabled' : '')
-                }
-                role="button"
-                href={state.currentUrl}
-                target="blank"
-              >
-                Google Drive
-              </a>,
-              <a
-                key={'photo_' + state.currentEp}
-                id="btn-gphoto"
-                className={
-                  'btn btn-primary h-auto border-0 m-1' +
-                  (state.currentPhotoUrl === '' ? ' disabled' : '')
-                }
-                type="button"
-                href={state.currentPhotoUrl}
-                target="blank"
-              >
-                Google Photo
-              </a>,
-            ]}
-            show={state.popupFiles}
-            setShow={(show) => setState({ ...state, popupFiles: show })}
-            canClose={true}
-          />
-          <GeneralPopup
-            show={state.popupLoading}
-            message="Loading..."
-            canClose={false}
-            setShow={(show) => setState({ ...state, popupLoading: show })}
-          />
+          {popup}
         </div>
       </div>
     </div>
