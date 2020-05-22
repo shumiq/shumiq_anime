@@ -15,17 +15,19 @@ const Anime = () => {
   useEffect(() => {
     onFirebaseDatabaseUpdate((db) => {
       setAnimeList(db?.animelist);
-      setPageList(AnimeFilter(db?.animelist, filter));
     });
-  }, [filter]);
+  }, []);
+
+  useEffect(() => {
+    setPageList(AnimeFilter(animeList, filter));
+  }, [animeList, filter]);
 
   const updateFilter = useCallback(
     (newFilter) => {
       setFilter(newFilter);
       setPageList(AnimeFilter(animeList, newFilter));
     },
-    [animeList]
-  );
+    [animeList]);
 
   return (
     <div className="Anime">
