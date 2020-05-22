@@ -35,7 +35,7 @@ const Conan = () => {
     UpdateConanRef();
   }, [conanList]);
 
-  const showFiles = useCallback((ep, files) => {
+  const showFiles = useCallback((files) => {
     const url = files.url ? files.url : '';
     const photoUrl = files.photoUrl ? files.photoUrl : '';
     const showFilesPopup = (show) => {
@@ -161,7 +161,7 @@ const Conan = () => {
                                 <button
                                   className="btn btn-primary m-1"
                                   onClick={() =>
-                                    showFiles(episode, conan.episodes[episode])
+                                    showFiles(conan.episodes[episode])
                                   }
                                   key={episode}
                                 >
