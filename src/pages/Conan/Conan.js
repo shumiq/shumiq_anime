@@ -76,6 +76,7 @@ const Conan = () => {
           case: cs.toString(),
           name: 'แก้ไข',
         };
+        newConanList[cs].episodes = {};
         newConanList[cs].episodes[ep] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
@@ -154,11 +155,11 @@ const Conan = () => {
               >
                 <i className="material-icons">folder</i>
               </a>
-              <button className="btn" onClick={randomEp}>
+              <button id="btn-random" className="btn" onClick={randomEp}>
                 <i className="material-icons">shuffle</i>
               </button>
               {IsAdmin() && (
-                <button className="btn" onClick={update}>
+                <button id="btn-update" className="btn" onClick={update}>
                   <i className="material-icons">cached</i>
                 </button>
               )}
