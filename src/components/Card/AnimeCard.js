@@ -9,37 +9,56 @@ import GeneralPopup from '../Popup/GeneralPopup';
 import AnimeFolderPopup from '../Popup/AnimeFolderPopup';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
-import React, { useState } from 'react';
+import FilesPopup from '../Popup/FilesPopup';
+import React, { useState, useCallback } from 'react';
 
 const AnimeCard = (props) => {
   const anime = props.anime;
-  const [state, setState] = useState({
-    animeInfo: null,
-    folderFiles: {},
-    popupEdit: false,
-    popupInfo: false,
-    popupFolderInternal: false,
-    popupFolderExternal: false,
-  });
+  const layout =
+    JSON.stringify(getLocalStorage('layout')) !== '{}'
+      ? getLocalStorage('layout')
+      : 'auto';
+  const [popup, setPopup] = useState('');
 
-  const increase = (field) => {
-    let animeCopy = JSON.parse(JSON.stringify(anime));
-    animeCopy[field] = parseInt(animeCopy[field]) + 1;
-    SaveAnime(anime.key, animeCopy);
-  };
+  const increase = useCallback(
+    (field) => {
+      let animeCopy = JSON.parse(JSON.stringify(anime));
+      animeCopy[field] = parseInt(animeCopy[field]) + 1;
+      SaveAnime(anime.key, animeCopy);
+    },
+    [anime]
+  );
 
-  const showInfoPopup = async () => {
+  const showInfo = useCallback(async () => {
+    setPopup(
+      <GeneralPopup show={true} message="Loading..." canClose={false} />
+    );
     const response = await AnilistApi.getAnime(anime.title, anime.blacklist);
-    setState({
-      ...state,
-      animeInfo: response,
-      popupInfo: true,
-    });
-  };
+    setPopup(
+      <GeneralPopup show={false} message="Loading..." canClose={false} />
+    );
+    const showInfoPopup = (show) => {
+      setPopup(
+        <AnimeInfoPopup
+          anime={anime}
+          info={response}
+          show={show}
+          setShow={showInfoPopup}
+        />
+      );
+    };
+    showInfoPopup(true);
+  }, [anime]);
 
-  const showFolderPopup = async () => {
+  const showFolder = useCallback(async () => {
+    setPopup(
+      <GeneralPopup show={true} message="Loading..." canClose={false} />
+    );
     const driveFiles = await GoogleDriveApi.getFiles(anime.gdriveid_public);
     const photoFiles = await GooglePhotoApi.getMedias(anime.gphotoid);
+    setPopup(
+      <GeneralPopup show={false} message="Loading..." canClose={false} />
+    );
     let files = {};
     driveFiles.forEach((file) => {
       if (!files[file.name]) files[file.name] = {};
@@ -52,17 +71,45 @@ const AnimeCard = (props) => {
       files[file.filename].name = file.filename;
       files[file.filename].photoUrl = file.productUrl;
     });
-    setState({
-      ...state,
-      folderFiles: files,
-      popupFolderInternal: true,
-    });
-  };
 
-  const layout =
-    JSON.stringify(getLocalStorage('layout')) !== '{}'
-      ? getLocalStorage('layout')
-      : 'auto';
+    const showFolderPopup = (show) => {
+      setPopup(
+        <AnimeFolderPopup
+          folderFiles={files}
+          show={show}
+          setShow={showFolderPopup}
+        />
+      );
+    };
+    showFolderPopup(true);
+  }, [anime]);
+
+  const showEditPopup = useCallback(
+    (show) => {
+      setPopup(
+        <EditAnimePopup anime={anime} show={show} setShow={showEditPopup} />
+      );
+    },
+    [anime]
+  );
+
+  const showFilesPopup = useCallback(
+    (show) => {
+      const driveUrl = anime.gdriveid_public
+        ? 'http://doc.google.com/drive/folders/' + anime.gdriveid_public
+        : '';
+      const photoUrl = anime.url ? anime.url : '';
+      setPopup(
+        <FilesPopup
+          driveUrl={driveUrl}
+          photoUrl={photoUrl}
+          show={show}
+          setShow={showFilesPopup}
+        />
+      );
+    },
+    [anime]
+  );
 
   return (
     <div className={'anime-card p-3 ' + CardLayout[layout]}>
@@ -108,7 +155,7 @@ const AnimeCard = (props) => {
                 id="btn-edit"
                 className="btn btn-outline-light border-0 p-0 m-0 ml-3"
                 style={{ height: '24px' }}
-                onClick={() => setState({ ...state, popupEdit: true })}
+                onClick={() => showEditPopup(true)}
               >
                 <i className="material-icons">edit</i>
               </button>
@@ -134,7 +181,7 @@ const AnimeCard = (props) => {
               className="btn btn-outline-light border-0 p-0 m-0"
               style={{ height: '24px' }}
               id="btn-show-info"
-              onClick={showInfoPopup}
+              onClick={showInfo}
             >
               <i className="material-icons">info_outline</i>
             </button>
@@ -177,7 +224,6 @@ const AnimeCard = (props) => {
                         role="button"
                         style={{ cursor: 'pointer' }}
                         onClick={() => increase('view')}
-                        onKeyDown={() => increase('view')}
                       >
                         +
                       </b>
@@ -224,7 +270,7 @@ const AnimeCard = (props) => {
               <button
                 id="btn-folder-internal"
                 className="btn btn-outline-light h-auto border-0"
-                onClick={showFolderPopup}
+                onClick={showFolder}
               >
                 <i className="material-icons align-middle">folder</i>
               </button>
@@ -233,7 +279,7 @@ const AnimeCard = (props) => {
             <button
               id="btn-folder-external"
               className="btn btn-outline-light h-auto border-0"
-              onClick={() => setState({ ...state, popupFolderExternal: true })}
+              onClick={() => showFilesPopup(true)}
             >
               <i className="material-icons align-middle">photo_library</i>
             </button>
@@ -263,81 +309,7 @@ const AnimeCard = (props) => {
           </div>
         </div>
       </div>
-      <EditAnimePopup
-        anime={anime}
-        show={state.popupEdit}
-        setShow={(show) => setState({ ...state, popupEdit: show })}
-      />
-      <AnimeInfoPopup
-        anime={anime}
-        info={state.animeInfo}
-        show={state.popupInfo}
-        setShow={(show) => setState({ ...state, popupInfo: show })}
-      />
-      <AnimeFolderPopup
-        folderFiles={state.folderFiles}
-        show={state.popupFolderInternal}
-        setShow={(show) => setState({ ...state, popupFolderInternal: show })}
-      />
-      <GeneralPopup
-        message={[
-          anime.gdriveid_public && (
-            <a
-              key={'drive_' + anime.key}
-              id="btn-gdrive"
-              className="btn btn-primary h-auto border-0 m-1"
-              role="button"
-              href={
-                'http://doc.google.com/drive/folders/' + anime.gdriveid_public
-              }
-              target="blank"
-            >
-              Google Drive
-            </a>
-          ),
-          !anime.gdriveid_public && (
-            <a
-              key={'drive_' + anime.key}
-              id="btn-gdrive"
-              className="btn btn-primary h-auto border-0 m-1 disabled"
-              role="button"
-              href={
-                'http://doc.google.com/drive/folders/' + anime.gdriveid_public
-              }
-              target="blank"
-            >
-              Google Drive
-            </a>
-          ),
-          anime.url === '' && (
-            <a
-              key={'photo_' + anime.key}
-              id="btn-gphoto"
-              className="btn btn-primary disabled h-auto border-0 m-1"
-              type="button"
-              href={anime.url}
-              target="blank"
-            >
-              Google Photo
-            </a>
-          ),
-          anime.url !== '' && (
-            <a
-              key={'photo_' + anime.key}
-              id="btn-gphoto"
-              className="btn btn-primary h-auto border-0 m-1"
-              type="button"
-              href={anime.url}
-              target="blank"
-            >
-              Google Photo
-            </a>
-          ),
-        ]}
-        show={state.popupFolderExternal}
-        setShow={(show) => setState({ ...state, popupFolderExternal: show })}
-        canClose={true}
-      />
+      {popup}
     </div>
   );
 };
