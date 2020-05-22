@@ -10,6 +10,7 @@ import AnimeCard from './AnimeCard';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import React from 'react';
+import EditAnimePopup from '../Popup/EditAnimePopup';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../api/anilist');
@@ -36,6 +37,23 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
     // Then
     expect(wrapper.find('#btn-edit')).toHaveLength(1);
+  });
+
+  it('should show edit popup when click edit button', () => {
+    // Given
+    IsAdmin.mockReturnValue(true);
+    const mockAnime = mockDatabase.animelist[0];
+    // When
+    const wrapper = mount(
+      <AnimeCard
+        anime={mockAnime}
+        setPopup={(popup) => {
+          // Then
+          expect(popup.type).toBe(EditAnimePopup);
+        }}
+      />
+    );
+    wrapper.find('#btn-edit').simulate('click');
   });
 
   it('should not show edit button if not admin', () => {
@@ -154,28 +172,6 @@ describe('<AnimeCard />', () => {
     expect(internalFolderButton.find('.disabled')).toHaveLength(1);
   });
 
-  // it('should enable google photo button if there is google photo url', () => {
-  //     // Given
-  //     IsAdmin.mockReturnValue(true);
-  //     const mockAnime = mockDatabase.animelist[0];
-  //     // When
-  //     const wrapper = mount(<AnimeCard anime={mockAnime} />);
-  //     const googlePhotoButton = wrapper.find('#btn-gphoto').first();
-  //     // Then
-  //     expect(googlePhotoButton.find('.disabled')).toHaveLength(0);
-  // });
-
-  // it('should disable google photo button if there is no google photo url', () => {
-  //     // Given
-  //     IsAdmin.mockReturnValue(true);
-  //     const mockAnime = mockDatabase.animelist[1];
-  //     // When
-  //     const wrapper = mount(<AnimeCard anime={mockAnime} />);
-  //     const googlePhotoButton = wrapper.find('#btn-gphoto').first();
-  //     // Then
-  //     expect(googlePhotoButton.find('.disabled')).toHaveLength(1);
-  // });
-
   it('should enable download button if there is download url', () => {
     // Given
     IsAdmin.mockReturnValue(true);
@@ -198,7 +194,7 @@ describe('<AnimeCard />', () => {
     expect(downloadButton.find('.disabled')).toHaveLength(1);
   });
 
-  it('should all AnilistApi when click show info button', async () => {
+  it('should call AnilistApi when click show info button', async () => {
     // Given
     const mockAnime = mockDatabase.animelist[1];
     const wrapper = mount(<AnimeCard anime={mockAnime} setPopup={() => {}} />);
