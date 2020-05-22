@@ -103,8 +103,8 @@ const Sync = () => {
               .sort((a, b) => {
                 if (
                   b.year * 10 +
-                  (b.season % 10) -
-                  (a.year * 10 + (a.season % 10)) ===
+                    (b.season % 10) -
+                    (a.year * 10 + (a.season % 10)) ===
                   0
                 )
                   return a.title < b.title ? -1 : 1;
@@ -138,9 +138,9 @@ const Sync = () => {
                         {anime.gphotoid &&
                           albumList[anime.gphotoid] &&
                           anime.download.toString() !==
-                          albumList[
-                            anime.gphotoid
-                          ]?.mediaItemsCount.toString() &&
+                            albumList[
+                              anime.gphotoid
+                            ]?.mediaItemsCount.toString() &&
                           !anime.title.includes('Conan') && (
                             <button
                               id="btn-update"
