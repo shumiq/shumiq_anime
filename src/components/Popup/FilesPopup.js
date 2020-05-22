@@ -16,7 +16,7 @@ const FilesPopup = (props) => {
         animation={true}
         onHide={closePopup}
       >
-        <Modal.Body>
+        <Modal.Body className="text-center">
           <a
             className={
               'btn btn-primary h-auto border-0 m-1' +
