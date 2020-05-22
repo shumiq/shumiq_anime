@@ -11,6 +11,7 @@ const Anime = () => {
   );
   const [pageList, setPageList] = useState(AnimeFilter(animeList));
   const [filter, setFilter] = useState({});
+  const [popup, setPopup] = useState('');
 
   useEffect(() => {
     onFirebaseDatabaseUpdate((db) => {
@@ -27,7 +28,8 @@ const Anime = () => {
       setFilter(newFilter);
       setPageList(AnimeFilter(animeList, newFilter));
     },
-    [animeList]);
+    [animeList]
+  );
 
   return (
     <div className="Anime">
@@ -35,7 +37,9 @@ const Anime = () => {
         <div className="row text-center w-100 m-0">
           {pageList.map(
             (anime) =>
-              anime !== null && <AnimeCard anime={anime} key={anime?.key} />
+              anime !== null && (
+                <AnimeCard anime={anime} key={anime?.key} setPopup={setPopup} />
+              )
           )}
         </div>
       </div>
@@ -46,6 +50,7 @@ const Anime = () => {
           setFilter={updateFilter}
         />
       )}
+      {popup}
     </div>
   );
 };

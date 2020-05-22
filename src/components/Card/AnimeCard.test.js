@@ -133,7 +133,7 @@ describe('<AnimeCard />', () => {
     let mockAnime = mockDatabase.animelist[0];
     mockAnime.gdriveid_public = 'driveid';
     // When
-    const wrapper = mount(<AnimeCard anime={mockAnime} />);
+    const wrapper = mount(<AnimeCard anime={mockAnime} setPopup={() => {}} />);
     // When
     await act(async () => {
       wrapper.find('#btn-folder-internal').simulate('click');
@@ -201,7 +201,7 @@ describe('<AnimeCard />', () => {
   it('should all AnilistApi when click show info button', async () => {
     // Given
     const mockAnime = mockDatabase.animelist[1];
-    const wrapper = mount(<AnimeCard anime={mockAnime} />);
+    const wrapper = mount(<AnimeCard anime={mockAnime} setPopup={() => {}} />);
     const showInfoButton = wrapper.find('#btn-show-info');
     // When
     await act(async () => {

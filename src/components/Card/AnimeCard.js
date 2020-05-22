@@ -14,11 +14,11 @@ import React, { useState, useCallback } from 'react';
 
 const AnimeCard = (props) => {
   const anime = props.anime;
+  const setPopup = props.setPopup;
   const layout =
     JSON.stringify(getLocalStorage('layout')) !== '{}'
       ? getLocalStorage('layout')
       : 'auto';
-  const [popup, setPopup] = useState('');
 
   const increase = useCallback(
     (field) => {
@@ -309,7 +309,6 @@ const AnimeCard = (props) => {
           </div>
         </div>
       </div>
-      {popup}
     </div>
   );
 };
