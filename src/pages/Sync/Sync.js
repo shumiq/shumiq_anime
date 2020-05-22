@@ -3,74 +3,85 @@ import { onFirebaseDatabaseUpdate, SaveAnime } from '../../utils/firebase';
 import GooglePhotoApi from '../../api/googlephoto';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import GoogleDriveApi from '../../api/googledrive';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const Sync = () => {
-  const [state, setState] = useState({
-    animeList: getLocalStorage('database')?.animelist.filter(
-      (anime) => anime != null
-    ),
-    albumList: [],
-    nextPageToken: '',
-    popupLoading: false,
-  });
+  const [animeList, setAnimeList] = useState(
+    getLocalStorage('database')?.animelist?.filter((anime) => anime != null)
+  );
+  const [albumList, setAlbumList] = useState([]);
+  const [nextPageToken, setNextPageToken] = useState('');
+  const [popup, setPopup] = useState('');
 
-  onFirebaseDatabaseUpdate((db) => {
-    setState({
-      ...state,
-      animeList: db?.animelist.filter((anime) => anime != null),
+  useEffect(() => {
+    onFirebaseDatabaseUpdate((db) => {
+      setAnimeList(db?.animelist.filter((anime) => anime != null));
     });
-  });
+  }, []);
 
-  const getAlbums = async (all = false) => {
-    setState({ ...state, popupLoading: true });
-    const response = (await all)
-      ? await GooglePhotoApi.getAllAlbums(state.nextPageToken)
-      : await GooglePhotoApi.getAlbums(state.nextPageToken);
-    setState({ ...state, popupLoading: false });
-    let albums = state.albumList;
-    response.albums.forEach((album) => {
-      if (album?.id) albums[album.id] = album;
-    });
-    setState({
-      ...state,
-      albumList: albums,
-      nextPageToken: response.nextPageToken,
-    });
-  };
+  const getAlbums = useCallback(
+    async (all = false) => {
+      setPopup(
+        <GeneralPopup show={true} message="Loading..." canClose={false} />
+      );
+      const response = (await all)
+        ? await GooglePhotoApi.getAllAlbums(nextPageToken)
+        : await GooglePhotoApi.getAlbums(nextPageToken);
+      let albums = albumList;
+      response.albums.forEach((album) => {
+        if (album?.id) albums[album.id] = album;
+      });
+      setAlbumList(albums);
+      setNextPageToken(response.nextPageToken);
+      setPopup(
+        <GeneralPopup show={false} message="Loading..." canClose={false} />
+      );
+    },
+    [albumList, nextPageToken]
+  );
 
-  const unsync = (anime) => {
+  const unsync = useCallback((anime) => {
     if (window.confirm('Do you want to unsync "' + anime.title + '" ?')) {
       anime.gphotoid = null;
       SaveAnime(anime.key, anime);
     }
-  };
+  }, []);
 
-  const update = async (anime) => {
-    setState({ ...state, popupLoading: true });
-    anime.gdriveid = await GoogleDriveApi.getPrivateFolderId(anime);
-    anime.gdriveid_public = await GoogleDriveApi.getPublicFolderId(anime);
-    const photo_medias = await GooglePhotoApi.getMedias(anime.gphotoid);
-    const drive_upload = await GoogleDriveApi.getUploadFiles();
-    await photo_medias.forEach(async (media) => {
-      const file = drive_upload.filter(
-        (file) => file.name === media.filename
-      )[0];
-      if (file?.id) {
-        await GoogleDriveApi.moveUploadFile(file.id, anime.gdriveid);
-      }
-    });
-    anime.download = state.albumList[anime.gphotoid].mediaItemsCount;
-    SaveAnime(anime.key, anime);
-    setState({ ...state, popupLoading: false });
-  };
+  const update = useCallback(
+    async (anime) => {
+      setPopup(
+        <GeneralPopup show={true} message="Loading..." canClose={false} />
+      );
+      anime.gdriveid = await GoogleDriveApi.getPrivateFolderId(anime);
+      anime.gdriveid_public = await GoogleDriveApi.getPublicFolderId(anime);
+      const photo_medias = await GooglePhotoApi.getMedias(anime.gphotoid);
+      const drive_upload = await GoogleDriveApi.getUploadFiles();
+      await photo_medias.forEach(async (media) => {
+        const file = drive_upload.filter(
+          (file) => file.name === media.filename
+        )[0];
+        if (file?.id) {
+          await GoogleDriveApi.moveUploadFile(file.id, anime.gdriveid);
+        }
+      });
+      anime.download = albumList[anime.gphotoid].mediaItemsCount;
+      SaveAnime(anime.key, anime);
+      setPopup(
+        <GeneralPopup show={false} message="Loading..." canClose={false} />
+      );
+    },
+    [albumList]
+  );
 
-  const sync = async (anime) => {
-    anime.gphotoid = Object.entries(state.albumList).filter(
-      (entry) => entry[1].title === '[Anime] ' + anime.title
-    )[0]?.[0];
-    SaveAnime(anime.key, anime);
-  };
+  const sync = useCallback(
+    async (anime) => {
+      anime.gphotoid = Object.entries(albumList).filter(
+        (entry) => entry[1].title === '[Anime] ' + anime.title
+      )[0]?.[0];
+      SaveAnime(anime.key, anime);
+    },
+    [albumList]
+  );
 
   return (
     <div className="Sync">
@@ -88,12 +99,12 @@ const Sync = () => {
             </tr>
           </thead>
           <tbody>
-            {state.animeList
+            {animeList
               .sort((a, b) => {
                 if (
                   b.year * 10 +
-                    (b.season % 10) -
-                    (a.year * 10 + (a.season % 10)) ===
+                  (b.season % 10) -
+                  (a.year * 10 + (a.season % 10)) ===
                   0
                 )
                   return a.title < b.title ? -1 : 1;
@@ -120,17 +131,16 @@ const Sync = () => {
                       <td className="text-left align-middle">{anime.title}</td>
                       <td className="text-center align-middle">
                         {anime.download}
-                        {state.albumList[anime.gphotoid] &&
-                          '/' +
-                            state.albumList[anime.gphotoid]?.mediaItemsCount}
+                        {albumList[anime.gphotoid] &&
+                          '/' + albumList[anime.gphotoid]?.mediaItemsCount}
                       </td>
                       <td className="text-center align-middle">
                         {anime.gphotoid &&
-                          state.albumList[anime.gphotoid] &&
+                          albumList[anime.gphotoid] &&
                           anime.download.toString() !==
-                            state.albumList[
-                              anime.gphotoid
-                            ]?.mediaItemsCount.toString() &&
+                          albumList[
+                            anime.gphotoid
+                          ]?.mediaItemsCount.toString() &&
                           !anime.title.includes('Conan') && (
                             <button
                               id="btn-update"
@@ -152,7 +162,7 @@ const Sync = () => {
                           </button>
                         )}
                         {!anime.gphotoid &&
-                          Object.entries(state.albumList).some(
+                          Object.entries(albumList).some(
                             (entry) =>
                               entry[1].title === '[Anime] ' + anime.title
                           ) && (
@@ -180,7 +190,7 @@ const Sync = () => {
             >
               Recent Files
             </a>
-            {state.nextPageToken !== null && (
+            {nextPageToken !== null && (
               <span>
                 <button
                   id="btn-load-more"
@@ -200,7 +210,7 @@ const Sync = () => {
                 </button>
               </span>
             )}
-            {state.nextPageToken === null && (
+            {nextPageToken === null && (
               <span>
                 <button
                   id="btn-load-more"
@@ -222,12 +232,7 @@ const Sync = () => {
             )}
           </div>
         </nav>
-        <GeneralPopup
-          show={state.popupLoading}
-          message="Loading..."
-          canClose={false}
-          setShow={(show) => setState({ ...state, popupLoading: show })}
-        />
+        {popup}
       </div>
     </div>
   );
