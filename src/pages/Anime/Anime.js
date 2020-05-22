@@ -3,45 +3,44 @@ import { getLocalStorage } from '../../utils/localstorage';
 import AnimeCard from '../../components/Card/AnimeCard';
 import Filterbar from '../../components/Filterbar/Filterbar';
 import { AnimeFilter, SeasonList } from './Anime.filter';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const Anime = () => {
-  const [state, setState] = useState({
-    animelist: getLocalStorage('database')?.animelist,
-    pagelist: AnimeFilter(getLocalStorage('database')?.animelist),
-    filter: {},
-  });
+  const [animeList, setAnimeList] = useState(
+    getLocalStorage('database')?.animelist
+  );
+  const [pageList, setPageList] = useState(AnimeFilter(animeList));
+  const [filter, setFilter] = useState({});
 
-  onFirebaseDatabaseUpdate((db) => {
-    setState({
-      ...state,
-      animelist: db?.animelist,
-      pagelist: AnimeFilter(db?.animelist, state.filter),
+  useEffect(() => {
+    onFirebaseDatabaseUpdate((db) => {
+      setAnimeList(db?.animelist);
+      setPageList(AnimeFilter(db?.animelist, filter));
     });
-  });
+  }, [filter]);
 
-  const updateFilter = (newFilter) => {
-    setState({
-      ...state,
-      filter: newFilter,
-      pagelist: AnimeFilter(state.animelist, state.filter),
-    });
-  };
+  const updateFilter = useCallback(
+    (newFilter) => {
+      setFilter(newFilter);
+      setPageList(AnimeFilter(animeList, newFilter));
+    },
+    [animeList]
+  );
 
   return (
     <div className="Anime">
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
-          {state.pagelist.map(
+          {pageList.map(
             (anime) =>
               anime !== null && <AnimeCard anime={anime} key={anime?.key} />
           )}
         </div>
       </div>
-      {state.animelist && SeasonList(state.animelist) && (
+      {animeList && SeasonList(animeList) && (
         <Filterbar
-          filter={state.filter}
-          seasonlist={SeasonList(state.animelist)}
+          filter={filter}
+          seasonlist={SeasonList(animeList)}
           setFilter={updateFilter}
         />
       )}
