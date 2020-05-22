@@ -176,4 +176,57 @@ describe('<Conan />', () => {
       },
     ]);
   });
+
+  it('should not show InputPopup when click name but not admin', () => {
+    getLocalStorage.mockReturnValue(mockDatabase);
+    IsAdmin.mockReturnValue(false);
+    const wrapper = shallow(<Conan />);
+    wrapper.find('tr').at(1).find('span').simulate('click');
+    expect(wrapper.find('InputPopup')).toHaveLength(0);
+  });
+
+  it('should show InputPopup when click name and admin', () => {
+    getLocalStorage.mockReturnValue(mockDatabase);
+    IsAdmin.mockReturnValue(true);
+    const wrapper = shallow(<Conan />);
+    wrapper.find('tr').at(1).find('span').simulate('click');
+    wrapper.find('InputPopup').props().callback('newName');
+    expect(wrapper.find('InputPopup')).toHaveLength(1);
+    expect(wrapper.find('InputPopup').props().default).toEqual('case 1');
+    expect(SaveConan).toHaveBeenCalledWith([
+      null,
+      {
+        case: '1',
+        episodes: {
+          '200': {
+            photoUrl: 'url',
+            url: 'url',
+          },
+          '201': {
+            photoUrl: 'url',
+            url: 'url',
+          },
+          '202': {
+            photoUrl: 'url',
+            url: 'url',
+          },
+        },
+        name: 'newName',
+      },
+      {
+        case: '2',
+        episodes: {
+          '203': {
+            photoUrl: 'url',
+            url: 'url',
+          },
+          '204': {
+            photoUrl: 'url',
+            url: 'url',
+          },
+        },
+        name: 'case 2',
+      },
+    ]);
+  });
 });

@@ -5,6 +5,7 @@ import { IsAdmin } from '../../utils/userdetail';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import FilesPopup from '../../components/Popup/FilesPopup';
+import InputPopup from '../../components/Popup/InputPopup';
 import React, { useState, createRef, useEffect, useCallback } from 'react';
 
 const driveFolderId = '1ZXug0hPb-_ylKa45LX7H42cLLTvLiBdy';
@@ -105,6 +106,31 @@ const Conan = () => {
     }
   }, [conanList, conanRef]);
 
+  const showInput = useCallback(
+    (cs) => {
+      if (IsAdmin()) {
+        const name = conanList[cs].name;
+        const callback = (newName) => {
+          let newList = JSON.parse(JSON.stringify(conanList));
+          newList[cs].name = newName;
+          SaveConan(newList);
+        };
+        const showInputPopup = (show) => {
+          setPopup(
+            <InputPopup
+              default={name}
+              callback={callback}
+              show={show}
+              setShow={showInputPopup}
+            />
+          );
+        };
+        showInputPopup(true);
+      }
+    },
+    [conanList]
+  );
+
   return (
     <div className="Anime">
       <div className="container p-0 my-5">
@@ -123,7 +149,11 @@ const Conan = () => {
                     conan !== null && (
                       <tr key={conan.case} ref={conanRef[conan.case]}>
                         <td>{conan.case}</td>
-                        <td className="text-left">{conan.name}</td>
+                        <td className="text-left">
+                          <span onClick={() => showInput(conan.case)}>
+                            {conan.name}
+                          </span>
+                        </td>
                         <td>
                           {Object.keys(conan.episodes).map(
                             (episode) =>
