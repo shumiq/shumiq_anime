@@ -1,24 +1,32 @@
 import { SaveAnime } from '../../utils/firebase';
-import React from 'react';
+import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 const EditAnimePopup = (props) => {
   const anime = props.anime;
   let state = JSON.parse(JSON.stringify(anime));
-  const closePopup = () => props.setShow(false);
-  const saveAnime = () => {
+
+  const closePopup = useCallback(() => props.setShow(false), [props]);
+
+  const saveAnime = useCallback(() => {
     SaveAnime(state.key, state);
     closePopup();
-  };
-  const deleteAnime = () => {
+  }, [state, closePopup]);
+
+  const deleteAnime = useCallback(() => {
     if (window.confirm('Do you want to delete "' + anime.title + '" ?')) {
       SaveAnime(state.key, null);
       closePopup();
     }
-  };
-  const updateFormData = (event) => {
-    state[event.target.name] = event.target.value;
-  };
+  }, [anime, state, closePopup]);
+
+  const updateFormData = useCallback(
+    (event) => {
+      state[event.target.name] = event.target.value;
+    },
+    [state]
+  );
+
   return (
     <div className="EditAnimePopup">
       <Modal

@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 const GeneralPopup = (props) => {
-  const closePopup = () => props.setShow(false);
   const canClose = {
     backdrop: props.canClose ? true : 'static',
     keyboard: props.canClose,
   };
+  const closePopup = useCallback(() => props.setShow(false), [props]);
   return (
     <div className="GeneralPopup">
       <Modal

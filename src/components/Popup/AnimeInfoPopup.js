@@ -1,14 +1,14 @@
 import { SaveAnime } from '../../utils/firebase';
 import { IsAdmin } from '../../utils/userdetail';
-import React from 'react';
+import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 const AnimeInfoPopup = (props) => {
   const anime = props.anime;
   const info = props.info;
-  const closePopup = () => props.setShow(false);
+  const closePopup = useCallback(() => props.setShow(false), [props]);
 
-  const syncAnime = () => {
+  const syncAnime = useCallback(() => {
     let state = JSON.parse(JSON.stringify(anime));
     state.studio = info.studios?.nodes[0]?.name
       ? info.studios?.nodes[0]?.name
@@ -34,8 +34,9 @@ const AnimeInfoPopup = (props) => {
     state.cover_url = info.coverImage.large;
     SaveAnime(state.key, state);
     closePopup();
-  };
-  const blackListResult = () => {
+  }, [anime, closePopup, info]);
+
+  const blackListResult = useCallback(() => {
     if (
       window.confirm('Are you sure "' + info.title.romaji + '" is incorrect?')
     ) {
@@ -45,7 +46,8 @@ const AnimeInfoPopup = (props) => {
       SaveAnime(state.key, state);
       closePopup();
     }
-  };
+  }, [anime, closePopup, info]);
+
   return (
     <div className="AnimeInfoPopup">
       <Modal

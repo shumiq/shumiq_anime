@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 const FilesPopup = (props) => {
   const driveUrl = props.driveUrl ? props.driveUrl : '';
   const photoUrl = props.photoUrl ? props.photoUrl : '';
-  const closePopup = () => props.setShow(false);
+  const closePopup = useCallback(() => props.setShow(false), [props]);
   return (
     <div className="GeneralPopup">
       <Modal

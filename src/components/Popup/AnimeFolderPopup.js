@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 const AnimeFolderPopup = (props) => {
   const files = props.folderFiles;
   const filenames = Object.keys(files).sort();
-  const closePopup = () => props.setShow(false);
+  const closePopup = useCallback(() => props.setShow(false), [props]);
   return (
     <div className="AnimeFolderPopup">
       <Modal
