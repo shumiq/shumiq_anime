@@ -21,9 +21,10 @@ const Conan = () => {
   useEffect(() => {
     function UpdateConanRef() {
       let ref = [];
-      Object.keys(conanList).forEach((cs) => {
-        ref[cs] = createRef();
-      });
+      if (conanList)
+        Object.keys(conanList).forEach((cs) => {
+          ref[cs] = createRef();
+        });
       setConanRef(ref);
     }
     onFirebaseDatabaseUpdate((db) => {
@@ -116,31 +117,32 @@ const Conan = () => {
               </tr>
             </thead>
             <tbody>
-              {conanList.map(
-                (conan) =>
-                  conan !== null && (
-                    <tr key={conan.case} ref={conanRef[conan.case]}>
-                      <td>{conan.case}</td>
-                      <td className="text-left">{conan.name}</td>
-                      <td>
-                        {Object.keys(conan.episodes).map(
-                          (episode) =>
-                            conan.episodes[episode]?.url && (
-                              <button
-                                className="btn btn-primary m-1"
-                                onClick={() =>
-                                  showFiles(episode, conan.episodes[episode])
-                                }
-                                key={episode}
-                              >
-                                {episode}
-                              </button>
-                            )
-                        )}
-                      </td>
-                    </tr>
-                  )
-              )}
+              {conanList &&
+                conanList.map(
+                  (conan) =>
+                    conan !== null && (
+                      <tr key={conan.case} ref={conanRef[conan.case]}>
+                        <td>{conan.case}</td>
+                        <td className="text-left">{conan.name}</td>
+                        <td>
+                          {Object.keys(conan.episodes).map(
+                            (episode) =>
+                              conan.episodes[episode]?.url && (
+                                <button
+                                  className="btn btn-primary m-1"
+                                  onClick={() =>
+                                    showFiles(episode, conan.episodes[episode])
+                                  }
+                                  key={episode}
+                                >
+                                  {episode}
+                                </button>
+                              )
+                          )}
+                        </td>
+                      </tr>
+                    )
+                )}
             </tbody>
           </table>
 
