@@ -1,11 +1,10 @@
 import { SeasonEnum, FilterEnum } from '../../utils/enum';
 import { defaultFilter } from '../../pages/Anime/Anime.filter';
 import { IsAdmin } from '../../utils/userdetail';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 const Filterbar = (props) => {
   const filter = Object.assign(defaultFilter, props.filter);
-  const setFilter = (f) => props.setFilter(f);
   const seasonList = props.seasonlist;
   const currentSeason =
     filter.category.toString() === FilterEnum.ONLY_UNSEEN.toString() ||
@@ -14,27 +13,27 @@ const Filterbar = (props) => {
       : filter?.season === FilterEnum.LATEST_SEASON
       ? Object.keys(seasonList).sort().pop()
       : filter.season;
-
-  const seasonToText = (season) => {
-    if (season.toString() === FilterEnum.ALL_SEASON.toString())
-      return 'All Season';
-    let [year, seasonNum] = season.split(',');
-    return year + ' ' + SeasonEnum[seasonNum];
-  };
-
   const hasNextSeason =
     Object.keys(seasonList).sort().pop() === currentSeason ||
     currentSeason.toString() === FilterEnum.ALL_SEASON.toString()
       ? 'invisible'
       : '';
-
   const havePreviousSeason =
     Object.keys(seasonList).sort().reverse().pop() === currentSeason ||
     currentSeason.toString() === FilterEnum.ALL_SEASON.toString()
       ? 'invisible'
       : '';
 
-  const gotoNextSeason = () => {
+  const setFilter = useCallback((f) => props.setFilter(f), [props]);
+
+  const seasonToText = useCallback((season) => {
+    if (season.toString() === FilterEnum.ALL_SEASON.toString())
+      return 'All Season';
+    let [year, seasonNum] = season.split(',');
+    return year + ' ' + SeasonEnum[seasonNum];
+  }, []);
+
+  const gotoNextSeason = useCallback(() => {
     if (hasNextSeason === 'invisible') return;
     const nextSeasonIndex =
       Object.keys(seasonList)
@@ -43,9 +42,9 @@ const Filterbar = (props) => {
     const nextSeason = Object.keys(seasonList).sort()[nextSeasonIndex];
     filter.season = nextSeason;
     setFilter(filter);
-  };
+  }, [currentSeason, setFilter, hasNextSeason, seasonList, filter]);
 
-  const gotoPreviousSeason = () => {
+  const gotoPreviousSeason = useCallback(() => {
     if (havePreviousSeason === 'invisible') return;
     const previousSeasonIndex =
       Object.keys(seasonList)
@@ -54,29 +53,41 @@ const Filterbar = (props) => {
     const previousSeason = Object.keys(seasonList).sort()[previousSeasonIndex];
     filter.season = previousSeason;
     setFilter(filter);
-  };
+  }, [currentSeason, setFilter, havePreviousSeason, seasonList, filter]);
 
-  const changeCategory = (event) => {
-    filter.category = event.target.value;
-    setFilter(filter);
-  };
-
-  const changeOrder = (event) => {
-    filter.orderby = event.target.value;
-    setFilter(filter);
-  };
-
-  const changeSeason = (event) => {
-    filter.season = event.target.value;
-    setFilter(filter);
-  };
-
-  const changeKey = (event) => {
-    if (event.key === 'Enter') {
-      filter.keyword = event.target.value;
+  const changeCategory = useCallback(
+    (event) => {
+      filter.category = event.target.value;
       setFilter(filter);
-    }
-  };
+    },
+    [filter, setFilter]
+  );
+
+  const changeOrder = useCallback(
+    (event) => {
+      filter.orderby = event.target.value;
+      setFilter(filter);
+    },
+    [filter, setFilter]
+  );
+
+  const changeSeason = useCallback(
+    (event) => {
+      filter.season = event.target.value;
+      setFilter(filter);
+    },
+    [filter, setFilter]
+  );
+
+  const changeKey = useCallback(
+    (event) => {
+      if (event.key === 'Enter') {
+        filter.keyword = event.target.value;
+        setFilter(filter);
+      }
+    },
+    [filter, setFilter]
+  );
 
   return (
     <div className="Filterbar">
