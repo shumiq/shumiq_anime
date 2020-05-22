@@ -6,11 +6,11 @@ import { getLocalStorage } from '../../utils/localstorage';
 import { CardLayout } from '../../utils/enum';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
+import EditAnimePopup from '../Popup/EditAnimePopup';
 import AnimeCard from './AnimeCard';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import React from 'react';
-import EditAnimePopup from '../Popup/EditAnimePopup';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../api/anilist');

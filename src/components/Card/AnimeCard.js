@@ -10,7 +10,7 @@ import AnimeFolderPopup from '../Popup/AnimeFolderPopup';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import FilesPopup from '../Popup/FilesPopup';
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 const AnimeCard = (props) => {
   const anime = props.anime;
@@ -48,7 +48,7 @@ const AnimeCard = (props) => {
       );
     };
     showInfoPopup(true);
-  }, [anime]);
+  }, [anime, setPopup]);
 
   const showFolder = useCallback(async () => {
     setPopup(
@@ -82,7 +82,7 @@ const AnimeCard = (props) => {
       );
     };
     showFolderPopup(true);
-  }, [anime]);
+  }, [anime, setPopup]);
 
   const showEditPopup = useCallback(
     (show) => {
@@ -90,7 +90,7 @@ const AnimeCard = (props) => {
         <EditAnimePopup anime={anime} show={show} setShow={showEditPopup} />
       );
     },
-    [anime]
+    [anime, setPopup]
   );
 
   const showFilesPopup = useCallback(
@@ -108,7 +108,7 @@ const AnimeCard = (props) => {
         />
       );
     },
-    [anime]
+    [anime, setPopup]
   );
 
   return (
