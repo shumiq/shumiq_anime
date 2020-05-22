@@ -69,5 +69,32 @@
         }
       }
     }
+  ],
+  "keyakilist": [
+    null,
+    {
+      "ep": "1",
+      "name": "episode 1",
+      "sub": {
+        "Thai": {
+          "url": "url",
+          "photoUrl": "url"
+        },
+        "Eng": {
+          "url": "url",
+          "photoUrl": "url"
+        }
+      }
+    },
+    {
+      "ep": "2",
+      "name": "episode 2",
+      "sub": {
+        "Thai": {
+          "url": "url",
+          "photoUrl": "url"
+        }
+      }
+    }
   ]
 }
