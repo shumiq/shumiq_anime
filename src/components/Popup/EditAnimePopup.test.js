@@ -5,7 +5,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 
 jest.mock('../../utils/firebase');
-const mockAnimeList = mockDatabase.animelist;
+const mockAnimeList = mockDatabase.animeList;
 
 describe('<EditAnimePopup />', () => {
   it('should not show when show props is false', () => {

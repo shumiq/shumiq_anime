@@ -14,7 +14,7 @@ const photoAlbumId =
 
 const Keyaki = () => {
   const [keyakiList, setKeyakiList] = useState(
-    getLocalStorage('database')?.keyakilist
+    getLocalStorage('database')?.keyakiList
   );
   const [keyakiRef, setKeyakiRef] = useState([]);
   const [popup, setPopup] = useState('');
@@ -30,7 +30,7 @@ const Keyaki = () => {
     }
     onFirebaseDatabaseUpdate((db) => {
       UpdateKeyakiRef();
-      setKeyakiList(db?.keyakilist);
+      setKeyakiList(db?.keyakiList);
     });
     UpdateKeyakiRef();
   }, [keyakiList]);

@@ -11,7 +11,7 @@ const AddAnimePopup = (props) => {
   const closePopup = useCallback(() => props.setShow(false), [props]);
   const addAnime = useCallback(
     (anime) => {
-      const animeList = getLocalStorage('database')?.animelist;
+      const animeList = getLocalStorage('database')?.animeList;
       if (!animeList) return;
       let key = animeList.length;
       while (animeList[key]) key++;

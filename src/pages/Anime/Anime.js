@@ -7,7 +7,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const Anime = () => {
   const [animeList, setAnimeList] = useState(
-    getLocalStorage('database')?.animelist
+    getLocalStorage('database')?.animeList
   );
   const [pageList, setPageList] = useState(AnimeFilter(animeList));
   const [filter, setFilter] = useState({});
@@ -15,7 +15,7 @@ const Anime = () => {
 
   useEffect(() => {
     onFirebaseDatabaseUpdate((db) => {
-      setAnimeList(db?.animelist);
+      setAnimeList(db?.animeList);
     });
   }, []);
 

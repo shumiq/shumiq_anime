@@ -7,7 +7,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const Sync = () => {
   const [animeList, setAnimeList] = useState(
-    getLocalStorage('database')?.animelist?.filter((anime) => anime != null)
+    getLocalStorage('database')?.animeList?.filter((anime) => anime != null)
   );
   const [albumList, setAlbumList] = useState([]);
   const [nextPageToken, setNextPageToken] = useState('');
@@ -15,7 +15,7 @@ const Sync = () => {
 
   useEffect(() => {
     onFirebaseDatabaseUpdate((db) => {
-      setAnimeList(db?.animelist.filter((anime) => anime != null));
+      setAnimeList(db?.animeList.filter((anime) => anime != null));
     });
   }, []);
 

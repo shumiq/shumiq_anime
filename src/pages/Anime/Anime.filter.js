@@ -7,9 +7,9 @@ export const defaultFilter = {
   orderby: FilterEnum.SORT_BY_SEASON,
 };
 
-export const AnimeFilter = (animelist, inputFilter = {}) => {
-  if (animelist == null) return [];
-  animelist = animelist.filter((anime) => anime?.key);
+export const AnimeFilter = (animeList, inputFilter = {}) => {
+  if (animeList == null) return [];
+  animeList = animeList.filter((anime) => anime?.key);
   let result = [];
   let filter = JSON.parse(JSON.stringify(defaultFilter));
   Object.assign(filter, inputFilter);
@@ -26,16 +26,16 @@ export const AnimeFilter = (animelist, inputFilter = {}) => {
   if (filter.keyword.trim().length > 0) filter.season = FilterEnum.ALL_SEASON;
 
   // Filter by Season
-  const seasonList = SeasonList(animelist);
+  const seasonList = SeasonList(animeList);
   if (filter.season.toString() !== FilterEnum.ALL_SEASON.toString()) {
     let season = filter.season;
     if (season.toString() === FilterEnum.LATEST_SEASON.toString())
       season = Object.keys(seasonList).sort().pop();
-    result = animelist.filter(
+    result = animeList.filter(
       (anime) => season === anime.year + ',' + anime.season
     );
   } else {
-    result = animelist.filter((anime) => true);
+    result = animeList.filter((anime) => true);
   }
 
   // Filter by Category
@@ -95,11 +95,11 @@ export const AnimeFilter = (animelist, inputFilter = {}) => {
   return result;
 };
 
-export const SeasonList = (animelist) => {
-  if (animelist == null) return {};
-  animelist = animelist.filter((anime) => anime?.key);
+export const SeasonList = (animeList) => {
+  if (animeList == null) return {};
+  animeList = animeList.filter((anime) => anime?.key);
   let seasonList = {};
-  animelist.forEach((anime) => {
+  animeList.forEach((anime) => {
     const season = anime.year + ',' + anime.season;
     if (!seasonList[season]) seasonList[season] = 0;
     seasonList[season]++;

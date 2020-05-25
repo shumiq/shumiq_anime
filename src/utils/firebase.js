@@ -28,7 +28,7 @@ firebase
   .database()
   .ref()
   .on('value', function (snapshot) {
-    let database = snapshot.val();
+    let database = snapshot.val()?.database;
     setLocalStorage('database', database);
     databaseOnUpdate(database);
   });
@@ -62,14 +62,14 @@ export const SignOut = () => {
 export const SaveAnime = (key, anime) => {
   firebase
     .database()
-    .ref('animelist/' + key)
+    .ref('database/animeList/' + key)
     .set(anime);
 };
 
 export const SaveConan = (conanList) => {
-  firebase.database().ref('conanlist/').set(conanList);
+  firebase.database().ref('database/conanList/').set(conanList);
 };
 
 export const SaveKeyaki = (keyakiList) => {
-  firebase.database().ref('keyakilist/').set(keyakiList);
+  firebase.database().ref('database/keyakiList/').set(keyakiList);
 };

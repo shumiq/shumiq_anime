@@ -2,7 +2,7 @@ import mockDatabase from '../../mock/database';
 import { FilterEnum } from '../../utils/enum';
 import { AnimeFilter, SeasonList } from './Anime.filter';
 
-const mockAnimeList = mockDatabase.animelist;
+const mockAnimeList = mockDatabase.animeList;
 
 describe('Anime Filter', () => {
   it('should return correct list of season', () => {

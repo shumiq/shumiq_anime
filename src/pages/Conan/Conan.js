@@ -14,7 +14,7 @@ const photoAlbumId =
 
 const Conan = () => {
   const [conanList, setConanList] = useState(
-    getLocalStorage('database')?.conanlist
+    getLocalStorage('database')?.conanList
   );
   const [conanRef, setConanRef] = useState([]);
   const [popup, setPopup] = useState('');
@@ -30,7 +30,7 @@ const Conan = () => {
     }
     onFirebaseDatabaseUpdate((db) => {
       UpdateConanRef();
-      setConanList(db?.conanlist);
+      setConanList(db?.conanList);
     });
     UpdateConanRef();
   }, [conanList]);

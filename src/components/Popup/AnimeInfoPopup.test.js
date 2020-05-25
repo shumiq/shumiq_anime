@@ -7,7 +7,7 @@ import React from 'react';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../utils/firebase');
-const mockAnimeList = mockDatabase.animelist;
+const mockAnimeList = mockDatabase.animeList;
 const mockInfo = {
   id: 107871,
   title: {
