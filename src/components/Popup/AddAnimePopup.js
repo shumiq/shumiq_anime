@@ -1,6 +1,7 @@
 import { getLocalStorage } from '../../utils/localstorage';
 import { SaveAnime } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
+import { SeasonEnum } from '../../utils/enum';
 import React, { useCallback, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
@@ -10,8 +11,32 @@ const AddAnimePopup = (props) => {
   const closePopup = useCallback(() => props.setShow(false), [props]);
   const addAnime = useCallback(
     (anime) => {
-      let animeList = getLocalStorage('database')?.animelist;
-      if (animeList) SaveAnime(animeList);
+      const animeList = getLocalStorage('database')?.animelist;
+      if (!animeList) return;
+      let key = animeList.length;
+      while (animeList[key]) key++;
+      const newAnime = {
+        key: key,
+        title: anime.title?.romaji,
+        studio: anime.studios?.nodes[0]?.name,
+        view: 0,
+        download: 0,
+        url: '',
+        score: anime.averageScore
+          ? (anime.averageScore / 10.0).toFixed(1)
+          : '0.0',
+        download_url: '',
+        all_episode: anime.episodes ? anime.episodes : '?',
+        season:
+          SeasonEnum[
+            anime.season.charAt(0) + anime.season.slice(1).toLowerCase()
+          ],
+        year: anime.startDate.year,
+        info: anime.description,
+        genres: anime.genres.join(', '),
+        cover_url: anime.coverImage.large,
+      };
+      SaveAnime(key, newAnime);
       closePopup();
     },
     [closePopup]
@@ -61,7 +86,8 @@ const AddAnimePopup = (props) => {
               <tbody>
                 {searchResult.map(
                   (anime) =>
-                    anime && (
+                    anime &&
+                    anime.season && (
                       <tr key={anime.id} className="text-left">
                         <td>
                           <small>{anime.title.userPreferred}</small>
@@ -72,7 +98,12 @@ const AddAnimePopup = (props) => {
                           </small>
                         </td>
                         <td>
-                          <button className="btn btn-secondary">Add</button>
+                          <button
+                            className="btn btn-secondary"
+                            onClick={() => addAnime(anime)}
+                          >
+                            Add
+                          </button>
                         </td>
                       </tr>
                     )
