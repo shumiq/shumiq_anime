@@ -3,6 +3,7 @@ import history from '../../history';
 import { IsAdmin } from '../../utils/userdetail';
 import { onFirebaseAuthUpdate } from '../../utils/firebase';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
+import AddAnimePopup from '../Popup/AddAnimePopup';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -11,6 +12,7 @@ const Navbar = () => {
     history.location.pathname === '/' || history.location.pathname === '/sync'
   );
   const [isAdmin, setIsAdmin] = useState(IsAdmin());
+  const [popup, setPopup] = useState('');
   const [cardLayout, setCardLayout] = useState(
     JSON.stringify(getLocalStorage('layout')) !== '{}'
       ? getLocalStorage('layout')
@@ -32,6 +34,14 @@ const Navbar = () => {
     setCardLayout(nextLayout);
     setLocalStorage('layout', nextLayout);
   }, [cardLayout]);
+
+  const showAddAnime = useCallback(() => {
+    const showAddAnimePopup = (show) => {
+      setPopup(<AddAnimePopup show={show} setShow={showAddAnimePopup} />);
+    };
+    showAddAnimePopup(true);
+    setIsAnime(true);
+  }, []);
 
   return (
     <div className="navbar">
@@ -62,6 +72,18 @@ const Navbar = () => {
                 Anime
               </Link>
             </li>
+            {isAnime && isAdmin && (
+              <li className="nav-item">
+                <Link
+                  id="link-add"
+                  className="nav-link btn"
+                  to="/"
+                  onClick={showAddAnime}
+                >
+                  Add Anime
+                </Link>
+              </li>
+            )}
             {isAnime && isAdmin && (
               <li className="nav-item">
                 <Link
@@ -113,6 +135,7 @@ const Navbar = () => {
           </ul>
         </div>
       </nav>
+      {popup}
     </div>
   );
 };

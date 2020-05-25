@@ -17,12 +17,14 @@ describe('<Navbar />', () => {
     IsAdmin.mockReturnValue(true);
     const wrapper = shallow(<Navbar />);
     expect(wrapper.contains('Sync Anime')).toEqual(true);
+    expect(wrapper.contains('Add Anime')).toEqual(true);
   });
 
   it('should not see admin link when not login as admin', () => {
     IsAdmin.mockReturnValue(false);
     const wrapper = shallow(<Navbar />);
     expect(wrapper.contains('Sync Anime')).toEqual(false);
+    expect(wrapper.contains('Add Anime')).toEqual(false);
   });
 
   it('should see anime related link when current page is anime related', () => {
@@ -30,10 +32,16 @@ describe('<Navbar />', () => {
     const wrapper = shallow(<Navbar />);
     wrapper.find('#link-logo').simulate('click');
     expect(wrapper.contains('Sync Anime')).toEqual(true);
+    expect(wrapper.contains('Add Anime')).toEqual(true);
     wrapper.find('#link-anime').simulate('click');
     expect(wrapper.contains('Sync Anime')).toEqual(true);
+    expect(wrapper.contains('Add Anime')).toEqual(true);
     wrapper.find('#link-sync').simulate('click');
     expect(wrapper.contains('Sync Anime')).toEqual(true);
+    expect(wrapper.contains('Add Anime')).toEqual(true);
+    wrapper.find('#link-add').simulate('click');
+    expect(wrapper.contains('Sync Anime')).toEqual(true);
+    expect(wrapper.contains('Add Anime')).toEqual(true);
   });
 
   it('should see not anime related link when current page is not anime related', () => {
@@ -41,8 +49,10 @@ describe('<Navbar />', () => {
     const wrapper = shallow(<Navbar />);
     wrapper.find('#link-keyaki').simulate('click');
     expect(wrapper.contains('Sync Anime')).toEqual(false);
+    expect(wrapper.contains('Add Anime')).toEqual(false);
     wrapper.find('#link-conan').simulate('click');
     expect(wrapper.contains('Sync Anime')).toEqual(false);
+    expect(wrapper.contains('Add Anime')).toEqual(false);
   });
 
   it('should change layout from auto to small', () => {
@@ -71,5 +81,12 @@ describe('<Navbar />', () => {
     const wrapper = shallow(<Navbar />);
     wrapper.find('#btn-layout').simulate('click');
     expect(setLocalStorage).toHaveBeenCalledWith('layout', 'auto');
+  });
+
+  it('should see AddAnimePopup when click add anime', () => {
+    IsAdmin.mockReturnValue(true);
+    const wrapper = shallow(<Navbar />);
+    wrapper.find('#link-add').simulate('click');
+    expect(wrapper.find('AddAnimePopup')).toHaveLength(1);
   });
 });
