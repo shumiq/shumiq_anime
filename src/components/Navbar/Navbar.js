@@ -5,6 +5,7 @@ import { Auth } from '../../utils/firebase';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 import AddAnimePopup from '../Popup/AddAnimePopup';
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isAnime, setIsAnime] = useState(
@@ -62,68 +63,69 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav text-center mr-auto">
             <li className="nav-item">
-              <a
+              <Link
                 id="link-anime"
                 className="nav-link btn"
-                href="/"
+                to="/"
                 onClick={() => setIsAnime(true)}
               >
                 Anime
-              </a>
+              </Link>
             </li>
             {isAnime && isAdmin && (
               <li className="nav-item">
-                <button
+                <Link
                   id="link-add"
                   className="nav-link btn w-100"
+                  to="/"
                   onClick={showAddAnime}
                 >
                   Add Anime
-                </button>
+                </Link>
               </li>
             )}
             {isAnime && isAdmin && (
               <li className="nav-item">
-                <a
+                <Link
                   id="link-sync"
                   className="nav-link btn"
-                  href="/sync"
+                  to="/sync"
                   onClick={() => setIsAnime(true)}
                 >
                   Sync Anime
-                </a>
+                </Link>
               </li>
             )}
             <li className="nav-item">
-              <a
+              <Link
                 id="link-conan"
                 className="nav-link btn"
-                href="/conan"
+                to="/conan"
                 onClick={() => setIsAnime(false)}
               >
                 Conan
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a
+              <Link
                 id="link-keyaki"
                 className="nav-link btn"
-                href="/keyaki"
+                to="/keyaki"
                 onClick={() => setIsAnime(false)}
               >
                 Keyakitte Kakenai
-              </a>
+              </Link>
             </li>
             {isAdmin && (
               <li className="nav-item">
-                <a
+                <Link
                   id="link-backup"
                   className="nav-link btn"
-                  href="/backup"
+                  to="/backup"
                   onClick={() => setIsAnime(false)}
                 >
                   Backup
-                </a>
+                </Link>
               </li>
             )}
           </ul>
