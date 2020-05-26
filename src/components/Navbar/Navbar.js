@@ -75,7 +75,7 @@ const Navbar = () => {
               <li className="nav-item">
                 <button
                   id="link-add"
-                  className="nav-link btn"
+                  className="nav-link btn w-100"
                   onClick={showAddAnime}
                 >
                   Add Anime
@@ -135,7 +135,15 @@ const Navbar = () => {
                   className="nav-link btn m-0"
                   onClick={updateCardLayout}
                 >
-                  {cardLayout}
+                  {cardLayout === 'small' ? (
+                    <i className="material-icons">photo_size_select_small</i>
+                  ) : cardLayout === 'medium' ? (
+                    <i className="material-icons">photo_size_select_large</i>
+                  ) : cardLayout === 'large' ? (
+                    <i className="material-icons">photo_size_select_actual</i>
+                  ) : (
+                    <i className="material-icons">brightness_auto</i>
+                  )}
                 </p>
               </li>
             )}
