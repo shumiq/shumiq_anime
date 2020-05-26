@@ -1,7 +1,8 @@
 import { getRouterConfig } from '../utils/router';
 import Navbar from '../components/Navbar/Navbar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import { Storage } from '../utils/firebase';
 
 const App = () => {
   const getRouters = (data) => {
@@ -14,6 +15,10 @@ const App = () => {
       return <Route key={index} {...props} />;
     });
   };
+
+  useEffect(() => {
+    Storage.autoBackup();
+  }, []);
 
   return (
     <div className="app">
