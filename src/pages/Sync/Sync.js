@@ -17,6 +17,22 @@ const Sync = () => {
     Database.subscribe((db) => {
       setAnimeList(db?.animeList.filter((anime) => anime != null));
     });
+    const fetchAlbums = async () => {
+      setPopup(
+        <GeneralPopup show={true} message="Loading..." canClose={false} />
+      );
+      const response = await GooglePhotoApi.getAlbums('');
+      let albums = [];
+      response.albums.forEach((album) => {
+        if (album?.id) albums[album.id] = album;
+      });
+      setAlbumList(albums);
+      setNextPageToken(response.nextPageToken);
+      setPopup(
+        <GeneralPopup show={false} message="Loading..." canClose={false} />
+      );
+    };
+    fetchAlbums();
   }, []);
 
   const getAlbums = useCallback(

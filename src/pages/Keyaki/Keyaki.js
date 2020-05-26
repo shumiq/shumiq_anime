@@ -20,6 +20,12 @@ const Keyaki = () => {
   const [popup, setPopup] = useState('');
 
   useEffect(() => {
+    Database.subscribe((db) => {
+      setKeyakiList(db?.keyakiList);
+    });
+  }, []);
+
+  useEffect(() => {
     function UpdateKeyakiRef() {
       let ref = [];
       if (keyakiList)
@@ -28,10 +34,6 @@ const Keyaki = () => {
         });
       setKeyakiRef(ref);
     }
-    Database.subscribe((db) => {
-      UpdateKeyakiRef();
-      setKeyakiList(db?.keyakiList);
-    });
     UpdateKeyakiRef();
   }, [keyakiList]);
 

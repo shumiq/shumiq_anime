@@ -20,6 +20,12 @@ const Conan = () => {
   const [popup, setPopup] = useState('');
 
   useEffect(() => {
+    Database.subscribe((db) => {
+      setConanList(db?.conanList);
+    });
+  }, []);
+
+  useEffect(() => {
     function UpdateConanRef() {
       let ref = [];
       if (conanList)
@@ -28,10 +34,6 @@ const Conan = () => {
         });
       setConanRef(ref);
     }
-    Database.subscribe((db) => {
-      UpdateConanRef();
-      setConanList(db?.conanList);
-    });
     UpdateConanRef();
   }, [conanList]);
 

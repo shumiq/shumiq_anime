@@ -19,6 +19,9 @@ const Backup = () => {
     Database.subscribe((db) => {
       setStatus(Database.status());
     });
+  }, []);
+
+  useEffect(() => {
     const fetchBackupFiles = async () => {
       showLoadingPopup(true);
       const files = await Database.backupFiles();
@@ -26,7 +29,6 @@ const Backup = () => {
       showLoadingPopup(false);
     };
     fetchBackupFiles();
-    setStatus(Database.status());
   }, [showLoadingPopup]);
 
   const deleteBackup = useCallback(
