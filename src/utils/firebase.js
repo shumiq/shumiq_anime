@@ -80,7 +80,7 @@ export const Database = {
   },
   backupFiles: async () => {
     const response = await Firebase.storage.list('backup');
-    return response;
+    return response.reverse();
   },
   runAutoBackup: async () => {
     const autoBackupThreshold = 1000 * 60 * 60 * 24 * 7; // 1 Week
