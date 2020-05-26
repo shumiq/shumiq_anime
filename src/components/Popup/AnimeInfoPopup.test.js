@@ -1,6 +1,6 @@
 import mockDatabase from '../../mock/database';
 import { IsAdmin } from '../../utils/userdetail';
-import { SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import AnimeInfoPopup from './AnimeInfoPopup';
 import { mount } from 'enzyme';
 import React from 'react';
@@ -101,7 +101,7 @@ describe('<AnimeInfoPopup />', () => {
 
   it('should sync with new info when click sync', () => {
     IsAdmin.mockReturnValue(true);
-    SaveAnime.mockReturnValue(null);
+    Database.saveAnime.mockReturnValue(null);
     const mockSetShow = () => {};
     const wrapper = mount(
       <AnimeInfoPopup
@@ -125,7 +125,7 @@ describe('<AnimeInfoPopup />', () => {
         season: 2,
       }
     );
-    expect(SaveAnime).toHaveBeenCalledWith(
+    expect(Database.saveAnime).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult
     );
@@ -133,7 +133,7 @@ describe('<AnimeInfoPopup />', () => {
 
   it('should add to blacklist when click incorrect', () => {
     IsAdmin.mockReturnValue(true);
-    SaveAnime.mockReturnValue(null);
+    Database.saveAnime.mockReturnValue(null);
     window.confirm = jest.fn(() => true);
     const mockSetShow = () => {};
     const wrapper = mount(
@@ -155,7 +155,7 @@ describe('<AnimeInfoPopup />', () => {
         blacklist: [mockInfo.id],
       }
     );
-    expect(SaveAnime).toHaveBeenCalledWith(
+    expect(Database.saveAnime).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult
     );

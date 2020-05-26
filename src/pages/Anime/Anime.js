@@ -1,4 +1,4 @@
-import { onFirebaseDatabaseUpdate } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import AnimeCard from '../../components/Card/AnimeCard';
 import Filterbar from '../../components/Filterbar/Filterbar';
@@ -14,7 +14,7 @@ const Anime = () => {
   const [popup, setPopup] = useState('');
 
   useEffect(() => {
-    onFirebaseDatabaseUpdate((db) => {
+    Database.onFirebaseDatabaseUpdate((db) => {
       setAnimeList(db?.animeList);
     });
   }, []);

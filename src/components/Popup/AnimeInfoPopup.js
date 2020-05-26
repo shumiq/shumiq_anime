@@ -1,4 +1,4 @@
-import { SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import { IsAdmin } from '../../utils/userdetail';
 import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
@@ -32,7 +32,7 @@ const AnimeInfoPopup = (props) => {
       .sort()
       .join(', ');
     state.cover_url = info.coverImage.large;
-    SaveAnime(state.key, state);
+    Database.saveAnime(state.key, state);
     closePopup();
   }, [anime, closePopup, info]);
 
@@ -43,7 +43,7 @@ const AnimeInfoPopup = (props) => {
       let state = JSON.parse(JSON.stringify(anime));
       if (!state.blacklist) state.blacklist = [];
       if (!state.blacklist.includes(info.id)) state.blacklist.push(info.id);
-      SaveAnime(state.key, state);
+      Database.saveAnime(state.key, state);
       closePopup();
     }
   }, [anime, closePopup, info]);

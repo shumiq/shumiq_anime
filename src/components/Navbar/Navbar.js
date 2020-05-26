@@ -1,7 +1,7 @@
 import Login from '../Login/Login';
 import history from '../../history';
 import { IsAdmin } from '../../utils/userdetail';
-import { onFirebaseAuthUpdate } from '../../utils/firebase';
+import { Auth } from '../../utils/firebase';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 import AddAnimePopup from '../Popup/AddAnimePopup';
 import React, { useState, useEffect, useCallback } from 'react';
@@ -20,7 +20,7 @@ const Navbar = () => {
   );
 
   useEffect(() => {
-    onFirebaseAuthUpdate(() => {
+    Auth.onFirebaseAuthUpdate(() => {
       setIsAdmin(IsAdmin());
     });
   }, []);

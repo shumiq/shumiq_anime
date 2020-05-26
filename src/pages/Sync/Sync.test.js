@@ -1,7 +1,7 @@
 import { getLocalStorage } from '../../utils/localstorage';
 import mockDatabase from '../../mock/database';
 import GooglePhotoApi from '../../api/googlephoto';
-import { SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import GoogleDriveApi from '../../api/googledrive';
 import Sync from './Sync';
 import { shallow } from 'enzyme';
@@ -107,7 +107,10 @@ describe('<Sync />', () => {
     updatedAnime.download = 2;
     updatedAnime.gdriveid_public = null;
     updatedAnime.gdriveid = null;
-    expect(SaveAnime).toHaveBeenCalledWith(updatedAnime.key, updatedAnime);
+    expect(Database.saveAnime).toHaveBeenCalledWith(
+      updatedAnime.key,
+      updatedAnime
+    );
   });
 
   it('should called save anime when unsync', async () => {
@@ -127,7 +130,10 @@ describe('<Sync />', () => {
     // Then
     let updatedAnime = JSON.parse(JSON.stringify(mockDatabase.animeList[1]));
     updatedAnime.gphotoid = null;
-    expect(SaveAnime).toHaveBeenCalledWith(updatedAnime.key, updatedAnime);
+    expect(Database.saveAnime).toHaveBeenCalledWith(
+      updatedAnime.key,
+      updatedAnime
+    );
   });
 
   it('should see sync buttons correctly', async () => {
@@ -194,6 +200,9 @@ describe('<Sync />', () => {
     // Then
     let updatedAnime = JSON.parse(JSON.stringify(mockDatabase.animeList[0]));
     updatedAnime.gphotoid = mockDatabase.animeList[0].gphotoid;
-    expect(SaveAnime).toHaveBeenCalledWith(updatedAnime.key, updatedAnime);
+    expect(Database.saveAnime).toHaveBeenCalledWith(
+      updatedAnime.key,
+      updatedAnime
+    );
   });
 });

@@ -1,7 +1,8 @@
-import { setLocalStorage, getLocalStorage } from './localstorage';
+import { setLocalStorage } from './localstorage';
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
+import 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC44si2Y_SRkWS8xvpODaLAm7GgMT35Xl4',
@@ -24,52 +25,42 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-firebase
-  .database()
-  .ref()
-  .on('value', function (snapshot) {
-    let database = snapshot.val()?.database;
-    setLocalStorage('database', database);
-    databaseOnUpdate(database);
-  });
-
-firebase.auth().onAuthStateChanged(function (currentUser) {
-  const database = getLocalStorage('database');
-  databaseOnUpdate(database);
-  authUpdate(currentUser);
-});
-
-let databaseOnUpdate = () => {};
-let authUpdate = () => {};
-
-export const onFirebaseDatabaseUpdate = (callback) => {
-  databaseOnUpdate = callback;
+export const Database = {
+  onFirebaseDatabaseUpdate: (callback) => {
+    firebase
+      .database()
+      .ref()
+      .on('value', function (snapshot) {
+        const database = snapshot.val()?.database;
+        setLocalStorage('database', database);
+        callback(database);
+      });
+  },
+  saveAnime: (key, anime) => {
+    firebase
+      .database()
+      .ref('database/animeList/' + key)
+      .set(anime);
+  },
+  saveConan: (conanList) => {
+    firebase.database().ref('database/conanList/').set(conanList);
+  },
+  saveKeyaki: (keyakiList) => {
+    firebase.database().ref('database/keyakiList/').set(keyakiList);
+  },
 };
 
-export const onFirebaseAuthUpdate = (callback) => {
-  authUpdate = callback;
-};
-
-export const SignIn = (tokenId) => {
-  const creds = firebase.auth.GoogleAuthProvider.credential(tokenId);
-  firebase.auth().signInWithCredential(creds);
-};
-
-export const SignOut = () => {
-  firebase.auth().signOut();
-};
-
-export const SaveAnime = (key, anime) => {
-  firebase
-    .database()
-    .ref('database/animeList/' + key)
-    .set(anime);
-};
-
-export const SaveConan = (conanList) => {
-  firebase.database().ref('database/conanList/').set(conanList);
-};
-
-export const SaveKeyaki = (keyakiList) => {
-  firebase.database().ref('database/keyakiList/').set(keyakiList);
+export const Auth = {
+  onFirebaseAuthUpdate: (callback) => {
+    firebase.auth().onAuthStateChanged(function (currentUser) {
+      callback(currentUser);
+    });
+  },
+  signIn: (tokenId) => {
+    const creds = firebase.auth.GoogleAuthProvider.credential(tokenId);
+    firebase.auth().signInWithCredential(creds);
+  },
+  signOut: () => {
+    firebase.auth().signOut();
+  },
 };

@@ -1,4 +1,4 @@
-import { onFirebaseDatabaseUpdate, SaveConan } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import { IsAdmin } from '../../utils/userdetail';
@@ -28,7 +28,7 @@ const Conan = () => {
         });
       setConanRef(ref);
     }
-    onFirebaseDatabaseUpdate((db) => {
+    Database.onFirebaseDatabaseUpdate((db) => {
       UpdateConanRef();
       setConanList(db?.conanList);
     });
@@ -85,7 +85,7 @@ const Conan = () => {
         };
       }
     });
-    SaveConan(newConanList);
+    Database.saveConan(newConanList);
     showLoadingPopup(false);
   }, [conanList]);
 
@@ -113,7 +113,7 @@ const Conan = () => {
         const callback = (newName) => {
           let newList = JSON.parse(JSON.stringify(conanList));
           newList[cs].name = newName;
-          SaveConan(newList);
+          Database.saveConan(newList);
         };
         const showInputPopup = (show) => {
           setPopup(

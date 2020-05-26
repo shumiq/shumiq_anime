@@ -3,7 +3,7 @@ import mockDatabase from '../../mock/database';
 import { IsAdmin } from '../../utils/userdetail';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
-import { SaveKeyaki } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import Keyaki from './Keyaki';
 import React from 'react';
 import { shallow, mount } from 'enzyme';
@@ -107,7 +107,7 @@ describe('<Keyaki />', () => {
     expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(false);
   });
 
-  it('should call SaveKeyaki after update', async () => {
+  it('should call Database.saveKeyaki after update', async () => {
     getLocalStorage.mockReturnValue(mockDatabase);
     GoogleDriveApi.getFiles.mockResolvedValue([
       {
@@ -133,7 +133,7 @@ describe('<Keyaki />', () => {
     const wrapper = shallow(<Keyaki />);
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
-    expect(SaveKeyaki).toHaveBeenCalledWith([
+    expect(Database.saveKeyaki).toHaveBeenCalledWith([
       null,
       {
         ep: '1',
@@ -194,7 +194,7 @@ describe('<Keyaki />', () => {
     wrapper.find('InputPopup').props().callback('newName');
     expect(wrapper.find('InputPopup')).toHaveLength(1);
     expect(wrapper.find('InputPopup').props().default).toEqual('episode 1');
-    expect(SaveKeyaki).toHaveBeenCalledWith([
+    expect(Database.saveKeyaki).toHaveBeenCalledWith([
       null,
       {
         ep: '1',

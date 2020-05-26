@@ -1,5 +1,5 @@
 import { getLocalStorage } from '../../utils/localstorage';
-import { SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
 import { SeasonEnum } from '../../utils/enum';
 import React, { useCallback, useState } from 'react';
@@ -36,7 +36,7 @@ const AddAnimePopup = (props) => {
         genres: anime.genres.join(', '),
         cover_url: anime.coverImage.large,
       };
-      SaveAnime(key, newAnime);
+      Database.saveAnime(key, newAnime);
       closePopup();
     },
     [closePopup]

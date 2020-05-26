@@ -1,4 +1,4 @@
-import { SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
@@ -9,13 +9,13 @@ const EditAnimePopup = (props) => {
   const closePopup = useCallback(() => props.setShow(false), [props]);
 
   const saveAnime = useCallback(() => {
-    SaveAnime(state.key, state);
+    Database.saveAnime(state.key, state);
     closePopup();
   }, [state, closePopup]);
 
   const deleteAnime = useCallback(() => {
     if (window.confirm('Do you want to delete "' + anime.title + '" ?')) {
-      SaveAnime(state.key, null);
+      Database.saveAnime(state.key, null);
       closePopup();
     }
   }, [anime, state, closePopup]);

@@ -1,4 +1,4 @@
-import { onFirebaseDatabaseUpdate, SaveKeyaki } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import { IsAdmin } from '../../utils/userdetail';
@@ -28,7 +28,7 @@ const Keyaki = () => {
         });
       setKeyakiRef(ref);
     }
-    onFirebaseDatabaseUpdate((db) => {
+    Database.onFirebaseDatabaseUpdate((db) => {
       UpdateKeyakiRef();
       setKeyakiList(db?.keyakiList);
     });
@@ -85,7 +85,7 @@ const Keyaki = () => {
         };
       }
     });
-    SaveKeyaki(newKeyakiList);
+    Database.saveKeyaki(newKeyakiList);
     showLoadingPopup(false);
   }, [keyakiList]);
 
@@ -113,7 +113,7 @@ const Keyaki = () => {
         const callback = (newName) => {
           let newList = JSON.parse(JSON.stringify(keyakiList));
           newList[ep].name = newName;
-          SaveKeyaki(newList);
+          Database.saveKeyaki(newList);
         };
         const showInputPopup = (show) => {
           setPopup(

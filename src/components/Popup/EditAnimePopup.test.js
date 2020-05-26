@@ -1,5 +1,5 @@
 import mockDatabase from '../../mock/database';
-import { SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import EditAnimePopup from './EditAnimePopup';
 import React from 'react';
 import { mount } from 'enzyme';
@@ -32,7 +32,7 @@ describe('<EditAnimePopup />', () => {
   });
 
   it('should save with new data when click save', () => {
-    SaveAnime.mockReturnValue(null);
+    Database.saveAnime.mockReturnValue(null);
     const mockSetShow = () => {};
     const wrapper = mount(
       <EditAnimePopup
@@ -124,14 +124,14 @@ describe('<EditAnimePopup />', () => {
         genres: 'genres',
       }
     );
-    expect(SaveAnime).toHaveBeenCalledWith(
+    expect(Database.saveAnime).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult
     );
   });
 
   it('should delete when click delete', () => {
-    SaveAnime.mockReturnValue(null);
+    Database.saveAnime.mockReturnValue(null);
     window.confirm = jest.fn(() => true);
     const mockSetShow = () => {};
     const wrapper = mount(
@@ -146,6 +146,6 @@ describe('<EditAnimePopup />', () => {
       .find('button.btn-primary')
       .at(1);
     deleteButton.simulate('click');
-    expect(SaveAnime).toHaveBeenCalledWith(mockAnimeList[0].key, null);
+    expect(Database.saveAnime).toHaveBeenCalledWith(mockAnimeList[0].key, null);
   });
 });

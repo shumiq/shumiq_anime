@@ -1,5 +1,5 @@
 import { setLocalStorage, removeLocalStorage } from '../../utils/localstorage';
-import { SignIn, SignOut } from '../../utils/firebase';
+import { Auth } from '../../utils/firebase';
 import { getUser } from '../../utils/userdetail';
 import GoogleLogin, { GoogleLogout } from 'react-google-login';
 import React, { useState, useCallback } from 'react';
@@ -11,14 +11,14 @@ const Login = () => {
     setLocalStorage('user', response.profileObj);
     setLocalStorage('accessToken', response.accessToken);
     setUser(getUser());
-    SignIn(response.tokenId);
+    Auth.signIn(response.tokenId);
   }, []);
 
   const logout = useCallback((response) => {
     removeLocalStorage('user');
     removeLocalStorage('accessToken');
     setUser(getUser());
-    SignOut();
+    Auth.signOut();
   }, []);
 
   return (

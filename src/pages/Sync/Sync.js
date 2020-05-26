@@ -1,5 +1,5 @@
 import { getLocalStorage } from '../../utils/localstorage';
-import { onFirebaseDatabaseUpdate, SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import GooglePhotoApi from '../../api/googlephoto';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import GoogleDriveApi from '../../api/googledrive';
@@ -14,7 +14,7 @@ const Sync = () => {
   const [popup, setPopup] = useState('');
 
   useEffect(() => {
-    onFirebaseDatabaseUpdate((db) => {
+    Database.onFirebaseDatabaseUpdate((db) => {
       setAnimeList(db?.animeList.filter((anime) => anime != null));
     });
   }, []);
@@ -43,7 +43,7 @@ const Sync = () => {
   const unsync = useCallback((anime) => {
     if (window.confirm('Do you want to unsync "' + anime.title + '" ?')) {
       anime.gphotoid = null;
-      SaveAnime(anime.key, anime);
+      Database.saveAnime(anime.key, anime);
     }
   }, []);
 
@@ -65,7 +65,7 @@ const Sync = () => {
         }
       });
       anime.download = albumList[anime.gphotoid].mediaItemsCount;
-      SaveAnime(anime.key, anime);
+      Database.saveAnime(anime.key, anime);
       setPopup(
         <GeneralPopup show={false} message="Loading..." canClose={false} />
       );
@@ -78,7 +78,7 @@ const Sync = () => {
       anime.gphotoid = Object.entries(albumList).filter(
         (entry) => entry[1].title === '[Anime] ' + anime.title
       )[0]?.[0];
-      SaveAnime(anime.key, anime);
+      Database.saveAnime(anime.key, anime);
     },
     [albumList]
   );

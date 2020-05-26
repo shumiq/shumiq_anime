@@ -1,7 +1,7 @@
 import { SeasonEnum, CardLayout } from '../../utils/enum';
 import { IsAdmin } from '../../utils/userdetail';
 import EditAnimePopup from '../../components/Popup/EditAnimePopup';
-import { SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
 import AnimeInfoPopup from '../Popup/AnimeInfoPopup';
 import { getLocalStorage } from '../../utils/localstorage';
@@ -24,7 +24,7 @@ const AnimeCard = (props) => {
     (field) => {
       let animeCopy = JSON.parse(JSON.stringify(anime));
       animeCopy[field] = parseInt(animeCopy[field]) + 1;
-      SaveAnime(anime.key, animeCopy);
+      Database.saveAnime(anime.key, animeCopy);
     },
     [anime]
   );

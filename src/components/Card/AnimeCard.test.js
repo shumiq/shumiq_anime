@@ -1,7 +1,7 @@
 import mockDatabase from '../../mock/database';
 import { IsAdmin } from '../../utils/userdetail';
 import AnilistApi from '../../api/anilist';
-import { SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import { CardLayout } from '../../utils/enum';
 import GoogleDriveApi from '../../api/googledrive';
@@ -210,7 +210,7 @@ describe('<AnimeCard />', () => {
     );
   });
 
-  it('should call SaveAnime when click plus button to increase view', async () => {
+  it('should call Database.saveAnime when click plus button to increase view', async () => {
     // Given
     IsAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
@@ -223,10 +223,13 @@ describe('<AnimeCard />', () => {
     // Then
     let expectedAnime = mockAnime;
     expectedAnime.view++;
-    expect(SaveAnime).toHaveBeenCalledWith(mockAnime.key, expectedAnime);
+    expect(Database.saveAnime).toHaveBeenCalledWith(
+      mockAnime.key,
+      expectedAnime
+    );
   });
 
-  it('should call SaveAnime when click plus button to increase download', async () => {
+  it('should call Database.saveAnime when click plus button to increase download', async () => {
     // Given
     IsAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
@@ -239,7 +242,10 @@ describe('<AnimeCard />', () => {
     // Then
     let expectedAnime = mockAnime;
     expectedAnime.download++;
-    expect(SaveAnime).toHaveBeenCalledWith(mockAnime.key, expectedAnime);
+    expect(Database.saveAnime).toHaveBeenCalledWith(
+      mockAnime.key,
+      expectedAnime
+    );
   });
 
   it('should set auto layout', () => {

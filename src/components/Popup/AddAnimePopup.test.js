@@ -1,7 +1,7 @@
 import AnilistApi from '../../api/anilist';
 import { getLocalStorage } from '../../utils/localstorage';
 import mockDatabase from '../../mock/database';
-import { SaveAnime } from '../../utils/firebase';
+import { Database } from '../../utils/firebase';
 import AddAnimePopup from './AddAnimePopup';
 import React from 'react';
 import { mount } from 'enzyme';
@@ -90,7 +90,7 @@ describe('<AddAnimePopup />', () => {
     expect(result.at(2).text()).toContain('SUMMER');
   });
 
-  it('should call SaveAnime when click add', async () => {
+  it('should call Database.saveAnime when click add', async () => {
     getLocalStorage.mockReturnValue(mockDatabase);
     AnilistApi.searchAnime.mockResolvedValue([
       {
@@ -116,7 +116,7 @@ describe('<AddAnimePopup />', () => {
       wrapper.find('div.modal').find('button').at(1).simulate('click');
     });
     await flushPromises();
-    expect(SaveAnime).toHaveBeenCalledWith(2, {
+    expect(Database.saveAnime).toHaveBeenCalledWith(2, {
       all_episode: 10,
       cover_url: 'cover_url',
       download: 0,
