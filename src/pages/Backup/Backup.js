@@ -7,7 +7,7 @@ import { useCallback } from 'react';
 const Backup = () => {
   const [backupFiles, setBackupFiles] = useState([]);
   const [popup, setPopup] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState(Database.status());
 
   const showLoadingPopup = useCallback((show) => {
     setPopup(
@@ -15,25 +15,10 @@ const Backup = () => {
     );
   }, []);
 
-  const currentStatus = useCallback(() => {
-    const status = Database.status();
-    return (
-      <p className="m-0 p-0">
-        Anime ({status.anime.series}/{status.anime.files}), Conan (
-        {status.conan.cases}/{status.conan.files}), Keyaki (
-        {status.keyaki.episodes}/{status.keyaki.files})
-      </p>
-    );
-  }, []);
-
   useEffect(() => {
     Database.subscribe((db) => {
-      setStatus(currentStatus());
+      setStatus(Database.status());
     });
-    setStatus(currentStatus());
-  }, [currentStatus]);
-
-  useEffect(() => {
     const fetchBackupFiles = async () => {
       showLoadingPopup(true);
       const files = await Database.backupFiles();
@@ -41,6 +26,7 @@ const Backup = () => {
       showLoadingPopup(false);
     };
     fetchBackupFiles();
+    setStatus(Database.status());
   }, [showLoadingPopup]);
 
   const deleteBackup = useCallback(
@@ -76,15 +62,37 @@ const Backup = () => {
             <thead>
               <tr>
                 <th className="text-center">File</th>
-                <th className="text-center">Status</th>
+                <th className="text-center">Anime</th>
+                <th className="text-center">Conan</th>
+                <th className="text-center">Keyaki</th>
                 <th className="text-center"></th>
               </tr>
             </thead>
             <tbody>
               <tr className="bg-dark">
-                <td>(current)</td>
-                <td>{status}</td>
+                <td className="pt-4">(current)</td>
                 <td>
+                  <p className="m-0 p-0 small">Series: {status.anime.series}</p>
+                  <p className="m-0 p-0 small">
+                    Download: {status.anime.files}
+                  </p>
+                  <p className="m-0 p-0 small">View: {status.anime.view}</p>
+                </td>
+                <td>
+                  <p className="m-0 p-0 small">Cases: {status.conan.cases}</p>
+                  <p className="m-0 p-0 small">
+                    Download: {status.conan.files}
+                  </p>
+                </td>
+                <td>
+                  <p className="m-0 p-0 small">
+                    Episodes: {status.keyaki.episodes}
+                  </p>
+                  <p className="m-0 p-0 small">
+                    Download: {status.keyaki.files}
+                  </p>
+                </td>
+                <td className="pt-3">
                   <button
                     id="btn-backup"
                     className="btn btn-outline-light border-0 p-0 m-0 ml-3"
@@ -98,18 +106,35 @@ const Backup = () => {
               {backupFiles &&
                 backupFiles.map((file) => (
                   <tr key={file.generation}>
-                    <td>{file.name}</td>
+                    <td className="pt-4">{file.name}</td>
                     <td>
-                      <p className="m-0 p-0">
-                        Anime ({file.customMetadata.animeSeries}/
-                        {file.customMetadata.animeFiles}), Conan (
-                        {file.customMetadata.conanCases}/
-                        {file.customMetadata.conanFiles}), Keyaki (
-                        {file.customMetadata.keyakiEpisodes}/
-                        {file.customMetadata.keyakiFiles})
+                      <p className="m-0 p-0 small">
+                        Series: {file.customMetadata.animeSeries}
+                      </p>
+                      <p className="m-0 p-0 small">
+                        Download: {file.customMetadata.animeFiles}
+                      </p>
+                      <p className="m-0 p-0 small">
+                        View: {file.customMetadata.animeView}
                       </p>
                     </td>
                     <td>
+                      <p className="m-0 p-0 small">
+                        Cases: {file.customMetadata.conanCases}
+                      </p>
+                      <p className="m-0 p-0 small">
+                        Download: {file.customMetadata.conanFiles}
+                      </p>
+                    </td>
+                    <td>
+                      <p className="m-0 p-0 small">
+                        Episodes: {file.customMetadata.keyakiEpisodes}
+                      </p>
+                      <p className="m-0 p-0 small">
+                        Download: {file.customMetadata.keyakiFiles}
+                      </p>
+                    </td>
+                    <td className="pt-3">
                       <button
                         id="btn-restore"
                         className="btn btn-outline-light border-0 p-0 m-0 ml-3"

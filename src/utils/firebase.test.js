@@ -25,6 +25,7 @@ describe('Database', () => {
       anime: {
         files: 3,
         series: 2,
+        view: 1,
       },
       conan: {
         cases: 2,
@@ -48,6 +49,7 @@ describe('Database', () => {
         customMetadata: {
           animeFiles: 3,
           animeSeries: 2,
+          animeView: 1,
           conanCases: 2,
           conanFiles: 5,
           keyakiEpisodes: 2,

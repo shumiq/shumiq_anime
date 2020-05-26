@@ -14,6 +14,7 @@ describe('<Backup />', () => {
       anime: {
         series: 3,
         files: 2,
+        view: 2,
       },
       conan: {
         cases: 5,
@@ -31,6 +32,7 @@ describe('<Backup />', () => {
         customMetadata: {
           animeSeries: 2,
           animeFiles: 1,
+          animeView: 1,
           conanCases: 4,
           conanFiles: 7,
           keyakiEpisodes: 5,
@@ -44,6 +46,7 @@ describe('<Backup />', () => {
         customMetadata: {
           animeSeries: 1,
           animeFiles: 0,
+          animeView: 0,
           conanCases: 3,
           conanFiles: 6,
           keyakiEpisodes: 4,
@@ -59,9 +62,13 @@ describe('<Backup />', () => {
       await flushPromises();
       wrapper.update();
     });
-    expect(wrapper.find('tr').at(1).text()).toContain('Anime (3/2)');
-    expect(wrapper.find('tr').at(1).text()).toContain('Conan (5/8)');
-    expect(wrapper.find('tr').at(1).text()).toContain('Keyaki (6/6)');
+    expect(wrapper.find('tr').at(1).text()).toContain('Series: 3');
+    expect(wrapper.find('tr').at(1).text()).toContain('Download: 2');
+    expect(wrapper.find('tr').at(1).text()).toContain('View: 2');
+    expect(wrapper.find('tr').at(1).text()).toContain('Cases: 5');
+    expect(wrapper.find('tr').at(1).text()).toContain('Download: 8');
+    expect(wrapper.find('tr').at(1).text()).toContain('Episodes: 6');
+    expect(wrapper.find('tr').at(1).text()).toContain('Download: 6');
   });
 
   it('should backup when click backup button', async () => {
@@ -84,13 +91,21 @@ describe('<Backup />', () => {
     });
     expect(wrapper.find('tr')).toHaveLength(4);
     expect(wrapper.find('tr').at(2).text()).toContain('20200526.json');
-    expect(wrapper.find('tr').at(2).text()).toContain('Anime (2/1)');
-    expect(wrapper.find('tr').at(2).text()).toContain('Conan (4/7)');
-    expect(wrapper.find('tr').at(2).text()).toContain('Keyaki (5/5)');
+    expect(wrapper.find('tr').at(2).text()).toContain('Series: 2');
+    expect(wrapper.find('tr').at(2).text()).toContain('Download: 1');
+    expect(wrapper.find('tr').at(2).text()).toContain('View: 1');
+    expect(wrapper.find('tr').at(2).text()).toContain('Cases: 4');
+    expect(wrapper.find('tr').at(2).text()).toContain('Download: 7');
+    expect(wrapper.find('tr').at(2).text()).toContain('Episodes: 5');
+    expect(wrapper.find('tr').at(2).text()).toContain('Download: 5');
     expect(wrapper.find('tr').at(3).text()).toContain('20200520.json');
-    expect(wrapper.find('tr').at(3).text()).toContain('Anime (1/0)');
-    expect(wrapper.find('tr').at(3).text()).toContain('Conan (3/6)');
-    expect(wrapper.find('tr').at(3).text()).toContain('Keyaki (4/4)');
+    expect(wrapper.find('tr').at(3).text()).toContain('Series: 1');
+    expect(wrapper.find('tr').at(3).text()).toContain('Download: 0');
+    expect(wrapper.find('tr').at(3).text()).toContain('View: 0');
+    expect(wrapper.find('tr').at(3).text()).toContain('Cases: 3');
+    expect(wrapper.find('tr').at(3).text()).toContain('Download: 6');
+    expect(wrapper.find('tr').at(3).text()).toContain('Episodes: 4');
+    expect(wrapper.find('tr').at(3).text()).toContain('Download: 4');
   });
 
   it('should update database when click restore', async () => {

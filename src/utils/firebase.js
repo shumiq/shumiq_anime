@@ -18,6 +18,12 @@ export const Database = {
         sumAnime += parseInt(anime.download);
       }
     });
+    let sumViewAnime = 0;
+    database.animeList.forEach((anime) => {
+      if (anime) {
+        sumViewAnime += parseInt(anime.view);
+      }
+    });
     let sumConan = 0;
     database.conanList.forEach((conan) => {
       if (conan) {
@@ -34,6 +40,7 @@ export const Database = {
       anime: {
         series: database.animeList.filter((anime) => anime != null).length,
         files: sumAnime,
+        view: sumViewAnime,
       },
       conan: {
         cases: database.conanList.filter((conan) => conan != null).length,
@@ -53,6 +60,7 @@ export const Database = {
       customMetadata: {
         animeSeries: status.anime.series,
         animeFiles: status.anime.files,
+        animeView: status.anime.view,
         conanCases: status.conan.cases,
         conanFiles: status.conan.files,
         keyakiEpisodes: status.keyaki.episodes,
