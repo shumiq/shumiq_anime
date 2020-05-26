@@ -1,4 +1,4 @@
-import { ROUTER_CONFIG } from './RouterConfig/routerConfig';
+import { ROUTER_CONFIG } from './config/routerConfig';
 import { IsAdmin } from './userdetail';
 
 export const getRouterConfig = () => {

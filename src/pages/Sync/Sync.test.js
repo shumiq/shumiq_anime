@@ -107,7 +107,7 @@ describe('<Sync />', () => {
     updatedAnime.download = 2;
     updatedAnime.gdriveid_public = null;
     updatedAnime.gdriveid = null;
-    expect(Database.saveAnime).toHaveBeenCalledWith(
+    expect(Database.update.anime).toHaveBeenCalledWith(
       updatedAnime.key,
       updatedAnime
     );
@@ -130,7 +130,7 @@ describe('<Sync />', () => {
     // Then
     let updatedAnime = JSON.parse(JSON.stringify(mockDatabase.animeList[1]));
     updatedAnime.gphotoid = null;
-    expect(Database.saveAnime).toHaveBeenCalledWith(
+    expect(Database.update.anime).toHaveBeenCalledWith(
       updatedAnime.key,
       updatedAnime
     );
@@ -200,7 +200,7 @@ describe('<Sync />', () => {
     // Then
     let updatedAnime = JSON.parse(JSON.stringify(mockDatabase.animeList[0]));
     updatedAnime.gphotoid = mockDatabase.animeList[0].gphotoid;
-    expect(Database.saveAnime).toHaveBeenCalledWith(
+    expect(Database.update.anime).toHaveBeenCalledWith(
       updatedAnime.key,
       updatedAnime
     );

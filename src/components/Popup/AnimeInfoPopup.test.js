@@ -101,7 +101,7 @@ describe('<AnimeInfoPopup />', () => {
 
   it('should sync with new info when click sync', () => {
     IsAdmin.mockReturnValue(true);
-    Database.saveAnime.mockReturnValue(null);
+    Database.update.anime.mockReturnValue(null);
     const mockSetShow = () => {};
     const wrapper = mount(
       <AnimeInfoPopup
@@ -125,7 +125,7 @@ describe('<AnimeInfoPopup />', () => {
         season: 2,
       }
     );
-    expect(Database.saveAnime).toHaveBeenCalledWith(
+    expect(Database.update.anime).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult
     );
@@ -133,7 +133,7 @@ describe('<AnimeInfoPopup />', () => {
 
   it('should add to blacklist when click incorrect', () => {
     IsAdmin.mockReturnValue(true);
-    Database.saveAnime.mockReturnValue(null);
+    Database.update.anime.mockReturnValue(null);
     window.confirm = jest.fn(() => true);
     const mockSetShow = () => {};
     const wrapper = mount(
@@ -155,7 +155,7 @@ describe('<AnimeInfoPopup />', () => {
         blacklist: [mockInfo.id],
       }
     );
-    expect(Database.saveAnime).toHaveBeenCalledWith(
+    expect(Database.update.anime).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult
     );

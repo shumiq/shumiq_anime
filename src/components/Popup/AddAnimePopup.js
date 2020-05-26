@@ -36,7 +36,7 @@ const AddAnimePopup = (props) => {
         genres: anime.genres.join(', '),
         cover_url: anime.coverImage.large,
       };
-      Database.saveAnime(key, newAnime);
+      Database.update.anime(key, newAnime);
       closePopup();
     },
     [closePopup]

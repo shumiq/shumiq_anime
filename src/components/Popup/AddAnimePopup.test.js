@@ -90,7 +90,7 @@ describe('<AddAnimePopup />', () => {
     expect(result.at(2).text()).toContain('SUMMER');
   });
 
-  it('should call Database.saveAnime when click add', async () => {
+  it('should call Database.update.anime when click add', async () => {
     getLocalStorage.mockReturnValue(mockDatabase);
     AnilistApi.searchAnime.mockResolvedValue([
       {
@@ -116,7 +116,7 @@ describe('<AddAnimePopup />', () => {
       wrapper.find('div.modal').find('button').at(1).simulate('click');
     });
     await flushPromises();
-    expect(Database.saveAnime).toHaveBeenCalledWith(2, {
+    expect(Database.update.anime).toHaveBeenCalledWith(2, {
       all_episode: 10,
       cover_url: 'cover_url',
       download: 0,

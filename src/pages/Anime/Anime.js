@@ -14,7 +14,7 @@ const Anime = () => {
   const [popup, setPopup] = useState('');
 
   useEffect(() => {
-    Database.onFirebaseDatabaseUpdate((db) => {
+    Database.subscribe((db) => {
       setAnimeList(db?.animeList);
     });
   }, []);

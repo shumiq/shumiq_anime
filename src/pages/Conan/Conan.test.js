@@ -113,7 +113,7 @@ describe('<Conan />', () => {
     expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(false);
   });
 
-  it('should call Database.saveConan after update', async () => {
+  it('should call Database.update.conan after update', async () => {
     getLocalStorage.mockReturnValue(mockDatabase);
     GoogleDriveApi.getFiles.mockResolvedValue([
       {
@@ -139,7 +139,7 @@ describe('<Conan />', () => {
     const wrapper = shallow(<Conan />);
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
-    expect(Database.saveConan).toHaveBeenCalledWith([
+    expect(Database.update.conan).toHaveBeenCalledWith([
       null,
       {
         case: '1',
@@ -193,7 +193,7 @@ describe('<Conan />', () => {
     wrapper.find('InputPopup').props().callback('newName');
     expect(wrapper.find('InputPopup')).toHaveLength(1);
     expect(wrapper.find('InputPopup').props().default).toEqual('case 1');
-    expect(Database.saveConan).toHaveBeenCalledWith([
+    expect(Database.update.conan).toHaveBeenCalledWith([
       null,
       {
         case: '1',

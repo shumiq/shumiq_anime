@@ -1,8 +1,8 @@
 import { getRouterConfig } from '../utils/router';
 import Navbar from '../components/Navbar/Navbar';
+import { Database } from '../utils/firebase';
 import React, { useEffect } from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
-import { Storage } from '../utils/firebase';
 
 const App = () => {
   const getRouters = (data) => {
@@ -17,7 +17,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    Storage.autoBackup();
+    Database.runAutoDelete();
+    Database.runAutoBackup();
   }, []);
 
   return (

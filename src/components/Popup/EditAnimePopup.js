@@ -9,13 +9,13 @@ const EditAnimePopup = (props) => {
   const closePopup = useCallback(() => props.setShow(false), [props]);
 
   const saveAnime = useCallback(() => {
-    Database.saveAnime(state.key, state);
+    Database.update.anime(state.key, state);
     closePopup();
   }, [state, closePopup]);
 
   const deleteAnime = useCallback(() => {
     if (window.confirm('Do you want to delete "' + anime.title + '" ?')) {
-      Database.saveAnime(state.key, null);
+      Database.update.anime(state.key, null);
       closePopup();
     }
   }, [anime, state, closePopup]);

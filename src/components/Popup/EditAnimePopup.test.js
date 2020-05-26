@@ -32,7 +32,7 @@ describe('<EditAnimePopup />', () => {
   });
 
   it('should save with new data when click save', () => {
-    Database.saveAnime.mockReturnValue(null);
+    Database.update.anime.mockReturnValue(null);
     const mockSetShow = () => {};
     const wrapper = mount(
       <EditAnimePopup
@@ -124,14 +124,14 @@ describe('<EditAnimePopup />', () => {
         genres: 'genres',
       }
     );
-    expect(Database.saveAnime).toHaveBeenCalledWith(
+    expect(Database.update.anime).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult
     );
   });
 
   it('should delete when click delete', () => {
-    Database.saveAnime.mockReturnValue(null);
+    Database.update.anime.mockReturnValue(null);
     window.confirm = jest.fn(() => true);
     const mockSetShow = () => {};
     const wrapper = mount(
@@ -146,6 +146,9 @@ describe('<EditAnimePopup />', () => {
       .find('button.btn-primary')
       .at(1);
     deleteButton.simulate('click');
-    expect(Database.saveAnime).toHaveBeenCalledWith(mockAnimeList[0].key, null);
+    expect(Database.update.anime).toHaveBeenCalledWith(
+      mockAnimeList[0].key,
+      null
+    );
   });
 });

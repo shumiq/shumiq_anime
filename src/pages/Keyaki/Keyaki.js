@@ -28,7 +28,7 @@ const Keyaki = () => {
         });
       setKeyakiRef(ref);
     }
-    Database.onFirebaseDatabaseUpdate((db) => {
+    Database.subscribe((db) => {
       UpdateKeyakiRef();
       setKeyakiList(db?.keyakiList);
     });
@@ -85,7 +85,7 @@ const Keyaki = () => {
         };
       }
     });
-    Database.saveKeyaki(newKeyakiList);
+    Database.update.keyaki(newKeyakiList);
     showLoadingPopup(false);
   }, [keyakiList]);
 
@@ -113,7 +113,7 @@ const Keyaki = () => {
         const callback = (newName) => {
           let newList = JSON.parse(JSON.stringify(keyakiList));
           newList[ep].name = newName;
-          Database.saveKeyaki(newList);
+          Database.update.keyaki(newList);
         };
         const showInputPopup = (show) => {
           setPopup(

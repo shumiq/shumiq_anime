@@ -14,7 +14,7 @@ const Sync = () => {
   const [popup, setPopup] = useState('');
 
   useEffect(() => {
-    Database.onFirebaseDatabaseUpdate((db) => {
+    Database.subscribe((db) => {
       setAnimeList(db?.animeList.filter((anime) => anime != null));
     });
   }, []);
@@ -43,7 +43,7 @@ const Sync = () => {
   const unsync = useCallback((anime) => {
     if (window.confirm('Do you want to unsync "' + anime.title + '" ?')) {
       anime.gphotoid = null;
-      Database.saveAnime(anime.key, anime);
+      Database.update.anime(anime.key, anime);
     }
   }, []);
 
@@ -65,7 +65,7 @@ const Sync = () => {
         }
       });
       anime.download = albumList[anime.gphotoid].mediaItemsCount;
-      Database.saveAnime(anime.key, anime);
+      Database.update.anime(anime.key, anime);
       setPopup(
         <GeneralPopup show={false} message="Loading..." canClose={false} />
       );
@@ -78,7 +78,7 @@ const Sync = () => {
       anime.gphotoid = Object.entries(albumList).filter(
         (entry) => entry[1].title === '[Anime] ' + anime.title
       )[0]?.[0];
-      Database.saveAnime(anime.key, anime);
+      Database.update.anime(anime.key, anime);
     },
     [albumList]
   );

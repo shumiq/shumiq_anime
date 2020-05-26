@@ -2,7 +2,7 @@ import { IsAdmin } from './userdetail';
 import { getRouterConfig } from './router';
 
 jest.mock('./userdetail');
-jest.mock('./RouterConfig/routerConfig', () => ({
+jest.mock('./config/routerConfig', () => ({
   ROUTER_CONFIG: [
     {
       path: '/',

@@ -32,7 +32,7 @@ const AnimeInfoPopup = (props) => {
       .sort()
       .join(', ');
     state.cover_url = info.coverImage.large;
-    Database.saveAnime(state.key, state);
+    Database.update.anime(state.key, state);
     closePopup();
   }, [anime, closePopup, info]);
 
@@ -43,7 +43,7 @@ const AnimeInfoPopup = (props) => {
       let state = JSON.parse(JSON.stringify(anime));
       if (!state.blacklist) state.blacklist = [];
       if (!state.blacklist.includes(info.id)) state.blacklist.push(info.id);
-      Database.saveAnime(state.key, state);
+      Database.update.anime(state.key, state);
       closePopup();
     }
   }, [anime, closePopup, info]);

@@ -20,7 +20,7 @@ const Navbar = () => {
   );
 
   useEffect(() => {
-    Auth.onFirebaseAuthUpdate(() => {
+    Auth.subscribe(() => {
       setIsAdmin(IsAdmin());
     });
   }, []);

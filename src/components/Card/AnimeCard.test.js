@@ -210,7 +210,7 @@ describe('<AnimeCard />', () => {
     );
   });
 
-  it('should call Database.saveAnime when click plus button to increase view', async () => {
+  it('should call Database.update.anime when click plus button to increase view', async () => {
     // Given
     IsAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
@@ -223,13 +223,13 @@ describe('<AnimeCard />', () => {
     // Then
     let expectedAnime = mockAnime;
     expectedAnime.view++;
-    expect(Database.saveAnime).toHaveBeenCalledWith(
+    expect(Database.update.anime).toHaveBeenCalledWith(
       mockAnime.key,
       expectedAnime
     );
   });
 
-  it('should call Database.saveAnime when click plus button to increase download', async () => {
+  it('should call Database.update.anime when click plus button to increase download', async () => {
     // Given
     IsAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
@@ -242,7 +242,7 @@ describe('<AnimeCard />', () => {
     // Then
     let expectedAnime = mockAnime;
     expectedAnime.download++;
-    expect(Database.saveAnime).toHaveBeenCalledWith(
+    expect(Database.update.anime).toHaveBeenCalledWith(
       mockAnime.key,
       expectedAnime
     );

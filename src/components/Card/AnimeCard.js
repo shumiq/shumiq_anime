@@ -24,7 +24,7 @@ const AnimeCard = (props) => {
     (field) => {
       let animeCopy = JSON.parse(JSON.stringify(anime));
       animeCopy[field] = parseInt(animeCopy[field]) + 1;
-      Database.saveAnime(anime.key, animeCopy);
+      Database.update.anime(anime.key, animeCopy);
     },
     [anime]
   );

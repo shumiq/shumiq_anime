@@ -28,7 +28,7 @@ const Conan = () => {
         });
       setConanRef(ref);
     }
-    Database.onFirebaseDatabaseUpdate((db) => {
+    Database.subscribe((db) => {
       UpdateConanRef();
       setConanList(db?.conanList);
     });
@@ -85,7 +85,7 @@ const Conan = () => {
         };
       }
     });
-    Database.saveConan(newConanList);
+    Database.update.conan(newConanList);
     showLoadingPopup(false);
   }, [conanList]);
 
@@ -113,7 +113,7 @@ const Conan = () => {
         const callback = (newName) => {
           let newList = JSON.parse(JSON.stringify(conanList));
           newList[cs].name = newName;
-          Database.saveConan(newList);
+          Database.update.conan(newList);
         };
         const showInputPopup = (show) => {
           setPopup(
