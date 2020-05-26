@@ -1,6 +1,6 @@
 import { getLocalStorage } from '../../utils/localstorage';
 import mockDatabase from '../../mock/database';
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import { Database } from '../../utils/firebase';
@@ -62,7 +62,7 @@ describe('<Conan />', () => {
 
   it('should random to one case when click random button', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     window.HTMLElement.prototype.scrollIntoView = () => {};
     const wrapper = mount(<Conan />);
     wrapper.find('#btn-random').simulate('click');
@@ -71,14 +71,14 @@ describe('<Conan />', () => {
 
   it('should not show update button when not admin', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const wrapper = shallow(<Conan />);
     expect(wrapper.find('#btn-update')).toHaveLength(0);
   });
 
   it('should show update button when admin', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Conan />);
     expect(wrapper.find('#btn-update')).toHaveLength(1);
   });
@@ -105,7 +105,7 @@ describe('<Conan />', () => {
         productUrl: 'thisisurl2',
       },
     ]);
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Conan />);
     wrapper.find('#btn-update').simulate('click');
     expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(true);
@@ -135,7 +135,7 @@ describe('<Conan />', () => {
         productUrl: 'thisisurl2',
       },
     ]);
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Conan />);
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
@@ -179,7 +179,7 @@ describe('<Conan />', () => {
 
   it('should not show InputPopup when click name but not admin', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const wrapper = shallow(<Conan />);
     wrapper.find('tr').at(1).find('span').simulate('click');
     expect(wrapper.find('InputPopup')).toHaveLength(0);
@@ -187,7 +187,7 @@ describe('<Conan />', () => {
 
   it('should show InputPopup when click name and admin', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Conan />);
     wrapper.find('tr').at(1).find('span').simulate('click');
     wrapper.find('InputPopup').props().callback('newName');

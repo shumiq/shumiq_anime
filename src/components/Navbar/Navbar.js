@@ -1,6 +1,6 @@
 import Login from '../Login/Login';
 import history from '../../history';
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import { Auth } from '../../utils/firebase';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 import AddAnimePopup from '../Popup/AddAnimePopup';
@@ -10,7 +10,7 @@ const Navbar = () => {
   const [isAnime, setIsAnime] = useState(
     history.location.pathname === '/' || history.location.pathname === '/sync'
   );
-  const [isAdmin, setIsAdmin] = useState(IsAdmin());
+  const [isAdmin, setIsAdmin] = useState(UserDetail.isAdmin());
   const [popup, setPopup] = useState('');
   const [cardLayout, setCardLayout] = useState(
     JSON.stringify(getLocalStorage('layout')) !== '{}'
@@ -20,7 +20,7 @@ const Navbar = () => {
 
   useEffect(() => {
     Auth.subscribe(() => {
-      setIsAdmin(IsAdmin());
+      setIsAdmin(UserDetail.isAdmin());
     });
   }, []);
 

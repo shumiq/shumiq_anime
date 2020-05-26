@@ -1,5 +1,5 @@
 import { Database } from '../../utils/firebase';
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
@@ -123,7 +123,7 @@ const AnimeInfoPopup = (props) => {
         </Modal.Body>
 
         <Modal.Footer>
-          {IsAdmin() && (
+          {UserDetail.isAdmin() && (
             <button
               type="button"
               className="btn btn-primary"
@@ -132,7 +132,7 @@ const AnimeInfoPopup = (props) => {
               Sync
             </button>
           )}
-          {IsAdmin() && (
+          {UserDetail.isAdmin() && (
             <button
               type="button"
               className="btn btn-primary"

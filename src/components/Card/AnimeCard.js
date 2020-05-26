@@ -1,5 +1,5 @@
 import { SeasonEnum, CardLayout } from '../../utils/enum';
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import EditAnimePopup from '../../components/Popup/EditAnimePopup';
 import { Database } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
@@ -116,7 +116,8 @@ const AnimeCard = (props) => {
       <div
         className={
           'card ' +
-          (IsAdmin() && anime.view.toString() !== anime.download.toString()
+          (UserDetail.isAdmin() &&
+          anime.view.toString() !== anime.download.toString()
             ? 'border border-primary'
             : '')
         }
@@ -150,7 +151,7 @@ const AnimeCard = (props) => {
             >
               <i className="material-icons">share</i>
             </button>
-            {IsAdmin() && (
+            {UserDetail.isAdmin() && (
               <button
                 id="btn-edit"
                 className="btn btn-outline-light border-0 p-0 m-0 ml-3"
@@ -208,7 +209,7 @@ const AnimeCard = (props) => {
                   </small>
                 </td>
               </tr>
-              {IsAdmin() && (
+              {UserDetail.isAdmin() && (
                 <tr>
                   <td className="text-left px-3">
                     <small>View</small>
@@ -239,7 +240,7 @@ const AnimeCard = (props) => {
                   <small>
                     {anime.download}/{anime.all_episode}
                   </small>
-                  {IsAdmin() &&
+                  {UserDetail.isAdmin() &&
                     anime.download.toString() !==
                       anime.all_episode.toString() && (
                       <b
@@ -258,15 +259,16 @@ const AnimeCard = (props) => {
         </div>
         <div className="card-footer p-1">
           <div className="d-flex justify-content-around w-auto">
-            {IsAdmin() && (!anime.gdriveid_public || !anime.gphotoid) && (
-              <button
-                id="btn-folder-internal"
-                className="btn btn-outline-secondary disabled h-auto border-0"
-              >
-                <i className="material-icons align-middle">folder</i>
-              </button>
-            )}
-            {IsAdmin() && anime.gdriveid_public && anime.gphotoid && (
+            {UserDetail.isAdmin() &&
+              (!anime.gdriveid_public || !anime.gphotoid) && (
+                <button
+                  id="btn-folder-internal"
+                  className="btn btn-outline-secondary disabled h-auto border-0"
+                >
+                  <i className="material-icons align-middle">folder</i>
+                </button>
+              )}
+            {UserDetail.isAdmin() && anime.gdriveid_public && anime.gphotoid && (
               <button
                 id="btn-folder-internal"
                 className="btn btn-outline-light h-auto border-0"
@@ -284,7 +286,7 @@ const AnimeCard = (props) => {
               <i className="material-icons align-middle">photo_library</i>
             </button>
 
-            {IsAdmin() && anime.download_url === '' && (
+            {UserDetail.isAdmin() && anime.download_url === '' && (
               <a
                 id="btn-download"
                 className="btn btn-outline-secondary disabled h-auto border-0"
@@ -295,7 +297,7 @@ const AnimeCard = (props) => {
                 <i className="material-icons align-middle">add_box</i>
               </a>
             )}
-            {IsAdmin() && anime.download_url !== '' && (
+            {UserDetail.isAdmin() && anime.download_url !== '' && (
               <a
                 id="btn-download"
                 className="btn btn-outline-light h-auto border-0"

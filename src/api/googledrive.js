@@ -1,4 +1,4 @@
-import { getAccessToken } from '../utils/userdetail';
+import UserDetail from '../utils/userdetail';
 import axios from 'axios';
 
 const uploadFolderId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
@@ -12,7 +12,7 @@ const GoogleDriveApi = {
     while (true) {
       const response = await axios.get(
         'https://www.googleapis.com/drive/v3/files?access_token=' +
-          getAccessToken() +
+          UserDetail.getAccessToken() +
           '&pageToken=' +
           nextPageToken +
           "&q='" +
@@ -68,7 +68,7 @@ const GoogleDriveApi = {
   createFolder: async (name, parentId) => {
     const response = await axios.post(
       'https://www.googleapis.com/drive/v3/files?access_token=' +
-        getAccessToken(),
+        UserDetail.getAccessToken(),
       {
         name: name,
         mimeType: 'application/vnd.google-apps.folder',
@@ -82,7 +82,7 @@ const GoogleDriveApi = {
       'https://www.googleapis.com/drive/v3/files/' +
         fileId +
         '?access_token=' +
-        getAccessToken() +
+        UserDetail.getAccessToken() +
         '&addParents=' +
         destinationId +
         '&removeParents=' +

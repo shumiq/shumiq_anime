@@ -1,6 +1,6 @@
 import { setLocalStorage, removeLocalStorage } from '../../utils/localstorage';
 import { Auth } from '../../utils/firebase';
-import { getUser } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import GoogleLogin, { GoogleLogout } from 'react-google-login';
 import React, { useState, useCallback } from 'react';
 
@@ -10,14 +10,14 @@ const Login = () => {
   const login = useCallback((response) => {
     setLocalStorage('user', response.profileObj);
     setLocalStorage('accessToken', response.accessToken);
-    setUser(getUser());
+    setUser(UserDetail.getUser());
     Auth.signIn(response.tokenId);
   }, []);
 
   const logout = useCallback((response) => {
     removeLocalStorage('user');
     removeLocalStorage('accessToken');
-    setUser(getUser());
+    setUser(UserDetail.getUser());
     Auth.signOut();
   }, []);
 
@@ -35,15 +35,15 @@ const Login = () => {
               onClick={renderProps.onClick}
               disabled={renderProps.disabled}
             >
-              {getUser() && (
+              {UserDetail.getUser() && (
                 <img
-                  src={getUser().imageUrl}
-                  alt={getUser().name}
+                  src={UserDetail.getUser().imageUrl}
+                  alt={UserDetail.getUser().name}
                   className="rounded-circle"
                   style={{ width: '30px', height: '30px' }}
                 />
               )}
-              {!getUser() && <b>Login</b>}
+              {!UserDetail.getUser() && <b>Login</b>}
             </button>
           )}
         />

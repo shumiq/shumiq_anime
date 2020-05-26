@@ -1,6 +1,6 @@
 import { getLocalStorage } from '../../utils/localstorage';
 import mockDatabase from '../../mock/database';
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import { Database } from '../../utils/firebase';
@@ -56,7 +56,7 @@ describe('<Keyaki />', () => {
 
   it('should random to one case when click random button', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     window.HTMLElement.prototype.scrollIntoView = () => {};
     const wrapper = mount(<Keyaki />);
     wrapper.find('#btn-random').simulate('click');
@@ -65,14 +65,14 @@ describe('<Keyaki />', () => {
 
   it('should not show update button when not admin', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const wrapper = shallow(<Keyaki />);
     expect(wrapper.find('#btn-update')).toHaveLength(0);
   });
 
   it('should show update button when admin', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Keyaki />);
     expect(wrapper.find('#btn-update')).toHaveLength(1);
   });
@@ -99,7 +99,7 @@ describe('<Keyaki />', () => {
         productUrl: 'thisisurl2',
       },
     ]);
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Keyaki />);
     wrapper.find('#btn-update').simulate('click');
     expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(true);
@@ -129,7 +129,7 @@ describe('<Keyaki />', () => {
         productUrl: 'thisisurl2',
       },
     ]);
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Keyaki />);
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
@@ -180,7 +180,7 @@ describe('<Keyaki />', () => {
 
   it('should not show InputPopup when click name but not admin', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const wrapper = shallow(<Keyaki />);
     wrapper.find('tr').at(1).find('span').simulate('click');
     expect(wrapper.find('InputPopup')).toHaveLength(0);
@@ -188,7 +188,7 @@ describe('<Keyaki />', () => {
 
   it('should show InputPopup when click name and admin', () => {
     getLocalStorage.mockReturnValue(mockDatabase);
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Keyaki />);
     wrapper.find('tr').at(1).find('span').simulate('click');
     wrapper.find('InputPopup').props().callback('newName');

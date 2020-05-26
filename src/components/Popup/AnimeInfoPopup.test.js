@@ -1,5 +1,5 @@
 import mockDatabase from '../../mock/database';
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import { Database } from '../../utils/firebase';
 import AnimeInfoPopup from './AnimeInfoPopup';
 import { mount } from 'enzyme';
@@ -74,7 +74,7 @@ describe('<AnimeInfoPopup />', () => {
   });
 
   it('should not show sync and incorrect button if not admin', () => {
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const wrapper = mount(
       <AnimeInfoPopup
         anime={mockAnimeList[0]}
@@ -87,7 +87,7 @@ describe('<AnimeInfoPopup />', () => {
   });
 
   it('should show sync and incorrect button if admin', () => {
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = mount(
       <AnimeInfoPopup
         anime={mockAnimeList[0]}
@@ -100,7 +100,7 @@ describe('<AnimeInfoPopup />', () => {
   });
 
   it('should sync with new info when click sync', () => {
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     Database.update.anime.mockReturnValue(null);
     const mockSetShow = () => {};
     const wrapper = mount(
@@ -132,7 +132,7 @@ describe('<AnimeInfoPopup />', () => {
   });
 
   it('should add to blacklist when click incorrect', () => {
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     Database.update.anime.mockReturnValue(null);
     window.confirm = jest.fn(() => true);
     const mockSetShow = () => {};

@@ -1,4 +1,4 @@
-import { getAccessToken } from '../utils/userdetail';
+import UserDetail from '../utils/userdetail';
 import axios from 'axios';
 
 const pageSize = 50;
@@ -9,7 +9,7 @@ const GooglePhotoApi = {
   getAlbums: async (nextPageToken) => {
     const response = await axios.get(
       'https://photoslibrary.googleapis.com/v1/albums?access_token=' +
-        getAccessToken() +
+        UserDetail.getAccessToken() +
         '&pageToken=' +
         nextPageToken +
         '&pageSize=' +
@@ -44,7 +44,7 @@ const GooglePhotoApi = {
     while (true) {
       const response = await axios.post(
         'https://photoslibrary.googleapis.com/v1/mediaItems:search?access_token=' +
-          getAccessToken(),
+          UserDetail.getAccessToken(),
         {
           albumId: albumId,
           pageToken: nextPageToken,

@@ -1,4 +1,4 @@
-import { getAccessToken } from '../utils/userdetail';
+import UserDetail from '../utils/userdetail';
 import GoogleDriveApi from './googledrive';
 import axios from 'axios';
 
@@ -11,7 +11,7 @@ describe('GoogleDriveApi', () => {
   describe('Get Files', () => {
     it('should call api', async () => {
       // Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       axios.get.mockResolvedValue({ data: { files: [] } });
       const folderId = 'folder_id';
       // When
@@ -20,7 +20,7 @@ describe('GoogleDriveApi', () => {
       // Then
       expect(axios.get).toHaveBeenCalledWith(
         'https://www.googleapis.com/drive/v3/files?access_token=' +
-          getAccessToken() +
+          UserDetail.getAccessToken() +
           "&pageToken=&q='" +
           folderId +
           "' in parents"
@@ -28,7 +28,7 @@ describe('GoogleDriveApi', () => {
     });
     it('should call api with upload folder id', async () => {
       // Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       axios.get.mockResolvedValue({ data: { files: [] } });
       const folderId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
       // When
@@ -37,7 +37,7 @@ describe('GoogleDriveApi', () => {
       // Then
       expect(axios.get).toHaveBeenCalledWith(
         'https://www.googleapis.com/drive/v3/files?access_token=' +
-          getAccessToken() +
+          UserDetail.getAccessToken() +
           "&pageToken=&q='" +
           folderId +
           "' in parents"
@@ -45,7 +45,7 @@ describe('GoogleDriveApi', () => {
     });
     it('should call api with private anime folder id', async () => {
       // Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       axios.get.mockResolvedValue({ data: { files: [] } });
       const folderId = '1teaWviknfgbuDsoFarRIsnny1HQ8zQe2';
       // When
@@ -54,7 +54,7 @@ describe('GoogleDriveApi', () => {
       // Then
       expect(axios.get).toHaveBeenCalledWith(
         'https://www.googleapis.com/drive/v3/files?access_token=' +
-          getAccessToken() +
+          UserDetail.getAccessToken() +
           "&pageToken=&q='" +
           folderId +
           "' in parents"
@@ -62,7 +62,7 @@ describe('GoogleDriveApi', () => {
     });
     it('should call api with public anime folder id', async () => {
       // Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       axios.get.mockResolvedValue({ data: { files: [] } });
       const folderId = '16MJ-jTxpa041WDc4nDjjLpIiSyNCEI4h';
       // When
@@ -71,7 +71,7 @@ describe('GoogleDriveApi', () => {
       // Then
       expect(axios.get).toHaveBeenCalledWith(
         'https://www.googleapis.com/drive/v3/files?access_token=' +
-          getAccessToken() +
+          UserDetail.getAccessToken() +
           "&pageToken=&q='" +
           folderId +
           "' in parents"
@@ -82,7 +82,7 @@ describe('GoogleDriveApi', () => {
   describe('Get Folder id', () => {
     it('should return private folder id when folder available', async () => {
       //Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       const mockAnime = { title: 'title' };
       const mockFolderId = 'folder_id';
       axios.get.mockResolvedValue({
@@ -97,7 +97,7 @@ describe('GoogleDriveApi', () => {
 
     it('should return private folder id when folder not available', async () => {
       //Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       const mockAnime = { title: 'title' };
       const mockFolderId = 'folder_id';
       axios.get.mockResolvedValue({ data: { files: [] } });
@@ -111,7 +111,7 @@ describe('GoogleDriveApi', () => {
 
     it('should return public folder id', async () => {
       //Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       const mockAnime = { title: 'title' };
       const mockFolderId = 'folder_id';
       axios.get.mockResolvedValue({
@@ -126,7 +126,7 @@ describe('GoogleDriveApi', () => {
 
     it('should return public folder id when folder not available', async () => {
       //Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       const mockAnime = { title: 'title' };
       const mockFolderId = 'folder_id';
       axios.get.mockResolvedValue({ data: { files: [] } });
@@ -142,7 +142,7 @@ describe('GoogleDriveApi', () => {
   describe('Create folder', () => {
     it('should call api', async () => {
       // Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       const folderName = 'name';
       const parentId = 'parent';
       // When
@@ -151,7 +151,7 @@ describe('GoogleDriveApi', () => {
       // Then
       expect(axios.post).toHaveBeenCalledWith(
         'https://www.googleapis.com/drive/v3/files?access_token=' +
-          getAccessToken(),
+          UserDetail.getAccessToken(),
         {
           name: folderName,
           mimeType: 'application/vnd.google-apps.folder',
@@ -164,7 +164,7 @@ describe('GoogleDriveApi', () => {
   describe('Move files', () => {
     it('should call api', async () => {
       // Given
-      getAccessToken.mockReturnValue('access_token');
+      UserDetail.getAccessToken.mockReturnValue('access_token');
       const fileId = 'file';
       const sourceId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
       const destinationId = 'destination';
@@ -176,7 +176,7 @@ describe('GoogleDriveApi', () => {
         'https://www.googleapis.com/drive/v3/files/' +
           fileId +
           '?access_token=' +
-          getAccessToken() +
+          UserDetail.getAccessToken() +
           '&addParents=' +
           destinationId +
           '&removeParents=' +

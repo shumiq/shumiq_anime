@@ -1,4 +1,4 @@
-import { IsAdmin } from './userdetail';
+import UserDetail from './userdetail';
 import { getRouterConfig } from './router';
 
 jest.mock('./userdetail');
@@ -21,13 +21,13 @@ jest.mock('./config/routerConfig', () => ({
 
 describe('Router', () => {
   it('should return all routers when admin', () => {
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const routers = getRouterConfig();
     expect(routers).toHaveLength(2);
   });
 
   it('should return only non-admin routers when not admin', () => {
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const routers = getRouterConfig();
     expect(routers).toHaveLength(1);
   });

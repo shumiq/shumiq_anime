@@ -1,6 +1,6 @@
 import { SeasonEnum, FilterEnum } from '../../utils/enum';
 import { defaultFilter } from '../../pages/Anime/Anime.filter';
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import React, { useCallback } from 'react';
 
 const Filterbar = (props) => {
@@ -104,12 +104,12 @@ const Filterbar = (props) => {
                     value={filter.category}
                   >
                     <option value={FilterEnum.ALL_ANIME}>All Anime</option>
-                    {IsAdmin() && (
+                    {UserDetail.isAdmin() && (
                       <option value={FilterEnum.ONLY_UNSEEN}>
                         Only Unseen
                       </option>
                     )}
-                    {IsAdmin() && (
+                    {UserDetail.isAdmin() && (
                       <option value={FilterEnum.ONLY_UNFINISH}>
                         Only Unfinished
                       </option>

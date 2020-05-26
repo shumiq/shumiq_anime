@@ -1,5 +1,5 @@
 import mockDatabase from '../../mock/database';
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import AnilistApi from '../../api/anilist';
 import { Database } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
@@ -31,7 +31,7 @@ describe('<AnimeCard />', () => {
 
   it('should show edit button if admin', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -41,7 +41,7 @@ describe('<AnimeCard />', () => {
 
   it('should show edit popup when click edit button', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
     // When
     const wrapper = mount(
@@ -58,7 +58,7 @@ describe('<AnimeCard />', () => {
 
   it('should not show edit button if not admin', () => {
     // Given
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const mockAnime = mockDatabase.animeList[0];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -68,7 +68,7 @@ describe('<AnimeCard />', () => {
 
   it('should show plus button and glow border in view row if there is any unview episode and login as admin', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -79,7 +79,7 @@ describe('<AnimeCard />', () => {
 
   it('should not show plus button and glow border in view row if all episodes are viewed', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[1];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -90,7 +90,7 @@ describe('<AnimeCard />', () => {
 
   it('should not show plus button and glow border if not admin', () => {
     // Given
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const mockAnime = mockDatabase.animeList[0];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -101,7 +101,7 @@ describe('<AnimeCard />', () => {
 
   it('should show plus button in download row if there is any undownload episode and admin', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -111,7 +111,7 @@ describe('<AnimeCard />', () => {
 
   it('should not show plus button in download row if all episodes are downloaded', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[1];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -121,7 +121,7 @@ describe('<AnimeCard />', () => {
 
   it('should not show plus button in download row if not admin', () => {
     // Given
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const mockAnime = mockDatabase.animeList[0];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -131,7 +131,7 @@ describe('<AnimeCard />', () => {
 
   it('should enable internal folder button if there is both google drive id and google photo id', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     let mockAnime = mockDatabase.animeList[0];
     mockAnime.gdriveid_public = 'driveid';
     // When
@@ -143,7 +143,7 @@ describe('<AnimeCard />', () => {
 
   it('should call googledrive api and googlephotoapi when click internal folder button', async () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     GoogleDriveApi.getFiles.mockResolvedValue([{ name: 'name', id: 'id' }]);
     GooglePhotoApi.getMedias.mockResolvedValue([
       { filename: 'name', productUrl: 'url' },
@@ -163,7 +163,7 @@ describe('<AnimeCard />', () => {
 
   it('should disable internal folder button if there is neither google drive id nor google photo id', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[1];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -174,7 +174,7 @@ describe('<AnimeCard />', () => {
 
   it('should enable download button if there is download url', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -185,7 +185,7 @@ describe('<AnimeCard />', () => {
 
   it('should disable download button if there is no download url', () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[1];
     // When
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
@@ -212,7 +212,7 @@ describe('<AnimeCard />', () => {
 
   it('should call Database.update.anime when click plus button to increase view', async () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
     const addViewButton = wrapper.find('#btn-add-view').first();
@@ -231,7 +231,7 @@ describe('<AnimeCard />', () => {
 
   it('should call Database.update.anime when click plus button to increase download', async () => {
     // Given
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const mockAnime = mockDatabase.animeList[0];
     const wrapper = mount(<AnimeCard anime={mockAnime} />);
     const addViewButton = wrapper.find('#btn-add-download').first();

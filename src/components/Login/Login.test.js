@@ -1,4 +1,4 @@
-import { getUser } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import Login from './Login';
 import React from 'react';
 import { mount } from 'enzyme';
@@ -17,13 +17,13 @@ describe('<Login />', () => {
   };
 
   it('should see login text when no user', () => {
-    getUser.mockReturnValue(null);
+    UserDetail.getUser.mockReturnValue(null);
     const wrapper = mount(<Login />);
     expect(wrapper.text()).toContain('Login');
   });
 
   it('should not see login text when have user', () => {
-    getUser.mockReturnValue(mockUser);
+    UserDetail.getUser.mockReturnValue(mockUser);
     const wrapper = mount(<Login />);
     expect(wrapper.text()).not.toContain('Login');
   });

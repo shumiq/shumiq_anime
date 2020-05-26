@@ -1,4 +1,4 @@
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 import Navbar from './Navbar';
 import React from 'react';
@@ -14,21 +14,21 @@ describe('<Navbar />', () => {
   });
 
   it('should see admin link when login as admin', () => {
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Navbar />);
     expect(wrapper.contains('Sync Anime')).toEqual(true);
     expect(wrapper.contains('Add Anime')).toEqual(true);
   });
 
   it('should not see admin link when not login as admin', () => {
-    IsAdmin.mockReturnValue(false);
+    UserDetail.isAdmin.mockReturnValue(false);
     const wrapper = shallow(<Navbar />);
     expect(wrapper.contains('Sync Anime')).toEqual(false);
     expect(wrapper.contains('Add Anime')).toEqual(false);
   });
 
   it('should see anime related link when current page is anime related', () => {
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Navbar />);
     wrapper.find('#link-logo').simulate('click');
     expect(wrapper.contains('Sync Anime')).toEqual(true);
@@ -45,7 +45,7 @@ describe('<Navbar />', () => {
   });
 
   it('should see not anime related link when current page is not anime related', () => {
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Navbar />);
     wrapper.find('#link-keyaki').simulate('click');
     expect(wrapper.contains('Sync Anime')).toEqual(false);
@@ -84,7 +84,7 @@ describe('<Navbar />', () => {
   });
 
   it('should see AddAnimePopup when click add anime', () => {
-    IsAdmin.mockReturnValue(true);
+    UserDetail.isAdmin.mockReturnValue(true);
     const wrapper = shallow(<Navbar />);
     wrapper.find('#link-add').simulate('click');
     expect(wrapper.find('AddAnimePopup')).toHaveLength(1);

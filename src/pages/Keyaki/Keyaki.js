@@ -1,7 +1,7 @@
 import { Database } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
-import { IsAdmin } from '../../utils/userdetail';
+import UserDetail from '../../utils/userdetail';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import FilesPopup from '../../components/Popup/FilesPopup';
@@ -108,7 +108,7 @@ const Keyaki = () => {
 
   const showInput = useCallback(
     (ep) => {
-      if (IsAdmin()) {
+      if (UserDetail.isAdmin()) {
         const name = keyakiList[ep].name;
         const callback = (newName) => {
           let newList = JSON.parse(JSON.stringify(keyakiList));
@@ -188,7 +188,7 @@ const Keyaki = () => {
               <button id="btn-random" className="btn" onClick={randomEp}>
                 <i className="material-icons">shuffle</i>
               </button>
-              {IsAdmin() && (
+              {UserDetail.isAdmin() && (
                 <button id="btn-update" className="btn" onClick={update}>
                   <i className="material-icons">cached</i>
                 </button>

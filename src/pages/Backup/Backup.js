@@ -7,9 +7,7 @@ import { useCallback } from 'react';
 const Backup = () => {
   const [backupFiles, setBackupFiles] = useState([]);
   const [popup, setPopup] = useState('');
-  const [status, setStatus] = useState(
-    <GeneralPopup show={true} message="Loading..." canClose={false} />
-  );
+  const [status, setStatus] = useState('');
 
   const showLoadingPopup = useCallback((show) => {
     setPopup(
@@ -37,11 +35,12 @@ const Backup = () => {
 
   useEffect(() => {
     const fetchBackupFiles = async () => {
+      showLoadingPopup(true);
       const files = await Database.backupFiles();
       setBackupFiles(files);
+      showLoadingPopup(false);
     };
     fetchBackupFiles();
-    showLoadingPopup(false);
   }, [showLoadingPopup]);
 
   const deleteBackup = useCallback(
