@@ -67,6 +67,9 @@ export const Database = {
     );
     return response;
   },
+  deleteBackup: async (fileName) => {
+    await Firebase.storage.delete('backup', fileName);
+  },
   backupFiles: async () => {
     const response = await Firebase.storage.list('backup');
     return response;
@@ -96,6 +99,9 @@ export const Database = {
     return true;
   },
   update: {
+    database: (db) => {
+      Firebase.database.set('database', db);
+    },
     anime: (key, anime) => {
       Firebase.database.set('database/animeList/' + key, anime);
     },

@@ -116,6 +116,18 @@ const Navbar = () => {
                 Keyakitte Kakenai
               </Link>
             </li>
+            {isAdmin && (
+              <li className="nav-item">
+                <Link
+                  id="link-backup"
+                  className="nav-link btn"
+                  to="/backup"
+                  onClick={() => setIsAnime(false)}
+                >
+                  Backup
+                </Link>
+              </li>
+            )}
           </ul>
           <ul className="navbar-nav text-center ml-auto">
             {isAnime && (

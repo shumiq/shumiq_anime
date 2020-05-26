@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
 import 'firebase/storage';
+import axios from 'axios';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC44si2Y_SRkWS8xvpODaLAm7GgMT35Xl4',
@@ -58,7 +59,9 @@ export default {
       const list = await firebase.storage().ref(path).listAll();
       let files = [];
       for (const file of list.items) {
-        const metadata = await file.getMetadata();
+        let metadata = await file.getMetadata();
+        metadata.download = await file.getDownloadURL();
+        metadata.data = (await axios.get(metadata.download)).data;
         files.push(metadata);
       }
       return files.sort((a, b) => (a.name < b.name ? -1 : 1));

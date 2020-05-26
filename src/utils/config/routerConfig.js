@@ -2,6 +2,7 @@ import Anime from '../../pages/Anime/Anime';
 import Sync from '../../pages/Sync/Sync';
 import Conan from '../../pages/Conan/Conan';
 import Keyaki from '../../pages/Keyaki/Keyaki';
+import Backup from '../../pages/Backup/Backup';
 
 export const ROUTER_CONFIG = [
   {
@@ -14,6 +15,12 @@ export const ROUTER_CONFIG = [
     path: '/sync',
     exact: true,
     component: Sync,
+    auth: ['Admin'],
+  },
+  {
+    path: '/backup',
+    exact: true,
+    component: Backup,
     auth: ['Admin'],
   },
   {
