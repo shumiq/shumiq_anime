@@ -12,11 +12,16 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
+### `npm start:functions`
+
+Runs the AWS Lambda functions on localhost. <br />
+Open [http://localhost:9000/.netlify/functions/index](http://localhost:9000/.netlify/functions/index) to execute the `index` function. 
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.
 
-### `npm run test-coverage`
+### `npm run test:coverage`
 
 Run the coverage test
 
