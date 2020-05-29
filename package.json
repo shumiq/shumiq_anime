@@ -12,6 +12,7 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "firebase": "^7.14.0",
     "history": "^4.10.1",
+    "netlify": "^4.1.7",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
@@ -26,9 +27,10 @@
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll=false && start ./coverage/lcov-report/index.html",
     "deploy": "react-scripts build && firebase deploy",
+    "deploy:functions": "netlify-lambda build functions && netlify deploy --dir=build --functions=lambda --prod",
     "eject": "react-scripts eject",
-    "lint": "eslint src",
-    "lint:fix": "eslint --fix src"
+    "lint": "eslint src && eslint functions",
+    "lint:fix": "eslint --fix src && eslint --fix functions"
   },
   "eslintConfig": {
     "extends": [
