@@ -7,6 +7,7 @@ import { CardLayout } from '../../utils/enum';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import EditAnimePopup from '../Popup/EditAnimePopup';
+import ClipboardPopup from '../Popup/ClipboardPopup';
 import AnimeCard from './AnimeCard';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
@@ -54,6 +55,38 @@ describe('<AnimeCard />', () => {
       />
     );
     wrapper.find('#btn-edit').simulate('click');
+  });
+
+  it('should show clipboard popup when click share button and cannot share', () => {
+    // Given
+    UserDetail.isAdmin.mockReturnValue(true);
+    const mockAnime = mockDatabase.animeList[0];
+    // When
+    const wrapper = mount(
+      <AnimeCard
+        anime={mockAnime}
+        setPopup={(popup) => {
+          // Then
+          expect(popup.type).toBe(ClipboardPopup);
+        }}
+      />
+    );
+    wrapper.find('#btn-share').simulate('click');
+  });
+
+  it('should not show clipboard popup when click share button and can share', () => {
+    // Given
+    navigator.share = jest.fn((data) => {
+      expect(data).toStrictEqual({
+        title: 'Princess Connect! Re:Dive',
+        url: 'https://shumiq-anime.netlify.app/.netlify/functions/share/352',
+      });
+    });
+    UserDetail.isAdmin.mockReturnValue(true);
+    const mockAnime = mockDatabase.animeList[0];
+    // When
+    const wrapper = mount(<AnimeCard anime={mockAnime} />);
+    wrapper.find('#btn-share').simulate('click');
   });
 
   it('should not show edit button if not admin', () => {
