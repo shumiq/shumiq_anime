@@ -10,6 +10,7 @@ import AnimeFolderPopup from '../Popup/AnimeFolderPopup';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import FilesPopup from '../Popup/FilesPopup';
+import ClipboardPopup from '../Popup/ClipboardPopup';
 import React, { useCallback } from 'react';
 
 const AnimeCard = (props) => {
@@ -28,6 +29,24 @@ const AnimeCard = (props) => {
     },
     [anime]
   );
+
+  const share = useCallback(() => {
+    const url =
+      'https://shumiq-anime.netlify.app/.netlify/functions/share/' + anime.key;
+    if (navigator?.share) {
+      navigator.share({
+        title: anime.title,
+        url: url,
+      });
+    } else {
+      const showClipboardPopup = (show) => {
+        setPopup(
+          <ClipboardPopup text={url} show={show} setShow={showClipboardPopup} />
+        );
+      };
+      showClipboardPopup(true);
+    }
+  }, [anime, setPopup]);
 
   const showInfo = useCallback(async () => {
     setPopup(
@@ -146,8 +165,10 @@ const AnimeCard = (props) => {
             style={{ top: '20px', right: '20px' }}
           >
             <button
+              id="btn-share"
               className="btn btn-outline-light border-0 p-0 m-0"
               style={{ height: '24px' }}
+              onClick={share}
             >
               <i className="material-icons">share</i>
             </button>
