@@ -4,8 +4,9 @@ import AnimeCard from '../../components/Card/AnimeCard';
 import Filterbar from '../../components/Filterbar/Filterbar';
 import { AnimeFilter, SeasonList } from './Anime.filter';
 import React, { useState, useEffect, useCallback } from 'react';
+import queryString from 'query-string';
 
-const Anime = () => {
+const Anime = (props) => {
   const [animeList, setAnimeList] = useState(
     getLocalStorage('database')?.animeList
   );
@@ -22,6 +23,15 @@ const Anime = () => {
   useEffect(() => {
     setPageList(AnimeFilter(animeList, filter));
   }, [animeList, filter]);
+
+  useEffect(() => {
+    const params = queryString.parse(props.location.search);
+    if (params.search) {
+      setFilter({
+        keyword: params.search,
+      });
+    }
+  }, [props]);
 
   const updateFilter = useCallback(
     (newFilter) => {

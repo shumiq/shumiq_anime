@@ -56,7 +56,12 @@ const opengraphGenerator = (anime) => {
     logo_url: anime.cover_url,
   };
   indexHTML = indexHTML.replace(openGraphPlaceholder, getOpenGraph(org));
-  indexHTML = indexHTML.replace('@url@', default_url);
+  indexHTML = indexHTML.replace(
+    '@url@',
+    default_url +
+      '?search=' +
+      encodeURI(anime.title + ' ' + anime.year + ' ' + enumSeason[anime.season])
+  );
   return indexHTML;
 };
 
