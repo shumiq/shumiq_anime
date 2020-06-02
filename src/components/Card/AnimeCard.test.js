@@ -79,7 +79,7 @@ describe('<AnimeCard />', () => {
     navigator.share = jest.fn((data) => {
       expect(data).toStrictEqual({
         title: 'Princess Connect! Re:Dive',
-        url: 'https://shumiq-anime.netlify.app/.netlify/functions/share/352',
+        url: 'https://shumiq-anime.netlify.app/.netlify/functions/api/v1/share/352',
       });
     });
     UserDetail.isAdmin.mockReturnValue(true);

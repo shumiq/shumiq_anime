@@ -44,6 +44,10 @@ Builds the app for production to the `build` folder.
 
 Builds the functions for production to the `lambda` folder.
 
+### `npm run deploy`
+
+Builds the app for production to the `build` and `lambda` folder and deploy to firebase and netlify.
+
 ### `npm run deploy:firebase`
 
 Builds the app for production to the `build` folder and deploy to firebase hosting.

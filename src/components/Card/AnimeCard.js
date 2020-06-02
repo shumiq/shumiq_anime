@@ -32,7 +32,8 @@ const AnimeCard = (props) => {
 
   const share = useCallback(() => {
     const url =
-      'https://shumiq-anime.netlify.app/.netlify/functions/share/' + anime.key;
+      'https://shumiq-anime.netlify.app/.netlify/functions/api/v1/share/' +
+      anime.key;
     if (navigator?.share) {
       navigator.share({
         title: anime.title,
