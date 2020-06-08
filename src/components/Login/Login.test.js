@@ -1,7 +1,7 @@
-import UserDetail from '../../utils/userdetail';
-import Login from './Login';
 import React from 'react';
 import { mount } from 'enzyme';
+import UserDetail from '../../utils/userdetail';
+import Login from './Login';
 
 jest.mock('../../utils/userdetail');
 

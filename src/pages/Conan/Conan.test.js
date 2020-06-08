@@ -1,3 +1,5 @@
+import React from 'react';
+import { shallow, mount } from 'enzyme';
 import { getLocalStorage } from '../../utils/localstorage';
 import mockDatabase from '../../mock/database';
 import UserDetail from '../../utils/userdetail';
@@ -5,8 +7,6 @@ import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import { Database } from '../../utils/firebase';
 import Conan from './Conan';
-import React from 'react';
-import { shallow, mount } from 'enzyme';
 
 jest.mock('../../utils/localstorage');
 jest.mock('../../utils/userdetail');

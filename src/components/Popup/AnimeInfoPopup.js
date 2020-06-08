@@ -1,7 +1,7 @@
-import { Database } from '../../utils/firebase';
-import UserDetail from '../../utils/userdetail';
 import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import { Database } from '../../utils/firebase';
+import UserDetail from '../../utils/userdetail';
 
 const AnimeInfoPopup = (props) => {
   const anime = props.anime;

@@ -1,5 +1,5 @@
-import UserDetail from '../utils/userdetail';
 import axios from 'axios';
+import UserDetail from '../utils/userdetail';
 
 const pageSize = 50;
 const includeAlbum = '[Anime]';

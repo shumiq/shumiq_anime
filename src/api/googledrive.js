@@ -1,5 +1,5 @@
-import UserDetail from '../utils/userdetail';
 import axios from 'axios';
+import UserDetail from '../utils/userdetail';
 
 const uploadFolderId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
 const privateAnimeFolderId = '1teaWviknfgbuDsoFarRIsnny1HQ8zQe2';

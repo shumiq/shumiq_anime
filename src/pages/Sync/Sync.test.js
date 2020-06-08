@@ -1,11 +1,11 @@
+import { shallow } from 'enzyme';
+import React from 'react';
 import { getLocalStorage } from '../../utils/localstorage';
 import mockDatabase from '../../mock/database';
 import GooglePhotoApi from '../../api/googlephoto';
 import { Database } from '../../utils/firebase';
 import GoogleDriveApi from '../../api/googledrive';
 import Sync from './Sync';
-import { shallow } from 'enzyme';
-import React from 'react';
 
 jest.mock('../../utils/localstorage');
 jest.mock('../../api/googlephoto');

@@ -1,9 +1,9 @@
+import React, { useEffect } from 'react';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import { getRouterConfig } from '../utils/router';
 import Navbar from '../components/Navbar/Navbar';
 import { Database } from '../utils/firebase';
 import UserDetail from '../utils/userdetail';
-import React, { useEffect } from 'react';
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
 const App = () => {
   const getRouters = (data) => {

@@ -1,8 +1,8 @@
+import React from 'react';
+import { shallow } from 'enzyme';
 import UserDetail from '../../utils/userdetail';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 import Navbar from './Navbar';
-import React from 'react';
-import { shallow } from 'enzyme';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../utils/localstorage');

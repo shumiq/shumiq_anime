@@ -1,9 +1,9 @@
+import React, { useState, useEffect, useCallback } from 'react';
 import { getLocalStorage } from '../../utils/localstorage';
 import { Database } from '../../utils/firebase';
 import GooglePhotoApi from '../../api/googlephoto';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import GoogleDriveApi from '../../api/googledrive';
-import React, { useState, useEffect, useCallback } from 'react';
 
 const Sync = () => {
   const [animeList, setAnimeList] = useState(

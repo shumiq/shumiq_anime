@@ -1,6 +1,6 @@
-import InputPopup from './InputPopup';
 import React from 'react';
 import { mount } from 'enzyme';
+import InputPopup from './InputPopup';
 
 describe('<InputPopup />', () => {
   it('should not show when show props is false', () => {

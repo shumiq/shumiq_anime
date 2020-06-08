@@ -1,6 +1,6 @@
-import FilesPopup from './FilesPopup';
 import React from 'react';
 import { mount } from 'enzyme';
+import FilesPopup from './FilesPopup';
 describe('<FilesPopup />', () => {
   it('should not show when show props is false', () => {
     const wrapper = mount(

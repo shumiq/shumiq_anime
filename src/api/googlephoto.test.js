@@ -1,6 +1,6 @@
+import axios from 'axios';
 import UserDetail from '../utils/userdetail';
 import GooglePhotoApi from './googlephoto';
-import axios from 'axios';
 
 jest.mock('axios');
 jest.mock('../utils/userdetail');

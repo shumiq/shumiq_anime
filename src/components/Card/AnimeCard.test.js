@@ -1,3 +1,6 @@
+import { act } from 'react-dom/test-utils';
+import { mount } from 'enzyme';
+import React from 'react';
 import mockDatabase from '../../mock/database';
 import UserDetail from '../../utils/userdetail';
 import AnilistApi from '../../api/anilist';
@@ -9,9 +12,6 @@ import GooglePhotoApi from '../../api/googlephoto';
 import EditAnimePopup from '../Popup/EditAnimePopup';
 import ClipboardPopup from '../Popup/ClipboardPopup';
 import AnimeCard from './AnimeCard';
-import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
-import React from 'react';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../api/anilist');

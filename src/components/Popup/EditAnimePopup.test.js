@@ -1,8 +1,8 @@
+import React from 'react';
+import { mount } from 'enzyme';
 import mockDatabase from '../../mock/database';
 import { Database } from '../../utils/firebase';
 import EditAnimePopup from './EditAnimePopup';
-import React from 'react';
-import { mount } from 'enzyme';
 
 jest.mock('../../utils/firebase');
 const mockAnimeList = mockDatabase.animeList;

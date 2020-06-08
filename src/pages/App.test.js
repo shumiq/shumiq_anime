@@ -1,7 +1,7 @@
-import App from './App';
-import Anime from './Anime/Anime';
 import React from 'react';
 import { mount } from 'enzyme';
+import App from './App';
+import Anime from './Anime/Anime';
 
 jest.mock('./Anime/Anime');
 

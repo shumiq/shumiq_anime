@@ -1,6 +1,6 @@
+import axios from 'axios';
 import UserDetail from '../utils/userdetail';
 import GoogleDriveApi from './googledrive';
-import axios from 'axios';
 
 jest.mock('axios');
 jest.mock('../utils/userdetail');

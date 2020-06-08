@@ -1,6 +1,6 @@
-import GeneralPopup from './GeneralPopup';
 import React from 'react';
 import { mount } from 'enzyme';
+import GeneralPopup from './GeneralPopup';
 
 describe('<GeneralPopup />', () => {
   it('should not show when show props is false', () => {

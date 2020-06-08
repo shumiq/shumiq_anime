@@ -1,6 +1,6 @@
-import AnimeFolderPopup from './AnimeFolderPopup';
 import React from 'react';
 import { mount } from 'enzyme';
+import AnimeFolderPopup from './AnimeFolderPopup';
 
 const mockupFiles = {
   file1: {

@@ -1,9 +1,9 @@
+import { mount } from 'enzyme';
+import React from 'react';
 import mockDatabase from '../../mock/database';
 import UserDetail from '../../utils/userdetail';
 import { Database } from '../../utils/firebase';
 import AnimeInfoPopup from './AnimeInfoPopup';
-import { mount } from 'enzyme';
-import React from 'react';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../utils/firebase');

@@ -1,6 +1,6 @@
-import ClipboardPopup from './ClipboardPopup';
 import React from 'react';
 import { mount } from 'enzyme';
+import ClipboardPopup from './ClipboardPopup';
 
 describe('<ClipboardPopup />', () => {
   it('should not show when show props is false', () => {

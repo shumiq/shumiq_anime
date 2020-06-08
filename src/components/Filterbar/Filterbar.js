@@ -1,7 +1,7 @@
+import React, { useCallback } from 'react';
 import { SeasonEnum, FilterEnum } from '../../utils/enum';
 import { defaultFilter } from '../../pages/Anime/Anime.filter';
 import UserDetail from '../../utils/userdetail';
-import React, { useCallback } from 'react';
 
 const Filterbar = (props) => {
   const filter = Object.assign(defaultFilter, props.filter);

@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import { SeasonEnum, CardLayout } from '../../utils/enum';
 import UserDetail from '../../utils/userdetail';
 import EditAnimePopup from '../../components/Popup/EditAnimePopup';
@@ -11,7 +12,6 @@ import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import FilesPopup from '../Popup/FilesPopup';
 import ClipboardPopup from '../Popup/ClipboardPopup';
-import React, { useCallback } from 'react';
 
 const AnimeCard = (props) => {
   const anime = props.anime;

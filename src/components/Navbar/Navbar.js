@@ -1,11 +1,11 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import Login from '../Login/Login';
 import history from '../../history';
 import UserDetail from '../../utils/userdetail';
 import { Auth } from '../../utils/firebase';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 import AddAnimePopup from '../Popup/AddAnimePopup';
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isAnime, setIsAnime] = useState(

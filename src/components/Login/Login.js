@@ -1,8 +1,8 @@
+import GoogleLogin, { GoogleLogout } from 'react-google-login';
+import React, { useState, useCallback } from 'react';
 import { setLocalStorage, removeLocalStorage } from '../../utils/localstorage';
 import { Auth } from '../../utils/firebase';
 import UserDetail from '../../utils/userdetail';
-import GoogleLogin, { GoogleLogout } from 'react-google-login';
-import React, { useState, useCallback } from 'react';
 
 const Login = () => {
   const [user, setUser] = useState(null);

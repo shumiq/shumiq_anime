@@ -1,8 +1,8 @@
-import { Database } from '../../utils/firebase';
-import Backup from './Backup';
 import React from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
+import { Database } from '../../utils/firebase';
+import Backup from './Backup';
 
 jest.mock('../../utils/firebase');
 

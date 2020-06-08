@@ -1,11 +1,11 @@
+import React from 'react';
+import { mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import AnilistApi from '../../api/anilist';
 import { getLocalStorage } from '../../utils/localstorage';
 import mockDatabase from '../../mock/database';
 import { Database } from '../../utils/firebase';
 import AddAnimePopup from './AddAnimePopup';
-import React from 'react';
-import { mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
 
 jest.mock('../../api/anilist');
 jest.mock('../../utils/localstorage');

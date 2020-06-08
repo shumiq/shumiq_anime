@@ -1,7 +1,7 @@
-import { FilterEnum } from '../../utils/enum';
-import Filterbar from './Filterbar';
 import React from 'react';
 import { mount } from 'enzyme';
+import { FilterEnum } from '../../utils/enum';
+import Filterbar from './Filterbar';
 
 describe('<Filterbar />', () => {
   const seasonList = {

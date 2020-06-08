@@ -1,9 +1,9 @@
+import React, { useCallback, useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
 import { getLocalStorage } from '../../utils/localstorage';
 import { Database } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
 import { SeasonEnum } from '../../utils/enum';
-import React, { useCallback, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
 
 const AddAnimePopup = (props) => {
   const [keyword, setKeyword] = useState('');
