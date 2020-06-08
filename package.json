@@ -29,13 +29,15 @@
     "typescript": "^3.9.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start:client": "react-scripts start",
     "start:functions": "netlify-lambda serve functions",
-    "build": "react-scripts build",
+    "build": "npm run build:client && npm run build:functions",
+    "build:client": "react-scripts build",
+    "build:functions": "netlify-lambda build functions",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll=false && start ./coverage/lcov-report/index.html",
-    "deploy": "react-scripts build && firebase deploy",
-    "deploy:functions": "netlify-lambda build functions && netlify deploy --dir=build --functions=lambda --prod",
+    "deploy:firebase": "npm run build:client && firebase deploy",
+    "deploy:netlify": "npm run build && netlify deploy --dir=build --functions=lambda --prod",
     "eject": "react-scripts eject",
     "lint": "eslint src && eslint functions",
     "lint:fix": "eslint --fix src && eslint --fix functions"
