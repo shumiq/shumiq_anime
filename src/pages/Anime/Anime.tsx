@@ -4,18 +4,23 @@ import AnimeCard from '../../components/Card/AnimeCard';
 import Filterbar from '../../components/Filterbar/Filterbar';
 import { AnimeFilter, SeasonList } from './Anime.filter';
 import React, { useState, useEffect, useCallback } from 'react';
-import queryString from 'query-string';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import {Database as DatabaseData, Anime as AnimeData} from '../../utils/types'
 
-const Anime = (props) => {
-  const [animeList, setAnimeList] = useState(
+type TParams = { search: string };
+
+const queryString = require('query-string');
+
+const Anime = (props?: RouteComponentProps<TParams>) => {
+  const [animeList, setAnimeList] = useState<AnimeData[]>(
     getLocalStorage('database')?.animeList
   );
-  const [pageList, setPageList] = useState(AnimeFilter(animeList));
+  const [pageList, setPageList] = useState<AnimeData[]>(AnimeFilter(animeList));
   const [filter, setFilter] = useState({});
-  const [popup, setPopup] = useState('');
+  const [popup, setPopup] = useState<string>('');
 
   useEffect(() => {
-    Database.subscribe((db) => {
+    Database.subscribe((db: DatabaseData) => {
       setAnimeList(db?.animeList);
     });
   }, []);
@@ -25,7 +30,7 @@ const Anime = (props) => {
   }, [animeList, filter]);
 
   useEffect(() => {
-    const params = queryString.parse(props.location.search);
+    const params = queryString.parse(props?.location.search);
     if (params.search) {
       setFilter({
         keyword: params.search,
@@ -46,7 +51,7 @@ const Anime = (props) => {
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
           {pageList.map(
-            (anime) =>
+            (anime : AnimeData) =>
               anime !== null && (
                 <AnimeCard anime={anime} key={anime?.key} setPopup={setPopup} />
               )
@@ -65,4 +70,4 @@ const Anime = (props) => {
   );
 };
 
-export default Anime;
+export default withRouter(Anime);
