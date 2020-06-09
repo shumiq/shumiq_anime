@@ -6,7 +6,7 @@ import Firebase from './config/firebaseConfig';
 jest.mock('./localstorage');
 jest.mock('./config/firebaseConfig');
 
-const currentDate = () => {
+const currentDate = (): string => {
   const ts = new Date(Date.now());
   return (
     ts.getFullYear().toString() +
@@ -19,7 +19,7 @@ const currentDate = () => {
 
 describe('Database', () => {
   it('should has correct status', async () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     const status = Database.status();
     expect(status).toEqual({
       anime: {
@@ -39,7 +39,7 @@ describe('Database', () => {
   });
 
   it('should upload file when call backup', async () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     await Database.backup();
     expect(Firebase.storage.create).toHaveBeenCalledWith(
       'backup',
@@ -47,43 +47,43 @@ describe('Database', () => {
       JSON.stringify(mockDatabase),
       {
         customMetadata: {
-          animeFiles: 3,
-          animeSeries: 2,
-          animeView: 1,
-          conanCases: 2,
-          conanFiles: 5,
-          keyakiEpisodes: 2,
-          keyakiFiles: 3,
+          animeFiles: '3',
+          animeSeries: '2',
+          animeView: '1',
+          conanCases: '2',
+          conanFiles: '5',
+          keyakiEpisodes: '2',
+          keyakiFiles: '3',
         },
       }
     );
   });
 
   it('should backup when latest is more than 1 week', async () => {
-    Firebase.storage.list.mockResolvedValue([
+    (Firebase.storage.list as jest.Mock).mockResolvedValue([
       { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 10 },
     ]);
-    getLocalStorage.mockReturnValue(mockDatabase);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     await Database.runAutoBackup();
     expect(Firebase.storage.create).toHaveBeenCalled();
   });
 
   it('should not backup when latest is less than 1 week', async () => {
-    Firebase.storage.list.mockResolvedValue([
+    (Firebase.storage.list as jest.Mock).mockResolvedValue([
       { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 5 },
     ]);
-    getLocalStorage.mockReturnValue(mockDatabase);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     await Database.runAutoBackup();
     expect(Firebase.storage.create).not.toHaveBeenCalled();
   });
 
   it('should delete backups with older than 3 month', async () => {
-    Firebase.storage.list.mockResolvedValue([
+    (Firebase.storage.list as jest.Mock).mockResolvedValue([
       { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 80 },
       { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 100 },
       { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 110 },
     ]);
-    getLocalStorage.mockReturnValue(mockDatabase);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     await Database.runAutoDelete();
     expect(Firebase.storage.delete).toHaveBeenCalledTimes(2);
   });

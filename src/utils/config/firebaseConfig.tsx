@@ -3,6 +3,7 @@ import 'firebase/database';
 import 'firebase/auth';
 import 'firebase/storage';
 import axios from 'axios';
+import { Database } from '../types';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC44si2Y_SRkWS8xvpODaLAm7GgMT35Xl4',
@@ -30,12 +31,12 @@ export default {
     set: (path: string, value: unknown): void => {
       firebase.database().ref(path).set(value);
     },
-    subscribe: (path: string, callback: (data: unknown) => void): void => {
+    subscribe: (path: string, callback: (database: Database) => void): void => {
       firebase
         .database()
         .ref(path)
         .on('value', (snapshot: firebase.database.DataSnapshot): void => {
-          callback(snapshot);
+          callback(snapshot.val() as Database);
         });
     },
   },
@@ -55,9 +56,16 @@ export default {
   },
   storage: {
     backup: 'backup',
-    list: async (path: string): Promise<unknown[]> => {
+    list: async (
+      path: string
+    ): Promise<{ name: string; timeCreated: number }[]> => {
       const list = await firebase.storage().ref(path).listAll();
-      const files: { name: string; download: string; data: unknown }[] = [];
+      const files: {
+        name: string;
+        download: string;
+        data: unknown;
+        timeCreated: number;
+      }[] = [];
       for (const file of list.items) {
         const metadata = await file.getMetadata();
         metadata.download = await file.getDownloadURL();
