@@ -3,13 +3,14 @@ import Sync from '../../pages/Sync/Sync';
 import Conan from '../../pages/Conan/Conan';
 import Keyaki from '../../pages/Keyaki/Keyaki';
 import Backup from '../../pages/Backup/Backup';
+import { Router } from '../types';
 
-export const ROUTER_CONFIG = [
+export const ROUTER_CONFIG: Router[] = [
   {
     path: '/',
     exact: true,
     component: Anime,
-    auth: [],
+    auth: [''],
   },
   {
     path: '/sync',
@@ -27,12 +28,12 @@ export const ROUTER_CONFIG = [
     path: '/conan',
     exact: true,
     component: Conan,
-    auth: [],
+    auth: [''],
   },
   {
     path: '/keyaki',
     exact: true,
     component: Keyaki,
-    auth: [],
+    auth: [''],
   },
 ];

@@ -5,15 +5,17 @@ import Filterbar from '../../components/Filterbar/Filterbar';
 import { AnimeFilter, SeasonList } from './Anime.filter';
 import React, { useState, useEffect, useCallback } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import {Database as DatabaseData, Anime as AnimeData} from '../../utils/types'
+import {
+  Database as DatabaseData,
+  Anime as AnimeData,
+} from '../../utils/types';
+import queryString from 'query-string';
 
 type TParams = { search: string };
 
-const queryString = require('query-string');
-
 const Anime = (props?: RouteComponentProps<TParams>) => {
   const [animeList, setAnimeList] = useState<AnimeData[]>(
-    getLocalStorage('database')?.animeList
+    (getLocalStorage('database') as DatabaseData).animeList
   );
   const [pageList, setPageList] = useState<AnimeData[]>(AnimeFilter(animeList));
   const [filter, setFilter] = useState({});
@@ -51,7 +53,7 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
           {pageList.map(
-            (anime : AnimeData) =>
+            (anime: AnimeData) =>
               anime !== null && (
                 <AnimeCard anime={anime} key={anime?.key} setPopup={setPopup} />
               )

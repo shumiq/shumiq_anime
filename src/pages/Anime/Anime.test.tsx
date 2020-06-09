@@ -10,7 +10,11 @@ jest.mock('../../utils/localstorage');
 describe('<Anime />', () => {
   it('should show latest season anime cards', () => {
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
-    const wrapper = mount(<MemoryRouter><Anime /></MemoryRouter>);
+    const wrapper = mount(
+      <MemoryRouter>
+        <Anime />
+      </MemoryRouter>
+    );
     expect(wrapper.find('AnimeCard')).toHaveLength(1);
   });
 });

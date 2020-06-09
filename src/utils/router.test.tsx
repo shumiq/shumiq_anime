@@ -21,13 +21,13 @@ jest.mock('./config/routerConfig', () => ({
 
 describe('Router', () => {
   it('should return all routers when admin', () => {
-    UserDetail.isAdmin.mockReturnValue(true);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const routers = getRouterConfig();
     expect(routers).toHaveLength(2);
   });
 
   it('should return only non-admin routers when not admin', () => {
-    UserDetail.isAdmin.mockReturnValue(false);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
     const routers = getRouterConfig();
     expect(routers).toHaveLength(1);
   });
