@@ -38,7 +38,7 @@
   "conanList": [
     null,
     {
-      "case": "1",
+      "case": 1,
       "name": "case 1",
       "episodes": {
         "200": {
@@ -56,7 +56,7 @@
       }
     },
     {
-      "case": "2",
+      "case": 2,
       "name": "case 2",
       "episodes": {
         "203": {

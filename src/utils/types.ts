@@ -39,21 +39,21 @@ export interface Anime {
   year: number;
 }
 
-interface File {
-  photoUrl: string;
+export interface File {
+  photoUrl: string | null;
   url: string;
 }
 
 export interface Conan {
   case: number;
   name: string;
-  episodes: File[];
+  episodes: Record<number, File> | File[];
 }
 
 export interface Keyaki {
   ep: number;
   name: string;
-  sub: File[];
+  sub: Record<number, File> | File[];
 }
 
 export interface Router {

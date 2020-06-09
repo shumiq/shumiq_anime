@@ -7,27 +7,34 @@ import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import FilesPopup from '../../components/Popup/FilesPopup';
 import InputPopup from '../../components/Popup/InputPopup';
+import {
+  Database as DatabaseType,
+  Conan as ConanType,
+  File,
+} from '../../utils/types';
 
 const driveFolderId = '1ZXug0hPb-_ylKa45LX7H42cLLTvLiBdy';
 const photoAlbumId =
   'ACKboXA-SW1-hje13C1evPH_HlgHlP9UasTb7u5ECLT2ds1ufDzcH9gDrL-XXAT3_mveyhNr_ELI';
 
-const Conan = () => {
-  const [conanList, setConanList] = useState(
-    getLocalStorage('database')?.conanList
+const Conan = (): JSX.Element => {
+  const [conanList, setConanList] = useState<ConanType[]>(
+    (getLocalStorage('database') as DatabaseType)?.conanList
   );
-  const [conanRef, setConanRef] = useState([]);
-  const [popup, setPopup] = useState('');
+  const [conanRef, setConanRef] = useState<
+    React.RefObject<HTMLTableRowElement>[]
+  >([]);
+  const [popup, setPopup] = useState<JSX.Element | string>('');
 
   useEffect(() => {
-    Database.subscribe((db) => {
+    Database.subscribe((db: DatabaseType) => {
       setConanList(db?.conanList);
     });
   }, []);
 
   useEffect(() => {
     function UpdateConanRef() {
-      let ref = [];
+      const ref = [];
       if (conanList)
         Object.keys(conanList).forEach((cs) => {
           ref[cs] = createRef();
@@ -37,10 +44,10 @@ const Conan = () => {
     UpdateConanRef();
   }, [conanList]);
 
-  const showFiles = useCallback((files) => {
+  const showFiles = useCallback((files: File) => {
     const url = files.url ? files.url : '';
     const photoUrl = files.photoUrl ? files.photoUrl : '';
-    const showFilesPopup = (show) => {
+    const showFilesPopup = (show: boolean) => {
       setPopup(
         <FilesPopup
           driveUrl={url}
@@ -54,16 +61,22 @@ const Conan = () => {
   }, []);
 
   const update = useCallback(async () => {
-    const showLoadingPopup = (show) => {
+    const showLoadingPopup = (show: boolean) => {
       setPopup(
         <GeneralPopup show={show} message="Loading..." canClose={false} />
       );
     };
     showLoadingPopup(true);
-    let newConanList = JSON.parse(JSON.stringify(conanList));
-    const driveFiles = await GoogleDriveApi.getFiles(driveFolderId);
-    const photoFiles = await GooglePhotoApi.getMedias(photoAlbumId);
-    driveFiles.forEach((file) => {
+    const newConanList = JSON.parse(JSON.stringify(conanList)) as ConanType[];
+    const driveFiles = (await GoogleDriveApi.getFiles(driveFolderId)) as {
+      name: string;
+      id: string;
+    }[];
+    const photoFiles = (await GooglePhotoApi.getMedias(photoAlbumId)) as {
+      filename: string;
+      productUrl: string;
+    }[];
+    driveFiles.forEach((file: { name: string; id: string }) => {
       const cs = parseInt(file.name.split(' ')[1]);
       const ep = parseInt(file.name.split(' ')[3].split('.')[0]);
       const url =
@@ -77,10 +90,10 @@ const Conan = () => {
         };
       } else {
         newConanList[cs] = {
-          case: cs.toString(),
+          episodes: {} as Record<number, File>,
+          case: parseInt(cs.toString()),
           name: 'แก้ไข',
         };
-        newConanList[cs].episodes = {};
         newConanList[cs].episodes[ep] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
@@ -100,24 +113,27 @@ const Conan = () => {
       conanRef.map((ref) =>
         ref.current?.className ? (ref.current.className = '') : ''
       );
-      conanRef[ep].current.className = 'bg-dark';
-      conanRef[ep].current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
+      const current = conanRef[ep].current;
+      if (current) {
+        current.className = 'bg-dark';
+        current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
     }
   }, [conanList, conanRef]);
 
   const showInput = useCallback(
-    (cs) => {
+    (cs: number) => {
       if (UserDetail.isAdmin()) {
         const name = conanList[cs].name;
-        const callback = (newName) => {
-          let newList = JSON.parse(JSON.stringify(conanList));
+        const callback = (newName: string) => {
+          const newList = JSON.parse(JSON.stringify(conanList)) as ConanType[];
           newList[cs].name = newName;
           Database.update.conan(newList);
         };
-        const showInputPopup = (show) => {
+        const showInputPopup = (show: boolean) => {
           setPopup(
             <InputPopup
               default={name}
@@ -158,8 +174,8 @@ const Conan = () => {
                         </td>
                         <td>
                           {Object.keys(conan.episodes).map(
-                            (episode) =>
-                              conan.episodes[episode]?.url && (
+                            (episode: string) =>
+                              conan.episodes[parseInt(episode)]?.url && (
                                 <button
                                   className="btn btn-primary m-1"
                                   onClick={() =>
