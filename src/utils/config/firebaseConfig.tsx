@@ -27,46 +27,51 @@ firebase.initializeApp(firebaseConfig);
 
 export default {
   database: {
-    set: (path, value) => {
+    set: (path: string, value: unknown): void => {
       firebase.database().ref(path).set(value);
     },
-    subscribe: (path, callback) => {
+    subscribe: (path: string, callback: (data: unknown) => void): void => {
       firebase
         .database()
         .ref(path)
-        .on('value', function (snapshot) {
+        .on('value', (snapshot: firebase.database.DataSnapshot): void => {
           callback(snapshot);
         });
     },
   },
   auth: {
-    subscribe: (callback) => {
-      firebase.auth().onAuthStateChanged(function (currentUser) {
-        callback(currentUser);
+    subscribe: (callback: () => void): void => {
+      firebase.auth().onAuthStateChanged((): void => {
+        callback();
       });
     },
-    signIn: (tokenId) => {
+    signIn: (tokenId: string): void => {
       const creds = firebase.auth.GoogleAuthProvider.credential(tokenId);
       firebase.auth().signInWithCredential(creds);
     },
-    signOut: () => {
+    signOut: (): void => {
       firebase.auth().signOut();
     },
   },
   storage: {
     backup: 'backup',
-    list: async (path) => {
+    list: async (path: string): Promise<unknown[]> => {
       const list = await firebase.storage().ref(path).listAll();
-      let files = [];
+      const files: { name: string; download: string; data: unknown }[] = [];
       for (const file of list.items) {
-        let metadata = await file.getMetadata();
+        const metadata = await file.getMetadata();
         metadata.download = await file.getDownloadURL();
         metadata.data = (await axios.get(metadata.download)).data;
         files.push(metadata);
       }
       return files.sort((a, b) => (a.name < b.name ? -1 : 1));
     },
-    create: async (path, fileName, text, metadata) => {
+    create: async (
+      path: string,
+      fileName: string,
+      text: string,
+      metadata: firebase.storage.UploadMetadata
+    ): Promise<firebase.storage.UploadTaskSnapshot> => {
       const response = await firebase
         .storage()
         .ref(path)
@@ -74,7 +79,7 @@ export default {
         .putString(text, 'raw', metadata);
       return response;
     },
-    delete: async (path, fileName) => {
+    delete: async (path: string, fileName: string): Promise<unknown> => {
       const response = await firebase
         .storage()
         .ref(path)
