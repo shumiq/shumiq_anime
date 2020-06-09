@@ -10,15 +10,15 @@ const currentDate = (): string => {
   const ts = new Date(Date.now());
   return (
     ts.getFullYear().toString() +
-    ('0' + (ts.getMonth() + 1)).slice(-2) +
-    ('0' + ts.getDate()).slice(-2)
+    ('0' + (ts.getMonth() + 1).toString()).slice(-2) +
+    ('0' + ts.getDate().toString()).slice(-2)
   );
 };
 
 // const flushPromises = () => new Promise(setImmediate);
 
 describe('Database', () => {
-  it('should has correct status', async () => {
+  it('should has correct status', () => {
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     const status = Database.status();
     expect(status).toEqual({
@@ -38,9 +38,9 @@ describe('Database', () => {
     });
   });
 
-  it('should upload file when call backup', async () => {
+  it('should upload file when call backup', () => {
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
-    await Database.backup();
+    Database.backup();
     expect(Firebase.storage.create).toHaveBeenCalledWith(
       'backup',
       currentDate() + '.json',

@@ -59,7 +59,7 @@ export const Database = {
       },
     };
   },
-  backup: async (): Promise<firebase.storage.UploadTaskSnapshot> => {
+  backup: (): void => {
     const database = getLocalStorage('database');
     const fileName = currentDate() + '.json';
     const status = Database.status();
@@ -74,17 +74,15 @@ export const Database = {
         keyakiFiles: status.keyaki?.files.toString() || '',
       },
     };
-    const response = await Firebase.storage.create(
+    Firebase.storage.create(
       'backup',
       fileName,
       JSON.stringify(database),
       metadata
     );
-    return response;
   },
-  deleteBackup: async (fileName: string): Promise<unknown> => {
-    const res = await Firebase.storage.delete('backup', fileName);
-    return res;
+  deleteBackup: (fileName: string): void => {
+    Firebase.storage.delete('backup', fileName);
   },
   backupFiles: async (): Promise<{ name: string; timeCreated: number }[]> => {
     const response = await Firebase.storage.list('backup');
@@ -119,7 +117,7 @@ export const Database = {
       Firebase.database.set('database', db);
     },
     anime: (key: number, anime: Anime): void => {
-      Firebase.database.set('database/animeList/' + key, anime);
+      Firebase.database.set('database/animeList/' + key.toString(), anime);
     },
     conan: (conanList: Conan[]): void => {
       Firebase.database.set('database/conanList/', conanList);
@@ -146,7 +144,7 @@ const currentDate = () => {
   const ts = new Date(Date.now());
   return (
     ts.getFullYear().toString() +
-    ('0' + (ts.getMonth() + 1)).slice(-2) +
-    ('0' + ts.getDate()).slice(-2)
+    ('0' + (ts.getMonth() + 1).toString()).slice(-2) +
+    ('0' + ts.getDate().toString()).slice(-2)
   );
 };

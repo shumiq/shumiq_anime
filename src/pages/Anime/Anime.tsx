@@ -6,23 +6,23 @@ import { AnimeFilter, SeasonList } from './Anime.filter';
 import React, { useState, useEffect, useCallback } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Database as DatabaseData,
-  Anime as AnimeData,
+  Database as DatabaseType,
+  Anime as AnimeType,
 } from '../../utils/types';
 import queryString from 'query-string';
 
 type TParams = { search: string };
 
 const Anime = (props?: RouteComponentProps<TParams>) => {
-  const [animeList, setAnimeList] = useState<AnimeData[]>(
-    (getLocalStorage('database') as DatabaseData).animeList
+  const [animeList, setAnimeList] = useState<AnimeType[]>(
+    (getLocalStorage('database') as DatabaseType).animeList
   );
-  const [pageList, setPageList] = useState<AnimeData[]>(AnimeFilter(animeList));
+  const [pageList, setPageList] = useState<AnimeType[]>(AnimeFilter(animeList));
   const [filter, setFilter] = useState({});
   const [popup, setPopup] = useState<string>('');
 
   useEffect(() => {
-    Database.subscribe((db: DatabaseData) => {
+    Database.subscribe((db: DatabaseType) => {
       setAnimeList(db?.animeList);
     });
   }, []);
@@ -32,7 +32,9 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
   }, [animeList, filter]);
 
   useEffect(() => {
-    const params = queryString.parse(props?.location.search);
+    const params = queryString.parse(props?.location.search || '') as {
+      search: string;
+    };
     if (params.search) {
       setFilter({
         keyword: params.search,
@@ -53,7 +55,7 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
           {pageList.map(
-            (anime: AnimeData) =>
+            (anime: AnimeType) =>
               anime !== null && (
                 <AnimeCard anime={anime} key={anime?.key} setPopup={setPopup} />
               )

@@ -29,7 +29,7 @@ firebase.initializeApp(firebaseConfig);
 export default {
   database: {
     set: (path: string, value: unknown): void => {
-      firebase.database().ref(path).set(value);
+      void firebase.database().ref(path).set(value);
     },
     subscribe: (path: string, callback: (database: Database) => void): void => {
       firebase
@@ -48,10 +48,10 @@ export default {
     },
     signIn: (tokenId: string): void => {
       const creds = firebase.auth.GoogleAuthProvider.credential(tokenId);
-      firebase.auth().signInWithCredential(creds);
+      void firebase.auth().signInWithCredential(creds);
     },
     signOut: (): void => {
-      firebase.auth().signOut();
+      void firebase.auth().signOut();
     },
   },
   storage: {
@@ -67,33 +67,32 @@ export default {
         timeCreated: number;
       }[] = [];
       for (const file of list.items) {
-        const metadata = await file.getMetadata();
-        metadata.download = await file.getDownloadURL();
-        metadata.data = (await axios.get(metadata.download)).data;
+        const metadata = (await file.getMetadata()) as {
+          name: string;
+          download: string;
+          data: unknown;
+          timeCreated: number;
+        };
+        metadata.download = (await file.getDownloadURL()) as string;
+        metadata.data = (await axios.get(metadata.download)).data as unknown;
         files.push(metadata);
       }
       return files.sort((a, b) => (a.name < b.name ? -1 : 1));
     },
-    create: async (
+    create: (
       path: string,
       fileName: string,
       text: string,
       metadata: firebase.storage.UploadMetadata
-    ): Promise<firebase.storage.UploadTaskSnapshot> => {
-      const response = await firebase
+    ): void => {
+      void firebase
         .storage()
         .ref(path)
         .child(fileName)
         .putString(text, 'raw', metadata);
-      return response;
     },
-    delete: async (path: string, fileName: string): Promise<unknown> => {
-      const response = await firebase
-        .storage()
-        .ref(path)
-        .child(fileName)
-        .delete();
-      return response;
+    delete: (path: string, fileName: string): void => {
+      void firebase.storage().ref(path).child(fileName).delete();
     },
   },
 };

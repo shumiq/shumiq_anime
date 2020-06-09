@@ -8,7 +8,7 @@ export const getLocalStorage = (key: string): unknown => {
   const value = window.localStorage.getItem(`${STORAGE_KEY}_${key}`) || '';
 
   try {
-    return JSON.parse(value) || {};
+    return (JSON.parse(value) as unknown) || {};
   } catch (err) {
     return {};
   }
