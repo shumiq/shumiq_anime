@@ -77,7 +77,7 @@ const Keyaki = () => {
         };
       } else {
         newKeyakiList[ep] = {
-          ep: ep.toString(),
+          ep: ep,
           name: 'แก้ไข',
         };
         newKeyakiList[ep].sub = {};

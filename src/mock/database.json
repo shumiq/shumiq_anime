@@ -3,36 +3,36 @@
     {
       "all_episode": "?",
       "cover_url": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx107871-ZOh7oeDd0kq9.png",
-      "download": "2",
+      "download": 2,
       "download_url": "https://www.animehdzero.com/catagory/3082",
       "genres": "Fantasy",
       "gphotoid": "gphotoid1",
       "info": "Set in the lovely land of Astoria where a gentle wind blows, <i>Princess Connect! Re:Dive</i> follows the adventures of: Yuuki, an amnesiac young man; Kokkoro, a small guide who looks after Yuuki; Pecorine, a beautiful swordswoman who is constantly hungry; and Karyl, a cat-eared magical girl with a somewhat cool personality. These fateful four form a guild entitled \"Bishoku-dono\" (\"Epicurean Hall\") and embark on delicious adventures together.<br>\n<br>\n(Source: Crunchyroll)",
       "key": 352,
       "score": "6.3",
-      "season": "1",
+      "season": 1,
       "studio": "CygamesPictures",
       "title": "Princess Connect! Re:Dive",
       "url": "https://photos.app.goo.gl/1N1WXALw2Dc2mZgb7",
-      "view": "0",
-      "year": "2020"
+      "view": 0,
+      "year": 2020
     },
     {
       "all_episode": "1",
       "cover_url": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx109019-xlrVQRdo1EQi.jpg",
-      "download": "1",
+      "download": 1,
       "download_url": "",
       "genres": "Comedy, Slice of Life",
       "gphotoid": "gphotoid2",
       "info": "Hina is an indoor-oriented girl who likes crafts and moves to a seaside town to continue with her high school education. She meets upperclassman Kuroiwa as she walks along an embankment and joins the mysterious \"Embankment Club.\" Hina dislikes sea creatures, but she fishes with her fellow club members and eats their catches. She gradually starts to appreciate the appeal of the ocean.<br><br>(Source: Anime News Network)",
       "key": 350,
       "score": "7",
-      "season": "2",
+      "season": 2,
       "studio": "Doga Kobo",
       "title": "Houkago Teibou Nisshi",
       "url": "",
-      "view": "1",
-      "year": "2020"
+      "view": 1,
+      "year": 2020
     }
   ],
   "conanList": [
@@ -73,7 +73,7 @@
   "keyakiList": [
     null,
     {
-      "ep": "1",
+      "ep": 1,
       "name": "episode 1",
       "sub": {
         "Thai": {
@@ -87,7 +87,7 @@
       }
     },
     {
-      "ep": "2",
+      "ep": 2,
       "name": "episode 2",
       "sub": {
         "Thai": {

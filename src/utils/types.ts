@@ -1,7 +1,7 @@
 export interface Database {
-  animeList: Anime[];
-  conanList: Conan[];
-  keyakiList: Keyaki[];
+  animeList: (Anime | null)[];
+  conanList: (Conan | null)[];
+  keyakiList: (Keyaki | null)[];
 }
 
 export interface DatabaseStatus {
@@ -47,13 +47,13 @@ export interface File {
 export interface Conan {
   case: number;
   name: string;
-  episodes: Record<number, File> | File[];
+  episodes: Record<number, File>;
 }
 
 export interface Keyaki {
   ep: number;
   name: string;
-  sub: Record<number, File> | File[];
+  sub: Record<string, File>;
 }
 
 export interface Router {

@@ -8,12 +8,18 @@ import {
   Conan,
   Keyaki,
 } from './types';
+import {
+  validateDatabase,
+  validateAnime,
+  validateConan,
+  validateKeyaki,
+} from './validation';
 
 export const Database = {
   subscribe: (callback: (database: DatabaseType) => void): void => {
     Firebase.database.subscribe('/database', (database: DatabaseType): void => {
       setLocalStorage('database', database);
-      callback(database);
+      callback(getLocalStorage('database') as DatabaseType);
     });
   },
   status: (): DatabaseStatus => {
@@ -22,13 +28,13 @@ export const Database = {
     let sumAnime = 0;
     database.animeList.forEach((anime) => {
       if (anime) {
-        sumAnime += parseInt(anime.download.toString());
+        sumAnime += anime.download;
       }
     });
     let sumViewAnime = 0;
     database.animeList.forEach((anime) => {
       if (anime) {
-        sumViewAnime += parseInt(anime.view.toString());
+        sumViewAnime += anime.view;
       }
     });
     let sumConan = 0;
@@ -114,16 +120,44 @@ export const Database = {
   },
   update: {
     database: (db: DatabaseType): void => {
-      Firebase.database.set('database', db);
+      try {
+        Firebase.database.set('database', validateDatabase(db));
+      } catch (error) {
+        console.error('Update database failed: Database has invalid format');
+        console.error(error);
+      }
     },
     anime: (key: number, anime: Anime): void => {
-      Firebase.database.set('database/animeList/' + key.toString(), anime);
+      try {
+        Firebase.database.set(
+          'database/animeList/' + key.toString(),
+          validateAnime(anime)
+        );
+      } catch (error) {
+        console.error('Update anime failed: Anime has invalid format');
+        console.error(error);
+      }
     },
     conan: (conanList: Conan[]): void => {
-      Firebase.database.set('database/conanList/', conanList);
+      try {
+        Firebase.database.set(
+          'database/conanList/',
+          conanList.map((conan) => validateConan(conan))
+        );
+      } catch (error) {
+        console.error('Update conan failed: Conan has invalid format');
+        console.error(error);
+      }
     },
     keyaki: (keyakiList: Keyaki[]): void => {
-      Firebase.database.set('database/keyakiList/', keyakiList);
+      try {
+        Firebase.database.set(
+          'database/keyakiList/',
+          keyakiList.map((keyaki) => validateKeyaki(keyaki))
+        );
+      } catch (error) {
+        console.error('Update keyaki failed: Keyaki has invalid format');
+      }
     },
   },
 };

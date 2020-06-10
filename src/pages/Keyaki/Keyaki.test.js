@@ -136,7 +136,7 @@ describe('<Keyaki />', () => {
     expect(Database.update.keyaki).toHaveBeenCalledWith([
       null,
       {
-        ep: '1',
+        ep: 1,
         sub: {
           Thai: {
             photoUrl: 'url',
@@ -150,7 +150,7 @@ describe('<Keyaki />', () => {
         name: 'episode 1',
       },
       {
-        ep: '2',
+        ep: 2,
         sub: {
           Thai: {
             photoUrl: 'url',
@@ -165,7 +165,7 @@ describe('<Keyaki />', () => {
         name: 'episode 2',
       },
       {
-        ep: '3',
+        ep: 3,
         sub: {
           Eng: {
             photoUrl: 'thisisurl2',
@@ -197,7 +197,7 @@ describe('<Keyaki />', () => {
     expect(Database.update.keyaki).toHaveBeenCalledWith([
       null,
       {
-        ep: '1',
+        ep: 1,
         sub: {
           Thai: {
             photoUrl: 'url',
@@ -211,7 +211,7 @@ describe('<Keyaki />', () => {
         name: 'newName',
       },
       {
-        ep: '2',
+        ep: 2,
         sub: {
           Thai: {
             photoUrl: 'url',

@@ -14,7 +14,7 @@ import queryString from 'query-string';
 type TParams = { search: string };
 
 const Anime = (props?: RouteComponentProps<TParams>) => {
-  const [animeList, setAnimeList] = useState<AnimeType[]>(
+  const [animeList, setAnimeList] = useState<(AnimeType | null)[]>(
     (getLocalStorage('database') as DatabaseType).animeList
   );
   const [pageList, setPageList] = useState<AnimeType[]>(AnimeFilter(animeList));

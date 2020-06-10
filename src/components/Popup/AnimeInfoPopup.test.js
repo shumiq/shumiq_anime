@@ -16,7 +16,7 @@ const mockInfo = {
   },
   season: 'SPRING',
   description: 'desc',
-  startDate: { year: '2020' },
+  startDate: { year: 2020 },
   episodes: null,
   source: 'VIDEO_GAME',
   coverImage: {
@@ -116,15 +116,13 @@ describe('<AnimeInfoPopup />', () => {
       .find('button.btn-primary')
       .first();
     syncButton.simulate('click');
-    const expectedResult = Object.assign(
-      JSON.parse(JSON.stringify(mockAnimeList[0])),
-      {
-        cover_url: 'someurl',
-        info: 'desc',
-        score: '6.6',
-        season: 2,
-      }
-    );
+    const expectedResult = {
+      ...mockAnimeList[0],
+      cover_url: 'someurl',
+      info: 'desc',
+      score: '6.6',
+      season: 2,
+    };
     expect(Database.update.anime).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult

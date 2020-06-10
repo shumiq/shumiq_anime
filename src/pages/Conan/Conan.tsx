@@ -18,7 +18,7 @@ const photoAlbumId =
   'ACKboXA-SW1-hje13C1evPH_HlgHlP9UasTb7u5ECLT2ds1ufDzcH9gDrL-XXAT3_mveyhNr_ELI';
 
 const Conan = (): JSX.Element => {
-  const [conanList, setConanList] = useState<ConanType[]>(
+  const [conanList, setConanList] = useState<(ConanType | null)[]>(
     (getLocalStorage('database') as DatabaseType)?.conanList
   );
   const [conanRef, setConanRef] = useState<
@@ -91,7 +91,7 @@ const Conan = (): JSX.Element => {
       } else {
         newConanList[cs] = {
           episodes: {} as Record<number, File>,
-          case: parseInt(cs.toString()),
+          case: cs,
           name: 'แก้ไข',
         };
         newConanList[cs].episodes[ep] = {
@@ -127,7 +127,7 @@ const Conan = (): JSX.Element => {
   const showInput = useCallback(
     (cs: number) => {
       if (UserDetail.isAdmin()) {
-        const name = conanList[cs].name;
+        const name = conanList[cs]?.name || '';
         const callback = (newName: string) => {
           const newList = JSON.parse(JSON.stringify(conanList)) as ConanType[];
           newList[cs].name = newName;
