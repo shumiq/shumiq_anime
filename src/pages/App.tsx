@@ -5,8 +5,8 @@ import Navbar from '../components/Navbar/Navbar';
 import { Database } from '../utils/firebase';
 import UserDetail from '../utils/userdetail';
 
-const App = () => {
-  const getRouters = (data) => {
+const App = (): JSX.Element => {
+  const getRouters = () => {
     return getRouterConfig().map((route, index) => {
       const props = {
         path: route.path,
@@ -19,8 +19,8 @@ const App = () => {
 
   useEffect(() => {
     if (UserDetail.isAdmin()) {
-      Database.runAutoDelete();
-      Database.runAutoBackup();
+      void Database.runAutoDelete();
+      void Database.runAutoBackup();
     }
   }, []);
 
