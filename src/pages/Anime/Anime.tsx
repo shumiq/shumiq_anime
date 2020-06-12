@@ -21,7 +21,7 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
     AnimeFilter(animeList)
   );
   const [filter, setFilter] = useState({});
-  const [popup, setPopup] = useState<string>('');
+  const [popup, setPopup] = useState<string | JSX.Element>('');
 
   useEffect(() => {
     Database.subscribe((db: DatabaseType) => {

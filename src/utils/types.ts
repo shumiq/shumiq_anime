@@ -30,6 +30,7 @@ export interface Anime {
   gdriveid: string;
   gdriveid_public: string;
   gphotoid: string;
+  blacklist?: number[];
   info: string;
   score: string;
   season: number;

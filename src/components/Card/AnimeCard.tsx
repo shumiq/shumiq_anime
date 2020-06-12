@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { SeasonEnum, CardLayout } from '../../utils/enum';
 import UserDetail from '../../utils/userdetail';
-import EditAnimePopup from '../../components/Popup/EditAnimePopup';
+import EditAnimePopup from '../Popup/EditAnimePopup';
 import { Database } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
 import AnimeInfoPopup from '../Popup/AnimeInfoPopup';
@@ -12,35 +12,42 @@ import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import FilesPopup from '../Popup/FilesPopup';
 import ClipboardPopup from '../Popup/ClipboardPopup';
+import { Anime } from '../../utils/types';
 
-const AnimeCard = (props) => {
+const AnimeCard = (props: {
+  anime: Anime;
+  setPopup: (popup: string | JSX.Element) => void;
+}): JSX.Element => {
   const anime = props.anime;
   const setPopup = props.setPopup;
   const layout =
     JSON.stringify(getLocalStorage('layout')) !== '{}'
-      ? getLocalStorage('layout')
+      ? (getLocalStorage('layout') as string)
       : 'auto';
 
   const increase = useCallback(
-    (field) => {
-      let animeCopy = JSON.parse(JSON.stringify(anime));
+    (field: string): void => {
+      const animeCopy = { ...anime };
       animeCopy[field] = parseInt(animeCopy[field]) + 1;
       Database.update.anime(anime.key, animeCopy);
     },
     [anime]
   );
 
-  const share = useCallback(() => {
+  const share = useCallback((): void => {
     const url =
       'https://shumiq-anime.netlify.app/.netlify/functions/api/v1/share/' +
-      anime.key;
-    if (navigator?.share) {
-      navigator.share({
+      anime.key.toString();
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    /* eslint-disable  @typescript-eslint/no-unsafe-call */
+    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
+    if ((navigator as any).share) {
+      void (navigator as any).share({
         title: anime.title,
         url: url,
       });
     } else {
-      const showClipboardPopup = (show) => {
+      const showClipboardPopup = (show: boolean) => {
         setPopup(
           <ClipboardPopup text={url} show={show} setShow={showClipboardPopup} />
         );
@@ -49,7 +56,7 @@ const AnimeCard = (props) => {
     }
   }, [anime, setPopup]);
 
-  const showInfo = useCallback(async () => {
+  const showInfo = useCallback(async (): Promise<void> => {
     setPopup(
       <GeneralPopup show={true} message="Loading..." canClose={false} />
     );
@@ -57,7 +64,7 @@ const AnimeCard = (props) => {
     setPopup(
       <GeneralPopup show={false} message="Loading..." canClose={false} />
     );
-    const showInfoPopup = (show) => {
+    const showInfoPopup = (show: boolean) => {
       setPopup(
         <AnimeInfoPopup
           anime={anime}
@@ -70,7 +77,7 @@ const AnimeCard = (props) => {
     showInfoPopup(true);
   }, [anime, setPopup]);
 
-  const showFolder = useCallback(async () => {
+  const showFolder = useCallback(async (): Promise<void> => {
     setPopup(
       <GeneralPopup show={true} message="Loading..." canClose={false} />
     );
@@ -79,20 +86,29 @@ const AnimeCard = (props) => {
     setPopup(
       <GeneralPopup show={false} message="Loading..." canClose={false} />
     );
-    let files = {};
+    const files: Record<
+      string,
+      { name: string; driveUrl?: string; photoUrl?: string }
+    > = {};
     driveFiles.forEach((file) => {
-      if (!files[file.name]) files[file.name] = {};
-      files[file.name].name = file.name;
-      files[file.name].driveUrl =
-        'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
+      files[file.name] = {
+        ...files[file.name],
+        name: file.name,
+        driveUrl:
+          'https://drive.google.com/file/d/' +
+          file.id +
+          '/preview?usp=drivesdk',
+      };
     });
     photoFiles.forEach((file) => {
-      if (!files[file.filename]) files[file.filename] = {};
-      files[file.filename].name = file.filename;
-      files[file.filename].photoUrl = file.productUrl;
+      files[file.filename] = {
+        ...files[file.filename],
+        name: file.filename,
+        photoUrl: file.productUrl,
+      };
     });
 
-    const showFolderPopup = (show) => {
+    const showFolderPopup = (show: boolean) => {
       setPopup(
         <AnimeFolderPopup
           folderFiles={files}
@@ -105,7 +121,7 @@ const AnimeCard = (props) => {
   }, [anime, setPopup]);
 
   const showEditPopup = useCallback(
-    (show) => {
+    (show: boolean) => {
       setPopup(
         <EditAnimePopup anime={anime} show={show} setShow={showEditPopup} />
       );
@@ -114,7 +130,7 @@ const AnimeCard = (props) => {
   );
 
   const showFilesPopup = useCallback(
-    (show) => {
+    (show: boolean) => {
       const driveUrl = anime.gdriveid_public
         ? 'http://doc.google.com/drive/folders/' + anime.gdriveid_public
         : '';
@@ -132,12 +148,11 @@ const AnimeCard = (props) => {
   );
 
   return (
-    <div className={'anime-card p-3 ' + CardLayout[layout]}>
+    <div className={'anime-card p-3 ' + (CardLayout[layout] as string)}>
       <div
         className={
           'card ' +
-          (UserDetail.isAdmin() &&
-          anime.view.toString() !== anime.download.toString()
+          (UserDetail.isAdmin() && anime.view !== anime.download
             ? 'border border-primary'
             : '')
         }
