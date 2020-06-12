@@ -17,7 +17,9 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
   const [animeList, setAnimeList] = useState<(AnimeType | null)[]>(
     (getLocalStorage('database') as DatabaseType).animeList
   );
-  const [pageList, setPageList] = useState<AnimeType[]>(AnimeFilter(animeList));
+  const [pageList, setPageList] = useState<(AnimeType | null)[]>(
+    AnimeFilter(animeList)
+  );
   const [filter, setFilter] = useState({});
   const [popup, setPopup] = useState<string>('');
 
@@ -55,7 +57,7 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
           {pageList.map(
-            (anime: AnimeType) =>
+            (anime: AnimeType | null) =>
               anime !== null && (
                 <AnimeCard anime={anime} key={anime?.key} setPopup={setPopup} />
               )

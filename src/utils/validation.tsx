@@ -18,6 +18,7 @@ export const validateAnime = (anime: Anime | null): Anime | null => {
     cover_url: anime.cover_url?.toString() || '',
     download: parseInt(anime.download.toString()),
     download_url: anime.download_url?.toString() || '',
+    genres: anime.genres?.toString() || '',
     gdriveid: anime.gdriveid?.toString() || '',
     gdriveid_public: anime.gdriveid_public?.toString() || '',
     gphotoid: anime.gphotoid?.toString() || '',

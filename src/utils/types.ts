@@ -26,9 +26,10 @@ export interface Anime {
   cover_url: string;
   download: number;
   download_url: string;
-  gdriveid: string;
-  gdriveid_public: string;
-  gphotoid: string;
+  genres: string;
+  gdriveid?: string;
+  gdriveid_public?: string;
+  gphotoid?: string;
   info: string;
   score: string;
   season: number;
