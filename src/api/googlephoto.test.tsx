@@ -11,8 +11,8 @@ describe('GooglePhotoApi', () => {
   describe('Albums', () => {
     it('should call api', async () => {
       // Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      axios.get.mockResolvedValue({ data: { albums: [] } });
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
+      (axios.get as jest.Mock).mockResolvedValue({ data: { albums: [] } });
       // When
       await GooglePhotoApi.getAlbums('');
       await flushPromises();
@@ -25,12 +25,12 @@ describe('GooglePhotoApi', () => {
     });
     it('should call api 2 times when get all albums', async () => {
       // Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const first_request =
         'https://photoslibrary.googleapis.com/v1/albums?access_token=' +
         UserDetail.getAccessToken() +
         '&pageToken=&pageSize=50';
-      axios.get.mockImplementation((request) =>
+      (axios.get as jest.Mock).mockImplementation((request) =>
         request === first_request
           ? Promise.resolve({
               data: { albums: [], nextPageToken: 'next_page' },
@@ -48,8 +48,8 @@ describe('GooglePhotoApi', () => {
   describe('Medias', () => {
     it('should call api', async () => {
       // Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      axios.post.mockResolvedValue({ data: { mediaItems: [] } });
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
+      (axios.post as jest.Mock).mockResolvedValue({ data: { mediaItems: [] } });
       const albumId = 'album_id';
       // When
       await GooglePhotoApi.getMedias(albumId);

@@ -1,21 +1,35 @@
 import axios from 'axios';
 import UserDetail from '../utils/userdetail';
+import {
+  GooglePhotoAlbumResponse,
+  GooglePhotoMediaResponse,
+} from '../utils/types';
 
 const pageSize = 50;
 const includeAlbum = '[Anime]';
 const excludeAlbum = 'Detective Conan';
 
 const GooglePhotoApi = {
-  getAlbums: async (nextPageToken) => {
-    const response = await axios.get(
+  getAlbums: async (
+    nextPageToken: string | null
+  ): Promise<{
+    albums: GooglePhotoAlbumResponse[];
+    nextPageToken: string | null;
+  }> => {
+    const response: {
+      data: {
+        albums: GooglePhotoAlbumResponse[];
+        nextPageToken: string | null;
+      };
+    } = await axios.get(
       'https://photoslibrary.googleapis.com/v1/albums?access_token=' +
         UserDetail.getAccessToken() +
         '&pageToken=' +
-        nextPageToken +
+        (nextPageToken || '') +
         '&pageSize=' +
-        pageSize
+        pageSize.toString()
     );
-    let albums = [];
+    const albums: GooglePhotoAlbumResponse[] = [];
     response.data.albums.forEach((album) => {
       if (
         album.title.includes(includeAlbum) &&
@@ -25,11 +39,19 @@ const GooglePhotoApi = {
     });
     return { albums: albums, nextPageToken: response.data.nextPageToken };
   },
-  getAllAlbums: async (token) => {
-    let albums = [];
-    let nextPageToken = token;
+  getAllAlbums: async (
+    token: string
+  ): Promise<{
+    albums: GooglePhotoAlbumResponse[];
+    nextPageToken: string | null;
+  }> => {
+    const albums: GooglePhotoAlbumResponse[] = [];
+    let nextPageToken: string | null = token;
     while (true) {
-      const response = await GooglePhotoApi.getAlbums(nextPageToken);
+      const response: {
+        albums: GooglePhotoAlbumResponse[];
+        nextPageToken: string | null;
+      } = await GooglePhotoApi.getAlbums(nextPageToken);
       response.albums.forEach((album) => {
         albums.push(album);
       });
@@ -38,11 +60,16 @@ const GooglePhotoApi = {
     }
     return { albums: albums, nextPageToken: null };
   },
-  getMedias: async (albumId) => {
-    let medias = [];
-    let nextPageToken = '';
+  getMedias: async (albumId: string): Promise<GooglePhotoMediaResponse[]> => {
+    const medias: GooglePhotoMediaResponse[] = [];
+    let nextPageToken: string | null = '';
     while (true) {
-      const response = await axios.post(
+      const response: {
+        data: {
+          mediaItems: GooglePhotoMediaResponse[];
+          nextPageToken: string | null;
+        };
+      } = await axios.post(
         'https://photoslibrary.googleapis.com/v1/mediaItems:search?access_token=' +
           UserDetail.getAccessToken(),
         {

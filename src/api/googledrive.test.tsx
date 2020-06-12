@@ -7,12 +7,31 @@ jest.mock('../utils/userdetail');
 
 describe('GoogleDriveApi', () => {
   const flushPromises = () => new Promise(setImmediate);
+  const mockAnime = {
+    key: 5,
+    all_episode: '?',
+    cover_url: 'string',
+    download: 5,
+    download_url: 'string',
+    genres: 'string',
+    gdriveid: '',
+    gdriveid_public: '',
+    gphotoid: '',
+    info: 'string',
+    score: '0.0',
+    season: 1,
+    studio: 'string',
+    title: 'title',
+    url: '',
+    view: 0,
+    year: 2020,
+  };
 
   describe('Get Files', () => {
     it('should call api', async () => {
       // Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      axios.get.mockResolvedValue({ data: { files: [] } });
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
+      (axios.get as jest.Mock).mockResolvedValue({ data: { files: [] } });
       const folderId = 'folder_id';
       // When
       await GoogleDriveApi.getFiles(folderId);
@@ -28,8 +47,8 @@ describe('GoogleDriveApi', () => {
     });
     it('should call api with upload folder id', async () => {
       // Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      axios.get.mockResolvedValue({ data: { files: [] } });
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
+      (axios.get as jest.Mock).mockResolvedValue({ data: { files: [] } });
       const folderId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
       // When
       await GoogleDriveApi.getUploadFiles();
@@ -45,8 +64,8 @@ describe('GoogleDriveApi', () => {
     });
     it('should call api with private anime folder id', async () => {
       // Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      axios.get.mockResolvedValue({ data: { files: [] } });
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
+      (axios.get as jest.Mock).mockResolvedValue({ data: { files: [] } });
       const folderId = '1teaWviknfgbuDsoFarRIsnny1HQ8zQe2';
       // When
       await GoogleDriveApi.getPrivateAnimeFolders();
@@ -62,8 +81,8 @@ describe('GoogleDriveApi', () => {
     });
     it('should call api with public anime folder id', async () => {
       // Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      axios.get.mockResolvedValue({ data: { files: [] } });
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
+      (axios.get as jest.Mock).mockResolvedValue({ data: { files: [] } });
       const folderId = '16MJ-jTxpa041WDc4nDjjLpIiSyNCEI4h';
       // When
       await GoogleDriveApi.getPublicAnimeFolders();
@@ -82,10 +101,9 @@ describe('GoogleDriveApi', () => {
   describe('Get Folder id', () => {
     it('should return private folder id when folder available', async () => {
       //Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      const mockAnime = { title: 'title' };
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const mockFolderId = 'folder_id';
-      axios.get.mockResolvedValue({
+      (axios.get as jest.Mock).mockResolvedValue({
         data: { files: [{ name: mockAnime.title, id: mockFolderId }] },
       });
       // When
@@ -97,11 +115,10 @@ describe('GoogleDriveApi', () => {
 
     it('should return private folder id when folder not available', async () => {
       //Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      const mockAnime = { title: 'title' };
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const mockFolderId = 'folder_id';
-      axios.get.mockResolvedValue({ data: { files: [] } });
-      axios.post.mockResolvedValue({ id: mockFolderId });
+      (axios.get as jest.Mock).mockResolvedValue({ data: { files: [] } });
+      (axios.post as jest.Mock).mockResolvedValue({ id: mockFolderId });
       // When
       const response = await GoogleDriveApi.getPrivateFolderId(mockAnime);
       await flushPromises();
@@ -111,10 +128,9 @@ describe('GoogleDriveApi', () => {
 
     it('should return public folder id', async () => {
       //Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      const mockAnime = { title: 'title' };
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const mockFolderId = 'folder_id';
-      axios.get.mockResolvedValue({
+      (axios.get as jest.Mock).mockResolvedValue({
         data: { files: [{ name: mockAnime.title, id: mockFolderId }] },
       });
       // When
@@ -126,11 +142,10 @@ describe('GoogleDriveApi', () => {
 
     it('should return public folder id when folder not available', async () => {
       //Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
-      const mockAnime = { title: 'title' };
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const mockFolderId = 'folder_id';
-      axios.get.mockResolvedValue({ data: { files: [] } });
-      axios.post.mockResolvedValue({ id: mockFolderId });
+      (axios.get as jest.Mock).mockResolvedValue({ data: { files: [] } });
+      (axios.post as jest.Mock).mockResolvedValue({ id: mockFolderId });
       // When
       const response = await GoogleDriveApi.getPublicFolderId(mockAnime);
       await flushPromises();
@@ -142,7 +157,7 @@ describe('GoogleDriveApi', () => {
   describe('Create folder', () => {
     it('should call api', async () => {
       // Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const folderName = 'name';
       const parentId = 'parent';
       // When
@@ -164,7 +179,7 @@ describe('GoogleDriveApi', () => {
   describe('Move files', () => {
     it('should call api', async () => {
       // Given
-      UserDetail.getAccessToken.mockReturnValue('access_token');
+      (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const fileId = 'file';
       const sourceId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
       const destinationId = 'destination';

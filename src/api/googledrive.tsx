@@ -1,16 +1,22 @@
 import axios from 'axios';
 import UserDetail from '../utils/userdetail';
+import { GoogleDriveFileResponse, Anime } from '../utils/types';
 
 const uploadFolderId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
 const privateAnimeFolderId = '1teaWviknfgbuDsoFarRIsnny1HQ8zQe2';
 const publicAnimeFolderId = '16MJ-jTxpa041WDc4nDjjLpIiSyNCEI4h';
 
 const GoogleDriveApi = {
-  getFiles: async (folderId) => {
-    let files = [];
-    let nextPageToken = '';
+  getFiles: async (folderId: string): Promise<GoogleDriveFileResponse[]> => {
+    const files: GoogleDriveFileResponse[] = [];
+    let nextPageToken: string | null = '';
     while (true) {
-      const response = await axios.get(
+      const response: {
+        data: {
+          files: GoogleDriveFileResponse[];
+          nextPageToken: string | null;
+        };
+      } = await axios.get(
         'https://www.googleapis.com/drive/v3/files?access_token=' +
           UserDetail.getAccessToken() +
           '&pageToken=' +
@@ -27,19 +33,19 @@ const GoogleDriveApi = {
     }
     return files;
   },
-  getUploadFiles: async () => {
+  getUploadFiles: async (): Promise<GoogleDriveFileResponse[]> => {
     const response = await GoogleDriveApi.getFiles(uploadFolderId);
     return response;
   },
-  getPrivateAnimeFolders: async () => {
+  getPrivateAnimeFolders: async (): Promise<GoogleDriveFileResponse[]> => {
     const response = await GoogleDriveApi.getFiles(privateAnimeFolderId);
     return response;
   },
-  getPublicAnimeFolders: async () => {
+  getPublicAnimeFolders: async (): Promise<GoogleDriveFileResponse[]> => {
     const response = await GoogleDriveApi.getFiles(publicAnimeFolderId);
     return response;
   },
-  getPrivateFolderId: async (anime) => {
+  getPrivateFolderId: async (anime: Anime): Promise<string> => {
     if (anime.gdriveid) return anime.gdriveid;
     const folderList = await GoogleDriveApi.getPrivateAnimeFolders();
     const animeFolder = folderList.filter(
@@ -52,7 +58,7 @@ const GoogleDriveApi = {
     );
     return newFolder.id;
   },
-  getPublicFolderId: async (anime) => {
+  getPublicFolderId: async (anime: Anime): Promise<string> => {
     if (anime.gdriveid_public) return anime.gdriveid_public;
     const folderList = await GoogleDriveApi.getPublicAnimeFolders();
     const animeFolder = folderList.filter(
@@ -65,8 +71,11 @@ const GoogleDriveApi = {
     );
     return newFolder.id;
   },
-  createFolder: async (name, parentId) => {
-    const response = await axios.post(
+  createFolder: async (
+    name: string,
+    parentId: string
+  ): Promise<{ id: string }> => {
+    const response: { id: string } = await axios.post(
       'https://www.googleapis.com/drive/v3/files?access_token=' +
         UserDetail.getAccessToken(),
       {
@@ -77,7 +86,10 @@ const GoogleDriveApi = {
     );
     return response;
   },
-  moveUploadFile: async (fileId, destinationId) => {
+  moveUploadFile: async (
+    fileId: string,
+    destinationId: string
+  ): Promise<void> => {
     await axios.patch(
       'https://www.googleapis.com/drive/v3/files/' +
         fileId +

@@ -1,16 +1,26 @@
 import axios from 'axios';
+import { AnilistInfoResponse } from '../utils/types';
 
 const AnilistApi = {
-  searchAnime: async (keyword) => {
+  searchAnime: async (keyword: string): Promise<AnilistInfoResponse[]> => {
     const response = await axios.post('https://graphql.anilist.co', {
       query: searchAnimeQueryBuilder(keyword),
     });
-    return response?.data?.data?.Page?.media;
+    return (response as {
+      data: {
+        data: {
+          Page: { media: AnilistInfoResponse[] };
+        };
+      };
+    })?.data.data.Page.media;
   },
-  getAnime: async (keyword, blacklist = []) => {
+  getAnime: async (
+    keyword: string,
+    blacklist: number[] = []
+  ): Promise<AnilistInfoResponse | null> => {
     const searchResult = await AnilistApi.searchAnime(keyword);
     for (const key in searchResult) {
-      let anime = searchResult[key];
+      const anime = searchResult[key];
       if (!blacklist.includes(anime.id)) {
         return anime;
       }
@@ -19,7 +29,7 @@ const AnilistApi = {
   },
 };
 
-export const searchAnimeQueryBuilder = (keyword) => {
+export const searchAnimeQueryBuilder = (keyword: string): string => {
   return (
     `{
         Page(page: 1, perPage: 100) {

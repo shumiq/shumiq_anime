@@ -18,7 +18,7 @@ describe('AnilistApi', () => {
 
   describe('getAnime', () => {
     it('should return first search result', async () => {
-      axios.post.mockResolvedValue({
+      (axios.post as jest.Mock).mockResolvedValue({
         data: {
           data: {
             Page: {
@@ -34,7 +34,7 @@ describe('AnilistApi', () => {
     });
 
     it('should return second search result if first is blacklist', async () => {
-      axios.post.mockResolvedValue({
+      (axios.post as jest.Mock).mockResolvedValue({
         data: {
           data: {
             Page: {
