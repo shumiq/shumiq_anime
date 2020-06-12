@@ -7,6 +7,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/enzyme": "^3.10.5",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^25.2.3",
     "@types/node": "^14.0.11",
     "@types/react": "^16.9.35",
@@ -58,10 +59,11 @@
       "plugin:@typescript-eslint/recommended",
       "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
-    "rules" : {
-      "@typescript-eslint/unbound-method" : "off",
-      "@typescript-eslint/no-for-in-array" : "off",
-      "no-constant-condition" : "off"
+    "rules": {
+      "@typescript-eslint/unbound-method": "off",
+      "@typescript-eslint/no-for-in-array": "off",
+      "@typescript-eslint/prefer-regexp-exec": "off",
+      "no-constant-condition": "off"
     },
     "plugins": [
       "import"
