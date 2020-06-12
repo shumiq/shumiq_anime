@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { getLocalStorage } from '../../utils/localstorage';
-import mockDatabase from '../../mock/database';
+import mockDatabase from '../../mock/database.json';
 import UserDetail from '../../utils/userdetail';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
@@ -18,7 +18,7 @@ describe('<Keyaki />', () => {
   const flushPromises = () => new Promise(setImmediate);
 
   it('should show correct conan list', () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     const wrapper = shallow(<Keyaki />);
     expect(wrapper.find('tr')).toHaveLength(3);
     expect(wrapper.find('tr').at(1).find('td').at(0).text()).toContain('1');
@@ -47,7 +47,7 @@ describe('<Keyaki />', () => {
   });
 
   it('should show FilesPopup when click episode button', () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     const wrapper = shallow(<Keyaki />);
     const epButton = wrapper.find('.btn').at(0);
     epButton.simulate('click');
@@ -55,31 +55,33 @@ describe('<Keyaki />', () => {
   });
 
   it('should random to one case when click random button', () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
-    UserDetail.isAdmin.mockReturnValue(false);
-    window.HTMLElement.prototype.scrollIntoView = () => {};
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
+    window.HTMLElement.prototype.scrollIntoView = (): void => {
+      return;
+    };
     const wrapper = mount(<Keyaki />);
     wrapper.find('#btn-random').simulate('click');
     expect(wrapper.find('table').html()).toContain('bg-dark');
   });
 
   it('should not show update button when not admin', () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
-    UserDetail.isAdmin.mockReturnValue(false);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
     const wrapper = shallow(<Keyaki />);
     expect(wrapper.find('#btn-update')).toHaveLength(0);
   });
 
   it('should show update button when admin', () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
-    UserDetail.isAdmin.mockReturnValue(true);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Keyaki />);
     expect(wrapper.find('#btn-update')).toHaveLength(1);
   });
 
   it('should show loading popup when click update', async () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
-    GoogleDriveApi.getFiles.mockResolvedValue([
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
+    (GoogleDriveApi.getFiles as jest.Mock).mockResolvedValue([
       {
         name: 'Keyakitte Kakenai 02 Eng.mp4',
         id: 'thisisid1',
@@ -89,7 +91,7 @@ describe('<Keyaki />', () => {
         id: 'thisisid2',
       },
     ]);
-    GooglePhotoApi.getMedias.mockResolvedValue([
+    (GooglePhotoApi.getMedias as jest.Mock).mockResolvedValue([
       {
         filename: 'Keyakitte Kakenai 02 Eng.mp4',
         productUrl: 'thisisurl1',
@@ -99,17 +101,21 @@ describe('<Keyaki />', () => {
         productUrl: 'thisisurl2',
       },
     ]);
-    UserDetail.isAdmin.mockReturnValue(true);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Keyaki />);
     wrapper.find('#btn-update').simulate('click');
-    expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(true);
+    expect(
+      (wrapper.find('GeneralPopup')?.props() as { show: boolean }).show
+    ).toBe(true);
     await flushPromises();
-    expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(false);
+    expect(
+      (wrapper.find('GeneralPopup')?.props() as { show: boolean }).show
+    ).toBe(false);
   });
 
   it('should call Database.update.keyaki after update', async () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
-    GoogleDriveApi.getFiles.mockResolvedValue([
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
+    (GoogleDriveApi.getFiles as jest.Mock).mockResolvedValue([
       {
         name: 'Keyakitte Kakenai 02 Eng.mp4',
         id: 'thisisid1',
@@ -119,7 +125,7 @@ describe('<Keyaki />', () => {
         id: 'thisisid2',
       },
     ]);
-    GooglePhotoApi.getMedias.mockResolvedValue([
+    (GooglePhotoApi.getMedias as jest.Mock).mockResolvedValue([
       {
         filename: 'Keyakitte Kakenai 02 Eng.mp4',
         productUrl: 'thisisurl1',
@@ -129,7 +135,7 @@ describe('<Keyaki />', () => {
         productUrl: 'thisisurl2',
       },
     ]);
-    UserDetail.isAdmin.mockReturnValue(true);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Keyaki />);
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
@@ -179,19 +185,21 @@ describe('<Keyaki />', () => {
   });
 
   it('should not show InputPopup when click name but not admin', () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
-    UserDetail.isAdmin.mockReturnValue(false);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
     const wrapper = shallow(<Keyaki />);
     wrapper.find('tr').at(1).find('span').simulate('click');
     expect(wrapper.find('InputPopup')).toHaveLength(0);
   });
 
   it('should show InputPopup when click name and admin', () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
-    UserDetail.isAdmin.mockReturnValue(true);
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Keyaki />);
     wrapper.find('tr').at(1).find('span').simulate('click');
-    wrapper.find('InputPopup').props().callback('newName');
+    (wrapper.find('InputPopup').props() as {
+      callback: (name: string) => void;
+    }).callback('newName');
     expect(wrapper.find('InputPopup')).toHaveLength(1);
     expect(wrapper.find('InputPopup').props().default).toEqual('episode 1');
     expect(Database.update.keyaki).toHaveBeenCalledWith([

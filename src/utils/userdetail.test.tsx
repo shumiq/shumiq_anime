@@ -7,13 +7,13 @@ describe('userdetail', () => {
   it('should return user if has user', () => {
     (getLocalStorage as jest.Mock).mockReturnValue({ email: 'test_user' });
     const user = UserDetail.getUser();
-    expect(user.email).toBe('test_user');
+    expect(user?.email).toBe('test_user');
   });
 
   it('should return null user if not has user', () => {
     (getLocalStorage as jest.Mock).mockReturnValue(null);
     const user = UserDetail.getUser();
-    expect(user).toStrictEqual({});
+    expect(user).toBe(null);
   });
 
   it('should return access token if has', () => {

@@ -2,10 +2,10 @@ import { getLocalStorage } from './localstorage';
 import { User } from './types';
 
 export default {
-  getUser: (): User => {
+  getUser: (): User | null => {
     const user = getLocalStorage('user') as User;
     if (user?.email) return user;
-    return {};
+    return null;
   },
   getAccessToken: (): string => {
     const accessToken = getLocalStorage('accessToken') as string;

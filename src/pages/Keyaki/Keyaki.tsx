@@ -7,17 +7,24 @@ import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import FilesPopup from '../../components/Popup/FilesPopup';
 import InputPopup from '../../components/Popup/InputPopup';
+import {
+  Database as DatabaseType,
+  Keyaki as KeyakiType,
+  File,
+} from '../../utils/types';
 
 const driveFolderId = '16jhCH2CkhVgZdmSx0cWhh364a1oqUm8U';
 const photoAlbumId =
   'ACKboXDVl0yynHYnKsDhn5HNlV7AxRTmboF6WNjWyFek8nloYNKJ1B0fxWQZ5A7Vk-kh-FOmRTJE';
 
-const Keyaki = () => {
-  const [keyakiList, setKeyakiList] = useState(
-    getLocalStorage('database')?.keyakiList
+const Keyaki = (): JSX.Element => {
+  const [keyakiList, setKeyakiList] = useState<(KeyakiType | null)[]>(
+    (getLocalStorage('database') as DatabaseType)?.keyakiList
   );
-  const [keyakiRef, setKeyakiRef] = useState([]);
-  const [popup, setPopup] = useState('');
+  const [keyakiRef, setKeyakiRef] = useState<
+    React.RefObject<HTMLTableRowElement>[]
+  >([]);
+  const [popup, setPopup] = useState<JSX.Element | string>('');
 
   useEffect(() => {
     Database.subscribe((db) => {
@@ -27,7 +34,7 @@ const Keyaki = () => {
 
   useEffect(() => {
     function UpdateKeyakiRef() {
-      let ref = [];
+      const ref = [];
       if (keyakiList)
         Object.keys(keyakiList).forEach((ep) => {
           ref[ep] = createRef();
@@ -37,10 +44,10 @@ const Keyaki = () => {
     UpdateKeyakiRef();
   }, [keyakiList]);
 
-  const showFiles = useCallback((files) => {
+  const showFiles = useCallback((files: File) => {
     const url = files.url ? files.url : '';
     const photoUrl = files.photoUrl ? files.photoUrl : '';
-    const showFilesPopup = (show) => {
+    const showFilesPopup = (show: boolean) => {
       setPopup(
         <FilesPopup
           driveUrl={url}
@@ -54,16 +61,24 @@ const Keyaki = () => {
   }, []);
 
   const update = useCallback(async () => {
-    const showLoadingPopup = (show) => {
+    const showLoadingPopup = (show: boolean) => {
       setPopup(
         <GeneralPopup show={show} message="Loading..." canClose={false} />
       );
     };
     showLoadingPopup(true);
-    let newKeyakiList = JSON.parse(JSON.stringify(keyakiList));
-    const driveFiles = await GoogleDriveApi.getFiles(driveFolderId);
-    const photoFiles = await GooglePhotoApi.getMedias(photoAlbumId);
-    driveFiles.forEach((file) => {
+    const newKeyakiList = JSON.parse(
+      JSON.stringify(keyakiList)
+    ) as KeyakiType[];
+    const driveFiles = (await GoogleDriveApi.getFiles(driveFolderId)) as {
+      name: string;
+      id: string;
+    }[];
+    const photoFiles = (await GooglePhotoApi.getMedias(photoAlbumId)) as {
+      filename: string;
+      productUrl: string;
+    }[];
+    driveFiles.forEach((file: { name: string; id: string }) => {
       const ep = parseInt(file.name.split(' ')[2]);
       const sub = file.name.split(' ')[3].split('.')[0];
       const url =
@@ -77,10 +92,10 @@ const Keyaki = () => {
         };
       } else {
         newKeyakiList[ep] = {
+          sub: {} as Record<string, File>,
           ep: ep,
           name: 'แก้ไข',
         };
-        newKeyakiList[ep].sub = {};
         newKeyakiList[ep].sub[sub] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
@@ -100,24 +115,29 @@ const Keyaki = () => {
       keyakiRef.map((ref) =>
         ref.current?.className ? (ref.current.className = '') : ''
       );
-      keyakiRef[ep].current.className = 'bg-dark';
-      keyakiRef[ep].current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
+      const current = keyakiRef[ep].current;
+      if (current) {
+        current.className = 'bg-dark';
+        current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
     }
   }, [keyakiList, keyakiRef]);
 
   const showInput = useCallback(
-    (ep) => {
+    (ep: number) => {
       if (UserDetail.isAdmin()) {
-        const name = keyakiList[ep].name;
-        const callback = (newName) => {
-          let newList = JSON.parse(JSON.stringify(keyakiList));
+        const name = keyakiList[ep]?.name || '';
+        const callback = (newName: string) => {
+          const newList = JSON.parse(
+            JSON.stringify(keyakiList)
+          ) as KeyakiType[];
           newList[ep].name = newName;
           Database.update.keyaki(newList);
         };
-        const showInputPopup = (show) => {
+        const showInputPopup = (show: boolean) => {
           setPopup(
             <InputPopup
               default={name}
@@ -163,7 +183,7 @@ const Keyaki = () => {
                                 <button
                                   className="btn btn-primary m-1"
                                   onClick={() => showFiles(keyaki.sub[sub])}
-                                  key={keyaki.ep + '_' + sub}
+                                  key={keyaki.ep.toString() + '_' + sub}
                                 >
                                   {sub}
                                 </button>

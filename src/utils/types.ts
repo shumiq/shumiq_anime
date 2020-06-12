@@ -59,7 +59,7 @@ export interface Keyaki {
 export interface Router {
   path: string;
   exact: boolean;
-  component: React.ComponentClass | unknown; // to be remove after convert all to ts
+  component: React.ComponentClass | (() => JSX.Element);
   auth: string[];
 }
 
