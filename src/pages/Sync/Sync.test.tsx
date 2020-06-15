@@ -1,11 +1,12 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import { getLocalStorage } from '../../utils/localstorage';
-import mockDatabase from '../../mock/database';
+import mockDatabase from '../../mock/database.json';
 import GooglePhotoApi from '../../api/googlephoto';
 import { Database } from '../../utils/firebase';
 import GoogleDriveApi from '../../api/googledrive';
 import Sync from './Sync';
+import { Database as DatabaseType } from '../../utils/types';
 
 jest.mock('../../utils/localstorage');
 jest.mock('../../api/googlephoto');
@@ -17,7 +18,7 @@ describe('<Sync />', () => {
 
   it('should show 2 rows', () => {
     // Given
-    getLocalStorage.mockReturnValue(JSON.parse(JSON.stringify(mockDatabase)));
+    (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
     // When
     const wrapper = shallow(<Sync />);
     // Then
@@ -26,8 +27,8 @@ describe('<Sync />', () => {
 
   it('should call getAlbums api when click Load more...', async () => {
     // Given
-    getLocalStorage.mockReturnValue(JSON.parse(JSON.stringify(mockDatabase)));
-    GooglePhotoApi.getAlbums.mockResolvedValue({
+    (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
+    (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
         { id: mockDatabase.animeList[0].gphotoid, mediaItemsCount: 2 },
         { id: mockDatabase.animeList[1].gphotoid, mediaItemsCount: 2 },
@@ -37,16 +38,20 @@ describe('<Sync />', () => {
     // When
     wrapper.find('#btn-load-more').simulate('click');
     // Then
-    expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(true);
+    expect(
+      (wrapper.find('GeneralPopup')?.props() as { show: boolean }).show
+    ).toBe(true);
     await flushPromises();
-    expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(false);
+    expect(
+      (wrapper.find('GeneralPopup')?.props() as { show: boolean }).show
+    ).toBe(false);
     expect(GooglePhotoApi.getAlbums).toHaveBeenCalled();
   });
 
   it('should call getAllAlbums api when click Load all and show loading popup', async () => {
     // Given
-    getLocalStorage.mockReturnValue(JSON.parse(JSON.stringify(mockDatabase)));
-    GooglePhotoApi.getAllAlbums.mockResolvedValue({
+    (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
+    (GooglePhotoApi.getAllAlbums as jest.Mock).mockResolvedValue({
       albums: [
         { id: mockDatabase.animeList[0].gphotoid, mediaItemsCount: 2 },
         { id: mockDatabase.animeList[1].gphotoid, mediaItemsCount: 2 },
@@ -56,16 +61,20 @@ describe('<Sync />', () => {
     // When
     wrapper.find('#btn-load-all').simulate('click');
     // Then
-    expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(true);
+    expect(
+      (wrapper.find('GeneralPopup')?.props() as { show: boolean }).show
+    ).toBe(true);
     await flushPromises();
-    expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(false);
+    expect(
+      (wrapper.find('GeneralPopup')?.props() as { show: boolean }).show
+    ).toBe(false);
     expect(GooglePhotoApi.getAllAlbums).toHaveBeenCalled();
   });
 
   it('should show correct information & buttons after load from google photo', async () => {
     // Given
-    getLocalStorage.mockReturnValue(JSON.parse(JSON.stringify(mockDatabase)));
-    GooglePhotoApi.getAlbums.mockResolvedValue({
+    (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
+    (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
         { id: mockDatabase.animeList[0].gphotoid, mediaItemsCount: 2 },
         { id: mockDatabase.animeList[1].gphotoid, mediaItemsCount: 2 },
@@ -84,29 +93,35 @@ describe('<Sync />', () => {
 
   it('should called save anime when update and show loading popup', async () => {
     // Given
-    getLocalStorage.mockReturnValue(JSON.parse(JSON.stringify(mockDatabase)));
-    GooglePhotoApi.getAlbums.mockResolvedValue({
+    (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
+    (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
         { id: mockDatabase.animeList[0].gphotoid, mediaItemsCount: 2 },
         { id: mockDatabase.animeList[1].gphotoid, mediaItemsCount: 2 },
       ],
     });
-    GooglePhotoApi.getMedias.mockResolvedValue([]);
-    GoogleDriveApi.getPrivateFolderId.mockResolvedValue(null);
-    GoogleDriveApi.getPublicFolderId.mockResolvedValue(null);
+    (GooglePhotoApi.getMedias as jest.Mock).mockResolvedValue([]);
+    (GoogleDriveApi.getPrivateFolderId as jest.Mock).mockResolvedValue('');
+    (GoogleDriveApi.getPublicFolderId as jest.Mock).mockResolvedValue('');
     const wrapper = shallow(<Sync />);
     // When
     wrapper.find('#btn-load-more').simulate('click');
     await flushPromises();
     wrapper.find('.row-anime').at(0).find('#btn-update').simulate('click');
     // Then
-    expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(true);
+    expect(
+      (wrapper.find('GeneralPopup')?.props() as { show: boolean }).show
+    ).toBe(true);
     await flushPromises();
-    expect(wrapper.find('GeneralPopup')?.props()?.show).toBe(false);
-    let updatedAnime = JSON.parse(JSON.stringify(mockDatabase.animeList[1]));
-    updatedAnime.download = 2;
-    updatedAnime.gdriveid_public = null;
-    updatedAnime.gdriveid = null;
+    expect(
+      (wrapper.find('GeneralPopup')?.props() as { show: boolean }).show
+    ).toBe(false);
+    const updatedAnime = {
+      ...mockDatabase.animeList[1],
+      download: 2,
+      gdriveid_public: '',
+      gdriveid: '',
+    };
     expect(Database.update.anime).toHaveBeenCalledWith(
       updatedAnime.key,
       updatedAnime
@@ -115,8 +130,8 @@ describe('<Sync />', () => {
 
   it('should called save anime when unsync', async () => {
     // Given
-    getLocalStorage.mockReturnValue(JSON.parse(JSON.stringify(mockDatabase)));
-    GooglePhotoApi.getAlbums.mockResolvedValue({
+    (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
+    (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
         { id: mockDatabase.animeList[0].gphotoid, mediaItemsCount: 2 },
         { id: mockDatabase.animeList[1].gphotoid, mediaItemsCount: 2 },
@@ -128,8 +143,10 @@ describe('<Sync />', () => {
     wrapper.find('.row-anime').at(0).find('#btn-unsync').simulate('click');
     await flushPromises();
     // Then
-    let updatedAnime = JSON.parse(JSON.stringify(mockDatabase.animeList[1]));
-    updatedAnime.gphotoid = null;
+    const updatedAnime = {
+      ...mockDatabase.animeList[1],
+      gphotoid: '',
+    };
     expect(Database.update.anime).toHaveBeenCalledWith(
       updatedAnime.key,
       updatedAnime
@@ -138,20 +155,22 @@ describe('<Sync />', () => {
 
   it('should see sync buttons correctly', async () => {
     // Given
-    let db = JSON.parse(JSON.stringify(mockDatabase));
-    db.animeList[0].gphotoid = null;
-    db.animeList[1].gphotoid = null;
-    getLocalStorage.mockReturnValue(db);
-    GooglePhotoApi.getAlbums.mockResolvedValue({
+    const db = JSON.parse(JSON.stringify(mockDatabase)) as DatabaseType;
+    if (db.animeList[0]) db.animeList[0].gphotoid = '';
+    if (db.animeList[1]) db.animeList[1].gphotoid = '';
+    (getLocalStorage as jest.Mock).mockReturnValue(db);
+    (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
         {
           id: mockDatabase.animeList[0].gphotoid,
           title: '[Anime] ' + mockDatabase.animeList[0].title,
+          productUrl: '',
           mediaItemsCount: 2,
         },
         {
           id: mockDatabase.animeList[1].gphotoid,
           title: '[Anime] ' + mockDatabase.animeList[1].title + ' SS2',
+          productUrl: '',
           mediaItemsCount: 2,
         },
       ],
@@ -173,20 +192,22 @@ describe('<Sync />', () => {
 
   it('should call save anime when click sync buttons', async () => {
     // Given
-    let db = JSON.parse(JSON.stringify(mockDatabase));
-    db.animeList[0].gphotoid = null;
-    db.animeList[1].gphotoid = null;
-    getLocalStorage.mockReturnValue(db);
-    GooglePhotoApi.getAlbums.mockResolvedValue({
+    const db = JSON.parse(JSON.stringify(mockDatabase)) as DatabaseType;
+    if (db.animeList[0]) db.animeList[0].gphotoid = '';
+    if (db.animeList[1]) db.animeList[1].gphotoid = '';
+    (getLocalStorage as jest.Mock).mockReturnValue(db);
+    (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
         {
           id: mockDatabase.animeList[0].gphotoid,
           title: '[Anime] ' + mockDatabase.animeList[0].title,
+          productUrl: '',
           mediaItemsCount: 2,
         },
         {
           id: mockDatabase.animeList[1].gphotoid,
           title: '[Anime] ' + mockDatabase.animeList[1].title + ' SS2',
+          productUrl: '',
           mediaItemsCount: 2,
         },
       ],
@@ -198,8 +219,10 @@ describe('<Sync />', () => {
     wrapper.find('#btn-sync').simulate('click');
     await flushPromises();
     // Then
-    let updatedAnime = JSON.parse(JSON.stringify(mockDatabase.animeList[0]));
-    updatedAnime.gphotoid = mockDatabase.animeList[0].gphotoid;
+    const updatedAnime = {
+      ...mockDatabase.animeList[0],
+      gphotoid: mockDatabase.animeList[0].gphotoid,
+    };
     expect(Database.update.anime).toHaveBeenCalledWith(
       updatedAnime.key,
       updatedAnime
