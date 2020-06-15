@@ -16,30 +16,40 @@ const opengraphTemplate = `<!doctype html>
   </body>
 </html>`;
 
-const getMeta = (org) => {
+const getMeta = (org: {
+  name: string;
+  logo_url: string;
+  desc: string;
+}): string => {
   let og = `<meta property="og:type" content="website" />\n`;
   og += `<meta property="og:title" content="${org.name}" />\n`;
   og += `<meta property="og:image" content="${org.logo_url}" />\n`;
-  // og += `<meta property="og:url" content="https://shumiq-anime.netlify.app/share/${org.slug}" />\n`;
   og += `<meta property="og:description" content="${org.desc}" />\n`;
   return og;
 };
 
-export default (anime) => {
+export default (anime: {
+  title: string;
+  score: string;
+  year: number;
+  season: number;
+  download: number;
+  info: string;
+  cover_url: string;
+}): string => {
   let indexHTML = opengraphTemplate;
-  let enumSeason = ['', 'Winter', 'Spring', 'Summer', 'Fall'];
+  const enumSeason = ['', 'Winter', 'Spring', 'Summer', 'Fall'];
   const openGraphPlaceholder = '<meta name="functions-insert-dynamic-og">';
   const org = {
     name: anime.title.split('"').join('&quot;') + ' (★' + anime.score + ')',
     desc:
-      anime.year +
+      anime.year.toString() +
       ' ' +
       enumSeason[anime.season] +
       ' (' +
-      anime.download +
+      anime.download.toString() +
       ' Episodes) – ' +
       anime.info.split('"').join('&quot;').split('\n').join('\\n'),
-    slug: anime.key,
     logo_url: anime.cover_url,
   };
   indexHTML = indexHTML.replace(openGraphPlaceholder, getMeta(org));
@@ -47,7 +57,13 @@ export default (anime) => {
     '@url@',
     default_url +
       '?search=' +
-      encodeURI(anime.title + ' ' + anime.year + ' ' + enumSeason[anime.season])
+      encodeURI(
+        anime.title +
+          ' ' +
+          anime.year.toString() +
+          ' ' +
+          enumSeason[anime.season]
+      )
   );
   return indexHTML;
 };
