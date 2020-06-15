@@ -1,18 +1,22 @@
 import React, { useCallback, useRef } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-const ClipboardPopup = (props) => {
-  const inputRef = useRef('');
+const ClipboardPopup = (props: {
+  show: boolean;
+  setShow: (show: boolean) => void;
+  text: string;
+}): JSX.Element => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const closePopup = useCallback(() => props.setShow(false), [props]);
   const copy = useCallback(() => {
-    inputRef.current.select();
+    inputRef.current?.select();
     document.execCommand('copy');
   }, []);
   return (
     <div className="ClipboardPopup">
       <Modal
         show={props.show}
-        size="md"
+        size="lg"
         centered
         backdrop={true}
         keyboard={true}
