@@ -65,7 +65,7 @@ export const Database = {
       },
     };
   },
-  backup: (): void => {
+  backup: async (): Promise<void> => {
     const database = getLocalStorage('database');
     const fileName = currentDate() + '.json';
     const status = Database.status();
@@ -80,17 +80,26 @@ export const Database = {
         keyakiFiles: status.keyaki?.files.toString() || '',
       },
     };
-    Firebase.storage.create(
+    await Firebase.storage.create(
       'backup',
       fileName,
       JSON.stringify(database),
       metadata
     );
   },
-  deleteBackup: (fileName: string): void => {
-    Firebase.storage.delete('backup', fileName);
+  deleteBackup: async (fileName: string): Promise<void> => {
+    await Firebase.storage.delete('backup', fileName);
   },
-  backupFiles: async (): Promise<{ name: string; timeCreated: number }[]> => {
+  backupFiles: async (): Promise<
+    {
+      name: string;
+      timeCreated: number;
+      generation: string;
+      customMetadata: Record<string, string>;
+      data: unknown;
+      download: string;
+    }[]
+  > => {
     const response = await Firebase.storage.list('backup');
     return response.reverse();
   },
@@ -103,7 +112,7 @@ export const Database = {
         ? new Date(backupFiles[0].timeCreated).getTime()
         : 0;
     const timeDiff = currentTime - latestBackup;
-    if (timeDiff > autoBackupThreshold) Database.backup();
+    if (timeDiff > autoBackupThreshold) void Database.backup();
     return timeDiff > autoBackupThreshold;
   },
   runAutoDelete: async (): Promise<boolean> => {
@@ -114,7 +123,7 @@ export const Database = {
       const createdTime = new Date(file.timeCreated).getTime();
       const timeDiff = currentTime - createdTime;
       if (timeDiff > autoDeleteThreshold)
-        Firebase.storage.delete('backup', file.name);
+        void Firebase.storage.delete('backup', file.name);
     });
     return true;
   },

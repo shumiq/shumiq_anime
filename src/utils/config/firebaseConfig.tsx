@@ -58,20 +58,33 @@ export default {
     backup: 'backup',
     list: async (
       path: string
-    ): Promise<{ name: string; timeCreated: number }[]> => {
+    ): Promise<
+      {
+        name: string;
+        timeCreated: number;
+        generation: string;
+        customMetadata: Record<string, string>;
+        data: unknown;
+        download: string;
+      }[]
+    > => {
       const list = await firebase.storage().ref(path).listAll();
       const files: {
         name: string;
         download: string;
         data: unknown;
+        generation: string;
         timeCreated: number;
+        customMetadata: Record<string, string>;
       }[] = [];
       for (const file of list.items) {
         const metadata = (await file.getMetadata()) as {
           name: string;
           download: string;
           data: unknown;
+          generation: string;
           timeCreated: number;
+          customMetadata: Record<string, string>;
         };
         metadata.download = (await file.getDownloadURL()) as string;
         metadata.data = (await axios.get(metadata.download)).data as unknown;
@@ -79,20 +92,20 @@ export default {
       }
       return files.sort((a, b) => (a.name < b.name ? -1 : 1));
     },
-    create: (
+    create: async (
       path: string,
       fileName: string,
       text: string,
       metadata: firebase.storage.UploadMetadata
-    ): void => {
-      void firebase
+    ): Promise<void> => {
+      await firebase
         .storage()
         .ref(path)
         .child(fileName)
         .putString(text, 'raw', metadata);
     },
-    delete: (path: string, fileName: string): void => {
-      void firebase.storage().ref(path).child(fileName).delete();
+    delete: async (path: string, fileName: string): Promise<void> => {
+      await firebase.storage().ref(path).child(fileName).delete();
     },
   },
 };

@@ -4,12 +4,21 @@ import { useCallback } from 'react';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import { Database } from '../../utils/firebase';
 
-const Backup = () => {
-  const [backupFiles, setBackupFiles] = useState([]);
-  const [popup, setPopup] = useState('');
+const Backup = (): JSX.Element => {
+  const [backupFiles, setBackupFiles] = useState<
+    {
+      name: string;
+      timeCreated: number;
+      generation: string;
+      customMetadata: Record<string, string>;
+      data: unknown;
+      download: string;
+    }[]
+  >([]);
+  const [popup, setPopup] = useState<JSX.Element | string>('');
   const [status, setStatus] = useState(Database.status());
 
-  const showLoadingPopup = useCallback((show) => {
+  const showLoadingPopup = useCallback((show: boolean) => {
     setPopup(
       <GeneralPopup show={show} message="Loading..." canClose={false} />
     );
@@ -28,7 +37,7 @@ const Backup = () => {
       setBackupFiles(files);
       showLoadingPopup(false);
     };
-    fetchBackupFiles();
+    void fetchBackupFiles();
   }, [showLoadingPopup]);
 
   const deleteBackup = useCallback(
@@ -42,7 +51,7 @@ const Backup = () => {
     [showLoadingPopup]
   );
 
-  const restore = useCallback(async (data) => {
+  const restore = useCallback((data) => {
     if (window.confirm('Do you want to restore database with this backup?')) {
       Database.update.database(data);
     }
@@ -74,24 +83,26 @@ const Backup = () => {
               <tr className="bg-dark">
                 <td className="pt-4">(current)</td>
                 <td>
-                  <p className="m-0 p-0 small">Series: {status.anime.series}</p>
                   <p className="m-0 p-0 small">
-                    Download: {status.anime.files}
+                    Series: {status?.anime?.series}
                   </p>
-                  <p className="m-0 p-0 small">View: {status.anime.view}</p>
+                  <p className="m-0 p-0 small">
+                    Download: {status?.anime?.files}
+                  </p>
+                  <p className="m-0 p-0 small">View: {status?.anime?.view}</p>
                 </td>
                 <td>
-                  <p className="m-0 p-0 small">Cases: {status.conan.cases}</p>
+                  <p className="m-0 p-0 small">Cases: {status?.conan?.cases}</p>
                   <p className="m-0 p-0 small">
-                    Download: {status.conan.files}
+                    Download: {status?.conan?.files}
                   </p>
                 </td>
                 <td>
                   <p className="m-0 p-0 small">
-                    Episodes: {status.keyaki.episodes}
+                    Episodes: {status?.keyaki?.episodes}
                   </p>
                   <p className="m-0 p-0 small">
-                    Download: {status.keyaki.files}
+                    Download: {status?.keyaki?.files}
                   </p>
                 </td>
                 <td className="pt-3">

@@ -40,7 +40,7 @@ describe('Database', () => {
 
   it('should upload file when call backup', () => {
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
-    Database.backup();
+    void Database.backup();
     expect(Firebase.storage.create).toHaveBeenCalledWith(
       'backup',
       currentDate() + '.json',

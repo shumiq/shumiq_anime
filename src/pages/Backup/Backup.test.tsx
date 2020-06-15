@@ -10,7 +10,7 @@ describe('<Backup />', () => {
   const flushPromises = () => new Promise(setImmediate);
 
   beforeEach(() => {
-    Database.status.mockReturnValue({
+    (Database.status as jest.Mock).mockReturnValue({
       anime: {
         series: 3,
         files: 2,
@@ -25,7 +25,7 @@ describe('<Backup />', () => {
         files: 6,
       },
     });
-    Database.backupFiles.mockResolvedValue([
+    (Database.backupFiles as jest.Mock).mockResolvedValue([
       {
         generation: 10,
         name: '20200526.json',
@@ -76,7 +76,7 @@ describe('<Backup />', () => {
     await act(async () => {
       await flushPromises();
       wrapper.update();
-      await wrapper.find('#btn-backup').simulate('click');
+      wrapper.find('#btn-backup').simulate('click');
       await flushPromises();
       wrapper.update();
     });
@@ -114,7 +114,7 @@ describe('<Backup />', () => {
     await act(async () => {
       await flushPromises();
       wrapper.update();
-      await wrapper.find('#btn-restore').first().simulate('click');
+      wrapper.find('#btn-restore').first().simulate('click');
       await flushPromises();
       wrapper.update();
     });
@@ -126,7 +126,7 @@ describe('<Backup />', () => {
     await act(async () => {
       await flushPromises();
       wrapper.update();
-      await wrapper.find('#btn-delete').first().simulate('click');
+      wrapper.find('#btn-delete').first().simulate('click');
       await flushPromises();
       wrapper.update();
     });
