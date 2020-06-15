@@ -3,6 +3,13 @@ import { mount } from 'enzyme';
 import { FilterEnum } from '../../utils/enum';
 import Filterbar from './Filterbar';
 
+interface filterType {
+  season: number | string;
+  category: number;
+  keyword: string;
+  orderby: number;
+}
+
 describe('<Filterbar />', () => {
   const seasonList = {
     '2020,2': 1,
@@ -12,7 +19,13 @@ describe('<Filterbar />', () => {
 
   it('should show latest season as default', () => {
     const wrapper = mount(
-      <Filterbar filter={{}} seasonlist={seasonList} setFilter={null} />
+      <Filterbar
+        filter={{}}
+        seasonlist={seasonList}
+        setFilter={() => {
+          return;
+        }}
+      />
     );
     expect(wrapper.text()).toContain('2020 Spring');
   });
@@ -22,7 +35,9 @@ describe('<Filterbar />', () => {
       <Filterbar
         filter={{ season: '2019,4' }}
         seasonlist={seasonList}
-        setFilter={null}
+        setFilter={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.text()).toContain('2019 Fall');
@@ -33,7 +48,9 @@ describe('<Filterbar />', () => {
       <Filterbar
         filter={{ season: '2020,2' }}
         seasonlist={seasonList}
-        setFilter={null}
+        setFilter={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('.invisible')).toHaveLength(1);
@@ -47,7 +64,9 @@ describe('<Filterbar />', () => {
       <Filterbar
         filter={{ season: '2019,4' }}
         seasonlist={seasonList}
-        setFilter={null}
+        setFilter={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('.invisible')).toHaveLength(1);
@@ -61,14 +80,16 @@ describe('<Filterbar />', () => {
       <Filterbar
         filter={{ season: '2020,1' }}
         seasonlist={seasonList}
-        setFilter={null}
+        setFilter={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('.invisible')).toHaveLength(0);
   });
 
   it('should go to previous season', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.season).toBe('2019,4');
     };
     const wrapper = mount(
@@ -82,7 +103,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should go to next season', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.season).toBe('2020,2');
     };
     const wrapper = mount(
@@ -96,7 +117,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should show all anime category', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.category).toBe(FilterEnum.ALL_ANIME);
     };
     const wrapper = mount(
@@ -112,7 +133,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should show only unseen anime category', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.category).toBe(FilterEnum.ONLY_UNSEEN);
     };
     const wrapper = mount(
@@ -128,7 +149,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should show only unfinish anime category', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.category).toBe(FilterEnum.ONLY_UNFINISH);
     };
     const wrapper = mount(
@@ -144,7 +165,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should show only finish anime category', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.category).toBe(FilterEnum.ONLY_FINISH);
     };
     const wrapper = mount(
@@ -160,7 +181,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should order by season', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.orderby).toBe(FilterEnum.SORT_BY_SEASON);
     };
     const wrapper = mount(
@@ -176,7 +197,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should order by season', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.orderby).toBe(FilterEnum.SORT_BY_SCORE);
     };
     const wrapper = mount(
@@ -192,7 +213,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should show all season', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.season).toBe(FilterEnum.ALL_SEASON);
     };
     const wrapper = mount(
@@ -208,7 +229,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should show correct season', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.season).toBe('2020,1');
     };
     const wrapper = mount(
@@ -224,7 +245,7 @@ describe('<Filterbar />', () => {
   });
 
   it('should show anime with match keyword', () => {
-    let mockSetFilter = (filter) => {
+    const mockSetFilter = (filter: filterType) => {
       expect(filter.keyword).toBe('Hello, World');
     };
     const wrapper = mount(

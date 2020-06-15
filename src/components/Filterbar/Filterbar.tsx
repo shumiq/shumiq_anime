@@ -1,17 +1,35 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, ChangeEvent, KeyboardEvent } from 'react';
 import { SeasonEnum, FilterEnum } from '../../utils/enum';
 import { defaultFilter } from '../../pages/Anime/Anime.filter';
 import UserDetail from '../../utils/userdetail';
 
-const Filterbar = (props) => {
-  const filter = Object.assign(defaultFilter, props.filter);
+interface filterType {
+  season: number | string;
+  category: number;
+  keyword: string;
+  orderby: number;
+}
+
+interface optonalFilterType {
+  season?: number | string;
+  category?: number;
+  keyword?: string;
+  orderby?: number;
+}
+
+const Filterbar = (props: {
+  filter: optonalFilterType;
+  seasonlist: Record<string, number>;
+  setFilter: (filter: filterType) => void;
+}): JSX.Element => {
+  const filter = { ...defaultFilter, ...props.filter };
   const seasonList = props.seasonlist;
   const currentSeason =
     filter.category.toString() === FilterEnum.ONLY_UNSEEN.toString() ||
     filter.category.toString() === FilterEnum.ONLY_UNFINISH.toString()
       ? FilterEnum.ALL_SEASON
       : filter?.season === FilterEnum.LATEST_SEASON
-      ? Object.keys(seasonList).sort().pop()
+      ? Object.keys(seasonList).sort().pop() || FilterEnum.ALL_SEASON
       : filter.season;
   const hasNextSeason =
     Object.keys(seasonList).sort().pop() === currentSeason ||
@@ -24,16 +42,18 @@ const Filterbar = (props) => {
       ? 'invisible'
       : '';
 
-  const setFilter = useCallback((f) => props.setFilter(f), [props]);
+  const setFilter = useCallback((f: filterType): void => props.setFilter(f), [
+    props,
+  ]);
 
-  const seasonToText = useCallback((season) => {
+  const seasonToText = useCallback((season: string | number): string => {
     if (season.toString() === FilterEnum.ALL_SEASON.toString())
       return 'All Season';
-    let [year, seasonNum] = season.split(',');
-    return year + ' ' + SeasonEnum[seasonNum];
+    const [year, seasonNum] = season.toString().split(',');
+    return year.toString() + ' ' + (SeasonEnum[seasonNum] as string);
   }, []);
 
-  const gotoNextSeason = useCallback(() => {
+  const gotoNextSeason = useCallback((): void => {
     if (hasNextSeason === 'invisible') return;
     const nextSeasonIndex =
       Object.keys(seasonList)
@@ -44,7 +64,7 @@ const Filterbar = (props) => {
     setFilter(filter);
   }, [currentSeason, setFilter, hasNextSeason, seasonList, filter]);
 
-  const gotoPreviousSeason = useCallback(() => {
+  const gotoPreviousSeason = useCallback((): void => {
     if (havePreviousSeason === 'invisible') return;
     const previousSeasonIndex =
       Object.keys(seasonList)
@@ -56,23 +76,23 @@ const Filterbar = (props) => {
   }, [currentSeason, setFilter, havePreviousSeason, seasonList, filter]);
 
   const changeCategory = useCallback(
-    (event) => {
-      filter.category = event.target.value;
+    (event: ChangeEvent<HTMLSelectElement>): void => {
+      filter.category = parseInt(event.target.value);
       setFilter(filter);
     },
     [filter, setFilter]
   );
 
   const changeOrder = useCallback(
-    (event) => {
-      filter.orderby = event.target.value;
+    (event: ChangeEvent<HTMLSelectElement>): void => {
+      filter.orderby = parseInt(event.target.value);
       setFilter(filter);
     },
     [filter, setFilter]
   );
 
   const changeSeason = useCallback(
-    (event) => {
+    (event: ChangeEvent<HTMLSelectElement>): void => {
       filter.season = event.target.value;
       setFilter(filter);
     },
@@ -80,9 +100,9 @@ const Filterbar = (props) => {
   );
 
   const changeKey = useCallback(
-    (event) => {
+    (event: React.KeyboardEvent<HTMLInputElement>): void => {
       if (event.key === 'Enter') {
-        filter.keyword = event.target.value;
+        filter.keyword = (event.target as HTMLInputElement).value;
         setFilter(filter);
       }
     },
