@@ -127,7 +127,7 @@ export const Database = {
         console.error(error);
       }
     },
-    anime: (key: number, anime: Anime): void => {
+    anime: (key: number, anime: Anime | null): void => {
       try {
         Firebase.database.set(
           'database/animeList/' + key.toString(),

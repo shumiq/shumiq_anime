@@ -1,10 +1,15 @@
 import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Database } from '../../utils/firebase';
+import { Anime } from '../../utils/types';
 
-const EditAnimePopup = (props) => {
+const EditAnimePopup = (props: {
+  show: boolean;
+  setShow: (show: boolean) => void;
+  anime: Anime;
+}): JSX.Element => {
   const anime = props.anime;
-  let state = JSON.parse(JSON.stringify(anime));
+  const state: Anime = { ...anime };
 
   const closePopup = useCallback(() => props.setShow(false), [props]);
 
@@ -21,7 +26,7 @@ const EditAnimePopup = (props) => {
   }, [anime, state, closePopup]);
 
   const updateFormData = useCallback(
-    (event) => {
+    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       state[event.target.name] = event.target.value;
     },
     [state]

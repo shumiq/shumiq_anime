@@ -1,23 +1,36 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import mockDatabase from '../../mock/database';
+import mockDatabase from '../../mock/database.json';
 import { Database } from '../../utils/firebase';
 import EditAnimePopup from './EditAnimePopup';
+import { Anime } from '../../utils/types';
 
 jest.mock('../../utils/firebase');
-const mockAnimeList = mockDatabase.animeList;
+const mockAnimeList: Anime[] = mockDatabase.animeList;
 
 describe('<EditAnimePopup />', () => {
   it('should not show when show props is false', () => {
     const wrapper = mount(
-      <EditAnimePopup anime={mockAnimeList[0]} show={false} setShow={null} />
+      <EditAnimePopup
+        anime={mockAnimeList[0]}
+        show={false}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(wrapper.find('div.modal')).toHaveLength(0);
   });
 
   it('should show correct default value', () => {
     const wrapper = mount(
-      <EditAnimePopup anime={mockAnimeList[0]} show={true} setShow={null} />
+      <EditAnimePopup
+        anime={mockAnimeList[0]}
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(wrapper.find('div.modal').html()).toContain(mockAnimeList[0].title);
     expect(wrapper.find('div.modal').html()).toContain(mockAnimeList[0].studio);
@@ -32,8 +45,10 @@ describe('<EditAnimePopup />', () => {
   });
 
   it('should save with new data when click save', () => {
-    Database.update.anime.mockReturnValue(null);
-    const mockSetShow = () => {};
+    (Database.update.anime as jest.Mock).mockReturnValue(null);
+    const mockSetShow = () => {
+      return;
+    };
     const wrapper = mount(
       <EditAnimePopup
         anime={mockAnimeList[0]}
@@ -70,7 +85,7 @@ describe('<EditAnimePopup />', () => {
       .find('div.modal')
       .find('input.form-control')
       .at(4)
-      .simulate('change', { target: { name: 'all_episode', value: 11 } });
+      .simulate('change', { target: { name: 'all_episode', value: '11' } });
     wrapper
       .find('div.modal')
       .find('input.form-control')
@@ -84,7 +99,7 @@ describe('<EditAnimePopup />', () => {
       .find('div.modal')
       .find('input.form-control')
       .at(6)
-      .simulate('change', { target: { name: 'score', value: 10 } });
+      .simulate('change', { target: { name: 'score', value: '10' } });
     wrapper
       .find('div.modal')
       .find('input.form-control')
@@ -107,23 +122,21 @@ describe('<EditAnimePopup />', () => {
       .simulate('change', { target: { name: 'genres', value: 'genres' } });
 
     saveButton.simulate('click');
-    const expectedResult = Object.assign(
-      JSON.parse(JSON.stringify(mockAnimeList[0])),
-      {
-        title: 'new title',
-        studio: 'new studio',
-        view: 9,
-        download: 10,
-        all_episode: 11,
-        year: 2222,
-        season: 0,
-        score: 10,
-        cover_url: 'url1',
-        url: 'url2',
-        download_url: 'url3',
-        genres: 'genres',
-      }
-    );
+    const expectedResult = {
+      ...mockAnimeList[0],
+      title: 'new title',
+      studio: 'new studio',
+      view: 9,
+      download: 10,
+      all_episode: '11',
+      year: 2222,
+      season: 0,
+      score: '10',
+      cover_url: 'url1',
+      url: 'url2',
+      download_url: 'url3',
+      genres: 'genres',
+    };
     expect(Database.update.anime).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult
@@ -131,9 +144,11 @@ describe('<EditAnimePopup />', () => {
   });
 
   it('should delete when click delete', () => {
-    Database.update.anime.mockReturnValue(null);
+    (Database.update.anime as jest.Mock).mockReturnValue(null);
     window.confirm = jest.fn(() => true);
-    const mockSetShow = () => {};
+    const mockSetShow = () => {
+      return;
+    };
     const wrapper = mount(
       <EditAnimePopup
         anime={mockAnimeList[0]}
