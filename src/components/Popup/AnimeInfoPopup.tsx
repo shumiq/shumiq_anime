@@ -2,28 +2,35 @@ import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Database } from '../../utils/firebase';
 import UserDetail from '../../utils/userdetail';
+import { Anime, AnilistInfoResponse } from '../../utils/types';
 
-const AnimeInfoPopup = (props) => {
+const AnimeInfoPopup = (props: {
+  show: boolean;
+  setShow: (show: boolean) => void;
+  anime: Anime;
+  info: AnilistInfoResponse;
+}): JSX.Element => {
   const anime = props.anime;
   const info = props.info;
   const closePopup = useCallback(() => props.setShow(false), [props]);
 
   const syncAnime = useCallback(() => {
-    let state = JSON.parse(JSON.stringify(anime));
+    const state: Anime = { ...anime };
     state.studio = info.studios?.nodes[0]?.name
       ? info.studios?.nodes[0]?.name
       : 'none';
-    state.all_episode = info.episodes ? info.episodes : '?';
+    state.all_episode = info.episodes ? info.episodes.toString() : '?';
     state.year = info.startDate.year;
-    let seasonNum = [];
-    seasonNum['WINTER'] = 1;
-    seasonNum['SPRING'] = 2;
-    seasonNum['SUMMER'] = 3;
-    seasonNum['FALL'] = 4;
-    state.season = seasonNum[info.season];
+    const seasonNum = {
+      WINTER: 1,
+      SPRING: 2,
+      SUMMER: 3,
+      FALL: 4,
+    };
+    state.season = seasonNum[info.season] as number;
     state.info = info.description;
     if (info.averageScore) state.score = (info.averageScore / 10.0).toFixed(1);
-    let genres = state.genres.split(', ');
+    const genres = state.genres.split(', ');
     info.genres.forEach((g) => {
       if (!genres.includes(g)) genres.push(g);
     });
@@ -40,7 +47,7 @@ const AnimeInfoPopup = (props) => {
     if (
       window.confirm('Are you sure "' + info.title.romaji + '" is incorrect?')
     ) {
-      let state = JSON.parse(JSON.stringify(anime));
+      const state: Anime = { ...anime };
       if (!state.blacklist) state.blacklist = [];
       if (!state.blacklist.includes(info.id)) state.blacklist.push(info.id);
       Database.update.anime(state.key, state);
@@ -155,7 +162,7 @@ const AnimeInfoPopup = (props) => {
   );
 };
 
-const secondToDuration = (t) => {
+const secondToDuration = (t: number): string => {
   const cd = 24 * 60 * 60;
   const ch = 60 * 60;
   let d = Math.floor(t / cd);
@@ -169,7 +176,7 @@ const secondToDuration = (t) => {
     d++;
     h = 0;
   }
-  return d + ' days ' + h + ' hours ';
+  return d.toString() + ' days ' + h.toString() + ' hours ';
 };
 
 export default AnimeInfoPopup;

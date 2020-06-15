@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import mockDatabase from '../../mock/database';
+import mockDatabase from '../../mock/database.json';
 import UserDetail from '../../utils/userdetail';
 import { Database } from '../../utils/firebase';
 import AnimeInfoPopup from './AnimeInfoPopup';
@@ -46,7 +46,9 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList[0]}
         info={mockInfo}
         show={false}
-        setShow={null}
+        setShow={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('div.modal')).toHaveLength(0);
@@ -58,7 +60,9 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList[0]}
         info={mockInfo}
         show={true}
-        setShow={null}
+        setShow={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('div.modal').text()).toContain(mockAnimeList[0].title);
@@ -74,35 +78,41 @@ describe('<AnimeInfoPopup />', () => {
   });
 
   it('should not show sync and incorrect button if not admin', () => {
-    UserDetail.isAdmin.mockReturnValue(false);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
     const wrapper = mount(
       <AnimeInfoPopup
         anime={mockAnimeList[0]}
         info={mockInfo}
         show={true}
-        setShow={null}
+        setShow={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('div.modal').find('button.btn-primary').length).toBe(0);
   });
 
   it('should show sync and incorrect button if admin', () => {
-    UserDetail.isAdmin.mockReturnValue(true);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = mount(
       <AnimeInfoPopup
         anime={mockAnimeList[0]}
         info={mockInfo}
         show={true}
-        setShow={null}
+        setShow={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('div.modal').find('button.btn-primary').length).toBe(2);
   });
 
   it('should sync with new info when click sync', () => {
-    UserDetail.isAdmin.mockReturnValue(true);
-    Database.update.anime.mockReturnValue(null);
-    const mockSetShow = () => {};
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
+    (Database.update.anime as jest.Mock).mockReturnValue(null);
+    const mockSetShow = () => {
+      return;
+    };
     const wrapper = mount(
       <AnimeInfoPopup
         anime={mockAnimeList[0]}
@@ -123,17 +133,19 @@ describe('<AnimeInfoPopup />', () => {
       score: '6.6',
       season: 2,
     };
-    expect(Database.update.anime).toHaveBeenCalledWith(
+    expect(Database.update.anime as jest.Mock).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult
     );
   });
 
   it('should add to blacklist when click incorrect', () => {
-    UserDetail.isAdmin.mockReturnValue(true);
-    Database.update.anime.mockReturnValue(null);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
+    (Database.update.anime as jest.Mock).mockReturnValue(null);
     window.confirm = jest.fn(() => true);
-    const mockSetShow = () => {};
+    const mockSetShow = () => {
+      return;
+    };
     const wrapper = mount(
       <AnimeInfoPopup
         anime={mockAnimeList[0]}
@@ -147,13 +159,11 @@ describe('<AnimeInfoPopup />', () => {
       .find('button.btn-primary')
       .at(1);
     incorrectButton.simulate('click');
-    const expectedResult = Object.assign(
-      JSON.parse(JSON.stringify(mockAnimeList[0])),
-      {
-        blacklist: [mockInfo.id],
-      }
-    );
-    expect(Database.update.anime).toHaveBeenCalledWith(
+    const expectedResult = {
+      ...mockAnimeList[0],
+      blacklist: [mockInfo.id],
+    };
+    expect(Database.update.anime as jest.Mock).toHaveBeenCalledWith(
       mockAnimeList[0].key,
       expectedResult
     );

@@ -79,23 +79,23 @@ export interface AnilistInfoResponse {
   title: {
     romaji: string;
     english: string;
-    userPreferred: string;
+    userPreferred?: string;
   };
   season: string;
   description: string;
   startDate: { year: number };
-  episodes: number;
+  episodes: number | null;
   source: string;
   coverImage: {
     large: string;
   };
-  bannerImage: string;
+  bannerImage: string | null;
   genres: string[];
   meanScore: number;
   averageScore: number;
   popularity: number;
   relations: {
-    nodes: { title: { userPreferred: string } }[];
+    nodes: { title: { userPreferred: string }; type: string }[];
   };
   studios: {
     nodes: { name: string }[];
