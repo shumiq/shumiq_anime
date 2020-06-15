@@ -64,17 +64,19 @@ const AnimeCard = (props: {
     setPopup(
       <GeneralPopup show={false} message="Loading..." canClose={false} />
     );
-    const showInfoPopup = (show: boolean) => {
-      setPopup(
-        <AnimeInfoPopup
-          anime={anime}
-          info={response}
-          show={show}
-          setShow={showInfoPopup}
-        />
-      );
-    };
-    showInfoPopup(true);
+    if (response != null) {
+      const showInfoPopup = (show: boolean) => {
+        setPopup(
+          <AnimeInfoPopup
+            anime={anime}
+            info={response}
+            show={show}
+            setShow={showInfoPopup}
+          />
+        );
+      };
+      showInfoPopup(true);
+    }
   }, [anime, setPopup]);
 
   const showFolder = useCallback(async (): Promise<void> => {

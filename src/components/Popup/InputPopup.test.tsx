@@ -7,9 +7,13 @@ describe('<InputPopup />', () => {
     const wrapper = mount(
       <InputPopup
         default={''}
-        callback={() => {}}
+        callback={() => {
+          return;
+        }}
         show={false}
-        setShow={null}
+        setShow={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('div.modal')).toHaveLength(0);
@@ -17,7 +21,16 @@ describe('<InputPopup />', () => {
 
   it('should have input and button', () => {
     const wrapper = mount(
-      <InputPopup default={''} callback={() => {}} show={true} setShow={null} />
+      <InputPopup
+        default={''}
+        callback={() => {
+          return;
+        }}
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(wrapper.find('div.modal').find('input')).toHaveLength(1);
     expect(wrapper.find('div.modal').find('button')).toHaveLength(1);
@@ -31,7 +44,9 @@ describe('<InputPopup />', () => {
           expect(input).toEqual('test');
         }}
         show={true}
-        setShow={() => {}}
+        setShow={() => {
+          return;
+        }}
       />
     );
     wrapper

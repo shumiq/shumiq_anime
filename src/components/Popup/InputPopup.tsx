@@ -1,11 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-const InputPopup = (props) => {
+const InputPopup = (props: {
+  show: boolean;
+  setShow: (show: boolean) => void;
+  default: string;
+  callback: (text: string) => void;
+}): JSX.Element => {
   const [input, setInput] = useState(props.default ? props.default : '');
   const closePopup = useCallback(() => props.setShow(false), [props]);
   const saveInput = useCallback(
-    (text) => {
+    (text: string): void => {
       props.callback(text);
       closePopup();
     },
@@ -15,7 +20,7 @@ const InputPopup = (props) => {
     <div className="GeneralPopup">
       <Modal
         show={props.show}
-        size="md"
+        size="lg"
         centered
         backdrop={true}
         keyboard={true}

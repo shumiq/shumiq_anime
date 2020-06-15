@@ -5,14 +5,26 @@ import GeneralPopup from './GeneralPopup';
 describe('<GeneralPopup />', () => {
   it('should not show when show props is false', () => {
     const wrapper = mount(
-      <GeneralPopup message="test_message" show={false} setShow={null} />
+      <GeneralPopup
+        message="test_message"
+        show={false}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(wrapper.find('div.modal')).toHaveLength(0);
   });
 
   it('should show message in popup', () => {
     const wrapper = mount(
-      <GeneralPopup message="test_message" show={true} setShow={null} />
+      <GeneralPopup
+        message="test_message"
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(wrapper.find('div.modal').contains('test_message')).toBe(true);
   });
