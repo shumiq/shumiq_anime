@@ -17,13 +17,13 @@ describe('<Login />', () => {
   };
 
   it('should see login text when no user', () => {
-    UserDetail.getUser.mockReturnValue(null);
+    (UserDetail.getUser as jest.Mock).mockReturnValue(null);
     const wrapper = mount(<Login />);
     expect(wrapper.text()).toContain('Login');
   });
 
   it('should not see login text when have user', () => {
-    UserDetail.getUser.mockReturnValue(mockUser);
+    (UserDetail.getUser as jest.Mock).mockReturnValue(mockUser);
     const wrapper = mount(<Login />);
     expect(wrapper.text()).not.toContain('Login');
   });

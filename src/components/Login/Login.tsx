@@ -1,32 +1,44 @@
-import GoogleLogin, { GoogleLogout } from 'react-google-login';
+import GoogleLogin, {
+  GoogleLogout,
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from 'react-google-login';
 import React, { useState, useCallback } from 'react';
 import { setLocalStorage, removeLocalStorage } from '../../utils/localstorage';
 import { Auth } from '../../utils/firebase';
 import UserDetail from '../../utils/userdetail';
+import { User } from '../../utils/types';
 
-const Login = () => {
-  const [user, setUser] = useState(null);
+const Login = (): JSX.Element => {
+  const [user, setUser] = useState<User>({});
 
-  const login = useCallback((response) => {
-    setLocalStorage('user', response.profileObj);
-    setLocalStorage('accessToken', response.accessToken);
-    setUser(UserDetail.getUser());
-    Auth.signIn(response.tokenId);
-  }, []);
+  const login = useCallback(
+    (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
+      setLocalStorage('user', (response as GoogleLoginResponse).profileObj);
+      setLocalStorage(
+        'accessToken',
+        (response as GoogleLoginResponse).accessToken
+      );
+      setUser(UserDetail.getUser() || {});
+      Auth.signIn((response as GoogleLoginResponse).tokenId);
+    },
+    []
+  );
 
-  const logout = useCallback((response) => {
+  const logout = useCallback(() => {
     removeLocalStorage('user');
     removeLocalStorage('accessToken');
-    setUser(UserDetail.getUser());
+    setUser(UserDetail.getUser() || {});
     Auth.signOut();
   }, []);
 
   return (
     <div className="Login">
-      {user == null && (
+      {JSON.stringify(user) === '{}' && (
         <GoogleLogin
           clientId="557663136777-f5pcv9r46pipto60jqmepd6btmmlp86f.apps.googleusercontent.com"
           onSuccess={login}
+          onFailure={logout}
           scope="profile email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/photoslibrary.readonly"
           isSignedIn={true}
           render={(renderProps) => (
@@ -35,20 +47,20 @@ const Login = () => {
               onClick={renderProps.onClick}
               disabled={renderProps.disabled}
             >
-              {UserDetail.getUser() && (
+              {UserDetail.getUser() !== null && (
                 <img
-                  src={UserDetail.getUser().imageUrl}
-                  alt={UserDetail.getUser().name}
+                  src={UserDetail.getUser()?.imageUrl || ''}
+                  alt={UserDetail.getUser()?.name || ''}
                   className="rounded-circle"
                   style={{ width: '30px', height: '30px' }}
                 />
               )}
-              {!UserDetail.getUser() && <b>Login</b>}
+              {UserDetail.getUser() === null && <b>Login</b>}
             </button>
           )}
         />
       )}
-      {user != null && (
+      {JSON.stringify(user) !== '{}' && (
         <GoogleLogout
           clientId="557663136777-f5pcv9r46pipto60jqmepd6btmmlp86f.apps.googleusercontent.com"
           onLogoutSuccess={logout}
