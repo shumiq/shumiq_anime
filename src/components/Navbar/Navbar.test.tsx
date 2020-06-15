@@ -14,21 +14,21 @@ describe('<Navbar />', () => {
   });
 
   it('should see admin link when login as admin', () => {
-    UserDetail.isAdmin.mockReturnValue(true);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Navbar />);
     expect(wrapper.contains('Sync Anime')).toEqual(true);
     expect(wrapper.contains('Add Anime')).toEqual(true);
   });
 
   it('should not see admin link when not login as admin', () => {
-    UserDetail.isAdmin.mockReturnValue(false);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
     const wrapper = shallow(<Navbar />);
     expect(wrapper.contains('Sync Anime')).toEqual(false);
     expect(wrapper.contains('Add Anime')).toEqual(false);
   });
 
   it('should see anime related link when current page is anime related', () => {
-    UserDetail.isAdmin.mockReturnValue(true);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Navbar />);
     wrapper.find('#link-logo').simulate('click');
     expect(wrapper.contains('Sync Anime')).toEqual(true);
@@ -45,7 +45,7 @@ describe('<Navbar />', () => {
   });
 
   it('should see not anime related link when current page is not anime related', () => {
-    UserDetail.isAdmin.mockReturnValue(true);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Navbar />);
     wrapper.find('#link-keyaki').simulate('click');
     expect(wrapper.contains('Sync Anime')).toEqual(false);
@@ -56,35 +56,35 @@ describe('<Navbar />', () => {
   });
 
   it('should change layout from auto to small', () => {
-    getLocalStorage.mockReturnValue('auto');
+    (getLocalStorage as jest.Mock).mockReturnValue('auto');
     const wrapper = shallow(<Navbar />);
     wrapper.find('#btn-layout').simulate('click');
     expect(setLocalStorage).toHaveBeenCalledWith('layout', 'small');
   });
 
   it('should change layout from small to medium', () => {
-    getLocalStorage.mockReturnValue('small');
+    (getLocalStorage as jest.Mock).mockReturnValue('small');
     const wrapper = shallow(<Navbar />);
     wrapper.find('#btn-layout').simulate('click');
     expect(setLocalStorage).toHaveBeenCalledWith('layout', 'medium');
   });
 
   it('should change layout from medium to large', () => {
-    getLocalStorage.mockReturnValue('medium');
+    (getLocalStorage as jest.Mock).mockReturnValue('medium');
     const wrapper = shallow(<Navbar />);
     wrapper.find('#btn-layout').simulate('click');
     expect(setLocalStorage).toHaveBeenCalledWith('layout', 'large');
   });
 
   it('should change layout from large to auto', () => {
-    getLocalStorage.mockReturnValue('large');
+    (getLocalStorage as jest.Mock).mockReturnValue('large');
     const wrapper = shallow(<Navbar />);
     wrapper.find('#btn-layout').simulate('click');
     expect(setLocalStorage).toHaveBeenCalledWith('layout', 'auto');
   });
 
   it('should see AddAnimePopup when click add anime', () => {
-    UserDetail.isAdmin.mockReturnValue(true);
+    (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Navbar />);
     wrapper.find('#link-add').simulate('click');
     expect(wrapper.find('AddAnimePopup')).toHaveLength(1);

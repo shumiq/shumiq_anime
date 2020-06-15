@@ -7,15 +7,15 @@ import { Auth } from '../../utils/firebase';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 import AddAnimePopup from '../Popup/AddAnimePopup';
 
-const Navbar = () => {
-  const [isAnime, setIsAnime] = useState(
+const Navbar = (): JSX.Element => {
+  const [isAnime, setIsAnime] = useState<boolean>(
     history.location.pathname === '/' || history.location.pathname === '/sync'
   );
-  const [isAdmin, setIsAdmin] = useState(UserDetail.isAdmin());
-  const [popup, setPopup] = useState('');
-  const [cardLayout, setCardLayout] = useState(
+  const [isAdmin, setIsAdmin] = useState<boolean>(UserDetail.isAdmin());
+  const [popup, setPopup] = useState<string | JSX.Element>('');
+  const [cardLayout, setCardLayout] = useState<string>(
     JSON.stringify(getLocalStorage('layout')) !== '{}'
-      ? getLocalStorage('layout')
+      ? (getLocalStorage('layout') as string)
       : 'auto'
   );
 
@@ -36,7 +36,7 @@ const Navbar = () => {
   }, [cardLayout]);
 
   const showAddAnime = useCallback(() => {
-    const showAddAnimePopup = (show) => {
+    const showAddAnimePopup = (show: boolean) => {
       setPopup(<AddAnimePopup show={show} setShow={showAddAnimePopup} />);
     };
     showAddAnimePopup(true);
