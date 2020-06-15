@@ -21,21 +21,39 @@ const mockupFiles = {
 describe('<AnimeFolderPopup />', () => {
   it('should not show when show props is false', () => {
     const wrapper = mount(
-      <AnimeFolderPopup folderFiles={mockupFiles} show={false} setShow={null} />
+      <AnimeFolderPopup
+        folderFiles={mockupFiles}
+        show={false}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(wrapper.find('div.modal')).toHaveLength(0);
   });
 
   it('should have 3 files', () => {
     const wrapper = mount(
-      <AnimeFolderPopup folderFiles={mockupFiles} show={true} setShow={null} />
+      <AnimeFolderPopup
+        folderFiles={mockupFiles}
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(wrapper.find('div.modal').find('tr')).toHaveLength(4);
   });
 
   it('should show correct information in first file', () => {
     const wrapper = mount(
-      <AnimeFolderPopup folderFiles={mockupFiles} show={true} setShow={null} />
+      <AnimeFolderPopup
+        folderFiles={mockupFiles}
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(
       wrapper
@@ -90,7 +108,13 @@ describe('<AnimeFolderPopup />', () => {
 
   it('should show correct information in second file', () => {
     const wrapper = mount(
-      <AnimeFolderPopup folderFiles={mockupFiles} show={true} setShow={null} />
+      <AnimeFolderPopup
+        folderFiles={mockupFiles}
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(
       wrapper
@@ -135,7 +159,13 @@ describe('<AnimeFolderPopup />', () => {
 
   it('should show correct information in third file', () => {
     const wrapper = mount(
-      <AnimeFolderPopup folderFiles={mockupFiles} show={true} setShow={null} />
+      <AnimeFolderPopup
+        folderFiles={mockupFiles}
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(
       wrapper

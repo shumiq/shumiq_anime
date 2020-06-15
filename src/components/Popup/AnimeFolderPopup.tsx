@@ -1,7 +1,14 @@
 import React, { useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-const AnimeFolderPopup = (props) => {
+const AnimeFolderPopup = (props: {
+  show: boolean;
+  setShow: (show: boolean) => void;
+  folderFiles: Record<
+    string,
+    { name: string; photoUrl?: string; driveUrl?: string }
+  >;
+}): JSX.Element => {
   const files = props.folderFiles;
   const filenames = Object.keys(files).sort();
   const closePopup = useCallback(() => props.setShow(false), [props]);
