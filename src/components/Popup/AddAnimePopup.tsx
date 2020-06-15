@@ -1,17 +1,27 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, ChangeEvent } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { getLocalStorage } from '../../utils/localstorage';
 import { Database } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
 import { SeasonEnum } from '../../utils/enum';
+import {
+  AnilistInfoResponse,
+  Anime,
+  Database as DatabaseType,
+} from '../../utils/types';
 
-const AddAnimePopup = (props) => {
-  const [keyword, setKeyword] = useState('');
-  const [searchResult, setSearchResult] = useState([]);
+const AddAnimePopup = (props: {
+  show: boolean;
+  setShow: (show: boolean) => void;
+}): JSX.Element => {
+  const [keyword, setKeyword] = useState<string>('');
+  const [searchResult, setSearchResult] = useState<AnilistInfoResponse[]>([]);
   const closePopup = useCallback(() => props.setShow(false), [props]);
   const addAnime = useCallback(
-    (anime) => {
-      const animeList = getLocalStorage('database')?.animeList;
+    (anime: AnilistInfoResponse): void => {
+      const animeList: (Anime | null)[] = (getLocalStorage(
+        'database'
+      ) as DatabaseType).animeList;
       if (!animeList) return;
       let key = animeList.length;
       while (animeList[key]) key++;
@@ -22,15 +32,19 @@ const AddAnimePopup = (props) => {
         view: 0,
         download: 0,
         url: '',
+        gdriveid: '',
+        gdriveid_public: '',
+        gphotoid: '',
         score: anime.averageScore
           ? (anime.averageScore / 10.0).toFixed(1)
           : '0.0',
         download_url: '',
-        all_episode: anime.episodes ? anime.episodes : '?',
-        season:
+        all_episode: anime.episodes ? anime.episodes.toString() : '?',
+        season: parseInt(
           SeasonEnum[
             anime.season.charAt(0) + anime.season.slice(1).toLowerCase()
-          ],
+          ] as string
+        ),
         year: anime.startDate.year,
         info: anime.description,
         genres: anime.genres.join(', '),
@@ -49,7 +63,7 @@ const AddAnimePopup = (props) => {
     <div className="AddAnimePopup">
       <Modal
         show={props.show}
-        size="md"
+        size="lg"
         centered
         backdrop={true}
         keyboard={true}
@@ -65,8 +79,9 @@ const AddAnimePopup = (props) => {
                     type="text"
                     name="input"
                     className="form-control"
-                    defaultValue={props.default}
-                    onChange={(e) => setKeyword(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                      setKeyword(e.target.value)
+                    }
                   />
                 </td>
                 <td className="p-0 text-center">

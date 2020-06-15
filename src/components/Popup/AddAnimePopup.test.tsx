@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import AnilistApi from '../../api/anilist';
 import { getLocalStorage } from '../../utils/localstorage';
-import mockDatabase from '../../mock/database';
+import mockDatabase from '../../mock/database.json';
 import { Database } from '../../utils/firebase';
 import AddAnimePopup from './AddAnimePopup';
 
@@ -15,18 +15,32 @@ describe('<AddAnimePopup />', () => {
   const flushPromises = () => new Promise(setImmediate);
 
   it('should not show when show props is false', () => {
-    const wrapper = mount(<AddAnimePopup show={false} setShow={null} />);
+    const wrapper = mount(
+      <AddAnimePopup
+        show={false}
+        setShow={() => {
+          return;
+        }}
+      />
+    );
     expect(wrapper.find('div.modal')).toHaveLength(0);
   });
 
   it('should have input and button', () => {
-    const wrapper = mount(<AddAnimePopup show={true} setShow={null} />);
+    const wrapper = mount(
+      <AddAnimePopup
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
+    );
     expect(wrapper.find('div.modal').find('input')).toHaveLength(1);
     expect(wrapper.find('div.modal').find('button')).toHaveLength(1);
   });
 
   it('should call searchAnime from anilist api after click search', async () => {
-    AnilistApi.searchAnime.mockResolvedValue([
+    (AnilistApi.searchAnime as jest.Mock).mockResolvedValue([
       {
         id: 1,
         title: { userPreferred: 'anime1' },
@@ -34,19 +48,27 @@ describe('<AddAnimePopup />', () => {
         season: 'SPRING',
       },
     ]);
-    const wrapper = mount(<AddAnimePopup show={true} setShow={null} />);
-    wrapper
-      .find('div.modal')
-      .find('input.form-control')
-      .simulate('change', { target: { value: 'test' } });
+    const wrapper = mount(
+      <AddAnimePopup
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
+    );
     await act(async () => {
+      wrapper
+        .find('div.modal')
+        .find('input.form-control')
+        .simulate('change', { target: { value: 'test' } });
+      await flushPromises();
       wrapper.find('div.modal').find('button').simulate('click');
     });
-    expect(AnilistApi.searchAnime).toHaveBeenCalledWith('test');
+    expect(AnilistApi.searchAnime as jest.Mock).toHaveBeenCalledWith('test');
   });
 
   it('should see search result after click search', async () => {
-    AnilistApi.searchAnime.mockResolvedValue([
+    (AnilistApi.searchAnime as jest.Mock).mockResolvedValue([
       {
         id: 1,
         title: { userPreferred: 'anime1' },
@@ -66,11 +88,18 @@ describe('<AddAnimePopup />', () => {
         season: 'SUMMER',
       },
     ]);
-    const wrapper = mount(<AddAnimePopup show={true} setShow={null} />);
+    const wrapper = mount(
+      <AddAnimePopup
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
+    );
     await act(async () => {
       wrapper.find('div.modal').find('button').simulate('click');
+      await flushPromises();
     });
-    await flushPromises();
     wrapper.update();
     expect(wrapper.find('div.modal').find('table')).toHaveLength(2);
     const result = wrapper
@@ -91,8 +120,8 @@ describe('<AddAnimePopup />', () => {
   });
 
   it('should call Database.update.anime when click add', async () => {
-    getLocalStorage.mockReturnValue(mockDatabase);
-    AnilistApi.searchAnime.mockResolvedValue([
+    (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
+    (AnilistApi.searchAnime as jest.Mock).mockResolvedValue([
       {
         id: 1,
         title: { userPreferred: 'anime1', romaji: 'anime1_romaji' },
@@ -106,26 +135,36 @@ describe('<AddAnimePopup />', () => {
         episodes: 10,
       },
     ]);
-    const wrapper = mount(<AddAnimePopup show={true} setShow={() => {}} />);
+    const wrapper = mount(
+      <AddAnimePopup
+        show={true}
+        setShow={() => {
+          return;
+        }}
+      />
+    );
     await act(async () => {
       wrapper.find('div.modal').find('button').simulate('click');
+      await flushPromises();
     });
-    await flushPromises();
     wrapper.update();
     await act(async () => {
       wrapper.find('div.modal').find('button').at(1).simulate('click');
+      await flushPromises();
     });
-    await flushPromises();
     expect(Database.update.anime).toHaveBeenCalledWith(2, {
-      all_episode: 10,
+      all_episode: '10',
       cover_url: 'cover_url',
       download: 0,
       download_url: '',
+      gdriveid: '',
+      gdriveid_public: '',
+      gphotoid: '',
       genres: 'genre1, genre2',
       info: 'description',
       key: 2,
       score: '9.9',
-      season: '2',
+      season: 2,
       studio: 'studio',
       title: 'anime1_romaji',
       url: '',
