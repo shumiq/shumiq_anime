@@ -4,7 +4,14 @@ import FilesPopup from './FilesPopup';
 describe('<FilesPopup />', () => {
   it('should not show when show props is false', () => {
     const wrapper = mount(
-      <FilesPopup driveUrl={''} photoUrl={''} show={false} setShow={null} />
+      <FilesPopup
+        driveUrl={''}
+        photoUrl={''}
+        show={false}
+        setShow={() => {
+          return;
+        }}
+      />
     );
     expect(wrapper.find('div.modal')).toHaveLength(0);
   });
@@ -17,7 +24,9 @@ describe('<FilesPopup />', () => {
         driveUrl={mockDriveUrl}
         photoUrl={mockPhotoUrl}
         show={true}
-        setShow={null}
+        setShow={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('div.modal').find('.btn')).toHaveLength(2);
@@ -32,7 +41,9 @@ describe('<FilesPopup />', () => {
         driveUrl={mockDriveUrl}
         photoUrl={mockPhotoUrl}
         show={true}
-        setShow={null}
+        setShow={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('div.modal').find('.btn')).toHaveLength(2);
@@ -49,7 +60,9 @@ describe('<FilesPopup />', () => {
         driveUrl={mockDriveUrl}
         photoUrl={mockPhotoUrl}
         show={true}
-        setShow={null}
+        setShow={() => {
+          return;
+        }}
       />
     );
     expect(wrapper.find('div.modal').find('.btn')).toHaveLength(2);
