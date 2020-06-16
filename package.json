@@ -20,6 +20,7 @@
     "bootstrap": "^4.4.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
+    "eslint": "^7.2.0",
     "firebase": "^7.14.0",
     "history": "^4.10.1",
     "netlify": "^4.1.7",
