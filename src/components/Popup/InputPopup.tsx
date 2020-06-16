@@ -17,7 +17,7 @@ const InputPopup = (props: {
     [props, closePopup]
   );
   return (
-    <div className="GeneralPopup">
+    <div className="InputPopup">
       <Modal
         show={props.show}
         size="lg"
@@ -27,11 +27,14 @@ const InputPopup = (props: {
         animation={true}
         onHide={closePopup}
       >
+        <Modal.Header closeButton>
+          <Modal.Title>Edit</Modal.Title>
+        </Modal.Header>
         <Modal.Body className="text-center">
           <table className="table m-0">
             <tbody>
               <tr>
-                <td className="p-0 text-center">
+                <td className="p-0 text-center w-100">
                   <input
                     type="text"
                     name="input"
@@ -40,8 +43,9 @@ const InputPopup = (props: {
                     onChange={(e) => setInput(e.target.value)}
                   />
                 </td>
-                <td className="p-0 text-center">
+                <td className="p-0 pl-2 text-center">
                   <button
+                    id="btn-save"
                     type="button"
                     className="btn btn-primary"
                     onClick={() => saveInput(input)}

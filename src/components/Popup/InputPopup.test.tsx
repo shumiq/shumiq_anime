@@ -33,7 +33,7 @@ describe('<InputPopup />', () => {
       />
     );
     expect(wrapper.find('div.modal').find('input')).toHaveLength(1);
-    expect(wrapper.find('div.modal').find('button')).toHaveLength(1);
+    expect(wrapper.find('div.modal').find('button')).toHaveLength(2);
   });
 
   it('should callback with input value when click save', () => {
@@ -53,6 +53,6 @@ describe('<InputPopup />', () => {
       .find('div.modal')
       .find('input.form-control')
       .simulate('change', { target: { value: 'test' } });
-    wrapper.find('div.modal').find('button').simulate('click');
+    wrapper.find('div.modal').find('#btn-save').simulate('click');
   });
 });

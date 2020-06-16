@@ -70,11 +70,14 @@ const AddAnimePopup = (props: {
         animation={true}
         onHide={closePopup}
       >
+        <Modal.Header closeButton>
+          <Modal.Title>Add anime</Modal.Title>
+        </Modal.Header>
         <Modal.Body className="text-center">
           <table className="table m-0">
             <tbody>
               <tr>
-                <td className="p-0 text-center">
+                <td className="p-0 text-center w-100">
                   <input
                     type="text"
                     name="input"
@@ -84,8 +87,9 @@ const AddAnimePopup = (props: {
                     }
                   />
                 </td>
-                <td className="p-0 text-center">
+                <td className="p-0 pl-2 text-center">
                   <button
+                    id="btn-search"
                     type="button"
                     className="btn btn-primary"
                     onClick={searchAnime}
@@ -112,8 +116,9 @@ const AddAnimePopup = (props: {
                             {anime.startDate.year} {anime.season}
                           </small>
                         </td>
-                        <td>
+                        <td className="text-right">
                           <button
+                            id="btn-add"
                             className="btn btn-secondary"
                             onClick={() => addAnime(anime)}
                           >

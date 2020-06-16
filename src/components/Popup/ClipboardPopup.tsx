@@ -23,6 +23,9 @@ const ClipboardPopup = (props: {
         animation={true}
         onHide={closePopup}
       >
+        <Modal.Header closeButton>
+          <Modal.Title>Share</Modal.Title>
+        </Modal.Header>
         <Modal.Body className="text-center">
           <table className="table m-0">
             <tbody>
@@ -39,6 +42,7 @@ const ClipboardPopup = (props: {
                 </td>
                 <td className="p-0 text-center">
                   <button
+                    id="btn-copy"
                     type="button"
                     className="btn btn-primary"
                     onClick={copy}

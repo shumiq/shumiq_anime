@@ -36,7 +36,7 @@ describe('<AddAnimePopup />', () => {
       />
     );
     expect(wrapper.find('div.modal').find('input')).toHaveLength(1);
-    expect(wrapper.find('div.modal').find('button')).toHaveLength(1);
+    expect(wrapper.find('div.modal').find('#btn-search')).toHaveLength(1);
   });
 
   it('should call searchAnime from anilist api after click search', async () => {
@@ -62,7 +62,7 @@ describe('<AddAnimePopup />', () => {
         .find('input.form-control')
         .simulate('change', { target: { value: 'test' } });
       await flushPromises();
-      wrapper.find('div.modal').find('button').simulate('click');
+      wrapper.find('div.modal').find('#btn-search').simulate('click');
     });
     expect(AnilistApi.searchAnime as jest.Mock).toHaveBeenCalledWith('test');
   });
@@ -97,7 +97,7 @@ describe('<AddAnimePopup />', () => {
       />
     );
     await act(async () => {
-      wrapper.find('div.modal').find('button').simulate('click');
+      wrapper.find('div.modal').find('#btn-search').simulate('click');
       await flushPromises();
     });
     wrapper.update();
@@ -144,12 +144,12 @@ describe('<AddAnimePopup />', () => {
       />
     );
     await act(async () => {
-      wrapper.find('div.modal').find('button').simulate('click');
+      wrapper.find('div.modal').find('#btn-search').simulate('click');
       await flushPromises();
     });
     wrapper.update();
     await act(async () => {
-      wrapper.find('div.modal').find('button').at(1).simulate('click');
+      wrapper.find('div.modal').find('#btn-add').simulate('click');
       await flushPromises();
     });
     expect(Database.update.anime).toHaveBeenCalledWith(2, {

@@ -10,6 +10,7 @@ const GeneralPopup = (props: {
   const canClose = {
     backdrop: props.canClose ? true : 'static',
     keyboard: props.canClose,
+    header: props.canClose,
   };
   const closePopup = useCallback(() => {
     if (props.setShow) props.setShow(false);
@@ -25,6 +26,11 @@ const GeneralPopup = (props: {
         animation={true}
         onHide={closePopup}
       >
+        {canClose.header && (
+          <Modal.Header closeButton>
+            <Modal.Title>Message</Modal.Title>
+          </Modal.Header>
+        )}
         <Modal.Body>
           <p className="text-center m-0 p-0">{props.message}</p>
         </Modal.Body>

@@ -31,7 +31,7 @@ describe('<ClipboardPopup />', () => {
     expect(((input as unknown) as HTMLInputElement).value).toEqual(
       'sample_url'
     );
-    expect(wrapper.find('div.modal').find('button')).toHaveLength(1);
+    expect(wrapper.find('div.modal').find('#btn-copy')).toHaveLength(1);
   });
 
   it('should callback with input value when click save', () => {
@@ -45,7 +45,7 @@ describe('<ClipboardPopup />', () => {
         }}
       />
     );
-    wrapper.find('div.modal').find('button').simulate('click');
+    wrapper.find('div.modal').find('#btn-copy').simulate('click');
     expect(document.execCommand).toHaveBeenCalledWith('copy');
   });
 });

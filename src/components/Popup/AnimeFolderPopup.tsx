@@ -22,6 +22,9 @@ const AnimeFolderPopup = (props: {
         animation={true}
         onHide={closePopup}
       >
+        <Modal.Header closeButton>
+          <Modal.Title>Folder</Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           <table className="table table-hover">
             <thead>

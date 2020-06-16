@@ -11,7 +11,7 @@ const FilesPopup = (props: {
   const photoUrl = props.photoUrl ? props.photoUrl : '';
   const closePopup = useCallback(() => props.setShow(false), [props]);
   return (
-    <div className="GeneralPopup">
+    <div className="FilesPopup">
       <Modal
         show={props.show}
         size="sm"
@@ -21,6 +21,9 @@ const FilesPopup = (props: {
         animation={true}
         onHide={closePopup}
       >
+        <Modal.Header closeButton>
+          <Modal.Title>Files</Modal.Title>
+        </Modal.Header>
         <Modal.Body className="text-center">
           <a
             className={
