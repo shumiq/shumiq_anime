@@ -18,7 +18,7 @@ import {
 export const Database = {
   subscribe: (callback: (database: DatabaseType) => void): void => {
     Firebase.database.subscribe('/database', (database: DatabaseType): void => {
-      setLocalStorage('database', database);
+      setLocalStorage('database', validateDatabase(database));
       callback(getLocalStorage('database') as DatabaseType);
     });
   },
@@ -38,9 +38,9 @@ export const Database = {
       }
     });
     let sumConan = 0;
-    database.conanList.forEach((conan) => {
-      if (conan) {
-        sumConan += Object.keys(conan.episodes).length;
+    Object.keys(database.conanList).forEach((key) => {
+      if (database.conanList[key]) {
+        sumConan += Object.keys(database.conanList[key].episodes).length;
       }
     });
     let sumKeyaki = 0;
@@ -56,7 +56,7 @@ export const Database = {
         view: sumViewAnime,
       },
       conan: {
-        cases: database.conanList.filter((conan) => conan != null).length,
+        cases: Object.keys(database.conanList).length,
         files: sumConan,
       },
       keyaki: {
@@ -147,12 +147,12 @@ export const Database = {
         console.error(error);
       }
     },
-    conan: (conanList: Conan[]): void => {
+    conan: (conanList: Record<string, Conan>): void => {
+      Object.keys(conanList).forEach((key) => {
+        conanList[key] = validateConan(conanList[key]);
+      });
       try {
-        Firebase.database.set(
-          'database/conanList/',
-          conanList.map((conan) => validateConan(conan))
-        );
+        Firebase.database.set('database/conanList/', conanList);
       } catch (error) {
         console.error('Update conan failed: Conan has invalid format');
         console.error(error);

@@ -18,7 +18,7 @@ const photoAlbumId =
   'ACKboXA-SW1-hje13C1evPH_HlgHlP9UasTb7u5ECLT2ds1ufDzcH9gDrL-XXAT3_mveyhNr_ELI';
 
 const Conan = (): JSX.Element => {
-  const [conanList, setConanList] = useState<(ConanType | null)[]>(
+  const [conanList, setConanList] = useState<Record<string, ConanType>>(
     (getLocalStorage('database') as DatabaseType)?.conanList
   );
   const [conanRef, setConanRef] = useState<
@@ -67,7 +67,10 @@ const Conan = (): JSX.Element => {
       );
     };
     showLoadingPopup(true);
-    const newConanList = JSON.parse(JSON.stringify(conanList)) as ConanType[];
+    const newConanList = JSON.parse(JSON.stringify(conanList)) as Record<
+      string,
+      ConanType
+    >;
     const driveFiles = (await GoogleDriveApi.getFiles(driveFolderId)) as {
       name: string;
       id: string;
@@ -125,11 +128,14 @@ const Conan = (): JSX.Element => {
   }, [conanList, conanRef]);
 
   const showInput = useCallback(
-    (cs: number) => {
+    (cs: string) => {
       if (UserDetail.isAdmin()) {
         const name = conanList[cs]?.name || '';
         const callback = (newName: string) => {
-          const newList = JSON.parse(JSON.stringify(conanList)) as ConanType[];
+          const newList = JSON.parse(JSON.stringify(conanList)) as Record<
+            string,
+            ConanType
+          >;
           newList[cs].name = newName;
           Database.update.conan(newList);
         };
@@ -162,24 +168,32 @@ const Conan = (): JSX.Element => {
             </thead>
             <tbody>
               {conanList &&
-                conanList.map(
-                  (conan) =>
-                    conan !== null && (
-                      <tr key={conan.case} ref={conanRef[conan.case]}>
-                        <td>{conan.case}</td>
+                Object.keys(conanList).map(
+                  (key) =>
+                    conanList[key] !== null && (
+                      <tr
+                        key={conanList[key].case}
+                        ref={conanRef[conanList[key].case]}
+                      >
+                        <td>{conanList[key].case}</td>
                         <td className="text-left">
-                          <span onClick={() => showInput(conan.case)}>
-                            {conan.name}
+                          <span
+                            onClick={() =>
+                              showInput(conanList[key].case.toString())
+                            }
+                          >
+                            {conanList[key].name}
                           </span>
                         </td>
                         <td>
-                          {Object.keys(conan.episodes).map(
+                          {Object.keys(conanList[key].episodes).map(
                             (episode: string) =>
-                              conan.episodes[parseInt(episode)]?.url && (
+                              conanList[key].episodes[parseInt(episode)]
+                                ?.url && (
                                 <button
                                   className="btn btn-primary m-1"
                                   onClick={() =>
-                                    showFiles(conan.episodes[episode])
+                                    showFiles(conanList[key].episodes[episode])
                                   }
                                   key={episode}
                                 >

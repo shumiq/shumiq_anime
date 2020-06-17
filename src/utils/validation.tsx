@@ -1,10 +1,17 @@
 import { Database, Anime, Conan, Keyaki } from './types';
 
 export const validateDatabase = (db: Database): Database | boolean => {
+  if (Array.isArray(db.conanList)) {
+    const objectConanList: Record<string, Conan> = {};
+    Object.keys(db.conanList).forEach((key) => {
+      objectConanList[key] = validateConan(db.conanList[key]);
+    });
+    db.conanList = objectConanList;
+  }
   return {
     ...db,
     animeList: db.animeList.map((anime) => validateAnime(anime)),
-    conanList: db.conanList.map((conan) => validateConan(conan)),
+    conanList: db.conanList,
     keyakiList: db.keyakiList.map((keyaki) => validateKeyaki(keyaki)),
   };
 };
@@ -33,8 +40,7 @@ export const validateAnime = (anime: Anime | null): Anime | null => {
   };
 };
 
-export const validateConan = (conan: Conan | null): Conan | null => {
-  if (conan === null) return null;
+export const validateConan = (conan: Conan): Conan => {
   return {
     ...conan,
     case: parseInt(conan.case.toString()),

@@ -145,9 +145,8 @@ describe('<Conan />', () => {
     const wrapper = shallow(<Conan />);
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
-    expect(Database.update.conan).toHaveBeenCalledWith([
-      null,
-      {
+    expect(Database.update.conan).toHaveBeenCalledWith({
+      '1': {
         case: 1,
         episodes: {
           '200': { photoUrl: 'url', url: 'url' },
@@ -156,7 +155,7 @@ describe('<Conan />', () => {
         },
         name: 'case 1',
       },
-      {
+      '2': {
         case: 2,
         episodes: {
           '203': { photoUrl: 'url', url: 'url' },
@@ -169,7 +168,7 @@ describe('<Conan />', () => {
         },
         name: 'case 2',
       },
-      {
+      '3': {
         case: 3,
         episodes: {
           '206': {
@@ -180,7 +179,7 @@ describe('<Conan />', () => {
         },
         name: 'แก้ไข',
       },
-    ]);
+    });
   });
 
   it('should not show InputPopup when click name but not admin', () => {
@@ -201,9 +200,8 @@ describe('<Conan />', () => {
     }).callback('newName');
     expect(wrapper.find('InputPopup')).toHaveLength(1);
     expect(wrapper.find('InputPopup').props().default).toEqual('case 1');
-    expect(Database.update.conan).toHaveBeenCalledWith([
-      null,
-      {
+    expect(Database.update.conan).toHaveBeenCalledWith({
+      '1': {
         case: 1,
         episodes: {
           '200': {
@@ -221,7 +219,7 @@ describe('<Conan />', () => {
         },
         name: 'newName',
       },
-      {
+      '2': {
         case: 2,
         episodes: {
           '203': {
@@ -235,6 +233,6 @@ describe('<Conan />', () => {
         },
         name: 'case 2',
       },
-    ]);
+    });
   });
 });

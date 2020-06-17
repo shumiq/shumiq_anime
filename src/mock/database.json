@@ -39,9 +39,8 @@
       "year": 2020
     }
   ],
-  "conanList": [
-    null,
-    {
+  "conanList": {
+    "1": {
       "case": 1,
       "name": "case 1",
       "episodes": {
@@ -59,7 +58,7 @@
         }
       }
     },
-    {
+    "2": {
       "case": 2,
       "name": "case 2",
       "episodes": {
@@ -73,7 +72,7 @@
         }
       }
     }
-  ],
+  },
   "keyakiList": [
     null,
     {
