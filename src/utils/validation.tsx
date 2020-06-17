@@ -4,15 +4,24 @@ export const validateDatabase = (db: Database): Database | boolean => {
   if (Array.isArray(db.conanList)) {
     const objectConanList: Record<string, Conan> = {};
     Object.keys(db.conanList).forEach((key) => {
-      objectConanList[key] = validateConan(db.conanList[key]);
+      if (db.conanList[key])
+        objectConanList[key] = validateConan(db.conanList[key]);
     });
     db.conanList = objectConanList;
+  }
+  if (Array.isArray(db.keyakiList)) {
+    const objectKeyakiList: Record<string, Keyaki> = {};
+    Object.keys(db.keyakiList).forEach((key) => {
+      if (db.keyakiList[key])
+        objectKeyakiList[key] = validateKeyaki(db.keyakiList[key]);
+    });
+    db.keyakiList = objectKeyakiList;
   }
   return {
     ...db,
     animeList: db.animeList.map((anime) => validateAnime(anime)),
     conanList: db.conanList,
-    keyakiList: db.keyakiList.map((keyaki) => validateKeyaki(keyaki)),
+    keyakiList: db.keyakiList,
   };
 };
 
@@ -48,8 +57,7 @@ export const validateConan = (conan: Conan): Conan => {
   };
 };
 
-export const validateKeyaki = (keyaki: Keyaki | null): Keyaki | null => {
-  if (keyaki === null) return null;
+export const validateKeyaki = (keyaki: Keyaki): Keyaki => {
   return {
     ...keyaki,
     ep: parseInt(keyaki.ep.toString()),

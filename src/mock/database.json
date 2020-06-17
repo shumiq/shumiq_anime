@@ -73,9 +73,8 @@
       }
     }
   },
-  "keyakiList": [
-    null,
-    {
+  "keyakiList": {
+    "1": {
       "ep": 1,
       "name": "episode 1",
       "sub": {
@@ -89,7 +88,7 @@
         }
       }
     },
-    {
+    "2": {
       "ep": 2,
       "name": "episode 2",
       "sub": {
@@ -99,5 +98,5 @@
         }
       }
     }
-  ]
+  }
 }

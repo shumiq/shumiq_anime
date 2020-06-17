@@ -44,9 +44,9 @@ export const Database = {
       }
     });
     let sumKeyaki = 0;
-    database.keyakiList.forEach((keyaki) => {
-      if (keyaki) {
-        sumKeyaki += Object.keys(keyaki.sub).length;
+    Object.keys(database.keyakiList).forEach((key) => {
+      if (database.keyakiList[key]) {
+        sumKeyaki += Object.keys(database.keyakiList[key].sub).length;
       }
     });
     return {
@@ -60,7 +60,7 @@ export const Database = {
         files: sumConan,
       },
       keyaki: {
-        episodes: database.keyakiList.filter((keyaki) => keyaki != null).length,
+        episodes: Object.keys(database.keyakiList).length,
         files: sumKeyaki,
       },
     };
@@ -158,12 +158,12 @@ export const Database = {
         console.error(error);
       }
     },
-    keyaki: (keyakiList: Keyaki[]): void => {
+    keyaki: (keyakiList: Record<string, Keyaki>): void => {
+      Object.keys(keyakiList).forEach((key) => {
+        keyakiList[key] = validateKeyaki(keyakiList[key]);
+      });
       try {
-        Firebase.database.set(
-          'database/keyakiList/',
-          keyakiList.map((keyaki) => validateKeyaki(keyaki))
-        );
+        Firebase.database.set('database/keyakiList/', keyakiList);
       } catch (error) {
         console.error('Update keyaki failed: Keyaki has invalid format');
       }

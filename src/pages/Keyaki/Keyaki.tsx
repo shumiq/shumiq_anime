@@ -18,7 +18,7 @@ const photoAlbumId =
   'ACKboXDVl0yynHYnKsDhn5HNlV7AxRTmboF6WNjWyFek8nloYNKJ1B0fxWQZ5A7Vk-kh-FOmRTJE';
 
 const Keyaki = (): JSX.Element => {
-  const [keyakiList, setKeyakiList] = useState<(KeyakiType | null)[]>(
+  const [keyakiList, setKeyakiList] = useState<Record<string, KeyakiType>>(
     (getLocalStorage('database') as DatabaseType)?.keyakiList
   );
   const [keyakiRef, setKeyakiRef] = useState<
@@ -67,9 +67,10 @@ const Keyaki = (): JSX.Element => {
       );
     };
     showLoadingPopup(true);
-    const newKeyakiList = JSON.parse(
-      JSON.stringify(keyakiList)
-    ) as KeyakiType[];
+    const newKeyakiList = JSON.parse(JSON.stringify(keyakiList)) as Record<
+      string,
+      KeyakiType
+    >;
     const driveFiles = (await GoogleDriveApi.getFiles(driveFolderId)) as {
       name: string;
       id: string;
@@ -131,9 +132,10 @@ const Keyaki = (): JSX.Element => {
       if (UserDetail.isAdmin()) {
         const name = keyakiList[ep]?.name || '';
         const callback = (newName: string) => {
-          const newList = JSON.parse(
-            JSON.stringify(keyakiList)
-          ) as KeyakiType[];
+          const newList = JSON.parse(JSON.stringify(keyakiList)) as Record<
+            string,
+            KeyakiType
+          >;
           newList[ep].name = newName;
           Database.update.keyaki(newList);
         };
@@ -166,24 +168,31 @@ const Keyaki = (): JSX.Element => {
             </thead>
             <tbody>
               {keyakiList &&
-                keyakiList.map(
-                  (keyaki) =>
-                    keyaki !== null && (
-                      <tr key={keyaki.ep} ref={keyakiRef[keyaki.ep]}>
-                        <td>{keyaki.ep}</td>
+                Object.keys(keyakiList).map(
+                  (key) =>
+                    keyakiList[key] !== null && (
+                      <tr
+                        key={keyakiList[key].ep}
+                        ref={keyakiRef[keyakiList[key].ep]}
+                      >
+                        <td>{keyakiList[key].ep}</td>
                         <td className="text-left">
-                          <span onClick={() => showInput(keyaki.ep)}>
-                            {keyaki.name}
+                          <span onClick={() => showInput(keyakiList[key].ep)}>
+                            {keyakiList[key].name}
                           </span>
                         </td>
                         <td>
-                          {Object.keys(keyaki.sub).map(
+                          {Object.keys(keyakiList[key].sub).map(
                             (sub) =>
-                              keyaki.sub[sub]?.url && (
+                              keyakiList[key].sub[sub]?.url && (
                                 <button
                                   className="btn btn-primary m-1"
-                                  onClick={() => showFiles(keyaki.sub[sub])}
-                                  key={keyaki.ep.toString() + '_' + sub}
+                                  onClick={() =>
+                                    showFiles(keyakiList[key].sub[sub])
+                                  }
+                                  key={
+                                    keyakiList[key].ep.toString() + '_' + sub
+                                  }
                                 >
                                   {sub}
                                 </button>
