@@ -3,16 +3,20 @@ import { mount } from 'enzyme';
 import mockDatabase from '../../mock/database.json';
 import { Database } from '../../utils/firebase';
 import EditAnimePopup from './EditAnimePopup';
-import { Anime } from '../../utils/types';
+import { Anime, Database as DatabaseType } from '../../utils/types';
 
 jest.mock('../../utils/firebase');
-const mockAnimeList: Anime[] = mockDatabase.animeList;
+
+const mockAnimeList: Record<
+  string,
+  Anime
+> = ((mockDatabase as unknown) as DatabaseType).animeList;
 
 describe('<EditAnimePopup />', () => {
   it('should not show when show props is false', () => {
     const wrapper = mount(
       <EditAnimePopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         show={false}
         setShow={() => {
           return;
@@ -25,22 +29,30 @@ describe('<EditAnimePopup />', () => {
   it('should show correct default value', () => {
     const wrapper = mount(
       <EditAnimePopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         show={true}
         setShow={() => {
           return;
         }}
       />
     );
-    expect(wrapper.find('div.modal').html()).toContain(mockAnimeList[0].title);
-    expect(wrapper.find('div.modal').html()).toContain(mockAnimeList[0].studio);
-    expect(wrapper.find('div.modal').html()).toContain(mockAnimeList[0].year);
     expect(wrapper.find('div.modal').html()).toContain(
-      mockAnimeList[0].cover_url
+      mockAnimeList['352'].title
     );
-    expect(wrapper.find('div.modal').html()).toContain(mockAnimeList[0].url);
     expect(wrapper.find('div.modal').html()).toContain(
-      mockAnimeList[0].download_url
+      mockAnimeList['352'].studio
+    );
+    expect(wrapper.find('div.modal').html()).toContain(
+      mockAnimeList['352'].year
+    );
+    expect(wrapper.find('div.modal').html()).toContain(
+      mockAnimeList['352'].cover_url
+    );
+    expect(wrapper.find('div.modal').html()).toContain(
+      mockAnimeList['352'].url
+    );
+    expect(wrapper.find('div.modal').html()).toContain(
+      mockAnimeList['352'].download_url
     );
   });
 
@@ -51,7 +63,7 @@ describe('<EditAnimePopup />', () => {
     };
     const wrapper = mount(
       <EditAnimePopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         show={true}
         setShow={mockSetShow}
       />
@@ -123,7 +135,7 @@ describe('<EditAnimePopup />', () => {
 
     saveButton.simulate('click');
     const expectedResult = {
-      ...mockAnimeList[0],
+      ...mockAnimeList['352'],
       title: 'new title',
       studio: 'new studio',
       view: 9,
@@ -138,7 +150,7 @@ describe('<EditAnimePopup />', () => {
       genres: 'genres',
     };
     expect(Database.update.anime).toHaveBeenCalledWith(
-      mockAnimeList[0].key,
+      mockAnimeList['352'].key,
       expectedResult
     );
   });
@@ -151,7 +163,7 @@ describe('<EditAnimePopup />', () => {
     };
     const wrapper = mount(
       <EditAnimePopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         show={true}
         setShow={mockSetShow}
       />
@@ -162,7 +174,7 @@ describe('<EditAnimePopup />', () => {
       .at(1);
     deleteButton.simulate('click');
     expect(Database.update.anime).toHaveBeenCalledWith(
-      mockAnimeList[0].key,
+      mockAnimeList['352'].key,
       null
     );
   });

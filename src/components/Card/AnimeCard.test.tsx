@@ -25,7 +25,7 @@ describe('<AnimeCard />', () => {
 
   it('should show correct infomation', () => {
     // Given
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -42,7 +42,7 @@ describe('<AnimeCard />', () => {
   it('should show edit button if admin', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -59,7 +59,7 @@ describe('<AnimeCard />', () => {
   it('should show edit popup when click edit button', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -76,7 +76,7 @@ describe('<AnimeCard />', () => {
   it('should show clipboard popup when click share button and cannot share', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -103,7 +103,7 @@ describe('<AnimeCard />', () => {
       });
     });
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -119,7 +119,7 @@ describe('<AnimeCard />', () => {
   it('should not show edit button if not admin', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -136,7 +136,7 @@ describe('<AnimeCard />', () => {
   it('should show plus button and glow border in view row if there is any unview episode and login as admin', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -154,7 +154,7 @@ describe('<AnimeCard />', () => {
   it('should not show plus button and glow border in view row if all episodes are viewed', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[1];
+    const mockAnime = mockDatabase.animeList['350'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -172,7 +172,7 @@ describe('<AnimeCard />', () => {
   it('should not show plus button and glow border if not admin', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -190,7 +190,7 @@ describe('<AnimeCard />', () => {
   it('should show plus button in download row if there is any undownload episode and admin', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -207,7 +207,7 @@ describe('<AnimeCard />', () => {
   it('should not show plus button in download row if all episodes are downloaded', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[1];
+    const mockAnime = mockDatabase.animeList['350'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -224,7 +224,7 @@ describe('<AnimeCard />', () => {
   it('should not show plus button in download row if not admin', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -241,7 +241,7 @@ describe('<AnimeCard />', () => {
   it('should enable internal folder button if there is both google drive id and google photo id', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     mockAnime.gdriveid_public = 'driveid';
     // When
     const wrapper = mount(
@@ -266,7 +266,7 @@ describe('<AnimeCard />', () => {
     (GooglePhotoApi.getMedias as jest.Mock).mockResolvedValue([
       { filename: 'name', productUrl: 'url' },
     ]);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     mockAnime.gdriveid_public = 'driveid';
     // When
     const wrapper = mount(
@@ -290,7 +290,7 @@ describe('<AnimeCard />', () => {
   it('should disable internal folder button if there is neither google drive id nor google photo id', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[1];
+    const mockAnime = mockDatabase.animeList['350'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -308,7 +308,7 @@ describe('<AnimeCard />', () => {
   it('should enable download button if there is download url', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -326,7 +326,7 @@ describe('<AnimeCard />', () => {
   it('should disable download button if there is no download url', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[1];
+    const mockAnime = mockDatabase.animeList['350'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -343,7 +343,7 @@ describe('<AnimeCard />', () => {
 
   it('should call AnilistApi when click show info button', () => {
     // Given
-    const mockAnime = { ...mockDatabase.animeList[1], blacklist: [1] };
+    const mockAnime = { ...mockDatabase.animeList['350'], blacklist: [1] };
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
@@ -367,7 +367,7 @@ describe('<AnimeCard />', () => {
   it('should call Database.update.anime when click plus button to increase view', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
@@ -393,7 +393,7 @@ describe('<AnimeCard />', () => {
   it('should call Database.update.anime when click plus button to increase download', () => {
     // Given
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
@@ -419,7 +419,7 @@ describe('<AnimeCard />', () => {
   it('should set auto layout', () => {
     // Given
     (getLocalStorage as jest.Mock).mockReturnValue('auto');
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -436,7 +436,7 @@ describe('<AnimeCard />', () => {
   it('should set small layout', () => {
     // Given
     (getLocalStorage as jest.Mock).mockReturnValue('small');
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -453,7 +453,7 @@ describe('<AnimeCard />', () => {
   it('should set medium layout', () => {
     // Given
     (getLocalStorage as jest.Mock).mockReturnValue('medium');
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard
@@ -470,7 +470,7 @@ describe('<AnimeCard />', () => {
   it('should set large layout', () => {
     // Given
     (getLocalStorage as jest.Mock).mockReturnValue('large');
-    const mockAnime = mockDatabase.animeList[0];
+    const mockAnime = mockDatabase.animeList['352'];
     // When
     const wrapper = mount(
       <AnimeCard

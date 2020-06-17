@@ -1,9 +1,12 @@
 import mockDatabase from '../../mock/database.json';
 import { FilterEnum } from '../../utils/enum';
 import { AnimeFilter, SeasonList } from './Anime.filter';
-import { Anime } from '../../utils/types';
+import { Anime, Database } from '../../utils/types';
 
-const mockAnimeList: Anime[] = mockDatabase.animeList;
+const mockAnimeList: Record<
+  string,
+  Anime
+> = ((mockDatabase as unknown) as Database).animeList;
 
 describe('Anime Filter', () => {
   it('should return correct list of season', () => {
@@ -17,7 +20,7 @@ describe('Anime Filter', () => {
 
   it('should return latest season as default', () => {
     const result = AnimeFilter(mockAnimeList);
-    expect(result[0]).toStrictEqual(mockAnimeList[1]);
+    expect(result[0]).toStrictEqual(['350', mockAnimeList['350']]);
     expect(result.length).toBe(1);
   });
 
@@ -25,8 +28,8 @@ describe('Anime Filter', () => {
     const result = AnimeFilter(mockAnimeList, {
       season: FilterEnum.ALL_SEASON,
     });
-    expect(result[0]).toStrictEqual(mockAnimeList[1]);
-    expect(result[1]).toStrictEqual(mockAnimeList[0]);
+    expect(result[0]).toStrictEqual(['350', mockAnimeList['350']]);
+    expect(result[1]).toStrictEqual(['352', mockAnimeList['352']]);
     expect(result.length).toBe(2);
   });
 
@@ -35,8 +38,8 @@ describe('Anime Filter', () => {
       season: FilterEnum.ALL_SEASON,
       orderby: FilterEnum.SORT_BY_SCORE,
     });
-    expect(result[0]).toStrictEqual(mockAnimeList[1]);
-    expect(result[1]).toStrictEqual(mockAnimeList[0]);
+    expect(result[0]).toStrictEqual(['350', mockAnimeList['350']]);
+    expect(result[1]).toStrictEqual(['352', mockAnimeList['352']]);
     expect(result.length).toBe(2);
   });
 
@@ -44,7 +47,7 @@ describe('Anime Filter', () => {
     const result = AnimeFilter(mockAnimeList, {
       category: FilterEnum.ONLY_UNSEEN,
     });
-    expect(result[0]).toStrictEqual(mockAnimeList[0]);
+    expect(result[0]).toStrictEqual(['352', mockAnimeList['352']]);
     expect(result.length).toBe(1);
   });
 
@@ -52,7 +55,7 @@ describe('Anime Filter', () => {
     const result = AnimeFilter(mockAnimeList, {
       category: FilterEnum.ONLY_UNFINISH,
     });
-    expect(result[0]).toStrictEqual(mockAnimeList[0]);
+    expect(result[0]).toStrictEqual(['352', mockAnimeList['352']]);
     expect(result.length).toBe(1);
   });
 
@@ -60,7 +63,7 @@ describe('Anime Filter', () => {
     const result = AnimeFilter(mockAnimeList, {
       category: FilterEnum.ONLY_FINISH,
     });
-    expect(result[0]).toStrictEqual(mockAnimeList[1]);
+    expect(result[0]).toStrictEqual(['350', mockAnimeList['350']]);
     expect(result.length).toBe(1);
   });
 
@@ -68,7 +71,7 @@ describe('Anime Filter', () => {
     const result = AnimeFilter(mockAnimeList, {
       keyword: 'Princess Fantasy Winter',
     });
-    expect(result[0]).toStrictEqual(mockAnimeList[0]);
+    expect(result[0]).toStrictEqual(['352', mockAnimeList['352']]);
     expect(result.length).toBe(1);
   });
 });

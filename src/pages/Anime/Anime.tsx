@@ -14,10 +14,10 @@ import queryString from 'query-string';
 type TParams = { search: string };
 
 const Anime = (props?: RouteComponentProps<TParams>) => {
-  const [animeList, setAnimeList] = useState<(AnimeType | null)[]>(
+  const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(
     (getLocalStorage('database') as DatabaseType).animeList
   );
-  const [pageList, setPageList] = useState<(AnimeType | null)[]>(
+  const [pageList, setPageList] = useState<[string, AnimeType][]>(
     AnimeFilter(animeList)
   );
   const [filter, setFilter] = useState({});
@@ -57,9 +57,9 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
           {pageList.map(
-            (anime: AnimeType | null) =>
+            ([key, anime]) =>
               anime !== null && (
-                <AnimeCard anime={anime} key={anime?.key} setPopup={setPopup} />
+                <AnimeCard anime={anime} key={key} setPopup={setPopup} />
               )
           )}
         </div>

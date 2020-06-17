@@ -26,15 +26,15 @@ export const Database = {
     const database = getLocalStorage('database') as DatabaseType;
     if (!database) return {};
     let sumAnime = 0;
-    database.animeList.forEach((anime) => {
-      if (anime) {
-        sumAnime += anime.download;
+    Object.keys(database.animeList).forEach((key) => {
+      if (database.animeList[key]) {
+        sumAnime += database.animeList[key].download;
       }
     });
     let sumViewAnime = 0;
-    database.animeList.forEach((anime) => {
-      if (anime) {
-        sumViewAnime += anime.view;
+    Object.keys(database.animeList).forEach((key) => {
+      if (database.animeList[key]) {
+        sumViewAnime += database.animeList[key].view;
       }
     });
     let sumConan = 0;
@@ -51,7 +51,7 @@ export const Database = {
     });
     return {
       anime: {
-        series: database.animeList.filter((anime) => anime != null).length,
+        series: Object.keys(database.animeList).length,
         files: sumAnime,
         view: sumViewAnime,
       },
@@ -140,7 +140,7 @@ export const Database = {
       try {
         Firebase.database.set(
           'database/animeList/' + key.toString(),
-          validateAnime(anime)
+          anime ? validateAnime(anime) : null
         );
       } catch (error) {
         console.error('Update anime failed: Anime has invalid format');

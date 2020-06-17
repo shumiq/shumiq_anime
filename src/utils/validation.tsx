@@ -1,6 +1,14 @@
 import { Database, Anime, Conan, Keyaki } from './types';
 
 export const validateDatabase = (db: Database): Database | boolean => {
+  if (Array.isArray(db.animeList)) {
+    const objectAnimeList: Record<string, Anime> = {};
+    Object.keys(db.animeList).forEach((key) => {
+      if (db.animeList[key])
+        objectAnimeList[key] = validateAnime(db.animeList[key]);
+    });
+    db.animeList = objectAnimeList;
+  }
   if (Array.isArray(db.conanList)) {
     const objectConanList: Record<string, Conan> = {};
     Object.keys(db.conanList).forEach((key) => {
@@ -19,14 +27,13 @@ export const validateDatabase = (db: Database): Database | boolean => {
   }
   return {
     ...db,
-    animeList: db.animeList.map((anime) => validateAnime(anime)),
+    animeList: db.animeList,
     conanList: db.conanList,
     keyakiList: db.keyakiList,
   };
 };
 
-export const validateAnime = (anime: Anime | null): Anime | null => {
-  if (anime === null) return null;
+export const validateAnime = (anime: Anime): Anime => {
   return {
     ...anime,
     key: parseInt(anime.key.toString()),

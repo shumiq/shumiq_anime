@@ -9,17 +9,16 @@ export const defaultFilter = {
 };
 
 export const AnimeFilter = (
-  animeList: (Anime | null)[],
+  animeList: Record<string, Anime>,
   inputFilter: {
     season?: number | string;
     category?: number;
     keyword?: string;
     orderby?: number;
   } = {}
-): (Anime | null)[] => {
+): [string, Anime][] => {
   if (animeList == null) return [];
-  animeList = animeList.filter((anime) => anime?.key);
-  let result: (Anime | null)[] = [];
+  let result: [string, Anime][] = [];
   const filter = { ...defaultFilter, ...inputFilter };
 
   // ParseInt if not int
@@ -39,37 +38,35 @@ export const AnimeFilter = (
     let season = filter.season;
     if (season.toString() === FilterEnum.LATEST_SEASON.toString())
       season = Object.keys(seasonList).sort().pop() || 'undefined';
-    result = animeList.filter(
-      (anime) =>
-        anime !== null &&
-        season === anime.year.toString() + ',' + anime.season.toString()
-    );
+    result = Object.entries(animeList).filter((entries) => {
+      const anime = entries[1];
+      return season === anime.year.toString() + ',' + anime.season.toString();
+    });
   } else {
-    result = animeList.filter((anime) => true);
+    result = Object.entries(animeList);
   }
 
   // Filter by Category
   if (filter.category === FilterEnum.ONLY_UNSEEN) {
     result = result.filter(
-      (anime) => anime !== null && anime.view !== anime.download
+      (entries) => entries[1].view !== entries[1].download
     );
   }
   if (filter.category === FilterEnum.ONLY_UNFINISH) {
     result = result.filter(
-      (anime) =>
-        anime !== null && anime.all_episode !== anime.download.toString()
+      (entries) => entries[1].all_episode !== entries[1].download.toString()
     );
   }
   if (filter.category === FilterEnum.ONLY_FINISH) {
     result = result.filter(
-      (anime) =>
-        anime !== null && anime.all_episode === anime.download.toString()
+      (entries) => entries[1].all_episode === entries[1].download.toString()
     );
   }
 
   // Filter by Keyword
   if (filter.keyword.trim().length > 0) {
-    result = result.filter((anime) => {
+    result = result.filter((entries) => {
+      const anime = entries[1];
       if (anime !== null) {
         const animeKeywords = [
           anime.title.toString().toLowerCase(),
@@ -96,7 +93,9 @@ export const AnimeFilter = (
 
   // Sort Result
   if (filter.orderby === FilterEnum.SORT_BY_SEASON) {
-    result = result.sort((animeA, animeB) => {
+    result = result.sort((entriesA, entriesB) => {
+      const animeA = entriesA[1];
+      const animeB = entriesB[1];
       if (animeA !== null && animeB !== null) {
         const animeASeason =
           animeA.year.toString() + ',' + animeA.season.toString();
@@ -111,7 +110,9 @@ export const AnimeFilter = (
     });
   }
   if (filter.orderby === FilterEnum.SORT_BY_SCORE) {
-    result = result.sort((animeA, animeB) => {
+    result = result.sort((entriesA, entriesB) => {
+      const animeA = entriesA[1];
+      const animeB = entriesB[1];
       if (animeA !== null && animeB !== null) {
         return parseFloat(animeB.score) - parseFloat(animeA.score);
       } else {
@@ -124,12 +125,12 @@ export const AnimeFilter = (
 };
 
 export const SeasonList = (
-  animeList: (Anime | null)[]
+  animeList: Record<string, Anime>
 ): Record<string, number> => {
   if (animeList == null) return {};
-  animeList = animeList.filter((anime) => anime?.key);
   const seasonList = {};
-  animeList.forEach((anime) => {
+  Object.keys(animeList).forEach((key) => {
+    const anime = animeList[key];
     if (anime !== null) {
       const season = anime.year.toString() + ',' + anime.season.toString();
       if (!seasonList[season]) seasonList[season] = 0;

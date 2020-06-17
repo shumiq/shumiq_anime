@@ -11,10 +11,8 @@ import {
 } from '../../utils/types';
 
 const Sync = (): JSX.Element => {
-  const [animeList, setAnimeList] = useState<Anime[]>(
-    (getLocalStorage('database') as DatabaseType).animeList?.filter(
-      (anime) => anime != null
-    ) as Anime[]
+  const [animeList, setAnimeList] = useState<Record<string, Anime>>(
+    (getLocalStorage('database') as DatabaseType).animeList
   );
   const [albumList, setAlbumList] = useState<
     Record<string, GooglePhotoAlbumResponse>
@@ -24,7 +22,7 @@ const Sync = (): JSX.Element => {
 
   useEffect(() => {
     Database.subscribe((db) => {
-      setAnimeList(db.animeList.filter((anime) => anime != null) as Anime[]);
+      setAnimeList(db.animeList);
     });
     const fetchAlbums = async () => {
       setPopup(
@@ -124,8 +122,10 @@ const Sync = (): JSX.Element => {
             </tr>
           </thead>
           <tbody>
-            {animeList
-              .sort((a, b) => {
+            {Object.entries(animeList)
+              .sort((entriesA, entriesB) => {
+                const a = entriesA[1];
+                const b = entriesB[1];
                 if (
                   b.year * 10 +
                     (b.season % 10) -
@@ -141,61 +141,63 @@ const Sync = (): JSX.Element => {
                   );
               })
               .map(
-                (anime) =>
-                  anime !== null && (
-                    <tr key={anime.key} className="row-anime">
+                (entries) =>
+                  entries[1] !== null && (
+                    <tr key={entries[1].key} className="row-anime">
                       <td className="text-center align-middle">
-                        <a href={anime.url} target="blank">
+                        <a href={entries[1].url} target="blank">
                           <img
-                            src={anime.cover_url}
+                            src={entries[1].cover_url}
                             style={{ height: '50px' }}
                             alt="cover"
                           />
                         </a>
                       </td>
-                      <td className="text-left align-middle">{anime.title}</td>
-                      <td className="text-center align-middle">
-                        {anime.download}
-                        {albumList[anime.gphotoid] &&
-                          '/' + albumList[anime.gphotoid]?.mediaItemsCount}
+                      <td className="text-left align-middle">
+                        {entries[1].title}
                       </td>
                       <td className="text-center align-middle">
-                        {anime.gphotoid &&
-                          albumList[anime.gphotoid] &&
-                          anime.download.toString() !==
+                        {entries[1].download}
+                        {albumList[entries[1].gphotoid] &&
+                          '/' + albumList[entries[1].gphotoid]?.mediaItemsCount}
+                      </td>
+                      <td className="text-center align-middle">
+                        {entries[1].gphotoid &&
+                          albumList[entries[1].gphotoid] &&
+                          entries[1].download.toString() !==
                             albumList[
-                              anime.gphotoid
+                              entries[1].gphotoid
                             ]?.mediaItemsCount.toString() &&
-                          !anime.title.includes('Conan') && (
+                          !entries[1].title.includes('Conan') && (
                             <button
                               id="btn-update"
                               type="button"
                               className="btn btn-success mx-1 col"
-                              onClick={() => update(anime)}
+                              onClick={() => update(entries[1])}
                             >
                               Update
                             </button>
                           )}
-                        {anime.gphotoid && (
+                        {entries[1].gphotoid && (
                           <button
                             id="btn-unsync"
                             type="button"
                             className="btn btn-danger mx-1 col"
-                            onClick={() => unsync(anime)}
+                            onClick={() => unsync(entries[1])}
                           >
                             Unsync
                           </button>
                         )}
-                        {!anime.gphotoid &&
+                        {!entries[1].gphotoid &&
                           Object.entries(albumList).some(
                             (entry) =>
-                              entry[1].title === '[Anime] ' + anime.title
+                              entry[1].title === '[Anime] ' + entries[1].title
                           ) && (
                             <button
                               id="btn-sync"
                               type="button"
                               className="btn btn-primary mx-1 col"
-                              onClick={() => sync(anime)}
+                              onClick={() => sync(entries[1])}
                             >
                               Sync
                             </button>

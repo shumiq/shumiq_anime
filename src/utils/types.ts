@@ -1,5 +1,5 @@
 export interface Database {
-  animeList: (Anime | null)[];
+  animeList: Record<string, Anime>;
   conanList: Record<string, Conan>;
   keyakiList: Record<string, Keyaki>;
 }

@@ -4,10 +4,14 @@ import mockDatabase from '../../mock/database.json';
 import UserDetail from '../../utils/userdetail';
 import { Database } from '../../utils/firebase';
 import AnimeInfoPopup from './AnimeInfoPopup';
+import { Anime, Database as DatabaseType } from '../../utils/types';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../utils/firebase');
-const mockAnimeList = mockDatabase.animeList;
+const mockAnimeList: Record<
+  string,
+  Anime
+> = ((mockDatabase as unknown) as DatabaseType).animeList;
 const mockInfo = {
   id: 107871,
   title: {
@@ -43,7 +47,7 @@ describe('<AnimeInfoPopup />', () => {
   it('should not show when show props is false', () => {
     const wrapper = mount(
       <AnimeInfoPopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         info={mockInfo}
         show={false}
         setShow={() => {
@@ -57,7 +61,7 @@ describe('<AnimeInfoPopup />', () => {
   it('should show correct info', () => {
     const wrapper = mount(
       <AnimeInfoPopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         info={mockInfo}
         show={true}
         setShow={() => {
@@ -65,7 +69,9 @@ describe('<AnimeInfoPopup />', () => {
         }}
       />
     );
-    expect(wrapper.find('div.modal').text()).toContain(mockAnimeList[0].title);
+    expect(wrapper.find('div.modal').text()).toContain(
+      mockAnimeList['352'].title
+    );
     expect(wrapper.find('div.modal').text()).toContain(mockInfo.title.romaji);
     expect(wrapper.find('div.modal').text()).toContain(mockInfo.startDate.year);
     expect(wrapper.find('div.modal').text()).toContain(mockInfo.season);
@@ -81,7 +87,7 @@ describe('<AnimeInfoPopup />', () => {
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(false);
     const wrapper = mount(
       <AnimeInfoPopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         info={mockInfo}
         show={true}
         setShow={() => {
@@ -96,7 +102,7 @@ describe('<AnimeInfoPopup />', () => {
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = mount(
       <AnimeInfoPopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         info={mockInfo}
         show={true}
         setShow={() => {
@@ -115,7 +121,7 @@ describe('<AnimeInfoPopup />', () => {
     };
     const wrapper = mount(
       <AnimeInfoPopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         info={mockInfo}
         show={true}
         setShow={mockSetShow}
@@ -127,14 +133,14 @@ describe('<AnimeInfoPopup />', () => {
       .first();
     syncButton.simulate('click');
     const expectedResult = {
-      ...mockAnimeList[0],
+      ...mockAnimeList['352'],
       cover_url: 'someurl',
       info: 'desc',
       score: '6.6',
       season: 2,
     };
     expect(Database.update.anime as jest.Mock).toHaveBeenCalledWith(
-      mockAnimeList[0].key,
+      mockAnimeList['352'].key,
       expectedResult
     );
   });
@@ -148,7 +154,7 @@ describe('<AnimeInfoPopup />', () => {
     };
     const wrapper = mount(
       <AnimeInfoPopup
-        anime={mockAnimeList[0]}
+        anime={mockAnimeList['352']}
         info={mockInfo}
         show={true}
         setShow={mockSetShow}
@@ -160,11 +166,11 @@ describe('<AnimeInfoPopup />', () => {
       .at(1);
     incorrectButton.simulate('click');
     const expectedResult = {
-      ...mockAnimeList[0],
+      ...mockAnimeList['352'],
       blacklist: [mockInfo.id],
     };
     expect(Database.update.anime as jest.Mock).toHaveBeenCalledWith(
-      mockAnimeList[0].key,
+      mockAnimeList['352'].key,
       expectedResult
     );
   });

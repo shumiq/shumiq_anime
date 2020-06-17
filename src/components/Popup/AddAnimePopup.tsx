@@ -19,11 +19,11 @@ const AddAnimePopup = (props: {
   const closePopup = useCallback(() => props.setShow(false), [props]);
   const addAnime = useCallback(
     (anime: AnilistInfoResponse): void => {
-      const animeList: (Anime | null)[] = (getLocalStorage(
+      const animeList: Record<string, Anime> = (getLocalStorage(
         'database'
       ) as DatabaseType).animeList;
       if (!animeList) return;
-      let key = animeList.length;
+      let key = Object.keys(animeList).length;
       while (animeList[key]) key++;
       const newAnime = {
         key: key,
