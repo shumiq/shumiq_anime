@@ -16,9 +16,11 @@ import { Anime } from '../../utils/types';
 
 const AnimeCard = (props: {
   anime: Anime;
+  key: string;
   setPopup: (popup: string | JSX.Element) => void;
 }): JSX.Element => {
   const anime = props.anime;
+  const key = props.key;
   const setPopup = props.setPopup;
   const layout =
     JSON.stringify(getLocalStorage('layout')) !== '{}'
@@ -29,7 +31,7 @@ const AnimeCard = (props: {
     (field: string): void => {
       const animeCopy = { ...anime };
       animeCopy[field] = parseInt(animeCopy[field]) + 1;
-      Database.update.anime(anime.key, animeCopy);
+      Database.update.anime(key, animeCopy);
     },
     [anime]
   );
@@ -37,7 +39,7 @@ const AnimeCard = (props: {
   const share = useCallback((): void => {
     const url =
       'https://shumiq-anime.netlify.app/.netlify/functions/api/v1/share/' +
-      anime.key.toString();
+      key.toString();
     /* eslint-disable  @typescript-eslint/no-explicit-any */
     /* eslint-disable  @typescript-eslint/no-unsafe-call */
     /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
@@ -69,6 +71,7 @@ const AnimeCard = (props: {
         setPopup(
           <AnimeInfoPopup
             anime={anime}
+            key={key}
             info={response}
             show={show}
             setShow={showInfoPopup}
@@ -125,7 +128,7 @@ const AnimeCard = (props: {
   const showEditPopup = useCallback(
     (show: boolean) => {
       setPopup(
-        <EditAnimePopup anime={anime} show={show} setShow={showEditPopup} />
+        <EditAnimePopup anime={anime} show={show} key={key} setShow={showEditPopup} />
       );
     },
     [anime, setPopup]

@@ -30,6 +30,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -47,6 +48,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -64,6 +66,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(popup) => {
           // Then
           expect((popup as JSX.Element).type).toBe(EditAnimePopup);
@@ -81,6 +84,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(popup) => {
           // Then
           expect((popup as JSX.Element).type).toBe(ClipboardPopup);
@@ -108,6 +112,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -124,6 +129,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -141,6 +147,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -159,6 +166,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc350'}
         setPopup={(): void => {
           return;
         }}
@@ -177,6 +185,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -195,6 +204,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -212,6 +222,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc350'}
         setPopup={(): void => {
           return;
         }}
@@ -229,6 +240,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -247,6 +259,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -272,6 +285,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -295,6 +309,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc350'}
         setPopup={(): void => {
           return;
         }}
@@ -313,6 +328,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -331,6 +347,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc350'}
         setPopup={(): void => {
           return;
         }}
@@ -347,6 +364,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc350'}
         setPopup={(): void => {
           return;
         }}
@@ -371,6 +389,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -397,6 +416,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -424,6 +444,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -441,6 +462,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -458,6 +480,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}
@@ -475,6 +498,7 @@ describe('<AnimeCard />', () => {
     const wrapper = mount(
       <AnimeCard
         anime={mockAnime}
+        key={'abc352'}
         setPopup={(): void => {
           return;
         }}

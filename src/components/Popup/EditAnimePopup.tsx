@@ -5,22 +5,24 @@ import { Anime } from '../../utils/types';
 
 const EditAnimePopup = (props: {
   show: boolean;
+  key: string;
   setShow: (show: boolean) => void;
   anime: Anime;
 }): JSX.Element => {
   const anime = props.anime;
+  const key = props.key;
   const state: Anime = { ...anime };
 
   const closePopup = useCallback(() => props.setShow(false), [props]);
 
   const saveAnime = useCallback(() => {
-    Database.update.anime(state.key, state);
+    Database.update.anime(key, state);
     closePopup();
   }, [state, closePopup]);
 
   const deleteAnime = useCallback(() => {
     if (window.confirm('Do you want to delete "' + anime.title + '" ?')) {
-      Database.update.anime(state.key, null);
+      Database.update.anime(key, null);
       closePopup();
     }
   }, [anime, state, closePopup]);
@@ -44,7 +46,7 @@ const EditAnimePopup = (props: {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            Edit (#{anime.key}) {anime.title}
+            Edit (#{key}) {anime.title}
           </Modal.Title>
         </Modal.Header>
 

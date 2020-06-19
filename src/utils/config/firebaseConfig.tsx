@@ -31,6 +31,9 @@ export default {
     set: (path: string, value: unknown): void => {
       void firebase.database().ref(path).set(value);
     },
+    push: (path: string, value: unknown): void => {
+      void firebase.database().ref(path).push(value);
+    },
     subscribe: (path: string, callback: (database: Database) => void): void => {
       firebase
         .database()

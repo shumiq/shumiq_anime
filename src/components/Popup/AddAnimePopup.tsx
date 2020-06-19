@@ -27,7 +27,6 @@ const AddAnimePopup = (props: {
       while (animeList['anime' + keyLength.toString()]) keyLength++;
       const key = 'anime' + keyLength.toString();
       const newAnime: Anime = {
-        key: key,
         title: anime.title?.romaji,
         studio: anime.studios?.nodes[0]?.name,
         view: 0,

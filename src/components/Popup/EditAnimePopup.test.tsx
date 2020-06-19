@@ -18,6 +18,7 @@ describe('<EditAnimePopup />', () => {
       <EditAnimePopup
         anime={mockAnimeList['abc352']}
         show={false}
+        key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -31,6 +32,7 @@ describe('<EditAnimePopup />', () => {
       <EditAnimePopup
         anime={mockAnimeList['abc352']}
         show={true}
+        key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -65,6 +67,7 @@ describe('<EditAnimePopup />', () => {
       <EditAnimePopup
         anime={mockAnimeList['abc352']}
         show={true}
+        key={'abc352'}
         setShow={mockSetShow}
       />
     );
@@ -150,7 +153,7 @@ describe('<EditAnimePopup />', () => {
       genres: 'genres',
     };
     expect(Database.update.anime).toHaveBeenCalledWith(
-      mockAnimeList['abc352'].key,
+      'abc352',
       expectedResult
     );
   });
@@ -165,6 +168,7 @@ describe('<EditAnimePopup />', () => {
       <EditAnimePopup
         anime={mockAnimeList['abc352']}
         show={true}
+        key={'abc352'}
         setShow={mockSetShow}
       />
     );
@@ -174,7 +178,7 @@ describe('<EditAnimePopup />', () => {
       .at(1);
     deleteButton.simulate('click');
     expect(Database.update.anime).toHaveBeenCalledWith(
-      mockAnimeList['abc352'].key,
+      'abc352',
       null
     );
   });

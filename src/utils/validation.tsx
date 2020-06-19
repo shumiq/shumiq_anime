@@ -6,10 +6,7 @@ export const validateDatabase = (db: Database): Database | boolean => {
     Object.keys(db.animeList).forEach((key) => {
       if (db.animeList[key]) {
         const newKey = key.includes('anime') ? key : 'anime' + key;
-        objectAnimeList[newKey] = {
-          ...validateAnime(db.animeList[key]),
-          key: newKey,
-        };
+        objectAnimeList[newKey] = validateAnime(db.animeList[key])
       }
     });
     db.animeList = objectAnimeList;
@@ -50,7 +47,6 @@ export const validateDatabase = (db: Database): Database | boolean => {
 export const validateAnime = (anime: Anime): Anime => {
   return {
     ...anime,
-    key: anime.key.toString(),
     all_episode: anime.all_episode?.toString() || '?',
     cover_url: anime.cover_url?.toString() || '',
     download: parseInt(anime.download.toString()),

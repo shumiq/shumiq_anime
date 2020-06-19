@@ -63,15 +63,15 @@ const Sync = (): JSX.Element => {
     [albumList, nextPageToken]
   );
 
-  const unsync = useCallback((anime: Anime) => {
+  const unsync = useCallback((key:string, anime: Anime) => {
     if (window.confirm('Do you want to unsync "' + anime.title + '" ?')) {
       anime.gphotoid = '';
-      Database.update.anime(anime.key, anime);
+      Database.update.anime(key, anime);
     }
   }, []);
 
   const update = useCallback(
-    async (anime: Anime) => {
+    async (key:string, anime: Anime) => {
       setPopup(
         <GeneralPopup show={true} message="Loading..." canClose={false} />
       );
@@ -88,7 +88,7 @@ const Sync = (): JSX.Element => {
         }
       });
       anime.download = parseInt(albumList[anime.gphotoid].mediaItemsCount);
-      Database.update.anime(anime.key, anime);
+      Database.update.anime(key, anime);
       setPopup(
         <GeneralPopup show={false} message="Loading..." canClose={false} />
       );
@@ -97,11 +97,11 @@ const Sync = (): JSX.Element => {
   );
 
   const sync = useCallback(
-    (anime: Anime) => {
+    (key:string, anime: Anime) => {
       anime.gphotoid = Object.entries(albumList).filter(
         (entry) => entry[1].title === '[Anime] ' + anime.title
       )[0]?.[0];
-      Database.update.anime(anime.key, anime);
+      Database.update.anime(key, anime);
     },
     [albumList]
   );
@@ -141,63 +141,63 @@ const Sync = (): JSX.Element => {
                   );
               })
               .map(
-                (entries) =>
-                  entries[1] !== null && (
-                    <tr key={entries[1].key} className="row-anime">
+                ([key,anime]) =>
+                  anime !== null && (
+                    <tr key={key} className="row-anime">
                       <td className="text-center align-middle">
-                        <a href={entries[1].url} target="blank">
+                        <a href={anime.url} target="blank">
                           <img
-                            src={entries[1].cover_url}
+                            src={anime.cover_url}
                             style={{ height: '50px' }}
                             alt="cover"
                           />
                         </a>
                       </td>
                       <td className="text-left align-middle">
-                        {entries[1].title}
+                        {anime.title}
                       </td>
                       <td className="text-center align-middle">
-                        {entries[1].download}
-                        {albumList[entries[1].gphotoid] &&
-                          '/' + albumList[entries[1].gphotoid]?.mediaItemsCount}
+                        {anime.download}
+                        {albumList[anime.gphotoid] &&
+                          '/' + albumList[anime.gphotoid]?.mediaItemsCount}
                       </td>
                       <td className="text-center align-middle">
-                        {entries[1].gphotoid &&
-                          albumList[entries[1].gphotoid] &&
-                          entries[1].download.toString() !==
+                        {anime.gphotoid &&
+                          albumList[anime.gphotoid] &&
+                          anime.download.toString() !==
                             albumList[
-                              entries[1].gphotoid
+                              anime.gphotoid
                             ]?.mediaItemsCount.toString() &&
-                          !entries[1].title.includes('Conan') && (
+                          !anime.title.includes('Conan') && (
                             <button
                               id="btn-update"
                               type="button"
-                              className="btn btn-success mx-1 col"
-                              onClick={() => update(entries[1])}
+                              className="btn btn-success mx-1"
+                              onClick={() => update(key, anime)}
                             >
                               Update
                             </button>
                           )}
-                        {entries[1].gphotoid && (
+                        {anime.gphotoid && (
                           <button
                             id="btn-unsync"
                             type="button"
-                            className="btn btn-danger mx-1 col"
-                            onClick={() => unsync(entries[1])}
+                            className="btn btn-danger mx-1"
+                            onClick={() => unsync(key, anime)}
                           >
                             Unsync
                           </button>
                         )}
-                        {!entries[1].gphotoid &&
+                        {!anime.gphotoid &&
                           Object.entries(albumList).some(
                             (entry) =>
-                              entry[1].title === '[Anime] ' + entries[1].title
+                              entry[1].title === '[Anime] ' + anime.title
                           ) && (
                             <button
                               id="btn-sync"
                               type="button"
-                              className="btn btn-primary mx-1 col"
-                              onClick={() => sync(entries[1])}
+                              className="btn btn-primary mx-1"
+                              onClick={() => sync(key, anime)}
                             >
                               Sync
                             </button>

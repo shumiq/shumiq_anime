@@ -50,6 +50,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={false}
+        key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -64,6 +65,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
+        key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -90,6 +92,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
+        key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -105,6 +108,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
+        key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -124,6 +128,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
+        key={'abc352'}
         setShow={mockSetShow}
       />
     );
@@ -140,7 +145,7 @@ describe('<AnimeInfoPopup />', () => {
       season: 2,
     };
     expect(Database.update.anime as jest.Mock).toHaveBeenCalledWith(
-      mockAnimeList['abc352'].key,
+      'abc352',
       expectedResult
     );
   });
@@ -157,6 +162,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
+        key={'abc352'}
         setShow={mockSetShow}
       />
     );
@@ -170,7 +176,7 @@ describe('<AnimeInfoPopup />', () => {
       blacklist: [mockInfo.id],
     };
     expect(Database.update.anime as jest.Mock).toHaveBeenCalledWith(
-      mockAnimeList['abc352'].key,
+      'abc352',
       expectedResult
     );
   });
