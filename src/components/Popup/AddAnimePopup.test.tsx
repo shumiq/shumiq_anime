@@ -152,7 +152,7 @@ describe('<AddAnimePopup />', () => {
       wrapper.find('div.modal').find('#btn-add').simulate('click');
       await flushPromises();
     });
-    expect(Database.update.anime).toHaveBeenCalledWith(2, {
+    expect(Database.update.anime).toHaveBeenCalledWith('anime2', {
       all_episode: '10',
       cover_url: 'cover_url',
       download: 0,
@@ -162,7 +162,7 @@ describe('<AddAnimePopup />', () => {
       gphotoid: '',
       genres: 'genre1, genre2',
       info: 'description',
-      key: 2,
+      key: 'anime2',
       score: '9.9',
       season: 2,
       studio: 'studio',

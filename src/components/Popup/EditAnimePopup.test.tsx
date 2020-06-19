@@ -16,7 +16,7 @@ describe('<EditAnimePopup />', () => {
   it('should not show when show props is false', () => {
     const wrapper = mount(
       <EditAnimePopup
-        anime={mockAnimeList['352']}
+        anime={mockAnimeList['abc352']}
         show={false}
         setShow={() => {
           return;
@@ -29,7 +29,7 @@ describe('<EditAnimePopup />', () => {
   it('should show correct default value', () => {
     const wrapper = mount(
       <EditAnimePopup
-        anime={mockAnimeList['352']}
+        anime={mockAnimeList['abc352']}
         show={true}
         setShow={() => {
           return;
@@ -37,22 +37,22 @@ describe('<EditAnimePopup />', () => {
       />
     );
     expect(wrapper.find('div.modal').html()).toContain(
-      mockAnimeList['352'].title
+      mockAnimeList['abc352'].title
     );
     expect(wrapper.find('div.modal').html()).toContain(
-      mockAnimeList['352'].studio
+      mockAnimeList['abc352'].studio
     );
     expect(wrapper.find('div.modal').html()).toContain(
-      mockAnimeList['352'].year
+      mockAnimeList['abc352'].year
     );
     expect(wrapper.find('div.modal').html()).toContain(
-      mockAnimeList['352'].cover_url
+      mockAnimeList['abc352'].cover_url
     );
     expect(wrapper.find('div.modal').html()).toContain(
-      mockAnimeList['352'].url
+      mockAnimeList['abc352'].url
     );
     expect(wrapper.find('div.modal').html()).toContain(
-      mockAnimeList['352'].download_url
+      mockAnimeList['abc352'].download_url
     );
   });
 
@@ -63,7 +63,7 @@ describe('<EditAnimePopup />', () => {
     };
     const wrapper = mount(
       <EditAnimePopup
-        anime={mockAnimeList['352']}
+        anime={mockAnimeList['abc352']}
         show={true}
         setShow={mockSetShow}
       />
@@ -135,7 +135,7 @@ describe('<EditAnimePopup />', () => {
 
     saveButton.simulate('click');
     const expectedResult = {
-      ...mockAnimeList['352'],
+      ...mockAnimeList['abc352'],
       title: 'new title',
       studio: 'new studio',
       view: 9,
@@ -150,7 +150,7 @@ describe('<EditAnimePopup />', () => {
       genres: 'genres',
     };
     expect(Database.update.anime).toHaveBeenCalledWith(
-      mockAnimeList['352'].key,
+      mockAnimeList['abc352'].key,
       expectedResult
     );
   });
@@ -163,7 +163,7 @@ describe('<EditAnimePopup />', () => {
     };
     const wrapper = mount(
       <EditAnimePopup
-        anime={mockAnimeList['352']}
+        anime={mockAnimeList['abc352']}
         show={true}
         setShow={mockSetShow}
       />
@@ -174,7 +174,7 @@ describe('<EditAnimePopup />', () => {
       .at(1);
     deleteButton.simulate('click');
     expect(Database.update.anime).toHaveBeenCalledWith(
-      mockAnimeList['352'].key,
+      mockAnimeList['abc352'].key,
       null
     );
   });

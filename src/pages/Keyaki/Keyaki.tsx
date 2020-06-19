@@ -86,18 +86,18 @@ const Keyaki = (): JSX.Element => {
         'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
       const photoUrl = photoFiles.filter((f) => f.filename === file.name)[0]
         ?.productUrl;
-      if (newKeyakiList[ep]) {
-        newKeyakiList[ep].sub[sub] = {
+      if (newKeyakiList['ep' + ep.toString()]) {
+        newKeyakiList['ep' + ep.toString()].sub[sub] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
         };
       } else {
-        newKeyakiList[ep] = {
+        newKeyakiList['ep' + ep.toString()] = {
           sub: {} as Record<string, File>,
           ep: ep,
           name: 'แก้ไข',
         };
-        newKeyakiList[ep].sub[sub] = {
+        newKeyakiList['ep' + ep.toString()].sub[sub] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
         };
@@ -109,14 +109,17 @@ const Keyaki = (): JSX.Element => {
 
   const randomEp = useCallback(() => {
     let ep = 0;
-    while (ep === 0 || keyakiList[ep] === null) {
+    while (ep === 0 || keyakiList['ep' + ep.toString()] === null) {
       ep = Math.floor(Math.random() * Object.keys(keyakiList).length);
     }
-    if (keyakiRef[ep]?.current) {
+    const currentRef: React.RefObject<HTMLTableRowElement> = keyakiRef[
+      'ep' + ep.toString()
+    ] as React.RefObject<HTMLTableRowElement>;
+    if (currentRef) {
       keyakiRef.map((ref) =>
         ref.current?.className ? (ref.current.className = '') : ''
       );
-      const current = keyakiRef[ep].current;
+      const current = currentRef.current;
       if (current) {
         current.className = 'bg-dark';
         current.scrollIntoView({
@@ -128,15 +131,15 @@ const Keyaki = (): JSX.Element => {
   }, [keyakiList, keyakiRef]);
 
   const showInput = useCallback(
-    (ep: number) => {
+    (key: string) => {
       if (UserDetail.isAdmin()) {
-        const name = keyakiList[ep]?.name || '';
+        const name = keyakiList[key]?.name || '';
         const callback = (newName: string) => {
           const newList = JSON.parse(JSON.stringify(keyakiList)) as Record<
             string,
             KeyakiType
           >;
-          newList[ep].name = newName;
+          newList[key].name = newName;
           Database.update.keyaki(newList);
         };
         const showInputPopup = (show: boolean) => {
@@ -172,12 +175,14 @@ const Keyaki = (): JSX.Element => {
                   (key) =>
                     keyakiList[key] !== null && (
                       <tr
-                        key={keyakiList[key].ep}
-                        ref={keyakiRef[keyakiList[key].ep]}
+                        key={key}
+                        ref={
+                          keyakiRef[key] as React.RefObject<HTMLTableRowElement>
+                        }
                       >
                         <td>{keyakiList[key].ep}</td>
                         <td className="text-left">
-                          <span onClick={() => showInput(keyakiList[key].ep)}>
+                          <span onClick={() => showInput(key)}>
                             {keyakiList[key].name}
                           </span>
                         </td>

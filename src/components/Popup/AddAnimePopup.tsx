@@ -23,9 +23,10 @@ const AddAnimePopup = (props: {
         'database'
       ) as DatabaseType).animeList;
       if (!animeList) return;
-      let key = Object.keys(animeList).length;
-      while (animeList[key]) key++;
-      const newAnime = {
+      let keyLength = Object.keys(animeList).length;
+      while (animeList['anime' + keyLength.toString()]) keyLength++;
+      const key = 'anime' + keyLength.toString();
+      const newAnime: Anime = {
         key: key,
         title: anime.title?.romaji,
         studio: anime.studios?.nodes[0]?.name,

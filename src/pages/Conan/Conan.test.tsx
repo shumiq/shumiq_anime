@@ -146,7 +146,7 @@ describe('<Conan />', () => {
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
     expect(Database.update.conan).toHaveBeenCalledWith({
-      '1': {
+      case1: {
         case: 1,
         episodes: {
           '200': { photoUrl: 'url', url: 'url' },
@@ -155,7 +155,7 @@ describe('<Conan />', () => {
         },
         name: 'case 1',
       },
-      '2': {
+      case2: {
         case: 2,
         episodes: {
           '203': { photoUrl: 'url', url: 'url' },
@@ -168,7 +168,7 @@ describe('<Conan />', () => {
         },
         name: 'case 2',
       },
-      '3': {
+      case3: {
         case: 3,
         episodes: {
           '206': {
@@ -201,7 +201,7 @@ describe('<Conan />', () => {
     expect(wrapper.find('InputPopup')).toHaveLength(1);
     expect(wrapper.find('InputPopup').props().default).toEqual('case 1');
     expect(Database.update.conan).toHaveBeenCalledWith({
-      '1': {
+      case1: {
         case: 1,
         episodes: {
           '200': {
@@ -219,7 +219,7 @@ describe('<Conan />', () => {
         },
         name: 'newName',
       },
-      '2': {
+      case2: {
         case: 2,
         episodes: {
           '203': {

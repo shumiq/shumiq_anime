@@ -140,7 +140,7 @@ describe('<Keyaki />', () => {
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
     expect(Database.update.keyaki).toHaveBeenCalledWith({
-      '1': {
+      ep1: {
         ep: 1,
         sub: {
           Thai: {
@@ -154,7 +154,7 @@ describe('<Keyaki />', () => {
         },
         name: 'episode 1',
       },
-      '2': {
+      ep2: {
         ep: 2,
         sub: {
           Thai: {
@@ -169,7 +169,7 @@ describe('<Keyaki />', () => {
         },
         name: 'episode 2',
       },
-      '3': {
+      ep3: {
         ep: 3,
         sub: {
           Eng: {
@@ -202,7 +202,7 @@ describe('<Keyaki />', () => {
     expect(wrapper.find('InputPopup')).toHaveLength(1);
     expect(wrapper.find('InputPopup').props().default).toEqual('episode 1');
     expect(Database.update.keyaki).toHaveBeenCalledWith({
-      '1': {
+      ep1: {
         ep: 1,
         sub: {
           Thai: {
@@ -216,7 +216,7 @@ describe('<Keyaki />', () => {
         },
         name: 'newName',
       },
-      '2': {
+      ep2: {
         ep: 2,
         sub: {
           Thai: {

@@ -21,7 +21,7 @@ export interface DatabaseStatus {
 }
 
 export interface Anime {
-  key: number;
+  key: string;
   all_episode: string;
   cover_url: string;
   download: number;

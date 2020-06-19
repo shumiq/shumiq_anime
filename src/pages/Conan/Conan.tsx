@@ -86,18 +86,18 @@ const Conan = (): JSX.Element => {
         'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
       const photoUrl = photoFiles.filter((f) => f.filename === file.name)[0]
         ?.productUrl;
-      if (newConanList[cs]) {
-        newConanList[cs].episodes[ep] = {
+      if (newConanList['case' + cs.toString()]) {
+        newConanList['case' + cs.toString()].episodes[ep] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
         };
       } else {
-        newConanList[cs] = {
+        newConanList['case' + cs.toString()] = {
           episodes: {} as Record<number, File>,
           case: cs,
           name: 'แก้ไข',
         };
-        newConanList[cs].episodes[ep] = {
+        newConanList['case' + cs.toString()].episodes[ep] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
         };
@@ -109,14 +109,17 @@ const Conan = (): JSX.Element => {
 
   const randomEp = useCallback(() => {
     let ep = 0;
-    while (ep === 0 || conanList[ep] === null) {
+    while (ep === 0 || conanList['case' + ep.toString()] === null) {
       ep = Math.floor(Math.random() * Object.keys(conanList).length);
     }
-    if (conanRef[ep]?.current) {
+    const currentRef: React.RefObject<HTMLTableRowElement> = conanRef[
+      'case' + ep.toString()
+    ] as React.RefObject<HTMLTableRowElement>;
+    if (currentRef.current) {
       conanRef.map((ref) =>
         ref.current?.className ? (ref.current.className = '') : ''
       );
-      const current = conanRef[ep].current;
+      const current = currentRef.current;
       if (current) {
         current.className = 'bg-dark';
         current.scrollIntoView({
@@ -128,15 +131,15 @@ const Conan = (): JSX.Element => {
   }, [conanList, conanRef]);
 
   const showInput = useCallback(
-    (cs: string) => {
+    (key: string) => {
       if (UserDetail.isAdmin()) {
-        const name = conanList[cs]?.name || '';
+        const name = conanList[key]?.name || '';
         const callback = (newName: string) => {
           const newList = JSON.parse(JSON.stringify(conanList)) as Record<
             string,
             ConanType
           >;
-          newList[cs].name = newName;
+          newList[key].name = newName;
           Database.update.conan(newList);
         };
         const showInputPopup = (show: boolean) => {
@@ -172,16 +175,14 @@ const Conan = (): JSX.Element => {
                   (key) =>
                     conanList[key] !== null && (
                       <tr
-                        key={conanList[key].case}
-                        ref={conanRef[conanList[key].case]}
+                        key={key}
+                        ref={
+                          conanRef[key] as React.RefObject<HTMLTableRowElement>
+                        }
                       >
                         <td>{conanList[key].case}</td>
                         <td className="text-left">
-                          <span
-                            onClick={() =>
-                              showInput(conanList[key].case.toString())
-                            }
-                          >
+                          <span onClick={() => showInput(key)}>
                             {conanList[key].name}
                           </span>
                         </td>

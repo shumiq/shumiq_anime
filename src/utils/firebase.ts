@@ -136,10 +136,10 @@ export const Database = {
         console.error(error);
       }
     },
-    anime: (key: number, anime: Anime | null): void => {
+    anime: (key: string, anime: Anime | null): void => {
       try {
         Firebase.database.set(
-          'database/animeList/' + key.toString(),
+          'database/animeList/' + key,
           anime ? validateAnime(anime) : null
         );
       } catch (error) {

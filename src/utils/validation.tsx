@@ -1,4 +1,4 @@
-import { Database, Anime, Conan, Keyaki } from './types';
+import { Database, Anime, Conan, Keyaki, File } from './types';
 
 export const validateDatabase = (db: Database): Database | boolean => {
   if (Array.isArray(db.animeList)) {
@@ -36,7 +36,7 @@ export const validateDatabase = (db: Database): Database | boolean => {
 export const validateAnime = (anime: Anime): Anime => {
   return {
     ...anime,
-    key: parseInt(anime.key.toString()),
+    key: anime.key.toString(),
     all_episode: anime.all_episode?.toString() || '?',
     cover_url: anime.cover_url?.toString() || '',
     download: parseInt(anime.download.toString()),
@@ -57,10 +57,18 @@ export const validateAnime = (anime: Anime): Anime => {
 };
 
 export const validateConan = (conan: Conan): Conan => {
+  if (Array.isArray(conan.episodes)) {
+    const objectEpisodeList: Record<string, File> = {};
+    Object.keys(conan.episodes).forEach((key) => {
+      if (conan.episodes[key]) objectEpisodeList[key] = conan.episodes[key];
+    });
+    conan.episodes = objectEpisodeList;
+  }
   return {
     ...conan,
     case: parseInt(conan.case.toString()),
     name: conan.name?.toString() || '',
+    episodes: conan.episodes,
   };
 };
 
