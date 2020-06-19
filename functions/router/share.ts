@@ -2,7 +2,7 @@ import opengraphGenerator from '../utils/animeOg';
 import express from 'express';
 import axios from 'axios';
 
-const rest_url = 'https://shumiq-anime.firebaseio.com/database/animeList/';
+const rest_url = 'https://shumiq-anime.firebaseio.com/myanimelist_database/anime/';
 
 const router = express.Router();
 router.get('/:key', async (req, res) => {
