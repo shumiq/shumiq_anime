@@ -171,42 +171,46 @@ const Keyaki = (): JSX.Element => {
             </thead>
             <tbody>
               {keyakiList &&
-                Object.keys(keyakiList).map(
-                  (key) =>
-                    keyakiList[key] !== null && (
-                      <tr
-                        key={key}
-                        ref={
-                          keyakiRef[key] as React.RefObject<HTMLTableRowElement>
-                        }
-                      >
-                        <td>{keyakiList[key].ep}</td>
-                        <td className="text-left">
-                          <span onClick={() => showInput(key)}>
-                            {keyakiList[key].name}
-                          </span>
-                        </td>
-                        <td>
-                          {Object.keys(keyakiList[key].sub).map(
-                            (sub) =>
-                              keyakiList[key].sub[sub]?.url && (
-                                <button
-                                  className="btn btn-primary m-1"
-                                  onClick={() =>
-                                    showFiles(keyakiList[key].sub[sub])
-                                  }
-                                  key={
-                                    keyakiList[key].ep.toString() + '_' + sub
-                                  }
-                                >
-                                  {sub}
-                                </button>
-                              )
-                          )}
-                        </td>
-                      </tr>
-                    )
-                )}
+                Object.entries(keyakiList)
+                  .sort((entryA, entryB) => entryA[1].ep - entryB[1].ep)
+                  .map(
+                    ([key, keyaki]) =>
+                      keyakiList[key] !== null && (
+                        <tr
+                          key={key}
+                          ref={
+                            keyakiRef[key] as React.RefObject<
+                              HTMLTableRowElement
+                            >
+                          }
+                        >
+                          <td>{keyakiList[key].ep}</td>
+                          <td className="text-left">
+                            <span onClick={() => showInput(key)}>
+                              {keyakiList[key].name}
+                            </span>
+                          </td>
+                          <td>
+                            {Object.keys(keyakiList[key].sub).map(
+                              (sub) =>
+                                keyakiList[key].sub[sub]?.url && (
+                                  <button
+                                    className="btn btn-primary m-1"
+                                    onClick={() =>
+                                      showFiles(keyakiList[key].sub[sub])
+                                    }
+                                    key={
+                                      keyakiList[key].ep.toString() + '_' + sub
+                                    }
+                                  >
+                                    {sub}
+                                  </button>
+                                )
+                            )}
+                          </td>
+                        </tr>
+                      )
+                  )}
             </tbody>
           </table>
 

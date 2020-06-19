@@ -4,24 +4,38 @@ export const validateDatabase = (db: Database): Database | boolean => {
   if (Array.isArray(db.animeList)) {
     const objectAnimeList: Record<string, Anime> = {};
     Object.keys(db.animeList).forEach((key) => {
-      if (db.animeList[key])
-        objectAnimeList[key] = validateAnime(db.animeList[key]);
+      if (db.animeList[key]) {
+        const newKey = key.includes('anime') ? key : 'anime' + key;
+        objectAnimeList[newKey] = {
+          ...validateAnime(db.animeList[key]),
+          key: newKey,
+        };
+      }
     });
     db.animeList = objectAnimeList;
   }
   if (Array.isArray(db.conanList)) {
     const objectConanList: Record<string, Conan> = {};
     Object.keys(db.conanList).forEach((key) => {
-      if (db.conanList[key])
-        objectConanList[key] = validateConan(db.conanList[key]);
+      if (db.conanList[key]) {
+        const newKey = key.includes('case') ? key : 'case' + key;
+        objectConanList[newKey] = validateConan(db.conanList[key]);
+      }
     });
     db.conanList = objectConanList;
   }
+  Object.keys(db.conanList).forEach((key) => {
+    if (db.conanList[key]) {
+      db.conanList[key] = validateConan(db.conanList[key]);
+    }
+  });
   if (Array.isArray(db.keyakiList)) {
     const objectKeyakiList: Record<string, Keyaki> = {};
     Object.keys(db.keyakiList).forEach((key) => {
-      if (db.keyakiList[key])
-        objectKeyakiList[key] = validateKeyaki(db.keyakiList[key]);
+      if (db.keyakiList[key]) {
+        const newKey = key.includes('ep') ? key : 'ep' + key;
+        objectKeyakiList[newKey] = validateKeyaki(db.keyakiList[key]);
+      }
     });
     db.keyakiList = objectKeyakiList;
   }

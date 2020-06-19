@@ -171,41 +171,47 @@ const Conan = (): JSX.Element => {
             </thead>
             <tbody>
               {conanList &&
-                Object.keys(conanList).map(
-                  (key) =>
-                    conanList[key] !== null && (
-                      <tr
-                        key={key}
-                        ref={
-                          conanRef[key] as React.RefObject<HTMLTableRowElement>
-                        }
-                      >
-                        <td>{conanList[key].case}</td>
-                        <td className="text-left">
-                          <span onClick={() => showInput(key)}>
-                            {conanList[key].name}
-                          </span>
-                        </td>
-                        <td>
-                          {Object.keys(conanList[key].episodes).map(
-                            (episode: string) =>
-                              conanList[key].episodes[parseInt(episode)]
-                                ?.url && (
-                                <button
-                                  className="btn btn-primary m-1"
-                                  onClick={() =>
-                                    showFiles(conanList[key].episodes[episode])
-                                  }
-                                  key={episode}
-                                >
-                                  {episode}
-                                </button>
-                              )
-                          )}
-                        </td>
-                      </tr>
-                    )
-                )}
+                Object.entries(conanList)
+                  .sort((entryA, entryB) => entryA[1].case - entryB[1].case)
+                  .map(
+                    ([key, conan]) =>
+                      conanList[key] !== null && (
+                        <tr
+                          key={key}
+                          ref={
+                            conanRef[key] as React.RefObject<
+                              HTMLTableRowElement
+                            >
+                          }
+                        >
+                          <td>{conanList[key].case}</td>
+                          <td className="text-left">
+                            <span onClick={() => showInput(key)}>
+                              {conanList[key].name}
+                            </span>
+                          </td>
+                          <td>
+                            {Object.keys(conanList[key].episodes).map(
+                              (episode: string) =>
+                                conanList[key].episodes[parseInt(episode)]
+                                  ?.url && (
+                                  <button
+                                    className="btn btn-primary m-1"
+                                    onClick={() =>
+                                      showFiles(
+                                        conanList[key].episodes[episode]
+                                      )
+                                    }
+                                    key={episode}
+                                  >
+                                    {episode}
+                                  </button>
+                                )
+                            )}
+                          </td>
+                        </tr>
+                      )
+                  )}
             </tbody>
           </table>
 
