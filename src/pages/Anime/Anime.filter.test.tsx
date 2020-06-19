@@ -6,7 +6,7 @@ import { Anime, Database } from '../../utils/types';
 const mockAnimeList: Record<
   string,
   Anime
-> = ((mockDatabase as unknown) as Database).animeList;
+> = ((mockDatabase as unknown) as Database).anime;
 
 describe('Anime Filter', () => {
   it('should return correct list of season', () => {

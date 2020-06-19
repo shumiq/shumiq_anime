@@ -1,7 +1,7 @@
 export interface Database {
-  animeList: Record<string, Anime>;
-  conanList: Record<string, Conan>;
-  keyakiList: Record<string, Keyaki>;
+  anime: Record<string, Anime>;
+  conan: Record<string, Conan>;
+  keyaki: Record<string, Keyaki>;
 }
 
 export interface DatabaseStatus {

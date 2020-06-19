@@ -1,14 +1,9 @@
 import React, { useCallback, useState, ChangeEvent } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { getLocalStorage } from '../../utils/localstorage';
 import { Database } from '../../utils/firebase';
 import AnilistApi from '../../api/anilist';
 import { SeasonEnum } from '../../utils/enum';
-import {
-  AnilistInfoResponse,
-  Anime,
-  Database as DatabaseType,
-} from '../../utils/types';
+import { AnilistInfoResponse, Anime } from '../../utils/types';
 
 const AddAnimePopup = (props: {
   show: boolean;
@@ -19,13 +14,6 @@ const AddAnimePopup = (props: {
   const closePopup = useCallback(() => props.setShow(false), [props]);
   const addAnime = useCallback(
     (anime: AnilistInfoResponse): void => {
-      const animeList: Record<string, Anime> = (getLocalStorage(
-        'database'
-      ) as DatabaseType).animeList;
-      if (!animeList) return;
-      let keyLength = Object.keys(animeList).length;
-      while (animeList['anime' + keyLength.toString()]) keyLength++;
-      const key = 'anime' + keyLength.toString();
       const newAnime: Anime = {
         title: anime.title?.romaji,
         studio: anime.studios?.nodes[0]?.name,
@@ -50,7 +38,7 @@ const AddAnimePopup = (props: {
         genres: anime.genres.join(', '),
         cover_url: anime.coverImage.large,
       };
-      Database.update.anime(key, newAnime);
+      Database.add.anime(newAnime);
       closePopup();
     },
     [closePopup]

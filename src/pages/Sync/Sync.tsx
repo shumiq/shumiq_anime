@@ -12,7 +12,7 @@ import {
 
 const Sync = (): JSX.Element => {
   const [animeList, setAnimeList] = useState<Record<string, Anime>>(
-    (getLocalStorage('database') as DatabaseType).animeList
+    (getLocalStorage('database') as DatabaseType).anime
   );
   const [albumList, setAlbumList] = useState<
     Record<string, GooglePhotoAlbumResponse>
@@ -22,7 +22,7 @@ const Sync = (): JSX.Element => {
 
   useEffect(() => {
     Database.subscribe((db) => {
-      setAnimeList(db.animeList);
+      setAnimeList(db.anime);
     });
     const fetchAlbums = async () => {
       setPopup(
@@ -63,7 +63,7 @@ const Sync = (): JSX.Element => {
     [albumList, nextPageToken]
   );
 
-  const unsync = useCallback((key:string, anime: Anime) => {
+  const unsync = useCallback((key: string, anime: Anime) => {
     if (window.confirm('Do you want to unsync "' + anime.title + '" ?')) {
       anime.gphotoid = '';
       Database.update.anime(key, anime);
@@ -71,7 +71,7 @@ const Sync = (): JSX.Element => {
   }, []);
 
   const update = useCallback(
-    async (key:string, anime: Anime) => {
+    async (key: string, anime: Anime) => {
       setPopup(
         <GeneralPopup show={true} message="Loading..." canClose={false} />
       );
@@ -97,7 +97,7 @@ const Sync = (): JSX.Element => {
   );
 
   const sync = useCallback(
-    (key:string, anime: Anime) => {
+    (key: string, anime: Anime) => {
       anime.gphotoid = Object.entries(albumList).filter(
         (entry) => entry[1].title === '[Anime] ' + anime.title
       )[0]?.[0];
@@ -141,7 +141,7 @@ const Sync = (): JSX.Element => {
                   );
               })
               .map(
-                ([key,anime]) =>
+                ([key, anime]) =>
                   anime !== null && (
                     <tr key={key} className="row-anime">
                       <td className="text-center align-middle">
@@ -153,9 +153,7 @@ const Sync = (): JSX.Element => {
                           />
                         </a>
                       </td>
-                      <td className="text-left align-middle">
-                        {anime.title}
-                      </td>
+                      <td className="text-left align-middle">{anime.title}</td>
                       <td className="text-center align-middle">
                         {anime.download}
                         {albumList[anime.gphotoid] &&

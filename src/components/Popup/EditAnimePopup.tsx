@@ -5,12 +5,12 @@ import { Anime } from '../../utils/types';
 
 const EditAnimePopup = (props: {
   show: boolean;
-  key: string;
+  anime_key: string;
   setShow: (show: boolean) => void;
   anime: Anime;
 }): JSX.Element => {
   const anime = props.anime;
-  const key = props.key;
+  const key = props.anime_key;
   const state: Anime = { ...anime };
 
   const closePopup = useCallback(() => props.setShow(false), [props]);
@@ -18,14 +18,14 @@ const EditAnimePopup = (props: {
   const saveAnime = useCallback(() => {
     Database.update.anime(key, state);
     closePopup();
-  }, [state, closePopup]);
+  }, [key, state, closePopup]);
 
   const deleteAnime = useCallback(() => {
     if (window.confirm('Do you want to delete "' + anime.title + '" ?')) {
       Database.update.anime(key, null);
       closePopup();
     }
-  }, [anime, state, closePopup]);
+  }, [key, anime, closePopup]);
 
   const updateFormData = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -45,9 +45,7 @@ const EditAnimePopup = (props: {
         onHide={closePopup}
       >
         <Modal.Header closeButton>
-          <Modal.Title>
-            Edit (#{key}) {anime.title}
-          </Modal.Title>
+          <Modal.Title>Edit {anime.title}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>

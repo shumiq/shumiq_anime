@@ -8,12 +8,12 @@ const AnimeInfoPopup = (props: {
   show: boolean;
   setShow: (show: boolean) => void;
   anime: Anime;
-  key: string;
+  anime_key: string;
   info: AnilistInfoResponse;
 }): JSX.Element => {
   const anime = props.anime;
   const info = props.info;
-  const key = props.key;
+  const key = props.anime_key;
   const closePopup = useCallback(() => props.setShow(false), [props]);
 
   const syncAnime = useCallback(() => {
@@ -43,7 +43,7 @@ const AnimeInfoPopup = (props: {
     state.cover_url = info.coverImage.large;
     Database.update.anime(key, state);
     closePopup();
-  }, [anime, closePopup, info]);
+  }, [key, anime, closePopup, info]);
 
   const blackListResult = useCallback(() => {
     if (
@@ -55,7 +55,7 @@ const AnimeInfoPopup = (props: {
       Database.update.anime(key, state);
       closePopup();
     }
-  }, [anime, closePopup, info]);
+  }, [key, anime, closePopup, info]);
 
   return (
     <div className="AnimeInfoPopup">

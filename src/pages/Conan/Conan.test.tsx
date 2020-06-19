@@ -145,40 +145,27 @@ describe('<Conan />', () => {
     const wrapper = shallow(<Conan />);
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
-    expect(Database.update.conan).toHaveBeenCalledWith({
-      case1: {
-        case: 1,
-        episodes: {
-          '200': { photoUrl: 'url', url: 'url' },
-          '201': { photoUrl: 'url', url: 'url' },
-          '202': { photoUrl: 'url', url: 'url' },
+    expect(Database.update.conan).toHaveBeenCalledWith('case2', {
+      case: 2,
+      episodes: {
+        '203': { photoUrl: 'url', url: 'url' },
+        '204': { photoUrl: 'url', url: 'url' },
+        '205': {
+          photoUrl: 'thisisurl1',
+          url: 'https://drive.google.com/file/d/thisisid1/preview?usp=drivesdk',
         },
-        name: 'case 1',
       },
-      case2: {
-        case: 2,
-        episodes: {
-          '203': { photoUrl: 'url', url: 'url' },
-          '204': { photoUrl: 'url', url: 'url' },
-          '205': {
-            photoUrl: 'thisisurl1',
-            url:
-              'https://drive.google.com/file/d/thisisid1/preview?usp=drivesdk',
-          },
+      name: 'case 2',
+    });
+    expect(Database.add.conan).toHaveBeenCalledWith({
+      case: 3,
+      episodes: {
+        '206': {
+          photoUrl: 'thisisurl2',
+          url: 'https://drive.google.com/file/d/thisisid2/preview?usp=drivesdk',
         },
-        name: 'case 2',
       },
-      case3: {
-        case: 3,
-        episodes: {
-          '206': {
-            photoUrl: 'thisisurl2',
-            url:
-              'https://drive.google.com/file/d/thisisid2/preview?usp=drivesdk',
-          },
-        },
-        name: 'แก้ไข',
-      },
+      name: 'แก้ไข',
     });
   });
 
@@ -200,39 +187,23 @@ describe('<Conan />', () => {
     }).callback('newName');
     expect(wrapper.find('InputPopup')).toHaveLength(1);
     expect(wrapper.find('InputPopup').props().default).toEqual('case 1');
-    expect(Database.update.conan).toHaveBeenCalledWith({
-      case1: {
-        case: 1,
-        episodes: {
-          '200': {
-            photoUrl: 'url',
-            url: 'url',
-          },
-          '201': {
-            photoUrl: 'url',
-            url: 'url',
-          },
-          '202': {
-            photoUrl: 'url',
-            url: 'url',
-          },
+    expect(Database.update.conan).toHaveBeenCalledWith('case1', {
+      case: 1,
+      episodes: {
+        '200': {
+          photoUrl: 'url',
+          url: 'url',
         },
-        name: 'newName',
-      },
-      case2: {
-        case: 2,
-        episodes: {
-          '203': {
-            photoUrl: 'url',
-            url: 'url',
-          },
-          '204': {
-            photoUrl: 'url',
-            url: 'url',
-          },
+        '201': {
+          photoUrl: 'url',
+          url: 'url',
         },
-        name: 'case 2',
+        '202': {
+          photoUrl: 'url',
+          url: 'url',
+        },
       },
+      name: 'newName',
     });
   });
 });

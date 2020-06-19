@@ -19,7 +19,7 @@ const photoAlbumId =
 
 const Keyaki = (): JSX.Element => {
   const [keyakiList, setKeyakiList] = useState<Record<string, KeyakiType>>(
-    (getLocalStorage('database') as DatabaseType)?.keyakiList
+    (getLocalStorage('database') as DatabaseType)?.keyaki
   );
   const [keyakiRef, setKeyakiRef] = useState<
     React.RefObject<HTMLTableRowElement>[]
@@ -28,7 +28,7 @@ const Keyaki = (): JSX.Element => {
 
   useEffect(() => {
     Database.subscribe((db) => {
-      setKeyakiList(db?.keyakiList);
+      setKeyakiList(db?.keyaki);
     });
   }, []);
 
@@ -36,8 +36,8 @@ const Keyaki = (): JSX.Element => {
     function UpdateKeyakiRef() {
       const ref = [];
       if (keyakiList)
-        Object.keys(keyakiList).forEach((ep) => {
-          ref[ep] = createRef();
+        Object.keys(keyakiList).forEach((key) => {
+          ref[key] = createRef();
         });
       setKeyakiRef(ref);
     }
@@ -67,10 +67,6 @@ const Keyaki = (): JSX.Element => {
       );
     };
     showLoadingPopup(true);
-    const newKeyakiList = JSON.parse(JSON.stringify(keyakiList)) as Record<
-      string,
-      KeyakiType
-    >;
     const driveFiles = (await GoogleDriveApi.getFiles(driveFolderId)) as {
       name: string;
       id: string;
@@ -86,34 +82,41 @@ const Keyaki = (): JSX.Element => {
         'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
       const photoUrl = photoFiles.filter((f) => f.filename === file.name)[0]
         ?.productUrl;
-      if (newKeyakiList['ep' + ep.toString()]) {
-        newKeyakiList['ep' + ep.toString()].sub[sub] = {
-          url: url,
-          photoUrl: photoUrl ? photoUrl : null,
-        };
+      if (
+        Object.entries(keyakiList).filter(([key, keyaki]) => keyaki.ep === ep)
+          .length > 0
+      ) {
+        Object.entries(keyakiList)
+          .filter(([key, keyaki]) => keyaki.ep === ep)
+          .forEach(([key, keyaki]) => {
+            keyaki.sub[sub] = {
+              url: url,
+              photoUrl: photoUrl ? photoUrl : null,
+            };
+            Database.update.keyaki(key, keyaki);
+          });
       } else {
-        newKeyakiList['ep' + ep.toString()] = {
+        const keyaki: KeyakiType = {
           sub: {} as Record<string, File>,
           ep: ep,
           name: 'แก้ไข',
         };
-        newKeyakiList['ep' + ep.toString()].sub[sub] = {
+        keyaki.sub[sub] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
         };
+        Database.add.keyaki(keyaki);
       }
     });
-    Database.update.keyaki(newKeyakiList);
     showLoadingPopup(false);
   }, [keyakiList]);
 
   const randomEp = useCallback(() => {
-    let ep = 0;
-    while (ep === 0 || keyakiList['ep' + ep.toString()] === null) {
-      ep = Math.floor(Math.random() * Object.keys(keyakiList).length);
-    }
+    const randomKey = Object.keys(keyakiList)[
+      Math.floor(Math.random() * Object.keys(keyakiList).length)
+    ];
     const currentRef: React.RefObject<HTMLTableRowElement> = keyakiRef[
-      'ep' + ep.toString()
+      randomKey
     ] as React.RefObject<HTMLTableRowElement>;
     if (currentRef) {
       keyakiRef.map((ref) =>
@@ -135,12 +138,8 @@ const Keyaki = (): JSX.Element => {
       if (UserDetail.isAdmin()) {
         const name = keyakiList[key]?.name || '';
         const callback = (newName: string) => {
-          const newList = JSON.parse(JSON.stringify(keyakiList)) as Record<
-            string,
-            KeyakiType
-          >;
-          newList[key].name = newName;
-          Database.update.keyaki(newList);
+          keyakiList[key].name = newName;
+          Database.update.keyaki(key, keyakiList[key]);
         };
         const showInputPopup = (show: boolean) => {
           setPopup(

@@ -30,8 +30,8 @@ describe('<Sync />', () => {
     (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
     (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
-        { id: mockDatabase.animeList['abc352'].gphotoid, mediaItemsCount: 2 },
-        { id: mockDatabase.animeList['abc350'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc352'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc350'].gphotoid, mediaItemsCount: 2 },
       ],
     });
     const wrapper = shallow(<Sync />);
@@ -53,8 +53,8 @@ describe('<Sync />', () => {
     (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
     (GooglePhotoApi.getAllAlbums as jest.Mock).mockResolvedValue({
       albums: [
-        { id: mockDatabase.animeList['abc352'].gphotoid, mediaItemsCount: 2 },
-        { id: mockDatabase.animeList['abc350'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc352'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc350'].gphotoid, mediaItemsCount: 2 },
       ],
     });
     const wrapper = shallow(<Sync />);
@@ -76,8 +76,8 @@ describe('<Sync />', () => {
     (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
     (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
-        { id: mockDatabase.animeList['abc352'].gphotoid, mediaItemsCount: 2 },
-        { id: mockDatabase.animeList['abc350'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc352'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc350'].gphotoid, mediaItemsCount: 2 },
       ],
     });
     const wrapper = shallow(<Sync />);
@@ -96,8 +96,8 @@ describe('<Sync />', () => {
     (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
     (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
-        { id: mockDatabase.animeList['abc352'].gphotoid, mediaItemsCount: 2 },
-        { id: mockDatabase.animeList['abc350'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc352'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc350'].gphotoid, mediaItemsCount: 2 },
       ],
     });
     (GooglePhotoApi.getMedias as jest.Mock).mockResolvedValue([]);
@@ -117,15 +117,12 @@ describe('<Sync />', () => {
       (wrapper.find('GeneralPopup')?.props() as { show: boolean }).show
     ).toBe(false);
     const updatedAnime = {
-      ...mockDatabase.animeList['abc350'],
+      ...mockDatabase.anime['abc350'],
       download: 2,
       gdriveid_public: '',
       gdriveid: '',
     };
-    expect(Database.update.anime).toHaveBeenCalledWith(
-      updatedAnime.key,
-      updatedAnime
-    );
+    expect(Database.update.anime).toHaveBeenCalledWith('abc350', updatedAnime);
   });
 
   it('should called save anime when unsync', async () => {
@@ -133,8 +130,8 @@ describe('<Sync />', () => {
     (getLocalStorage as jest.Mock).mockReturnValue({ ...mockDatabase });
     (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
-        { id: mockDatabase.animeList['abc352'].gphotoid, mediaItemsCount: 2 },
-        { id: mockDatabase.animeList['abc350'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc352'].gphotoid, mediaItemsCount: 2 },
+        { id: mockDatabase.anime['abc350'].gphotoid, mediaItemsCount: 2 },
       ],
     });
     window.confirm = jest.fn(() => true);
@@ -144,32 +141,29 @@ describe('<Sync />', () => {
     await flushPromises();
     // Then
     const updatedAnime = {
-      ...mockDatabase.animeList['abc350'],
+      ...mockDatabase.anime['abc350'],
       gphotoid: '',
     };
-    expect(Database.update.anime).toHaveBeenCalledWith(
-      updatedAnime.key,
-      updatedAnime
-    );
+    expect(Database.update.anime).toHaveBeenCalledWith('abc350', updatedAnime);
   });
 
   it('should see sync buttons correctly', async () => {
     // Given
     const db = JSON.parse(JSON.stringify(mockDatabase)) as DatabaseType;
-    if (db.animeList['abc352']) db.animeList['abc352'].gphotoid = '';
-    if (db.animeList['abc350']) db.animeList['abc350'].gphotoid = '';
+    if (db.anime['abc352']) db.anime['abc352'].gphotoid = '';
+    if (db.anime['abc350']) db.anime['abc350'].gphotoid = '';
     (getLocalStorage as jest.Mock).mockReturnValue(db);
     (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
         {
-          id: mockDatabase.animeList['abc352'].gphotoid,
-          title: '[Anime] ' + mockDatabase.animeList['abc352'].title,
+          id: mockDatabase.anime['abc352'].gphotoid,
+          title: '[Anime] ' + mockDatabase.anime['abc352'].title,
           productUrl: '',
           mediaItemsCount: 2,
         },
         {
-          id: mockDatabase.animeList['abc350'].gphotoid,
-          title: '[Anime] ' + mockDatabase.animeList['abc350'].title + ' SS2',
+          id: mockDatabase.anime['abc350'].gphotoid,
+          title: '[Anime] ' + mockDatabase.anime['abc350'].title + ' SS2',
           productUrl: '',
           mediaItemsCount: 2,
         },
@@ -193,20 +187,20 @@ describe('<Sync />', () => {
   it('should call save anime when click sync buttons', async () => {
     // Given
     const db = JSON.parse(JSON.stringify(mockDatabase)) as DatabaseType;
-    if (db.animeList['abc352']) db.animeList['abc352'].gphotoid = '';
-    if (db.animeList['abc350']) db.animeList['abc350'].gphotoid = '';
+    if (db.anime['abc352']) db.anime['abc352'].gphotoid = '';
+    if (db.anime['abc350']) db.anime['abc350'].gphotoid = '';
     (getLocalStorage as jest.Mock).mockReturnValue(db);
     (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
         {
-          id: mockDatabase.animeList['abc352'].gphotoid,
-          title: '[Anime] ' + mockDatabase.animeList['abc352'].title,
+          id: mockDatabase.anime['abc352'].gphotoid,
+          title: '[Anime] ' + mockDatabase.anime['abc352'].title,
           productUrl: '',
           mediaItemsCount: 2,
         },
         {
-          id: mockDatabase.animeList['abc350'].gphotoid,
-          title: '[Anime] ' + mockDatabase.animeList['abc350'].title + ' SS2',
+          id: mockDatabase.anime['abc350'].gphotoid,
+          title: '[Anime] ' + mockDatabase.anime['abc350'].title + ' SS2',
           productUrl: '',
           mediaItemsCount: 2,
         },
@@ -220,12 +214,9 @@ describe('<Sync />', () => {
     await flushPromises();
     // Then
     const updatedAnime = {
-      ...mockDatabase.animeList['abc352'],
-      gphotoid: mockDatabase.animeList['abc352'].gphotoid,
+      ...mockDatabase.anime['abc352'],
+      gphotoid: mockDatabase.anime['abc352'].gphotoid,
     };
-    expect(Database.update.anime).toHaveBeenCalledWith(
-      updatedAnime.key,
-      updatedAnime
-    );
+    expect(Database.update.anime).toHaveBeenCalledWith('abc352', updatedAnime);
   });
 });

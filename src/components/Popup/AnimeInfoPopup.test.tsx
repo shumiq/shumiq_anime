@@ -11,7 +11,7 @@ jest.mock('../../utils/firebase');
 const mockAnimeList: Record<
   string,
   Anime
-> = ((mockDatabase as unknown) as DatabaseType).animeList;
+> = ((mockDatabase as unknown) as DatabaseType).anime;
 const mockInfo = {
   id: 107871,
   title: {
@@ -50,7 +50,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={false}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -65,7 +65,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -92,7 +92,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -108,7 +108,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -128,7 +128,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={mockSetShow}
       />
     );
@@ -162,7 +162,7 @@ describe('<AnimeInfoPopup />', () => {
         anime={mockAnimeList['abc352']}
         info={mockInfo}
         show={true}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={mockSetShow}
       />
     );

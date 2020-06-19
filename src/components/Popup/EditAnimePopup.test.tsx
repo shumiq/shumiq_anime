@@ -10,7 +10,7 @@ jest.mock('../../utils/firebase');
 const mockAnimeList: Record<
   string,
   Anime
-> = ((mockDatabase as unknown) as DatabaseType).animeList;
+> = ((mockDatabase as unknown) as DatabaseType).anime;
 
 describe('<EditAnimePopup />', () => {
   it('should not show when show props is false', () => {
@@ -18,7 +18,7 @@ describe('<EditAnimePopup />', () => {
       <EditAnimePopup
         anime={mockAnimeList['abc352']}
         show={false}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -32,7 +32,7 @@ describe('<EditAnimePopup />', () => {
       <EditAnimePopup
         anime={mockAnimeList['abc352']}
         show={true}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={() => {
           return;
         }}
@@ -67,7 +67,7 @@ describe('<EditAnimePopup />', () => {
       <EditAnimePopup
         anime={mockAnimeList['abc352']}
         show={true}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={mockSetShow}
       />
     );
@@ -168,7 +168,7 @@ describe('<EditAnimePopup />', () => {
       <EditAnimePopup
         anime={mockAnimeList['abc352']}
         show={true}
-        key={'abc352'}
+        anime_key={'abc352'}
         setShow={mockSetShow}
       />
     );
@@ -177,9 +177,6 @@ describe('<EditAnimePopup />', () => {
       .find('button.btn-primary')
       .at(1);
     deleteButton.simulate('click');
-    expect(Database.update.anime).toHaveBeenCalledWith(
-      'abc352',
-      null
-    );
+    expect(Database.update.anime).toHaveBeenCalledWith('abc352', null);
   });
 });

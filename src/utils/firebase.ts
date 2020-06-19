@@ -15,52 +15,57 @@ import {
   validateKeyaki,
 } from './validation';
 
+const databasePath = 'myanimelist_database';
+
 export const Database = {
   subscribe: (callback: (database: DatabaseType) => void): void => {
-    Firebase.database.subscribe('/database', (database: DatabaseType): void => {
-      setLocalStorage('database', validateDatabase(database));
-      callback(getLocalStorage('database') as DatabaseType);
-    });
+    Firebase.database.subscribe(
+      '/' + databasePath,
+      (database: DatabaseType): void => {
+        setLocalStorage('database', validateDatabase(database));
+        callback(getLocalStorage('database') as DatabaseType);
+      }
+    );
   },
   status: (): DatabaseStatus => {
     const database = getLocalStorage('database') as DatabaseType;
     if (!database) return {};
     let sumAnime = 0;
-    Object.keys(database.animeList).forEach((key) => {
-      if (database.animeList[key]) {
-        sumAnime += database.animeList[key].download;
+    Object.keys(database.anime).forEach((key) => {
+      if (database.anime[key]) {
+        sumAnime += database.anime[key].download;
       }
     });
     let sumViewAnime = 0;
-    Object.keys(database.animeList).forEach((key) => {
-      if (database.animeList[key]) {
-        sumViewAnime += database.animeList[key].view;
+    Object.keys(database.anime).forEach((key) => {
+      if (database.anime[key]) {
+        sumViewAnime += database.anime[key].view;
       }
     });
     let sumConan = 0;
-    Object.keys(database.conanList).forEach((key) => {
-      if (database.conanList[key]) {
-        sumConan += Object.keys(database.conanList[key].episodes).length;
+    Object.keys(database.conan).forEach((key) => {
+      if (database.conan[key]) {
+        sumConan += Object.keys(database.conan[key].episodes).length;
       }
     });
     let sumKeyaki = 0;
-    Object.keys(database.keyakiList).forEach((key) => {
-      if (database.keyakiList[key]) {
-        sumKeyaki += Object.keys(database.keyakiList[key].sub).length;
+    Object.keys(database.keyaki).forEach((key) => {
+      if (database.keyaki[key]) {
+        sumKeyaki += Object.keys(database.keyaki[key].sub).length;
       }
     });
     return {
       anime: {
-        series: Object.keys(database.animeList).length,
+        series: Object.keys(database.anime).length,
         files: sumAnime,
         view: sumViewAnime,
       },
       conan: {
-        cases: Object.keys(database.conanList).length,
+        cases: Object.keys(database.conan).length,
         files: sumConan,
       },
       keyaki: {
-        episodes: Object.keys(database.keyakiList).length,
+        episodes: Object.keys(database.keyaki).length,
         files: sumKeyaki,
       },
     };
@@ -127,10 +132,40 @@ export const Database = {
     });
     return true;
   },
+  add: {
+    anime: (anime: Anime): void => {
+      try {
+        Firebase.database.push(databasePath + '/anime/', validateAnime(anime));
+      } catch (error) {
+        console.error('Push anime failed: Anime has invalid format');
+        console.error(error);
+      }
+    },
+    conan: (conan: Conan): void => {
+      try {
+        Firebase.database.push(databasePath + '/conan/', validateConan(conan));
+      } catch (error) {
+        console.error('Push conan failed: Conan has invalid format');
+        console.error(error);
+      }
+    },
+    keyaki: (keyaki: Keyaki): void => {
+      try {
+        Firebase.database.push(
+          databasePath + '/keyaki/',
+          validateKeyaki(keyaki)
+        );
+      } catch (error) {
+        console.error('Push keyaki failed: Keyaki has invalid format');
+        console.error(error);
+      }
+    },
+  },
   update: {
     database: (db: DatabaseType): void => {
       try {
-        Firebase.database.set('database', validateDatabase(db));
+        Firebase.database.set(databasePath, validateDatabase(db));
+        // tempNewDatabaseOperation(db);
       } catch (error) {
         console.error('Update database failed: Database has invalid format');
         console.error(error);
@@ -139,7 +174,7 @@ export const Database = {
     anime: (key: string, anime: Anime | null): void => {
       try {
         Firebase.database.set(
-          'database/animeList/' + key,
+          databasePath + '/anime/' + key,
           anime ? validateAnime(anime) : null
         );
       } catch (error) {
@@ -147,25 +182,26 @@ export const Database = {
         console.error(error);
       }
     },
-    conan: (conanList: Record<string, Conan>): void => {
-      Object.keys(conanList).forEach((key) => {
-        conanList[key] = validateConan(conanList[key]);
-      });
+    conan: (key: string, conan: Conan): void => {
       try {
-        Firebase.database.set('database/conanList/', conanList);
+        Firebase.database.set(
+          databasePath + '/conan/' + key,
+          conan ? validateConan(conan) : null
+        );
       } catch (error) {
         console.error('Update conan failed: Conan has invalid format');
         console.error(error);
       }
     },
-    keyaki: (keyakiList: Record<string, Keyaki>): void => {
-      Object.keys(keyakiList).forEach((key) => {
-        keyakiList[key] = validateKeyaki(keyakiList[key]);
-      });
+    keyaki: (key: string, keyaki: Keyaki): void => {
       try {
-        Firebase.database.set('database/keyakiList/', keyakiList);
+        Firebase.database.set(
+          databasePath + '/keyaki/' + key,
+          keyaki ? validateKeyaki(keyaki) : null
+        );
       } catch (error) {
         console.error('Update keyaki failed: Keyaki has invalid format');
+        console.error(error);
       }
     },
   },

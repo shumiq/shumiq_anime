@@ -16,11 +16,11 @@ import { Anime } from '../../utils/types';
 
 const AnimeCard = (props: {
   anime: Anime;
-  key: string;
+  anime_key: string;
   setPopup: (popup: string | JSX.Element) => void;
 }): JSX.Element => {
   const anime = props.anime;
-  const key = props.key;
+  const key = props.anime_key;
   const setPopup = props.setPopup;
   const layout =
     JSON.stringify(getLocalStorage('layout')) !== '{}'
@@ -33,7 +33,7 @@ const AnimeCard = (props: {
       animeCopy[field] = parseInt(animeCopy[field]) + 1;
       Database.update.anime(key, animeCopy);
     },
-    [anime]
+    [key, anime]
   );
 
   const share = useCallback((): void => {
@@ -56,7 +56,7 @@ const AnimeCard = (props: {
       };
       showClipboardPopup(true);
     }
-  }, [anime, setPopup]);
+  }, [key, anime, setPopup]);
 
   const showInfo = useCallback(async (): Promise<void> => {
     setPopup(
@@ -71,7 +71,7 @@ const AnimeCard = (props: {
         setPopup(
           <AnimeInfoPopup
             anime={anime}
-            key={key}
+            anime_key={key}
             info={response}
             show={show}
             setShow={showInfoPopup}
@@ -80,7 +80,7 @@ const AnimeCard = (props: {
       };
       showInfoPopup(true);
     }
-  }, [anime, setPopup]);
+  }, [key, anime, setPopup]);
 
   const showFolder = useCallback(async (): Promise<void> => {
     setPopup(
@@ -128,10 +128,15 @@ const AnimeCard = (props: {
   const showEditPopup = useCallback(
     (show: boolean) => {
       setPopup(
-        <EditAnimePopup anime={anime} show={show} key={key} setShow={showEditPopup} />
+        <EditAnimePopup
+          anime={anime}
+          show={show}
+          anime_key={key}
+          setShow={showEditPopup}
+        />
       );
     },
-    [anime, setPopup]
+    [key, anime, setPopup]
   );
 
   const showFilesPopup = useCallback(

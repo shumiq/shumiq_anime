@@ -119,7 +119,7 @@ describe('<AddAnimePopup />', () => {
     expect(result.at(2).text()).toContain('SUMMER');
   });
 
-  it('should call Database.update.anime when click add', async () => {
+  it('should call Database.add.anime when click add', async () => {
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     (AnilistApi.searchAnime as jest.Mock).mockResolvedValue([
       {
@@ -152,7 +152,7 @@ describe('<AddAnimePopup />', () => {
       wrapper.find('div.modal').find('#btn-add').simulate('click');
       await flushPromises();
     });
-    expect(Database.update.anime).toHaveBeenCalledWith('anime2', {
+    expect(Database.add.anime).toHaveBeenCalledWith({
       all_episode: '10',
       cover_url: 'cover_url',
       download: 0,
@@ -162,7 +162,6 @@ describe('<AddAnimePopup />', () => {
       gphotoid: '',
       genres: 'genre1, genre2',
       info: 'description',
-      key: 'anime2',
       score: '9.9',
       season: 2,
       studio: 'studio',

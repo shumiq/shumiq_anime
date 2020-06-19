@@ -139,47 +139,26 @@ describe('<Keyaki />', () => {
     const wrapper = shallow(<Keyaki />);
     wrapper.find('#btn-update').simulate('click');
     await flushPromises();
-    expect(Database.update.keyaki).toHaveBeenCalledWith({
-      ep1: {
-        ep: 1,
-        sub: {
-          Thai: {
-            photoUrl: 'url',
-            url: 'url',
-          },
-          Eng: {
-            photoUrl: 'url',
-            url: 'url',
-          },
+    expect(Database.update.keyaki).toHaveBeenCalledWith('ep2', {
+      ep: 2,
+      name: 'episode 2',
+      sub: {
+        Eng: {
+          photoUrl: 'thisisurl1',
+          url: 'https://drive.google.com/file/d/thisisid1/preview?usp=drivesdk',
         },
-        name: 'episode 1',
+        Thai: { photoUrl: 'url', url: 'url' },
       },
-      ep2: {
-        ep: 2,
-        sub: {
-          Thai: {
-            photoUrl: 'url',
-            url: 'url',
-          },
-          Eng: {
-            photoUrl: 'thisisurl1',
-            url:
-              'https://drive.google.com/file/d/thisisid1/preview?usp=drivesdk',
-          },
+    });
+    expect(Database.add.keyaki).toHaveBeenCalledWith({
+      ep: 3,
+      sub: {
+        Eng: {
+          photoUrl: 'thisisurl2',
+          url: 'https://drive.google.com/file/d/thisisid2/preview?usp=drivesdk',
         },
-        name: 'episode 2',
       },
-      ep3: {
-        ep: 3,
-        sub: {
-          Eng: {
-            photoUrl: 'thisisurl2',
-            url:
-              'https://drive.google.com/file/d/thisisid2/preview?usp=drivesdk',
-          },
-        },
-        name: 'แก้ไข',
-      },
+      name: 'แก้ไข',
     });
   });
 
@@ -201,30 +180,12 @@ describe('<Keyaki />', () => {
     }).callback('newName');
     expect(wrapper.find('InputPopup')).toHaveLength(1);
     expect(wrapper.find('InputPopup').props().default).toEqual('episode 1');
-    expect(Database.update.keyaki).toHaveBeenCalledWith({
-      ep1: {
-        ep: 1,
-        sub: {
-          Thai: {
-            photoUrl: 'url',
-            url: 'url',
-          },
-          Eng: {
-            photoUrl: 'url',
-            url: 'url',
-          },
-        },
-        name: 'newName',
-      },
-      ep2: {
-        ep: 2,
-        sub: {
-          Thai: {
-            photoUrl: 'url',
-            url: 'url',
-          },
-        },
-        name: 'episode 2',
+    expect(Database.update.keyaki).toHaveBeenCalledWith('ep1', {
+      ep: 1,
+      name: 'newName',
+      sub: {
+        Eng: { photoUrl: 'url', url: 'url' },
+        Thai: { photoUrl: 'url', url: 'url' },
       },
     });
   });

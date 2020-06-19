@@ -1,5 +1,5 @@
 {
-  "animeList": {
+  "anime": {
     "abc352": {
       "all_episode": "?",
       "cover_url": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx107871-ZOh7oeDd0kq9.png",
@@ -37,7 +37,7 @@
       "year": 2020
     }
   },
-  "conanList": {
+  "conan": {
     "case1": {
       "case": 1,
       "name": "case 1",
@@ -71,7 +71,7 @@
       }
     }
   },
-  "keyakiList": {
+  "keyaki": {
     "ep1": {
       "ep": 1,
       "name": "episode 1",

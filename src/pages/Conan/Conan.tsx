@@ -19,7 +19,7 @@ const photoAlbumId =
 
 const Conan = (): JSX.Element => {
   const [conanList, setConanList] = useState<Record<string, ConanType>>(
-    (getLocalStorage('database') as DatabaseType)?.conanList
+    (getLocalStorage('database') as DatabaseType)?.conan
   );
   const [conanRef, setConanRef] = useState<
     React.RefObject<HTMLTableRowElement>[]
@@ -28,7 +28,7 @@ const Conan = (): JSX.Element => {
 
   useEffect(() => {
     Database.subscribe((db: DatabaseType) => {
-      setConanList(db?.conanList);
+      setConanList(db?.conan);
     });
   }, []);
 
@@ -36,8 +36,8 @@ const Conan = (): JSX.Element => {
     function UpdateConanRef() {
       const ref = [];
       if (conanList)
-        Object.keys(conanList).forEach((cs) => {
-          ref[cs] = createRef();
+        Object.keys(conanList).forEach((key) => {
+          ref[key] = createRef();
         });
       setConanRef(ref);
     }
@@ -67,10 +67,6 @@ const Conan = (): JSX.Element => {
       );
     };
     showLoadingPopup(true);
-    const newConanList = JSON.parse(JSON.stringify(conanList)) as Record<
-      string,
-      ConanType
-    >;
     const driveFiles = (await GoogleDriveApi.getFiles(driveFolderId)) as {
       name: string;
       id: string;
@@ -86,34 +82,41 @@ const Conan = (): JSX.Element => {
         'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
       const photoUrl = photoFiles.filter((f) => f.filename === file.name)[0]
         ?.productUrl;
-      if (newConanList['case' + cs.toString()]) {
-        newConanList['case' + cs.toString()].episodes[ep] = {
-          url: url,
-          photoUrl: photoUrl ? photoUrl : null,
-        };
+      if (
+        Object.entries(conanList).filter(([key, conan]) => conan.case === cs)
+          .length > 0
+      ) {
+        Object.entries(conanList)
+          .filter(([key, conan]) => conan.case === cs)
+          .forEach(([key, conan]) => {
+            conan.episodes[ep] = {
+              url: url,
+              photoUrl: photoUrl ? photoUrl : null,
+            };
+            Database.update.conan(key, conan);
+          });
       } else {
-        newConanList['case' + cs.toString()] = {
+        const conan: ConanType = {
           episodes: {} as Record<number, File>,
           case: cs,
           name: 'แก้ไข',
         };
-        newConanList['case' + cs.toString()].episodes[ep] = {
+        conan.episodes[ep] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
         };
+        Database.add.conan(conan);
       }
     });
-    Database.update.conan(newConanList);
     showLoadingPopup(false);
   }, [conanList]);
 
   const randomEp = useCallback(() => {
-    let ep = 0;
-    while (ep === 0 || conanList['case' + ep.toString()] === null) {
-      ep = Math.floor(Math.random() * Object.keys(conanList).length);
-    }
+    const randomKey = Object.keys(conanList)[
+      Math.floor(Math.random() * Object.keys(conanList).length)
+    ];
     const currentRef: React.RefObject<HTMLTableRowElement> = conanRef[
-      'case' + ep.toString()
+      randomKey
     ] as React.RefObject<HTMLTableRowElement>;
     if (currentRef.current) {
       conanRef.map((ref) =>
@@ -135,12 +138,8 @@ const Conan = (): JSX.Element => {
       if (UserDetail.isAdmin()) {
         const name = conanList[key]?.name || '';
         const callback = (newName: string) => {
-          const newList = JSON.parse(JSON.stringify(conanList)) as Record<
-            string,
-            ConanType
-          >;
-          newList[key].name = newName;
-          Database.update.conan(newList);
+          conanList[key].name = newName;
+          Database.update.conan(key, conanList[key]);
         };
         const showInputPopup = (show: boolean) => {
           setPopup(

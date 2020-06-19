@@ -15,7 +15,7 @@ type TParams = { search: string };
 
 const Anime = (props?: RouteComponentProps<TParams>) => {
   const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(
-    (getLocalStorage('database') as DatabaseType).animeList
+    (getLocalStorage('database') as DatabaseType).anime
   );
   const [pageList, setPageList] = useState<[string, AnimeType][]>(
     AnimeFilter(animeList)
@@ -25,7 +25,7 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
 
   useEffect(() => {
     Database.subscribe((db: DatabaseType) => {
-      setAnimeList(db?.animeList);
+      setAnimeList(db?.anime);
     });
   }, []);
 
@@ -59,7 +59,12 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
           {pageList.map(
             ([key, anime]) =>
               anime !== null && (
-                <AnimeCard anime={anime} key={key} setPopup={setPopup} />
+                <AnimeCard
+                  anime={anime}
+                  key={key}
+                  anime_key={key}
+                  setPopup={setPopup}
+                />
               )
           )}
         </div>
