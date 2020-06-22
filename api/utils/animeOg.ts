@@ -1,4 +1,4 @@
-const default_url = 'https://shumiq-anime.web.app/';
+const default_url = 'https://anime.shumiq.now.sh/';
 const opengraphTemplate = `<!doctype html>
 <html lang="en">
   <head>

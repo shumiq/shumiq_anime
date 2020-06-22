@@ -34,19 +34,16 @@
     "typescript": "^3.9.5"
   },
   "scripts": {
-    "start:client": "react-scripts start",
-    "start:functions": "netlify-lambda serve functions",
-    "build": "npm run build:client && npm run build:functions",
-    "build:client": "rm -rf build && react-scripts build",
-    "build:functions": "rm -rf lambda && netlify-lambda build functions",
+    "start": "vercel dev",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll=false && start ./coverage/lcov-report/index.html",
-    "deploy": "npm run build && firebase deploy && netlify deploy --dir=build --functions=lambda --prod",
-    "deploy:firebase": "npm run build:client && firebase deploy",
-    "deploy:netlify": "npm run build && netlify deploy --dir=build --functions=lambda --prod",
+    "deploy": "npm run build && firebase deploy && vercel --prod",
+    "deploy:firebase": "npm run build && firebase deploy",
+    "deploy:vercel": "vercel --prod",
     "eject": "react-scripts eject",
-    "lint": "eslint src && eslint functions",
-    "lint:fix": "eslint --fix src && eslint --fix functions"
+    "lint": "eslint src && eslint api",
+    "lint:fix": "eslint --fix src && eslint --fix api"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
@@ -97,6 +94,7 @@
     "@babel/plugin-transform-runtime": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1",
     "@babel/runtime": "^7.10.2",
+    "@vercel/node": "^1.7.1",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-prettier": "^3.1.3",
