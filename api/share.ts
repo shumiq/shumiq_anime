@@ -6,7 +6,6 @@ const rest_url =
   'https://shumiq-anime.firebaseio.com/myanimelist_database/anime/';
 
 export default async (req: NowRequest, res: NowResponse): Promise<void> => {
-  console.log(req.query.anime);
   const response: {
     data: {
       title: string;
