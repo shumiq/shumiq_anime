@@ -22,6 +22,7 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^7.2.0",
     "firebase": "^7.14.0",
+    "firebase-admin": "^8.12.1",
     "history": "^4.10.1",
     "netlify": "^4.1.7",
     "react": "^16.13.1",

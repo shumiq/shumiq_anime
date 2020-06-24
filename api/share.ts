@@ -1,23 +1,28 @@
 import opengraphGenerator from './utils/animeOg';
-import axios from 'axios';
 import { NowRequest, NowResponse } from '@vercel/node';
+import admin from 'firebase-admin';
 
-const rest_url =
-  'https://shumiq-anime.firebaseio.com/myanimelist_database/anime/';
+const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS || '{}';
+
+admin.initializeApp({
+  credential: admin.credential.cert(JSON.parse(serviceAccount)),
+  databaseURL: 'https://shumiq-anime.firebaseio.com',
+});
 
 export default async (req: NowRequest, res: NowResponse): Promise<void> => {
-  const response: {
-    data: {
-      title: string;
-      score: string;
-      year: number;
-      season: number;
-      download: number;
-      info: string;
-      cover_url: string;
-    };
-  } = await axios.get(rest_url + req.query.anime.toString() + '.json');
-  const anime = response.data;
+  const snapshot = await admin
+    .database()
+    .ref('myanimelist_database/anime/' + req.query.anime.toString())
+    .once('value');
+  const anime = snapshot.val() as {
+    title: string;
+    score: string;
+    year: number;
+    season: number;
+    download: number;
+    info: string;
+    cover_url: string;
+  };
   const resHtml = opengraphGenerator(anime);
   res.send(resHtml);
 };
