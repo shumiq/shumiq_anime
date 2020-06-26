@@ -54,7 +54,7 @@ const Anime = (props?: RouteComponentProps<TParams>) => {
 
   return (
     <div className="Anime">
-      <div className="container p-0 my-5">
+      <div className="container p-0 my-5 py-1">
         <div className="row text-center w-100 m-0">
           {pageList.map(
             ([key, anime]) =>

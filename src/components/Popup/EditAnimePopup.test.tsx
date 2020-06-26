@@ -13,27 +13,13 @@ const mockAnimeList: Record<
 > = ((mockDatabase as unknown) as DatabaseType).anime;
 
 describe('<EditAnimePopup />', () => {
-  it('should not show when show props is false', () => {
-    const wrapper = mount(
-      <EditAnimePopup
-        anime={mockAnimeList['abc352']}
-        show={false}
-        anime_key={'abc352'}
-        setShow={() => {
-          return;
-        }}
-      />
-    );
-    expect(wrapper.find('div.modal')).toHaveLength(0);
-  });
-
   it('should show correct default value', () => {
     const wrapper = mount(
       <EditAnimePopup
         anime={mockAnimeList['abc352']}
         show={true}
         anime_key={'abc352'}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -68,7 +54,7 @@ describe('<EditAnimePopup />', () => {
         anime={mockAnimeList['abc352']}
         show={true}
         anime_key={'abc352'}
-        setShow={mockSetShow}
+        onClose={mockSetShow}
       />
     );
     const saveButton = wrapper
@@ -169,7 +155,7 @@ describe('<EditAnimePopup />', () => {
         anime={mockAnimeList['abc352']}
         show={true}
         anime_key={'abc352'}
-        setShow={mockSetShow}
+        onClose={mockSetShow}
       />
     );
     const deleteButton = wrapper

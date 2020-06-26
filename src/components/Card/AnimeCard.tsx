@@ -150,7 +150,7 @@ const AnimeCard = (props: {
           anime={anime}
           show={show}
           anime_key={key}
-          setShow={showEditPopup}
+          onClose={() => setPopup('')}
         />
       );
     },
