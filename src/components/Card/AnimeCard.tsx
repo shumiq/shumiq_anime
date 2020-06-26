@@ -148,7 +148,9 @@ const AnimeCard = (props: {
           driveUrl={driveUrl}
           photoUrl={photoUrl}
           show={show}
-          setShow={showFilesPopup}
+          onClose={() => {
+            setPopup('');
+          }}
         />
       );
     },

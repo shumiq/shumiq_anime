@@ -2,20 +2,6 @@ import React from 'react';
 import { mount } from 'enzyme';
 import FilesPopup from './FilesPopup';
 describe('<FilesPopup />', () => {
-  it('should not show when show props is false', () => {
-    const wrapper = mount(
-      <FilesPopup
-        driveUrl={''}
-        photoUrl={''}
-        show={false}
-        setShow={() => {
-          return;
-        }}
-      />
-    );
-    expect(wrapper.find('div.modal')).toHaveLength(0);
-  });
-
   it('should show both drive and photo button', () => {
     const mockDriveUrl = 'url';
     const mockPhotoUrl = 'url';
@@ -24,7 +10,7 @@ describe('<FilesPopup />', () => {
         driveUrl={mockDriveUrl}
         photoUrl={mockPhotoUrl}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -41,7 +27,7 @@ describe('<FilesPopup />', () => {
         driveUrl={mockDriveUrl}
         photoUrl={mockPhotoUrl}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -60,7 +46,7 @@ describe('<FilesPopup />', () => {
         driveUrl={mockDriveUrl}
         photoUrl={mockPhotoUrl}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />

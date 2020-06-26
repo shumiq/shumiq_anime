@@ -53,7 +53,9 @@ const Conan = (): JSX.Element => {
           driveUrl={url}
           photoUrl={photoUrl}
           show={show}
-          setShow={showFilesPopup}
+          onClose={() => {
+            setPopup('');
+          }}
         />
       );
     };
