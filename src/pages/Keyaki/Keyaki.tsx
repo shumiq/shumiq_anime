@@ -65,7 +65,12 @@ const Keyaki = (): JSX.Element => {
   const update = useCallback(async () => {
     const showLoadingPopup = (show: boolean) => {
       setPopup(
-        <GeneralPopup show={show} message="Loading..." canClose={false} />
+        <GeneralPopup
+          show={show}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
       );
     };
     showLoadingPopup(true);

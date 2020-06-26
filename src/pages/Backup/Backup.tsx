@@ -20,7 +20,12 @@ const Backup = (): JSX.Element => {
 
   const showLoadingPopup = useCallback((show: boolean) => {
     setPopup(
-      <GeneralPopup show={show} message="Loading..." canClose={false} />
+      <GeneralPopup
+        show={show}
+        message="Loading..."
+        canClose={false}
+        onClose={() => setPopup(<div />)}
+      />
     );
   }, []);
 

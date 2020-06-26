@@ -1,40 +1,57 @@
-import React, { useCallback } from 'react';
-import Modal from 'react-bootstrap/Modal';
+import React, { useEffect, useCallback, useState } from 'react';
+import { Modal } from 'bootstrap';
+
+type Modal = {
+  show: () => void;
+  hide: () => void;
+};
 
 const GeneralPopup = (props: {
   show: boolean;
-  setShow?: (show: boolean) => void;
+  onClose: () => void;
   canClose?: boolean;
   message: string;
 }): JSX.Element => {
-  const canClose = {
-    backdrop: props.canClose ? true : 'static',
-    keyboard: props.canClose,
-    header: props.canClose,
-  };
-  const closePopup = useCallback(() => {
-    if (props.setShow) props.setShow(false);
-  }, [props]);
+  const canClose = props.canClose === undefined ? true : props.canClose;
+  const onClose = useCallback(() => props.onClose(), [props]);
+  const [modal, setModal] = useState<Modal>();
+  useEffect(() => {
+    const popupElement = document.querySelector('.modal');
+    if (popupElement) {
+      setModal(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        new Modal(popupElement, {
+          backdrop: canClose ? true : 'static',
+          keyboard: canClose,
+        }) as Modal
+      );
+    }
+  }, [canClose]);
+  useEffect(() => {
+    if (modal)
+      if (props.show) modal.show();
+      else modal.hide();
+  }, [modal, props.show, canClose]);
+  useEffect(() => {
+    const popupElement = document.querySelector('.modal');
+    if (popupElement !== null) {
+      popupElement.addEventListener('hidden.bs.modal', onClose);
+    }
+  }, [onClose]);
   return (
     <div className="GeneralPopup">
-      <Modal
-        show={props.show}
-        size="sm"
-        centered
-        backdrop={canClose.backdrop}
-        keyboard={canClose.keyboard}
-        animation={true}
-        onHide={closePopup}
-      >
-        {canClose.header && (
-          <Modal.Header closeButton>
-            <Modal.Title>Message</Modal.Title>
-          </Modal.Header>
-        )}
-        <Modal.Body>
-          <p className="text-center m-0 p-0">{props.message}</p>
-        </Modal.Body>
-      </Modal>
+      <div className="modal fade" role="dialog">
+        <div
+          className="modal-dialog modal-dialog-centered modal-sm"
+          role="document"
+        >
+          <div className="modal-content w-auto mx-auto">
+            <div className="modal-body text-center">
+              <p className="text-center m-0 p-0">{props.message}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

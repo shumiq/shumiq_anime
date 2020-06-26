@@ -58,11 +58,21 @@ const AnimeCard = (props: {
 
   const showInfo = useCallback(async (): Promise<void> => {
     setPopup(
-      <GeneralPopup show={true} message="Loading..." canClose={false} />
+      <GeneralPopup
+        show={true}
+        message="Loading..."
+        canClose={false}
+        onClose={() => setPopup('')}
+      />
     );
     const response = await AnilistApi.getAnime(anime.title, anime.blacklist);
     setPopup(
-      <GeneralPopup show={false} message="Loading..." canClose={false} />
+      <GeneralPopup
+        show={false}
+        message="Loading..."
+        canClose={false}
+        onClose={() => setPopup('')}
+      />
     );
     if (response != null) {
       const showInfoPopup = (show: boolean) => {
@@ -82,12 +92,22 @@ const AnimeCard = (props: {
 
   const showFolder = useCallback(async (): Promise<void> => {
     setPopup(
-      <GeneralPopup show={true} message="Loading..." canClose={false} />
+      <GeneralPopup
+        show={true}
+        message="Loading..."
+        canClose={false}
+        onClose={() => setPopup('')}
+      />
     );
     const driveFiles = await GoogleDriveApi.getFiles(anime.gdriveid_public);
     const photoFiles = await GooglePhotoApi.getMedias(anime.gphotoid);
     setPopup(
-      <GeneralPopup show={false} message="Loading..." canClose={false} />
+      <GeneralPopup
+        show={false}
+        message="Loading..."
+        canClose={false}
+        onClose={() => setPopup('')}
+      />
     );
     const files: Record<
       string,

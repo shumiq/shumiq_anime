@@ -26,7 +26,12 @@ const Sync = (): JSX.Element => {
     });
     const fetchAlbums = async () => {
       setPopup(
-        <GeneralPopup show={true} message="Loading..." canClose={false} />
+        <GeneralPopup
+          show={true}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
       );
       const response = await GooglePhotoApi.getAlbums('');
       const albums: Record<string, GooglePhotoAlbumResponse> = {};
@@ -36,7 +41,12 @@ const Sync = (): JSX.Element => {
       setAlbumList(albums);
       setNextPageToken(response.nextPageToken || '');
       setPopup(
-        <GeneralPopup show={false} message="Loading..." canClose={false} />
+        <GeneralPopup
+          show={false}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
       );
     };
     void fetchAlbums();
@@ -45,7 +55,12 @@ const Sync = (): JSX.Element => {
   const getAlbums = useCallback(
     async (all = false) => {
       setPopup(
-        <GeneralPopup show={true} message="Loading..." canClose={false} />
+        <GeneralPopup
+          show={true}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
       );
       const response = (await all)
         ? await GooglePhotoApi.getAllAlbums(nextPageToken)
@@ -57,7 +72,12 @@ const Sync = (): JSX.Element => {
       setAlbumList(albums);
       setNextPageToken(response.nextPageToken || '');
       setPopup(
-        <GeneralPopup show={false} message="Loading..." canClose={false} />
+        <GeneralPopup
+          show={false}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
       );
     },
     [albumList, nextPageToken]
@@ -73,7 +93,12 @@ const Sync = (): JSX.Element => {
   const update = useCallback(
     async (key: string, anime: Anime) => {
       setPopup(
-        <GeneralPopup show={true} message="Loading..." canClose={false} />
+        <GeneralPopup
+          show={true}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
       );
       anime.gdriveid = await GoogleDriveApi.getPrivateFolderId(anime);
       anime.gdriveid_public = await GoogleDriveApi.getPublicFolderId(anime);
@@ -90,7 +115,12 @@ const Sync = (): JSX.Element => {
       anime.download = parseInt(albumList[anime.gphotoid].mediaItemsCount);
       Database.update.anime(key, anime);
       setPopup(
-        <GeneralPopup show={false} message="Loading..." canClose={false} />
+        <GeneralPopup
+          show={false}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
       );
     },
     [albumList]

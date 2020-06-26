@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Modal } from 'bootstrap';
 
 type Modal = {
@@ -14,24 +14,28 @@ const FilesPopup = (props: {
 }): JSX.Element => {
   const driveUrl = props.driveUrl ? props.driveUrl : '';
   const photoUrl = props.photoUrl ? props.photoUrl : '';
-  const closePopup = useCallback(() => props.onClose(), [props]);
+  const onClose = useCallback(() => props.onClose(), [props]);
+  const [modal, setModal] = useState<Modal>();
   useEffect(() => {
     const popupElement = document.querySelector('.modal');
-    if (popupElement !== null) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      const modal = new Modal(popupElement) as Modal;
+    if (popupElement) {
+      setModal(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        new Modal(popupElement) as Modal
+      );
+    }
+  }, []);
+  useEffect(() => {
+    if (modal)
       if (props.show) modal.show();
       else modal.hide();
-    }
-  }, [props.show]);
+  }, [modal, props.show]);
   useEffect(() => {
     const popupElement = document.querySelector('.modal');
     if (popupElement !== null) {
-      popupElement.addEventListener('hidden.bs.modal', () => {
-        closePopup();
-      });
+      popupElement.addEventListener('hidden.bs.modal', onClose);
     }
-  }, [closePopup]);
+  }, [onClose]);
   return (
     <div className="FilesPopup">
       <div className="modal fade" role="dialog">
