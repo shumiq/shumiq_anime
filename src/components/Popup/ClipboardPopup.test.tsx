@@ -3,25 +3,12 @@ import { mount } from 'enzyme';
 import ClipboardPopup from './ClipboardPopup';
 
 describe('<ClipboardPopup />', () => {
-  it('should not show when show props is false', () => {
-    const wrapper = mount(
-      <ClipboardPopup
-        text={''}
-        show={false}
-        setShow={() => {
-          return;
-        }}
-      />
-    );
-    expect(wrapper.find('div.modal')).toHaveLength(0);
-  });
-
   it('should have input and button', () => {
     const wrapper = mount(
       <ClipboardPopup
         text={'sample_url'}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -40,7 +27,7 @@ describe('<ClipboardPopup />', () => {
       <ClipboardPopup
         text={'sample_url'}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />

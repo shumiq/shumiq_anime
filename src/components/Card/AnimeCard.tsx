@@ -49,7 +49,7 @@ const AnimeCard = (props: {
     } else {
       const showClipboardPopup = (show: boolean) => {
         setPopup(
-          <ClipboardPopup text={url} show={show} setShow={showClipboardPopup} />
+          <ClipboardPopup text={url} show={show} onClose={() => setPopup('')} />
         );
       };
       showClipboardPopup(true);
