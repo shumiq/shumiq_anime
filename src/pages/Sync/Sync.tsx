@@ -142,9 +142,9 @@ const Sync = (): JSX.Element => {
         className="container text-center"
         style={{ marginTop: '80px', marginBottom: '80px' }}
       >
-        <table className="table table-hover">
+        <table className="table table-hover mt-5 table-borderless">
           <thead>
-            <tr>
+            <tr className="table-bordered">
               <th></th>
               <th>Title</th>
               <th>Download</th>
@@ -173,7 +173,10 @@ const Sync = (): JSX.Element => {
               .map(
                 ([key, anime]) =>
                   anime !== null && (
-                    <tr key={key} className="row-anime">
+                    <tr
+                      key={key}
+                      className="row-anime table-bordered border-left-0 border-right-0"
+                    >
                       <td className="text-center align-middle">
                         <a href={anime.url} target="blank">
                           <img

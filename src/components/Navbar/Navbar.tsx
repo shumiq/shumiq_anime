@@ -44,115 +44,117 @@ const Navbar = (): JSX.Element => {
   }, []);
 
   return (
-    <div className="navbar">
+    <div className="Navbarasfasf">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <a id="link-logo" className="navbar-brand" href="/">
-          MyAnimeList
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav text-center mr-auto">
-            <li className="nav-item">
-              <Link
-                id="link-anime"
-                className="nav-link btn"
-                to="/"
-                onClick={() => setIsAnime(true)}
-              >
-                Anime
-              </Link>
-            </li>
-            {isAnime && isAdmin && (
+        <div className="container-fluid">
+          <a id="link-logo" className="navbar-brand" href="/">
+            MyAnimeList
+          </a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav text-center mr-auto">
               <li className="nav-item">
                 <Link
-                  id="link-add"
-                  className="nav-link btn w-100"
-                  to="/"
-                  onClick={showAddAnime}
-                >
-                  Add Anime
-                </Link>
-              </li>
-            )}
-            {isAnime && isAdmin && (
-              <li className="nav-item">
-                <Link
-                  id="link-sync"
+                  id="link-anime"
                   className="nav-link btn"
-                  to="/sync"
+                  to="/"
                   onClick={() => setIsAnime(true)}
                 >
-                  Sync Anime
+                  Anime
                 </Link>
               </li>
-            )}
-            <li className="nav-item">
-              <Link
-                id="link-conan"
-                className="nav-link btn"
-                to="/conan"
-                onClick={() => setIsAnime(false)}
-              >
-                Conan
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                id="link-keyaki"
-                className="nav-link btn"
-                to="/keyaki"
-                onClick={() => setIsAnime(false)}
-              >
-                Keyakitte Kakenai
-              </Link>
-            </li>
-            {isAdmin && (
+              {isAnime && isAdmin && (
+                <li className="nav-item">
+                  <Link
+                    id="link-add"
+                    className="nav-link btn w-100"
+                    to="/"
+                    onClick={showAddAnime}
+                  >
+                    Add Anime
+                  </Link>
+                </li>
+              )}
+              {isAnime && isAdmin && (
+                <li className="nav-item">
+                  <Link
+                    id="link-sync"
+                    className="nav-link btn"
+                    to="/sync"
+                    onClick={() => setIsAnime(true)}
+                  >
+                    Sync Anime
+                  </Link>
+                </li>
+              )}
               <li className="nav-item">
                 <Link
-                  id="link-backup"
+                  id="link-conan"
                   className="nav-link btn"
-                  to="/backup"
+                  to="/conan"
                   onClick={() => setIsAnime(false)}
                 >
-                  Backup
+                  Conan
                 </Link>
               </li>
-            )}
-          </ul>
-          <ul className="navbar-nav text-center ml-auto">
-            {isAnime && (
               <li className="nav-item">
-                <p
-                  id="btn-layout"
-                  className="nav-link btn m-0"
-                  onClick={updateCardLayout}
+                <Link
+                  id="link-keyaki"
+                  className="nav-link btn"
+                  to="/keyaki"
+                  onClick={() => setIsAnime(false)}
                 >
-                  {cardLayout === 'small' ? (
-                    <i className="material-icons">photo_size_select_small</i>
-                  ) : cardLayout === 'medium' ? (
-                    <i className="material-icons">photo_size_select_large</i>
-                  ) : cardLayout === 'large' ? (
-                    <i className="material-icons">photo_size_select_actual</i>
-                  ) : (
-                    <i className="material-icons">brightness_auto</i>
-                  )}
-                </p>
+                  Keyakitte Kakenai
+                </Link>
               </li>
-            )}
-            <li className="nav-item">
-              <Login />
-            </li>
-          </ul>
+              {isAdmin && (
+                <li className="nav-item">
+                  <Link
+                    id="link-backup"
+                    className="nav-link btn"
+                    to="/backup"
+                    onClick={() => setIsAnime(false)}
+                  >
+                    Backup
+                  </Link>
+                </li>
+              )}
+            </ul>
+            <ul className="navbar-nav text-center ml-auto">
+              {isAnime && (
+                <li className="nav-item">
+                  <p
+                    id="btn-layout"
+                    className="nav-link btn m-0"
+                    onClick={updateCardLayout}
+                  >
+                    {cardLayout === 'small' ? (
+                      <i className="material-icons">photo_size_select_small</i>
+                    ) : cardLayout === 'medium' ? (
+                      <i className="material-icons">photo_size_select_large</i>
+                    ) : cardLayout === 'large' ? (
+                      <i className="material-icons">photo_size_select_actual</i>
+                    ) : (
+                      <i className="material-icons">brightness_auto</i>
+                    )}
+                  </p>
+                </li>
+              )}
+              <li className="nav-item">
+                <Login />
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
       {popup}

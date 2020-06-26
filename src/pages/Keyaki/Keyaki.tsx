@@ -168,11 +168,12 @@ const Keyaki = (): JSX.Element => {
     <div className="Anime">
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
-          <table className="table table-hover">
+          <table className="table table-hover mt-5 table-borderless">
             <thead>
-              <tr>
+              <tr className="table-bordered">
                 <th className="text-center">Ep</th>
                 <th className="text-left">Name</th>
+                <th className="text-left"></th>
               </tr>
             </thead>
             <tbody>
@@ -189,6 +190,7 @@ const Keyaki = (): JSX.Element => {
                               HTMLTableRowElement
                             >
                           }
+                          className="table-bordered border-left-0 border-right-0"
                         >
                           <td>{keyakiList[key].ep}</td>
                           <td className="text-left">

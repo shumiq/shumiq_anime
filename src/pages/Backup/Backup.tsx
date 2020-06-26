@@ -74,9 +74,9 @@ const Backup = (): JSX.Element => {
     <div className="Backup">
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
-          <table className="table table-hover">
+          <table className="table table-hover mt-5 table-borderless">
             <thead>
-              <tr>
+              <tr className="table-bordered">
                 <th className="text-center">File</th>
                 <th className="text-center">Anime</th>
                 <th className="text-center">Conan</th>
@@ -85,7 +85,7 @@ const Backup = (): JSX.Element => {
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-dark">
+              <tr className="bg-dark table-bordered border-left-0 border-right-0">
                 <td className="pt-4">(current)</td>
                 <td>
                   <p className="m-0 p-0 small">
@@ -123,7 +123,10 @@ const Backup = (): JSX.Element => {
               </tr>
               {backupFiles &&
                 backupFiles.map((file) => (
-                  <tr key={file.generation}>
+                  <tr
+                    key={file.generation}
+                    className="table-bordered border-left-0 border-right-0"
+                  >
                     <td className="pt-4">{file.name}</td>
                     <td>
                       <p className="m-0 p-0 small">
