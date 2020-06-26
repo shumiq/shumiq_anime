@@ -19,25 +19,12 @@ const mockupFiles = {
 };
 
 describe('<AnimeFolderPopup />', () => {
-  it('should not show when show props is false', () => {
-    const wrapper = mount(
-      <AnimeFolderPopup
-        folderFiles={mockupFiles}
-        show={false}
-        setShow={() => {
-          return;
-        }}
-      />
-    );
-    expect(wrapper.find('div.modal')).toHaveLength(0);
-  });
-
   it('should have 3 files', () => {
     const wrapper = mount(
       <AnimeFolderPopup
         folderFiles={mockupFiles}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -50,7 +37,7 @@ describe('<AnimeFolderPopup />', () => {
       <AnimeFolderPopup
         folderFiles={mockupFiles}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -111,7 +98,7 @@ describe('<AnimeFolderPopup />', () => {
       <AnimeFolderPopup
         folderFiles={mockupFiles}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -162,7 +149,7 @@ describe('<AnimeFolderPopup />', () => {
       <AnimeFolderPopup
         folderFiles={mockupFiles}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />

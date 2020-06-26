@@ -136,11 +136,11 @@ const AnimeCard = (props: {
         <AnimeFolderPopup
           folderFiles={files}
           show={show}
-          setShow={showFolderPopup}
+          onClose={() => setPopup('')}
         />
       );
     };
-    showFolderPopup(true);
+    setTimeout(() => showFolderPopup(true), 500);
   }, [anime, setPopup]);
 
   const showEditPopup = useCallback(

@@ -5,7 +5,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router-dom';
 import './index.css';
-import 'bootstrap';
 
 ReactDOM.render(
   <Router history={history}>
