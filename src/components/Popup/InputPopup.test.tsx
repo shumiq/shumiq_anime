@@ -3,22 +3,6 @@ import { mount } from 'enzyme';
 import InputPopup from './InputPopup';
 
 describe('<InputPopup />', () => {
-  it('should not show when show props is false', () => {
-    const wrapper = mount(
-      <InputPopup
-        default={''}
-        callback={() => {
-          return;
-        }}
-        show={false}
-        setShow={() => {
-          return;
-        }}
-      />
-    );
-    expect(wrapper.find('div.modal')).toHaveLength(0);
-  });
-
   it('should have input and button', () => {
     const wrapper = mount(
       <InputPopup
@@ -27,13 +11,13 @@ describe('<InputPopup />', () => {
           return;
         }}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
     );
     expect(wrapper.find('div.modal').find('input')).toHaveLength(1);
-    expect(wrapper.find('div.modal').find('button')).toHaveLength(2);
+    expect(wrapper.find('div.modal').find('button')).toHaveLength(1);
   });
 
   it('should callback with input value when click save', () => {
@@ -44,7 +28,7 @@ describe('<InputPopup />', () => {
           expect(input).toEqual('test');
         }}
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />

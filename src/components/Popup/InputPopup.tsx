@@ -1,63 +1,82 @@
-import React, { useCallback, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Modal } from 'bootstrap';
+
+type Modal = {
+  show: () => void;
+  hide: () => void;
+};
 
 const InputPopup = (props: {
   show: boolean;
-  setShow: (show: boolean) => void;
+  onClose: () => void;
   default: string;
   callback: (text: string) => void;
 }): JSX.Element => {
   const [input, setInput] = useState(props.default ? props.default : '');
-  const closePopup = useCallback(() => props.setShow(false), [props]);
+  const onClose = useCallback(() => props.onClose(), [props]);
+  const [modal, setModal] = useState<Modal>();
+  useEffect(() => {
+    const popupElement = document.querySelector('.modal');
+    if (popupElement) {
+      setModal(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        new Modal(popupElement) as Modal
+      );
+    }
+  }, []);
+  useEffect(() => {
+    if (modal)
+      if (props.show) modal.show();
+      else modal.hide();
+  }, [modal, props.show]);
+  useEffect(() => {
+    const popupElement = document.querySelector('.modal');
+    if (popupElement !== null) {
+      popupElement.addEventListener('hidden.bs.modal', onClose);
+    }
+  }, [onClose]);
   const saveInput = useCallback(
     (text: string): void => {
       props.callback(text);
-      closePopup();
+      onClose();
     },
-    [props, closePopup]
+    [onClose, props]
   );
   return (
     <div className="InputPopup">
-      <Modal
-        show={props.show}
-        size="lg"
-        centered
-        backdrop={true}
-        keyboard={true}
-        animation={true}
-        onHide={closePopup}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Edit</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="text-center">
-          <table className="table m-0">
-            <tbody>
-              <tr>
-                <td className="p-0 text-center w-100">
-                  <input
-                    type="text"
-                    name="input"
-                    className="form-control"
-                    defaultValue={props.default}
-                    onChange={(e) => setInput(e.target.value)}
-                  />
-                </td>
-                <td className="p-0 pl-2 text-center">
-                  <button
-                    id="btn-save"
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => saveInput(input)}
-                  >
-                    Save
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Modal.Body>
-      </Modal>
+      <div className="modal fade">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content w-auto mx-auto">
+            <div className="modal-body text-center">
+              <table className="table m-0 table-borderless">
+                <tbody>
+                  <tr>
+                    <td className="p-0 text-center w-100">
+                      <input
+                        type="text"
+                        name="input"
+                        className="form-control"
+                        defaultValue={props.default}
+                        onChange={(e) => setInput(e.target.value)}
+                      />
+                    </td>
+                    <td className="p-0 pl-2 text-center">
+                      <button
+                        id="btn-save"
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => saveInput(input)}
+                      >
+                        Save
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

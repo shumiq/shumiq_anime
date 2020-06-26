@@ -38,11 +38,8 @@ const FilesPopup = (props: {
   }, [onClose]);
   return (
     <div className="FilesPopup">
-      <div className="modal fade" role="dialog">
-        <div
-          className="modal-dialog modal-dialog-centered modal-sm"
-          role="document"
-        >
+      <div className="modal fade">
+        <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content w-auto mx-auto">
             <div className="modal-body text-center">
               <a

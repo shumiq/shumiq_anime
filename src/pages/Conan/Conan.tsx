@@ -154,7 +154,7 @@ const Conan = (): JSX.Element => {
               default={name}
               callback={callback}
               show={show}
-              setShow={showInputPopup}
+              onClose={() => setPopup('')}
             />
           );
         };

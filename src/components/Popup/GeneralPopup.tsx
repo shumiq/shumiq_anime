@@ -40,11 +40,8 @@ const GeneralPopup = (props: {
   }, [onClose]);
   return (
     <div className="GeneralPopup">
-      <div className="modal fade" role="dialog">
-        <div
-          className="modal-dialog modal-dialog-centered modal-sm"
-          role="document"
-        >
+      <div className="modal fade">
+        <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content w-auto mx-auto">
             <div className="modal-body text-center">
               <p className="text-center m-0 p-0">{props.message}</p>
