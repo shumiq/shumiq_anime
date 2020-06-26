@@ -18,7 +18,8 @@ const AddAnimePopup = (props: {
   const [searchResult, setSearchResult] = useState<AnilistInfoResponse[]>([]);
   const onClose = useCallback(() => props.onClose(), [props]);
   const [modal, setModal] = useState<Modal>();
-  const closePopup = useCallback(() => modal?.hide(), [modal?.hide]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const closePopup = useCallback(() => modal?.hide(), [modal]);
   useEffect(() => {
     const popupElement = document.querySelector('.modal');
     if (popupElement) {
