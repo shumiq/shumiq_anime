@@ -14,23 +14,11 @@ jest.mock('../../utils/firebase');
 describe('<AddAnimePopup />', () => {
   const flushPromises = () => new Promise(setImmediate);
 
-  it('should not show when show props is false', () => {
-    const wrapper = mount(
-      <AddAnimePopup
-        show={false}
-        setShow={() => {
-          return;
-        }}
-      />
-    );
-    expect(wrapper.find('div.modal')).toHaveLength(0);
-  });
-
   it('should have input and button', () => {
     const wrapper = mount(
       <AddAnimePopup
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -51,7 +39,7 @@ describe('<AddAnimePopup />', () => {
     const wrapper = mount(
       <AddAnimePopup
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -91,7 +79,7 @@ describe('<AddAnimePopup />', () => {
     const wrapper = mount(
       <AddAnimePopup
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -138,7 +126,7 @@ describe('<AddAnimePopup />', () => {
     const wrapper = mount(
       <AddAnimePopup
         show={true}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />

@@ -37,7 +37,7 @@ const Navbar = (): JSX.Element => {
 
   const showAddAnime = useCallback(() => {
     const showAddAnimePopup = (show: boolean) => {
-      setPopup(<AddAnimePopup show={show} setShow={showAddAnimePopup} />);
+      setPopup(<AddAnimePopup show={show} onClose={() => setPopup('')} />);
     };
     showAddAnimePopup(true);
     setIsAnime(true);
