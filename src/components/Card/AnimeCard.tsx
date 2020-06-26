@@ -82,11 +82,11 @@ const AnimeCard = (props: {
             anime_key={key}
             info={response}
             show={show}
-            setShow={showInfoPopup}
+            onClose={() => setPopup('')}
           />
         );
       };
-      showInfoPopup(true);
+      setTimeout(() => showInfoPopup(true), 500);
     }
   }, [key, anime, setPopup]);
 

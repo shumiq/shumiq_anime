@@ -1,12 +1,17 @@
-import React, { useCallback } from 'react';
-import Modal from 'react-bootstrap/Modal';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Modal } from 'bootstrap';
 import { Database } from '../../utils/firebase';
 import UserDetail from '../../utils/userdetail';
 import { Anime, AnilistInfoResponse } from '../../utils/types';
 
+type Modal = {
+  show: () => void;
+  hide: () => void;
+};
+
 const AnimeInfoPopup = (props: {
   show: boolean;
-  setShow: (show: boolean) => void;
+  onClose: () => void;
   anime: Anime;
   anime_key: string;
   info: AnilistInfoResponse;
@@ -14,7 +19,29 @@ const AnimeInfoPopup = (props: {
   const anime = props.anime;
   const info = props.info;
   const key = props.anime_key;
-  const closePopup = useCallback(() => props.setShow(false), [props]);
+  const onClose = useCallback(() => props.onClose(), [props]);
+  const [modal, setModal] = useState<Modal>();
+  const closePopup = useCallback(() => modal?.hide(), [modal?.hide]);
+  useEffect(() => {
+    const popupElement = document.querySelector('.modal');
+    if (popupElement) {
+      setModal(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        new Modal(popupElement) as Modal
+      );
+    }
+  }, []);
+  useEffect(() => {
+    if (modal)
+      if (props.show) modal.show();
+      else modal.hide();
+  }, [modal, props.show]);
+  useEffect(() => {
+    const popupElement = document.querySelector('.modal');
+    if (popupElement !== null) {
+      popupElement.addEventListener('hidden.bs.modal', onClose);
+    }
+  }, [onClose]);
 
   const syncAnime = useCallback(() => {
     const state: Anime = { ...anime };
@@ -59,107 +86,113 @@ const AnimeInfoPopup = (props: {
 
   return (
     <div className="AnimeInfoPopup">
-      <Modal
-        show={props.show}
-        centered
-        backdrop={true}
-        keyboard={true}
-        animation={true}
-        onHide={closePopup}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{anime.title}</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          {info != null && (
-            <div id="infoPopup">
-              <div className="text-left">
-                <p className="my-0">
-                  <b>Title</b>: {info.title.romaji}{' '}
-                  {info.title.english &&
-                    info.title.english !== info.title.romaji &&
-                    '/ ' + info.title.english}
-                </p>
-                <p className="my-0">
-                  <b>Studio</b>: {info.studios?.nodes[0]?.name}
-                </p>
-                <p className="my-0">
-                  <b>Source</b>: {info.source}
-                </p>
-                <p className="my-0">
-                  <b>Episides</b>: {info.episodes}
-                </p>
-                {info.nextAiringEpisode != null && (
-                  <p className="my-0">
-                    <b>Next Airing</b>: EP{info.nextAiringEpisode.episode} in{' '}
-                    {secondToDuration(info.nextAiringEpisode.timeUntilAiring)}
-                  </p>
-                )}
-                <p className="my-0">
-                  <b>Season</b>: {info.startDate.year} {info.season}
-                </p>
-                <p className="my-0">
-                  <b>Score</b>: {info.averageScore / 10.0}
-                </p>
-                <p className="my-0">
-                  <b>Genres</b>: {info.genres.join(', ')}
-                </p>
-                {info.bannerImage != null && (
-                  <p className="my-0">
-                    <img src={info.bannerImage} width="100%" alt="banner" />
-                  </p>
-                )}
-                <p>{info.description}</p>
-
-                {info.relations?.nodes && (
-                  <p>
-                    <b>Related Media</b>:{' '}
-                    {info.relations.nodes
-                      .map(
-                        (related) =>
-                          related.title.userPreferred +
-                          ' (' +
-                          related.type +
-                          ')'
-                      )
-                      .join(', ')}
-                  </p>
-                )}
-              </div>
+      <div className="modal fade">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content w-auto mx-auto">
+            <div className="modal-header">
+              <h5 className="modal-title">{anime.title}</h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-          )}
-        </Modal.Body>
+            <div className="modal-body text-center">
+              {info != null && (
+                <div id="infoPopup">
+                  <div className="text-left">
+                    <p className="my-0">
+                      <b>Title</b>: {info.title.romaji}{' '}
+                      {info.title.english &&
+                        info.title.english !== info.title.romaji &&
+                        '/ ' + info.title.english}
+                    </p>
+                    <p className="my-0">
+                      <b>Studio</b>: {info.studios?.nodes[0]?.name}
+                    </p>
+                    <p className="my-0">
+                      <b>Source</b>: {info.source}
+                    </p>
+                    <p className="my-0">
+                      <b>Episides</b>: {info.episodes}
+                    </p>
+                    {info.nextAiringEpisode != null && (
+                      <p className="my-0">
+                        <b>Next Airing</b>: EP{info.nextAiringEpisode.episode}{' '}
+                        in{' '}
+                        {secondToDuration(
+                          info.nextAiringEpisode.timeUntilAiring
+                        )}
+                      </p>
+                    )}
+                    <p className="my-0">
+                      <b>Season</b>: {info.startDate.year} {info.season}
+                    </p>
+                    <p className="my-0">
+                      <b>Score</b>: {info.averageScore / 10.0}
+                    </p>
+                    <p className="my-0">
+                      <b>Genres</b>: {info.genres.join(', ')}
+                    </p>
+                    {info.bannerImage != null && (
+                      <p className="my-0">
+                        <img src={info.bannerImage} width="100%" alt="banner" />
+                      </p>
+                    )}
+                    <p>{info.description}</p>
 
-        <Modal.Footer>
-          {UserDetail.isAdmin() && (
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={syncAnime}
-            >
-              Sync
-            </button>
-          )}
-          {UserDetail.isAdmin() && (
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={blackListResult}
-            >
-              Incorrect
-            </button>
-          )}
-          <button
-            type="button"
-            className="btn btn-secondary"
-            data-dismiss="modal"
-            onClick={closePopup}
-          >
-            Close
-          </button>
-        </Modal.Footer>
-      </Modal>
+                    {info.relations?.nodes && (
+                      <p>
+                        <b>Related Media</b>:{' '}
+                        {info.relations.nodes
+                          .map(
+                            (related) =>
+                              related.title.userPreferred +
+                              ' (' +
+                              related.type +
+                              ')'
+                          )
+                          .join(', ')}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="modal-footer">
+              {UserDetail.isAdmin() && (
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={syncAnime}
+                >
+                  Sync
+                </button>
+              )}
+              {UserDetail.isAdmin() && (
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={blackListResult}
+                >
+                  Incorrect
+                </button>
+              )}
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

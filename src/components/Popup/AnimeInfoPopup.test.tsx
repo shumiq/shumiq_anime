@@ -44,21 +44,6 @@ const mockInfo = {
 };
 
 describe('<AnimeInfoPopup />', () => {
-  it('should not show when show props is false', () => {
-    const wrapper = mount(
-      <AnimeInfoPopup
-        anime={mockAnimeList['abc352']}
-        info={mockInfo}
-        show={false}
-        anime_key={'abc352'}
-        setShow={() => {
-          return;
-        }}
-      />
-    );
-    expect(wrapper.find('div.modal')).toHaveLength(0);
-  });
-
   it('should show correct info', () => {
     const wrapper = mount(
       <AnimeInfoPopup
@@ -66,7 +51,7 @@ describe('<AnimeInfoPopup />', () => {
         info={mockInfo}
         show={true}
         anime_key={'abc352'}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -93,7 +78,7 @@ describe('<AnimeInfoPopup />', () => {
         info={mockInfo}
         show={true}
         anime_key={'abc352'}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -109,7 +94,7 @@ describe('<AnimeInfoPopup />', () => {
         info={mockInfo}
         show={true}
         anime_key={'abc352'}
-        setShow={() => {
+        onClose={() => {
           return;
         }}
       />
@@ -129,7 +114,7 @@ describe('<AnimeInfoPopup />', () => {
         info={mockInfo}
         show={true}
         anime_key={'abc352'}
-        setShow={mockSetShow}
+        onClose={mockSetShow}
       />
     );
     const syncButton = wrapper
@@ -163,7 +148,7 @@ describe('<AnimeInfoPopup />', () => {
         info={mockInfo}
         show={true}
         anime_key={'abc352'}
-        setShow={mockSetShow}
+        onClose={mockSetShow}
       />
     );
     const incorrectButton = wrapper
