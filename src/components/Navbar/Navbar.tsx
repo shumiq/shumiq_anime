@@ -6,6 +6,7 @@ import UserDetail from '../../utils/userdetail';
 import { Auth } from '../../utils/firebase';
 import { getLocalStorage, setLocalStorage } from '../../utils/localstorage';
 import AddAnimePopup from '../Popup/AddAnimePopup';
+import { Collapse } from 'bootstrap';
 
 const Navbar = (): JSX.Element => {
   const [isAnime, setIsAnime] = useState<boolean>(
@@ -43,8 +44,16 @@ const Navbar = (): JSX.Element => {
     setIsAnime(true);
   }, []);
 
+  const toggleNavBar = useCallback(() => {
+    const navBar = document.querySelector('#navbarSupportedContent');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const collapse = new Collapse(navBar) as { toggle: () => void };
+    collapse.toggle();
+  }, []);
+
   return (
-    <div className="Navbarasfasf">
+    <div className="Navbar">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div className="container-fluid">
           <a id="link-logo" className="navbar-brand" href="/">
@@ -53,11 +62,7 @@ const Navbar = (): JSX.Element => {
           <button
             className="navbar-toggler"
             type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+            onClick={toggleNavBar}
           >
             <span className="navbar-toggler-icon"></span>
           </button>
