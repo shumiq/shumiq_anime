@@ -2,6 +2,7 @@ import React, { useCallback, ChangeEvent, KeyboardEvent } from 'react';
 import { SeasonEnum, FilterEnum } from '../../utils/enum';
 import { defaultFilter } from '../../pages/Anime/Anime.filter';
 import UserDetail from '../../utils/userdetail';
+import { Collapse } from 'bootstrap';
 
 interface filterType {
   season: number | string;
@@ -109,6 +110,14 @@ const Filterbar = (props: {
     [filter, setFilter]
   );
 
+  const toggleFilter = useCallback(() => {
+    const navBar = document.querySelector('#filterContent');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const collapse = new Collapse(navBar) as { toggle: () => void };
+    collapse.toggle();
+  }, []);
+
   return (
     <div className="Filterbar">
       <nav className="navbar navbar-expand-sm fixed-bottom p-0">
@@ -203,11 +212,7 @@ const Filterbar = (props: {
           <button
             className="btn btn-secondary p-0 mb-2 mr-2 mt-2"
             type="button"
-            data-toggle="collapse"
-            data-target="#filterContent"
-            aria-controls="#filterContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+            onClick={toggleFilter}
             style={{ width: '120px', height: '48px' }}
           >
             {seasonToText(currentSeason)}

@@ -45,7 +45,7 @@ const Navbar = (): JSX.Element => {
   }, []);
 
   const toggleNavBar = useCallback(() => {
-    const navBar = document.querySelector('#navbarSupportedContent');
+    const navBar = document.querySelector('#navbarMain');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const collapse = new Collapse(navBar) as { toggle: () => void };
@@ -66,7 +66,7 @@ const Navbar = (): JSX.Element => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <div className="collapse navbar-collapse" id="navbarMain">
             <ul className="navbar-nav text-center mr-auto">
               <li className="nav-item">
                 <Link
