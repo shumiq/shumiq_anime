@@ -57,7 +57,7 @@ const Navbar = (): JSX.Element => {
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div className="container-fluid">
           <a id="link-logo" className="navbar-brand" href="/">
-            MyAnimeList
+            A
           </a>
           <button
             className="navbar-toggler"
