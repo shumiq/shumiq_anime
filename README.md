@@ -6,6 +6,7 @@ You need to run these commands before start the development.
 
 ### `npm install`
 ### `npm install -g firebase-tools vercel`
+### `vercel env pull .env.local`
 
 ## Available Scripts
 

@@ -1,4 +1,5 @@
-const default_url = 'https://anime.shumiq.now.sh/';
+require('dotenv').config({ path: '.env.local' })
+const default_url = process.env.ENDPOINT;
 const opengraphTemplate = `<!doctype html>
 <html lang="en">
   <head>

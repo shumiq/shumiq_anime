@@ -2,7 +2,9 @@ import opengraphGenerator from './utils/animeOg';
 import { NowRequest, NowResponse } from '@vercel/node';
 import admin from 'firebase-admin';
 
-const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS || '{}';
+require('dotenv').config({ path: '.env.local' })
+let serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS || '{}';
+serviceAccount = serviceAccount.split("{\n").join("{").split("}\n").join("}").split("\"\n").join("\"").split(",\n").join(",").split("\n").join("\\n");
 
 admin.initializeApp({
   credential: admin.credential.cert(JSON.parse(serviceAccount)),
