@@ -37,7 +37,7 @@ const AnimeCard = (props: {
   );
 
   const share = useCallback((): void => {
-    const url = 'https://anime.shumiq.now.sh/api/share?anime=' + key.toString();
+    const url = process.env.REACT_APP_API_ENDPOINT + '/api/share?anime=' + key.toString();
     /* eslint-disable  @typescript-eslint/no-explicit-any */
     /* eslint-disable  @typescript-eslint/no-unsafe-call */
     /* eslint-disable  @typescript-eslint/no-unsafe-member-access */

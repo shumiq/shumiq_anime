@@ -102,7 +102,7 @@ describe('<AnimeCard />', () => {
     (navigator as any).share = jest.fn((data) => {
       expect(data).toStrictEqual({
         title: 'Princess Connect! Re:Dive',
-        url: 'https://anime.shumiq.now.sh/api/share?anime=abc352',
+        url: process.env.REACT_APP_API_ENDPOINT + '/api/share?anime=abc352',
       });
     });
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
