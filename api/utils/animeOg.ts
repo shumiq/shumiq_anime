@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
 require('dotenv').config({ path: '.env.local' });
 const default_url = process.env.ENDPOINT;
 const opengraphTemplate = `<!doctype html>
@@ -56,7 +57,7 @@ export default (anime: {
   indexHTML = indexHTML.replace(openGraphPlaceholder, getMeta(org));
   indexHTML = indexHTML.replace(
     '@url@',
-    default_url +
+    (default_url || '') +
       '?search=' +
       encodeURI(
         anime.title +
