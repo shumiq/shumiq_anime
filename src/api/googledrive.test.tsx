@@ -118,7 +118,9 @@ describe('GoogleDriveApi', () => {
       (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const mockFolderId = 'folder_id';
       (axios.get as jest.Mock).mockResolvedValue({ data: { files: [] } });
-      (axios.post as jest.Mock).mockResolvedValue({ id: mockFolderId });
+      (axios.post as jest.Mock).mockResolvedValue({
+        data: { id: mockFolderId },
+      });
       // When
       const response = await GoogleDriveApi.getPrivateFolderId(mockAnime);
       await flushPromises();
@@ -145,7 +147,9 @@ describe('GoogleDriveApi', () => {
       (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const mockFolderId = 'folder_id';
       (axios.get as jest.Mock).mockResolvedValue({ data: { files: [] } });
-      (axios.post as jest.Mock).mockResolvedValue({ id: mockFolderId });
+      (axios.post as jest.Mock).mockResolvedValue({
+        data: { id: mockFolderId },
+      });
       // When
       const response = await GoogleDriveApi.getPublicFolderId(mockAnime);
       await flushPromises();
@@ -158,6 +162,9 @@ describe('GoogleDriveApi', () => {
     it('should call api', async () => {
       // Given
       (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
+      (axios.post as jest.Mock).mockResolvedValue({
+        data: { id: 'aaa' },
+      });
       const folderName = 'name';
       const parentId = 'parent';
       // When

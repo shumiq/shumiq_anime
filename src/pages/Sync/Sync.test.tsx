@@ -190,6 +190,8 @@ describe('<Sync />', () => {
     if (db.anime['abc352']) db.anime['abc352'].gphotoid = '';
     if (db.anime['abc350']) db.anime['abc350'].gphotoid = '';
     (getLocalStorage as jest.Mock).mockReturnValue(db);
+    (GoogleDriveApi.getPrivateFolderId as jest.Mock).mockReturnValue('aaaa');
+    (GoogleDriveApi.getPublicFolderId as jest.Mock).mockReturnValue('bbbb');
     (GooglePhotoApi.getAlbums as jest.Mock).mockResolvedValue({
       albums: [
         {
@@ -216,6 +218,8 @@ describe('<Sync />', () => {
     const updatedAnime = {
       ...mockDatabase.anime['abc352'],
       gphotoid: mockDatabase.anime['abc352'].gphotoid,
+      gdriveid: 'aaaa',
+      gdriveid_public: 'bbbb',
     };
     expect(Database.update.anime).toHaveBeenCalledWith('abc352', updatedAnime);
   });

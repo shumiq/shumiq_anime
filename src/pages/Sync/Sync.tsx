@@ -86,6 +86,8 @@ const Sync = (): JSX.Element => {
   const unsync = useCallback((key: string, anime: Anime) => {
     if (window.confirm('Do you want to unsync "' + anime.title + '" ?')) {
       anime.gphotoid = '';
+      anime.gdriveid = '';
+      anime.gdriveid_public = '';
       Database.update.anime(key, anime);
     }
   }, []);
@@ -127,11 +129,29 @@ const Sync = (): JSX.Element => {
   );
 
   const sync = useCallback(
-    (key: string, anime: Anime) => {
+    async (key: string, anime: Anime) => {
+      setPopup(
+        <GeneralPopup
+          show={true}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
+      );
       anime.gphotoid = Object.entries(albumList).filter(
         (entry) => entry[1].title === '[Anime] ' + anime.title
       )[0]?.[0];
+      anime.gdriveid = await GoogleDriveApi.getPrivateFolderId(anime);
+      anime.gdriveid_public = await GoogleDriveApi.getPublicFolderId(anime);
       Database.update.anime(key, anime);
+      setPopup(
+        <GeneralPopup
+          show={false}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
+      );
     },
     [albumList]
   );
