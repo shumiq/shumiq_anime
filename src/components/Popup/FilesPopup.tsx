@@ -39,23 +39,20 @@ const FilesPopup = (props: {
       popupElement.addEventListener('hidden.bs.modal', onClose);
     }
   }, [onClose]);
-  const share = useCallback(
-    async (downloadUrl: string) => {
-      /* eslint-disable  @typescript-eslint/no-explicit-any */
-      /* eslint-disable  @typescript-eslint/no-unsafe-call */
-      /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
-      if ((navigator as any).share) {
-        void (navigator as any).share({
-          title: 'Download Video',
-          url: downloadUrl,
-        });
-      } else {
-        const downloadUrl = await GooglePhotoApi.getDownloadUrl(photoId);
-        window.open(downloadUrl, '_blank');
-      }
-    },
-    [photoId]
-  );
+  const share = useCallback(async (photoId: string) => {
+    const downloadUrl = await GooglePhotoApi.getDownloadUrl(photoId);
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    /* eslint-disable  @typescript-eslint/no-unsafe-call */
+    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
+    if ((navigator as any).share) {
+      void (navigator as any).share({
+        title: 'Download Video',
+        url: downloadUrl,
+      });
+    } else {
+      window.open(downloadUrl, '_blank');
+    }
+  }, []);
   return (
     <div className="FilesPopup">
       <div className="modal fade">
