@@ -168,60 +168,66 @@ const Keyaki = (): JSX.Element => {
     <div className="Anime">
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
-          <table className="table table-hover mt-5 table-borderless">
-            <thead>
-              <tr className="table-bordered">
-                <th className="text-center">Ep</th>
-                <th className="text-left">Name</th>
-                <th className="text-left"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {keyakiList &&
-                Object.entries(keyakiList)
-                  .sort((entryA, entryB) => entryA[1].ep - entryB[1].ep)
-                  .map(
-                    ([key, keyaki]) =>
-                      keyakiList[key] !== null && (
-                        <tr
-                          key={key}
-                          ref={
-                            keyakiRef[key] as React.RefObject<
-                              HTMLTableRowElement
-                            >
-                          }
-                          className="table-bordered border-left-0 border-right-0"
-                        >
-                          <td>{keyakiList[key].ep}</td>
-                          <td className="text-left">
-                            <span onClick={() => showInput(key)}>
-                              {keyakiList[key].name}
-                            </span>
-                          </td>
-                          <td>
-                            {Object.keys(keyakiList[key].sub).map(
-                              (sub) =>
-                                keyakiList[key].sub[sub]?.url && (
-                                  <button
-                                    className="btn btn-primary m-1"
-                                    onClick={() =>
-                                      showFiles(keyakiList[key].sub[sub])
-                                    }
-                                    key={
-                                      keyakiList[key].ep.toString() + '_' + sub
-                                    }
-                                  >
-                                    {sub}
-                                  </button>
-                                )
-                            )}
-                          </td>
-                        </tr>
-                      )
-                  )}
-            </tbody>
-          </table>
-
+          <div
+            className="w-100 m-0 p-0"
+            style={{ maxWidth: '100%', overflowX: 'auto' }}
+          >
+            <table className="table table-hover mt-5 table-borderless">
+              <thead>
+                <tr className="table-bordered">
+                  <th className="text-center">Ep</th>
+                  <th className="text-left">Name</th>
+                  <th className="text-left"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {keyakiList &&
+                  Object.entries(keyakiList)
+                    .sort((entryA, entryB) => entryA[1].ep - entryB[1].ep)
+                    .map(
+                      ([key, keyaki]) =>
+                        keyakiList[key] !== null && (
+                          <tr
+                            key={key}
+                            ref={
+                              keyakiRef[key] as React.RefObject<
+                                HTMLTableRowElement
+                              >
+                            }
+                            className="table-bordered border-left-0 border-right-0"
+                          >
+                            <td>{keyakiList[key].ep}</td>
+                            <td className="text-left">
+                              <span onClick={() => showInput(key)}>
+                                {keyakiList[key].name}
+                              </span>
+                            </td>
+                            <td>
+                              {Object.keys(keyakiList[key].sub).map(
+                                (sub) =>
+                                  keyakiList[key].sub[sub]?.url && (
+                                    <button
+                                      className="btn btn-primary m-1"
+                                      onClick={() =>
+                                        showFiles(keyakiList[key].sub[sub])
+                                      }
+                                      key={
+                                        keyakiList[key].ep.toString() +
+                                        '_' +
+                                        sub
+                                      }
+                                    >
+                                      {sub}
+                                    </button>
+                                  )
+                              )}
+                            </td>
+                          </tr>
+                        )
+                    )}
+              </tbody>
+            </table>
+          </div>
           <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
             <div className="w-100 text-center">
               <a

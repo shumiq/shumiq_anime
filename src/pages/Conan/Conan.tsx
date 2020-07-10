@@ -168,60 +168,65 @@ const Conan = (): JSX.Element => {
     <div className="Anime">
       <div className="container p-0 my-5">
         <div className="row text-center w-100 m-0">
-          <table className="table table-hover mt-5 table-borderless">
-            <thead>
-              <tr className="table-bordered">
-                <th className="text-center">Case</th>
-                <th className="text-left">Name</th>
-                <th className="text-left"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {conanList &&
-                Object.entries(conanList)
-                  .sort((entryA, entryB) => entryA[1].case - entryB[1].case)
-                  .map(
-                    ([key, conan]) =>
-                      conanList[key] !== null && (
-                        <tr
-                          key={key}
-                          ref={
-                            conanRef[key] as React.RefObject<
-                              HTMLTableRowElement
-                            >
-                          }
-                          className="table-bordered border-left-0 border-right-0"
-                        >
-                          <td>{conanList[key].case}</td>
-                          <td className="text-left">
-                            <span onClick={() => showInput(key)}>
-                              {conanList[key].name}
-                            </span>
-                          </td>
-                          <td>
-                            {Object.keys(conanList[key].episodes).map(
-                              (episode: string) =>
-                                conanList[key].episodes[parseInt(episode)]
-                                  ?.url && (
-                                  <button
-                                    className="btn btn-primary m-1"
-                                    onClick={() =>
-                                      showFiles(
-                                        conanList[key].episodes[episode]
-                                      )
-                                    }
-                                    key={episode}
-                                  >
-                                    {episode}
-                                  </button>
-                                )
-                            )}
-                          </td>
-                        </tr>
-                      )
-                  )}
-            </tbody>
-          </table>
+          <div
+            className="w-100 m-0 p-0"
+            style={{ maxWidth: '100%', overflowX: 'auto' }}
+          >
+            <table className="table table-hover mt-5 table-borderless">
+              <thead>
+                <tr className="table-bordered">
+                  <th className="text-center">Case</th>
+                  <th className="text-left">Name</th>
+                  <th className="text-left"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {conanList &&
+                  Object.entries(conanList)
+                    .sort((entryA, entryB) => entryA[1].case - entryB[1].case)
+                    .map(
+                      ([key, conan]) =>
+                        conanList[key] !== null && (
+                          <tr
+                            key={key}
+                            ref={
+                              conanRef[key] as React.RefObject<
+                                HTMLTableRowElement
+                              >
+                            }
+                            className="table-bordered border-left-0 border-right-0"
+                          >
+                            <td>{conanList[key].case}</td>
+                            <td className="text-left">
+                              <span onClick={() => showInput(key)}>
+                                {conanList[key].name}
+                              </span>
+                            </td>
+                            <td>
+                              {Object.keys(conanList[key].episodes).map(
+                                (episode: string) =>
+                                  conanList[key].episodes[parseInt(episode)]
+                                    ?.url && (
+                                    <button
+                                      className="btn btn-primary m-1"
+                                      onClick={() =>
+                                        showFiles(
+                                          conanList[key].episodes[episode]
+                                        )
+                                      }
+                                      key={episode}
+                                    >
+                                      {episode}
+                                    </button>
+                                  )
+                              )}
+                            </td>
+                          </tr>
+                        )
+                    )}
+              </tbody>
+            </table>
+          </div>
 
           <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
             <div className="w-100 text-center">

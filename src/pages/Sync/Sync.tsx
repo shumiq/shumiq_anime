@@ -162,104 +162,110 @@ const Sync = (): JSX.Element => {
         className="container text-center"
         style={{ marginTop: '80px', marginBottom: '80px' }}
       >
-        <table className="table table-hover mt-5 table-borderless">
-          <thead>
-            <tr className="table-bordered">
-              <th></th>
-              <th>Title</th>
-              <th>Download</th>
-              <th>Sync</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(animeList)
-              .sort((entriesA, entriesB) => {
-                const a = entriesA[1];
-                const b = entriesB[1];
-                if (
-                  b.year * 10 +
-                    (b.season % 10) -
-                    (a.year * 10 + (a.season % 10)) ===
-                  0
-                )
-                  return a.title < b.title ? -1 : 1;
-                else
-                  return (
+        <div
+          className="w-100 m-0 p-0"
+          style={{ maxWidth: '100%', overflowX: 'auto' }}
+        >
+          <table className="table table-hover mt-5 table-borderless">
+            <thead>
+              <tr className="table-bordered">
+                <th></th>
+                <th>Title</th>
+                <th>Download</th>
+                <th>Sync</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(animeList)
+                .sort((entriesA, entriesB) => {
+                  const a = entriesA[1];
+                  const b = entriesB[1];
+                  if (
                     b.year * 10 +
-                    (b.season % 10) -
-                    (a.year * 10 + (a.season % 10))
-                  );
-              })
-              .map(
-                ([key, anime]) =>
-                  anime !== null && (
-                    <tr
-                      key={key}
-                      className="row-anime table-bordered border-left-0 border-right-0"
-                    >
-                      <td className="text-center align-middle">
-                        <a href={anime.url} target="blank">
-                          <img
-                            src={anime.cover_url}
-                            style={{ height: '50px' }}
-                            alt="cover"
-                          />
-                        </a>
-                      </td>
-                      <td className="text-left align-middle">{anime.title}</td>
-                      <td className="text-center align-middle">
-                        {anime.download}
-                        {albumList[anime.gphotoid] &&
-                          '/' + albumList[anime.gphotoid]?.mediaItemsCount}
-                      </td>
-                      <td className="text-center align-middle">
-                        {anime.gphotoid &&
-                          albumList[anime.gphotoid] &&
-                          anime.download.toString() !==
-                            albumList[
-                              anime.gphotoid
-                            ]?.mediaItemsCount.toString() &&
-                          !anime.title.includes('Conan') && (
-                            <button
-                              id="btn-update"
-                              type="button"
-                              className="btn btn-success mx-1"
-                              onClick={() => update(key, anime)}
-                            >
-                              Update
-                            </button>
-                          )}
-                        {anime.gphotoid && (
-                          <button
-                            id="btn-unsync"
-                            type="button"
-                            className="btn btn-danger mx-1"
-                            onClick={() => unsync(key, anime)}
-                          >
-                            Unsync
-                          </button>
-                        )}
-                        {!anime.gphotoid &&
-                          Object.entries(albumList).some(
-                            (entry) =>
-                              entry[1].title === '[Anime] ' + anime.title
-                          ) && (
-                            <button
-                              id="btn-sync"
-                              type="button"
-                              className="btn btn-primary mx-1"
-                              onClick={() => sync(key, anime)}
-                            >
-                              Sync
-                            </button>
-                          )}
-                      </td>
-                    </tr>
+                      (b.season % 10) -
+                      (a.year * 10 + (a.season % 10)) ===
+                    0
                   )
-              )}
-          </tbody>
-        </table>
-
+                    return a.title < b.title ? -1 : 1;
+                  else
+                    return (
+                      b.year * 10 +
+                      (b.season % 10) -
+                      (a.year * 10 + (a.season % 10))
+                    );
+                })
+                .map(
+                  ([key, anime]) =>
+                    anime !== null && (
+                      <tr
+                        key={key}
+                        className="row-anime table-bordered border-left-0 border-right-0"
+                      >
+                        <td className="text-center align-middle">
+                          <a href={anime.url} target="blank">
+                            <img
+                              src={anime.cover_url}
+                              style={{ height: '50px' }}
+                              alt="cover"
+                            />
+                          </a>
+                        </td>
+                        <td className="text-left align-middle">
+                          {anime.title}
+                        </td>
+                        <td className="text-center align-middle">
+                          {anime.download}
+                          {albumList[anime.gphotoid] &&
+                            '/' + albumList[anime.gphotoid]?.mediaItemsCount}
+                        </td>
+                        <td className="text-center align-middle">
+                          {anime.gphotoid &&
+                            albumList[anime.gphotoid] &&
+                            anime.download.toString() !==
+                              albumList[
+                                anime.gphotoid
+                              ]?.mediaItemsCount.toString() &&
+                            !anime.title.includes('Conan') && (
+                              <button
+                                id="btn-update"
+                                type="button"
+                                className="btn btn-success mx-1"
+                                onClick={() => update(key, anime)}
+                              >
+                                Update
+                              </button>
+                            )}
+                          {anime.gphotoid && (
+                            <button
+                              id="btn-unsync"
+                              type="button"
+                              className="btn btn-danger mx-1"
+                              onClick={() => unsync(key, anime)}
+                            >
+                              Unsync
+                            </button>
+                          )}
+                          {!anime.gphotoid &&
+                            Object.entries(albumList).some(
+                              (entry) =>
+                                entry[1].title === '[Anime] ' + anime.title
+                            ) && (
+                              <button
+                                id="btn-sync"
+                                type="button"
+                                className="btn btn-primary mx-1"
+                                onClick={() => sync(key, anime)}
+                              >
+                                Sync
+                              </button>
+                            )}
+                        </td>
+                      </tr>
+                    )
+                )}
+            </tbody>
+          </table>
+        </div>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
           <div className="w-100 text-center">
             <a
