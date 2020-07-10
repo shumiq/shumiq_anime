@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal } from 'bootstrap';
 import GooglePhotoApi from '../../api/googlephoto';
+import userdetail from '../../utils/userdetail';
 
 type Modal = {
   show: () => void;
@@ -81,7 +82,7 @@ const FilesPopup = (props: {
               >
                 Google Photo
               </a>
-              {photoId && (
+              {userdetail.isAdmin() && photoId && (
                 <button
                   className={
                     'btn btn-primary h-auto border-0 m-1' +
