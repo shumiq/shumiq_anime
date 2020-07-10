@@ -114,7 +114,12 @@ const AnimeCard = (props: {
     );
     const files: Record<
       string,
-      { name: string; driveUrl?: string; photoUrl?: string }
+      {
+        name: string;
+        driveUrl?: string;
+        photoUrl?: string;
+        downloadUrl?: string;
+      }
     > = {};
     driveFiles.forEach((file) => {
       files[file.name] = {
@@ -131,6 +136,7 @@ const AnimeCard = (props: {
         ...files[file.filename],
         name: file.filename,
         photoUrl: file.productUrl,
+        downloadUrl: file.baseUrl + '=dv',
       };
     });
 

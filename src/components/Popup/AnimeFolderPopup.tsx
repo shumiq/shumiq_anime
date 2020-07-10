@@ -11,7 +11,7 @@ const AnimeFolderPopup = (props: {
   onClose: () => void;
   folderFiles: Record<
     string,
-    { name: string; photoUrl?: string; driveUrl?: string }
+    { name: string; photoUrl?: string; driveUrl?: string; downloadUrl?: string }
   >;
 }): JSX.Element => {
   const files = props.folderFiles;
@@ -65,6 +65,9 @@ const AnimeFolderPopup = (props: {
                     <th className="text-center" style={{ width: '50px' }}>
                       G.Drive
                     </th>
+                    <th className="text-center" style={{ width: '50px' }}>
+                      Download
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -96,6 +99,21 @@ const AnimeFolderPopup = (props: {
                           }
                           type="button"
                           href={files[name].driveUrl}
+                          target="blank"
+                        >
+                          <small>
+                            <i className="material-icons align-middle">movie</i>
+                          </small>
+                        </a>
+                      </td>
+                      <td className="text-center">
+                        <a
+                          className={
+                            'btn btn-outline-light h-auto border-0' +
+                            (files[name].downloadUrl ? '' : ' disabled')
+                          }
+                          type="button"
+                          href={files[name].downloadUrl}
                           target="blank"
                         >
                           <small>
