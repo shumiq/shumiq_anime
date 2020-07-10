@@ -128,11 +128,13 @@ describe('<Keyaki />', () => {
     (GooglePhotoApi.getMedias as jest.Mock).mockResolvedValue([
       {
         filename: 'Keyakitte Kakenai 02 Eng.mp4',
-        productUrl: 'thisisurl1',
+        productUrl: 'thisisurl1a',
+        baseUrl: 'thisisurl1b',
       },
       {
         filename: 'Keyakitte Kakenai 03 Eng.mp4',
-        productUrl: 'thisisurl2',
+        productUrl: 'thisisurl2a',
+        baseUrl: 'thisisurl2b',
       },
     ]);
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
@@ -144,7 +146,8 @@ describe('<Keyaki />', () => {
       name: 'episode 2',
       sub: {
         Eng: {
-          photoUrl: 'thisisurl1',
+          photoUrl: 'thisisurl1a',
+          downloadUrl: 'thisisurl1b=dv',
           url: 'https://drive.google.com/file/d/thisisid1/preview?usp=drivesdk',
         },
         Thai: { photoUrl: 'url', url: 'url' },
@@ -154,7 +157,8 @@ describe('<Keyaki />', () => {
       ep: 3,
       sub: {
         Eng: {
-          photoUrl: 'thisisurl2',
+          photoUrl: 'thisisurl2a',
+          downloadUrl: 'thisisurl2b=dv',
           url: 'https://drive.google.com/file/d/thisisid2/preview?usp=drivesdk',
         },
       },

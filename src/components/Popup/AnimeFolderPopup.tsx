@@ -41,7 +41,7 @@ const AnimeFolderPopup = (props: {
   return (
     <div className="AnimeFolderPopup">
       <div className="modal fade">
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-fullscreen">
           <div className="modal-content w-auto mx-auto">
             <div className="modal-header">
               <h5 className="modal-title">Folder</h5>
@@ -55,7 +55,7 @@ const AnimeFolderPopup = (props: {
               </button>
             </div>
             <div className="modal-body text-center">
-              <table className="table table-hover table-borderless">
+              <table className="table table-hover table-borderless w-auto mx-auto">
                 <thead>
                   <tr>
                     <th className="text-center">File</th>
@@ -73,10 +73,10 @@ const AnimeFolderPopup = (props: {
                 <tbody>
                   {filenames.map((name) => (
                     <tr key={name}>
-                      <td>
+                      <td className="align-middle">
                         <small>{files[name].name}</small>
                       </td>
-                      <td className="text-center">
+                      <td className="text-center align-middle">
                         <a
                           className={
                             'btn btn-outline-light h-auto border-0' +
@@ -91,7 +91,7 @@ const AnimeFolderPopup = (props: {
                           </small>
                         </a>
                       </td>
-                      <td className="text-center">
+                      <td className="text-center align-middle">
                         <a
                           className={
                             'btn btn-outline-light h-auto border-0' +
@@ -106,7 +106,7 @@ const AnimeFolderPopup = (props: {
                           </small>
                         </a>
                       </td>
-                      <td className="text-center">
+                      <td className="text-center align-middle">
                         <a
                           className={
                             'btn btn-outline-light h-auto border-0' +

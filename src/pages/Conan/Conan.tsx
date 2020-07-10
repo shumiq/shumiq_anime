@@ -47,11 +47,13 @@ const Conan = (): JSX.Element => {
   const showFiles = useCallback((files: File) => {
     const url = files.url ? files.url : '';
     const photoUrl = files.photoUrl ? files.photoUrl : '';
+    const downloadUrl = files.downloadUrl ? files.downloadUrl : '';
     const showFilesPopup = (show: boolean) => {
       setPopup(
         <FilesPopup
           driveUrl={url}
           photoUrl={photoUrl}
+          downloadUrl={downloadUrl}
           show={show}
           onClose={() => {
             setPopup('');
@@ -74,14 +76,8 @@ const Conan = (): JSX.Element => {
       );
     };
     showLoadingPopup(true);
-    const driveFiles = (await GoogleDriveApi.getFiles(driveFolderId)) as {
-      name: string;
-      id: string;
-    }[];
-    const photoFiles = (await GooglePhotoApi.getMedias(photoAlbumId)) as {
-      filename: string;
-      productUrl: string;
-    }[];
+    const driveFiles = await GoogleDriveApi.getFiles(driveFolderId);
+    const photoFiles = await GooglePhotoApi.getMedias(photoAlbumId);
     driveFiles.forEach((file: { name: string; id: string }) => {
       const cs = parseInt(file.name.split(' ')[1]);
       const ep = parseInt(file.name.split(' ')[3].split('.')[0]);
@@ -89,6 +85,8 @@ const Conan = (): JSX.Element => {
         'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
       const photoUrl = photoFiles.filter((f) => f.filename === file.name)[0]
         ?.productUrl;
+      const downloadUrl =
+        photoFiles.filter((f) => f.filename === file.name)[0]?.baseUrl + '=dv';
       if (
         Object.entries(conanList).filter(([key, conan]) => conan.case === cs)
           .length > 0
@@ -99,6 +97,7 @@ const Conan = (): JSX.Element => {
             conan.episodes[ep] = {
               url: url,
               photoUrl: photoUrl ? photoUrl : null,
+              downloadUrl: downloadUrl ? downloadUrl : null,
             };
             Database.update.conan(key, conan);
           });
@@ -111,6 +110,7 @@ const Conan = (): JSX.Element => {
         conan.episodes[ep] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
+          downloadUrl: downloadUrl ? downloadUrl : null,
         };
         Database.add.conan(conan);
       }

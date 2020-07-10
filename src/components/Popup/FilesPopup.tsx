@@ -11,9 +11,11 @@ const FilesPopup = (props: {
   onClose: () => void;
   driveUrl: string;
   photoUrl: string;
+  downloadUrl?: string;
 }): JSX.Element => {
   const driveUrl = props.driveUrl ? props.driveUrl : '';
   const photoUrl = props.photoUrl ? props.photoUrl : '';
+  const downloadUrl = props.downloadUrl ? props.downloadUrl : '';
   const onClose = useCallback(() => props.onClose(), [props]);
   const [modal, setModal] = useState<Modal>();
   useEffect(() => {
@@ -64,6 +66,19 @@ const FilesPopup = (props: {
               >
                 Google Photo
               </a>
+              {downloadUrl && (
+                <a
+                  className={
+                    'btn btn-primary h-auto border-0 m-1' +
+                    (downloadUrl === '' ? ' disabled' : '')
+                  }
+                  type="button"
+                  href={downloadUrl}
+                  target="blank"
+                >
+                  Download
+                </a>
+              )}
             </div>
           </div>
         </div>

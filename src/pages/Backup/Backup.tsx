@@ -133,8 +133,8 @@ const Backup = (): JSX.Element => {
                       key={file.generation}
                       className="table-bordered border-left-0 border-right-0"
                     >
-                      <td className="pt-4">{file.name}</td>
-                      <td>
+                      <td className="pt-4 align-middle">{file.name}</td>
+                      <td className="align-middle">
                         <p className="m-0 p-0 small">
                           Series: {file.customMetadata.animeSeries}
                         </p>
@@ -145,7 +145,7 @@ const Backup = (): JSX.Element => {
                           View: {file.customMetadata.animeView}
                         </p>
                       </td>
-                      <td>
+                      <td className="align-middle">
                         <p className="m-0 p-0 small">
                           Cases: {file.customMetadata.conanCases}
                         </p>
@@ -153,7 +153,7 @@ const Backup = (): JSX.Element => {
                           Download: {file.customMetadata.conanFiles}
                         </p>
                       </td>
-                      <td>
+                      <td className="align-middle">
                         <p className="m-0 p-0 small">
                           Episodes: {file.customMetadata.keyakiEpisodes}
                         </p>
@@ -161,7 +161,7 @@ const Backup = (): JSX.Element => {
                           Download: {file.customMetadata.keyakiFiles}
                         </p>
                       </td>
-                      <td className="pt-3">
+                      <td className="pt-3 align-middle">
                         <button
                           id="btn-restore"
                           className="btn btn-outline-light border-0 p-0 m-0 ml-3"
