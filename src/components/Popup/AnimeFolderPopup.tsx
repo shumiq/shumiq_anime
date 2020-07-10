@@ -38,6 +38,19 @@ const AnimeFolderPopup = (props: {
       popupElement.addEventListener('hidden.bs.modal', onClose);
     }
   }, [onClose]);
+  const share = useCallback((downloadUrl: string) => {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    /* eslint-disable  @typescript-eslint/no-unsafe-call */
+    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
+    if ((navigator as any).share) {
+      void (navigator as any).share({
+        title: 'Download Video',
+        url: downloadUrl,
+      });
+    } else {
+      window.open(downloadUrl, '_blank');
+    }
+  }, []);
   return (
     <div className="AnimeFolderPopup">
       <div className="modal fade">
@@ -107,19 +120,18 @@ const AnimeFolderPopup = (props: {
                         </a>
                       </td>
                       <td className="text-center align-middle">
-                        <a
+                        <button
                           className={
                             'btn btn-outline-light h-auto border-0' +
                             (files[name].downloadUrl ? '' : ' disabled')
                           }
                           type="button"
-                          href={files[name].downloadUrl}
-                          target="blank"
+                          onClick={() => share(files[name].downloadUrl || '')}
                         >
                           <small>
                             <i className="material-icons align-middle">movie</i>
                           </small>
-                        </a>
+                        </button>
                       </td>
                     </tr>
                   ))}

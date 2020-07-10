@@ -38,6 +38,19 @@ const FilesPopup = (props: {
       popupElement.addEventListener('hidden.bs.modal', onClose);
     }
   }, [onClose]);
+  const share = useCallback((downloadUrl: string) => {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    /* eslint-disable  @typescript-eslint/no-unsafe-call */
+    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
+    if ((navigator as any).share) {
+      void (navigator as any).share({
+        title: 'Download Video',
+        url: downloadUrl,
+      });
+    } else {
+      window.open(downloadUrl, '_blank');
+    }
+  }, []);
   return (
     <div className="FilesPopup">
       <div className="modal fade">
@@ -67,17 +80,18 @@ const FilesPopup = (props: {
                 Google Photo
               </a>
               {downloadUrl && (
-                <a
+                <button
                   className={
                     'btn btn-primary h-auto border-0 m-1' +
                     (downloadUrl === '' ? ' disabled' : '')
                   }
                   type="button"
-                  href={downloadUrl}
-                  target="blank"
+                  //href={downloadUrl}
+                  //target="blank"
+                  onClick={() => share(downloadUrl)}
                 >
                   Download
-                </a>
+                </button>
               )}
             </div>
           </div>
