@@ -47,13 +47,13 @@ const Conan = (): JSX.Element => {
   const showFiles = useCallback((files: File) => {
     const url = files.url ? files.url : '';
     const photoUrl = files.photoUrl ? files.photoUrl : '';
-    const downloadUrl = files.downloadUrl ? files.downloadUrl : '';
+    const photoId = files.photoId ? files.photoId : '';
     const showFilesPopup = (show: boolean) => {
       setPopup(
         <FilesPopup
           driveUrl={url}
           photoUrl={photoUrl}
-          downloadUrl={downloadUrl}
+          photoId={photoId}
           show={show}
           onClose={() => {
             setPopup('');
@@ -85,8 +85,7 @@ const Conan = (): JSX.Element => {
         'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
       const photoUrl = photoFiles.filter((f) => f.filename === file.name)[0]
         ?.productUrl;
-      const downloadUrl =
-        photoFiles.filter((f) => f.filename === file.name)[0]?.baseUrl + '=dv';
+      const photoId = photoFiles.filter((f) => f.filename === file.name)[0]?.id;
       if (
         Object.entries(conanList).filter(([key, conan]) => conan.case === cs)
           .length > 0
@@ -97,7 +96,7 @@ const Conan = (): JSX.Element => {
             conan.episodes[ep] = {
               url: url,
               photoUrl: photoUrl ? photoUrl : null,
-              downloadUrl: downloadUrl ? downloadUrl : null,
+              photoId: photoId ? photoId : null,
             };
             Database.update.conan(key, conan);
           });
@@ -110,7 +109,7 @@ const Conan = (): JSX.Element => {
         conan.episodes[ep] = {
           url: url,
           photoUrl: photoUrl ? photoUrl : null,
-          downloadUrl: downloadUrl ? downloadUrl : null,
+          photoId: photoId ? photoId : null,
         };
         Database.add.conan(conan);
       }

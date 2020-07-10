@@ -43,7 +43,7 @@ export interface Anime {
 export interface File {
   photoUrl: string | null;
   url: string;
-  downloadUrl: string | null;
+  photoId: string | null;
 }
 
 export interface Conan {

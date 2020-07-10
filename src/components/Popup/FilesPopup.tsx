@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal } from 'bootstrap';
+import GooglePhotoApi from '../../api/googlephoto';
 
 type Modal = {
   show: () => void;
@@ -11,11 +12,11 @@ const FilesPopup = (props: {
   onClose: () => void;
   driveUrl: string;
   photoUrl: string;
-  downloadUrl?: string;
+  photoId?: string;
 }): JSX.Element => {
   const driveUrl = props.driveUrl ? props.driveUrl : '';
   const photoUrl = props.photoUrl ? props.photoUrl : '';
-  const downloadUrl = props.downloadUrl ? props.downloadUrl : '';
+  const photoId = props.photoId ? props.photoId : '';
   const onClose = useCallback(() => props.onClose(), [props]);
   const [modal, setModal] = useState<Modal>();
   useEffect(() => {
@@ -38,19 +39,23 @@ const FilesPopup = (props: {
       popupElement.addEventListener('hidden.bs.modal', onClose);
     }
   }, [onClose]);
-  const share = useCallback((downloadUrl: string) => {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    /* eslint-disable  @typescript-eslint/no-unsafe-call */
-    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
-    if ((navigator as any).share) {
-      void (navigator as any).share({
-        title: 'Download Video',
-        url: downloadUrl,
-      });
-    } else {
-      window.open(downloadUrl, '_blank');
-    }
-  }, []);
+  const share = useCallback(
+    async (downloadUrl: string) => {
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
+      /* eslint-disable  @typescript-eslint/no-unsafe-call */
+      /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
+      if ((navigator as any).share) {
+        void (navigator as any).share({
+          title: 'Download Video',
+          url: downloadUrl,
+        });
+      } else {
+        const downloadUrl = await GooglePhotoApi.getDownloadUrl(photoId);
+        window.open(downloadUrl, '_blank');
+      }
+    },
+    [photoId]
+  );
   return (
     <div className="FilesPopup">
       <div className="modal fade">
@@ -79,16 +84,16 @@ const FilesPopup = (props: {
               >
                 Google Photo
               </a>
-              {downloadUrl && (
+              {photoId && (
                 <button
                   className={
                     'btn btn-primary h-auto border-0 m-1' +
-                    (downloadUrl === '' ? ' disabled' : '')
+                    (photoId === '' ? ' disabled' : '')
                   }
                   type="button"
                   //href={downloadUrl}
                   //target="blank"
-                  onClick={() => share(downloadUrl)}
+                  onClick={() => share(photoId)}
                 >
                   Download
                 </button>

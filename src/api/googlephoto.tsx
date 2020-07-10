@@ -86,6 +86,17 @@ const GooglePhotoApi = {
     }
     return medias;
   },
+  getDownloadUrl: async (mediaId: string): Promise<string> => {
+    const res: {
+      data: GooglePhotoMediaResponse;
+    } = await axios.get(
+      'https://photoslibrary.googleapis.com/v1/mediaItems/' +
+        mediaId +
+        '?access_token=' +
+        UserDetail.getAccessToken()
+    );
+    return res.data.baseUrl + '=dv';
+  },
 };
 
 export default GooglePhotoApi;

@@ -134,13 +134,13 @@ describe('<Conan />', () => {
     (GooglePhotoApi.getMedias as jest.Mock).mockResolvedValue([
       {
         filename: 'conan 0002 - 0205.mp4',
-        productUrl: 'thisisurl1a',
-        baseUrl: 'thisisurl1b',
+        productUrl: 'thisisurl1',
+        id: 'thisisgphotoid1',
       },
       {
         filename: 'conan 0003 - 0206.mp4',
-        productUrl: 'thisisurl2a',
-        baseUrl: 'thisisurl2b',
+        productUrl: 'thisisurl2',
+        id: 'thisisgphotoid2',
       },
     ]);
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
@@ -153,8 +153,8 @@ describe('<Conan />', () => {
         '203': { photoUrl: 'url', url: 'url' },
         '204': { photoUrl: 'url', url: 'url' },
         '205': {
-          photoUrl: 'thisisurl1a',
-          downloadUrl: 'thisisurl1b=dv',
+          photoUrl: 'thisisurl1',
+          photoId: 'thisisgphotoid1',
           url: 'https://drive.google.com/file/d/thisisid1/preview?usp=drivesdk',
         },
       },
@@ -164,8 +164,8 @@ describe('<Conan />', () => {
       case: 3,
       episodes: {
         '206': {
-          photoUrl: 'thisisurl2a',
-          downloadUrl: 'thisisurl2b=dv',
+          photoUrl: 'thisisurl2',
+          photoId: 'thisisgphotoid2',
           url: 'https://drive.google.com/file/d/thisisid2/preview?usp=drivesdk',
         },
       },
