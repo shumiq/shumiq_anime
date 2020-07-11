@@ -65,7 +65,8 @@ export const AnimeFilter = (
 
   // Filter by Keyword
   if (filter.keyword.trim().length > 0) {
-    result = result.filter(([id, anime]) => {
+    result = result.filter((entries) => {
+      const anime = entries[1];
       if (anime !== null) {
         const animeKeywords = [
           anime.title.toString().toLowerCase(),
@@ -85,7 +86,7 @@ export const AnimeFilter = (
             )
               isInclude = false;
           });
-        return isInclude || id === filter.keyword;
+        return isInclude;
       } else return false;
     });
   }

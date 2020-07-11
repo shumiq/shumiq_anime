@@ -38,7 +38,7 @@ export const ROUTER_CONFIG: Router[] = [
     auth: [''],
   },
   {
-    path: '/api/:function',
+    path: '/api/:query',
     exact: true,
     component: Api,
     auth: [''],
