@@ -61,7 +61,7 @@ export interface Keyaki {
 export interface Router {
   path: string;
   exact: boolean;
-  component: React.ComponentClass | (() => JSX.Element);
+  component: React.ComponentClass | (() => JSX.Element) | (() => null);
   auth: string[];
 }
 
