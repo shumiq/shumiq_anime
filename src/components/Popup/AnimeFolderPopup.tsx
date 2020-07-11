@@ -38,9 +38,22 @@ const AnimeFolderPopup = (props: {
       popupElement.addEventListener('hidden.bs.modal', onClose);
     }
   }, [onClose]);
-  const share = useCallback((downloadUrl: string) => {
+  const play = useCallback((downloadUrl: string) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT?.toString() || '';
     window.open(baseUrl + '/api/view?url=' + downloadUrl, '_blank');
+  }, []);
+  const share = useCallback((downloadUrl: string) => {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    /* eslint-disable  @typescript-eslint/no-unsafe-call */
+    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
+    if ((navigator as any).share) {
+      void (navigator as any).share({
+        title: 'Download Video',
+        url: downloadUrl,
+      });
+    } else {
+      window.open(downloadUrl, '_blank');
+    }
   }, []);
   return (
     <div className="AnimeFolderPopup">
@@ -72,6 +85,9 @@ const AnimeFolderPopup = (props: {
                     <th className="text-center" style={{ width: '50px' }}>
                       G.Drive
                     </th>
+                    <th className="text-center" style={{ width: '50px' }}>
+                      Download
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -87,7 +103,7 @@ const AnimeFolderPopup = (props: {
                             (files[name].downloadUrl ? '' : ' disabled')
                           }
                           type="button"
-                          onClick={() => share(files[name].downloadUrl || '')}
+                          onClick={() => play(files[name].downloadUrl || '')}
                         >
                           <small>
                             <i className="material-icons align-middle">
@@ -125,6 +141,22 @@ const AnimeFolderPopup = (props: {
                             <i className="material-icons align-middle">movie</i>
                           </small>
                         </a>
+                      </td>
+                      <td className="text-center align-middle">
+                        <button
+                          className={
+                            'btn btn-outline-light h-auto border-0' +
+                            (files[name].downloadUrl ? '' : ' disabled')
+                          }
+                          type="button"
+                          onClick={() => share(files[name].downloadUrl || '')}
+                        >
+                          <small>
+                            <i className="material-icons align-middle">
+                              vertical_align_bottom
+                            </i>
+                          </small>
+                        </button>
                       </td>
                     </tr>
                   ))}

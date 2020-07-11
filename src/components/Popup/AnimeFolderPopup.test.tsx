@@ -57,7 +57,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(1)
         .find('td')
-        .at(1)
+        .at(2)
         .html()
         .includes('url1.1')
     ).toBe(true);
@@ -67,7 +67,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(1)
         .find('td')
-        .at(1)
+        .at(2)
         .html()
         .includes('disabled')
     ).not.toBe(true);
@@ -77,7 +77,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(1)
         .find('td')
-        .at(2)
+        .at(3)
         .html()
         .includes('url1.2')
     ).toBe(true);
@@ -87,7 +87,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(1)
         .find('td')
-        .at(2)
+        .at(3)
         .html()
         .includes('disabled')
     ).not.toBe(true);
@@ -118,7 +118,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(2)
         .find('td')
-        .at(1)
+        .at(2)
         .html()
         .includes('url2.1')
     ).toBe(true);
@@ -128,7 +128,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(2)
         .find('td')
-        .at(1)
+        .at(2)
         .html()
         .includes('disabled')
     ).not.toBe(true);
@@ -138,7 +138,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(2)
         .find('td')
-        .at(2)
+        .at(3)
         .html()
         .includes('disabled')
     ).toBe(true);
@@ -169,7 +169,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(3)
         .find('td')
-        .at(1)
+        .at(2)
         .html()
         .includes('disabled')
     ).toBe(true);
@@ -179,7 +179,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(3)
         .find('td')
-        .at(2)
+        .at(3)
         .html()
         .includes('url3.2')
     ).toBe(true);
@@ -189,7 +189,7 @@ describe('<AnimeFolderPopup />', () => {
         .find('tr')
         .at(3)
         .find('td')
-        .at(2)
+        .at(3)
         .html()
         .includes('disabled')
     ).not.toBe(true);
