@@ -4,7 +4,6 @@ import Conan from '../../pages/Conan/Conan';
 import Keyaki from '../../pages/Keyaki/Keyaki';
 import Backup from '../../pages/Backup/Backup';
 import { Router } from '../types';
-import Api from '../../pages/Api/Api';
 
 export const ROUTER_CONFIG: Router[] = [
   {
@@ -35,12 +34,6 @@ export const ROUTER_CONFIG: Router[] = [
     path: '/keyaki',
     exact: true,
     component: Keyaki,
-    auth: [''],
-  },
-  {
-    path: '/api/:query',
-    exact: true,
-    component: Api,
     auth: [''],
   },
 ];
