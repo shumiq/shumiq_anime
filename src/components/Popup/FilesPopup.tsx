@@ -42,17 +42,8 @@ const FilesPopup = (props: {
   }, [onClose]);
   const share = useCallback(async (photoId: string) => {
     const downloadUrl = await GooglePhotoApi.getDownloadUrl(photoId);
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    /* eslint-disable  @typescript-eslint/no-unsafe-call */
-    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
-    if ((navigator as any).share) {
-      void (navigator as any).share({
-        title: 'Download Video',
-        url: downloadUrl,
-      });
-    } else {
-      window.open(downloadUrl, '_blank');
-    }
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT?.toString() || '';
+    window.open(baseUrl + '/api/view?url=' + downloadUrl, '_blank');
   }, []);
   return (
     <div className="FilesPopup">
@@ -60,6 +51,20 @@ const FilesPopup = (props: {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content w-auto mx-auto">
             <div className="modal-body text-center">
+              {userdetail.isAdmin() && photoId && (
+                <button
+                  className={
+                    'btn btn-primary h-auto border-0 m-1' +
+                    (photoId === '' ? ' disabled' : '')
+                  }
+                  type="button"
+                  //href={downloadUrl}
+                  //target="blank"
+                  onClick={() => share(photoId)}
+                >
+                  Play
+                </button>
+              )}
               <a
                 className={
                   'btn btn-primary h-auto border-0 m-1' +
@@ -82,20 +87,6 @@ const FilesPopup = (props: {
               >
                 Google Photo
               </a>
-              {userdetail.isAdmin() && photoId && (
-                <button
-                  className={
-                    'btn btn-primary h-auto border-0 m-1' +
-                    (photoId === '' ? ' disabled' : '')
-                  }
-                  type="button"
-                  //href={downloadUrl}
-                  //target="blank"
-                  onClick={() => share(photoId)}
-                >
-                  Download
-                </button>
-              )}
             </div>
           </div>
         </div>

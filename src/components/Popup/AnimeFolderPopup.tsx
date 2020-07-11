@@ -39,17 +39,8 @@ const AnimeFolderPopup = (props: {
     }
   }, [onClose]);
   const share = useCallback((downloadUrl: string) => {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    /* eslint-disable  @typescript-eslint/no-unsafe-call */
-    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
-    if ((navigator as any).share) {
-      void (navigator as any).share({
-        title: 'Download Video',
-        url: downloadUrl,
-      });
-    } else {
-      window.open(downloadUrl, '_blank');
-    }
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT?.toString() || '';
+    window.open(baseUrl + '/api/view?url=' + downloadUrl, '_blank');
   }, []);
   return (
     <div className="AnimeFolderPopup">
@@ -73,13 +64,13 @@ const AnimeFolderPopup = (props: {
                   <tr>
                     <th className="text-center">File</th>
                     <th className="text-center" style={{ width: '50px' }}>
+                      Play
+                    </th>
+                    <th className="text-center" style={{ width: '50px' }}>
                       G.Photo
                     </th>
                     <th className="text-center" style={{ width: '50px' }}>
                       G.Drive
-                    </th>
-                    <th className="text-center" style={{ width: '50px' }}>
-                      Download
                     </th>
                   </tr>
                 </thead>
@@ -88,6 +79,22 @@ const AnimeFolderPopup = (props: {
                     <tr key={name}>
                       <td className="align-middle">
                         <small>{files[name].name}</small>
+                      </td>
+                      <td className="text-center align-middle">
+                        <button
+                          className={
+                            'btn btn-outline-light h-auto border-0' +
+                            (files[name].downloadUrl ? '' : ' disabled')
+                          }
+                          type="button"
+                          onClick={() => share(files[name].downloadUrl || '')}
+                        >
+                          <small>
+                            <i className="material-icons align-middle">
+                              play_circle_outline
+                            </i>
+                          </small>
+                        </button>
                       </td>
                       <td className="text-center align-middle">
                         <a
@@ -118,20 +125,6 @@ const AnimeFolderPopup = (props: {
                             <i className="material-icons align-middle">movie</i>
                           </small>
                         </a>
-                      </td>
-                      <td className="text-center align-middle">
-                        <button
-                          className={
-                            'btn btn-outline-light h-auto border-0' +
-                            (files[name].downloadUrl ? '' : ' disabled')
-                          }
-                          type="button"
-                          onClick={() => share(files[name].downloadUrl || '')}
-                        >
-                          <small>
-                            <i className="material-icons align-middle">movie</i>
-                          </small>
-                        </button>
                       </td>
                     </tr>
                   ))}
