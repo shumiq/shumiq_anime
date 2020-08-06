@@ -29,3 +29,4 @@ lambda
 src/react-app-env.d.ts
 
 .vercel
+.idea
