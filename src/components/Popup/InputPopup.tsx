@@ -15,6 +15,8 @@ const InputPopup = (props: {
   const [input, setInput] = useState(props.default ? props.default : '');
   const onClose = useCallback(() => props.onClose(), [props]);
   const [modal, setModal] = useState<Modal>();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const closePopup = useCallback(() => modal?.hide(), [modal]);
   useEffect(() => {
     const popupElement = document.querySelector('.modal');
     if (popupElement) {
@@ -38,9 +40,9 @@ const InputPopup = (props: {
   const saveInput = useCallback(
     (text: string): void => {
       props.callback(text);
-      onClose();
+      closePopup();
     },
-    [onClose, props]
+    [closePopup, props]
   );
   return (
     <div className="InputPopup">
