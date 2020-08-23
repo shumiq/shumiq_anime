@@ -49,7 +49,7 @@ describe('GoogleDriveApi', () => {
       // Given
       (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       (axios.get as jest.Mock).mockResolvedValue({ data: { files: [] } });
-      const folderId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
+      const folderId = '1o17TTtMpHFT-xdWYaiYqTkjb7PQVUwBF';
       // When
       await GoogleDriveApi.getUploadFiles();
       await flushPromises();
@@ -188,7 +188,7 @@ describe('GoogleDriveApi', () => {
       // Given
       (UserDetail.getAccessToken as jest.Mock).mockReturnValue('access_token');
       const fileId = 'file';
-      const sourceId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
+      const sourceId = '1o17TTtMpHFT-xdWYaiYqTkjb7PQVUwBF';
       const destinationId = 'destination';
       // When
       await GoogleDriveApi.moveUploadFile(fileId, destinationId);

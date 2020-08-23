@@ -2,7 +2,7 @@ import axios from 'axios';
 import UserDetail from '../utils/userdetail';
 import { GoogleDriveFileResponse, Anime } from '../utils/types';
 
-const uploadFolderId = '1yO9pvMdrRrR5pIm9kAxYp9SEiwqpE_r6';
+const uploadFolderId = '1o17TTtMpHFT-xdWYaiYqTkjb7PQVUwBF';
 const privateAnimeFolderId = '1teaWviknfgbuDsoFarRIsnny1HQ8zQe2';
 const publicAnimeFolderId = '16MJ-jTxpa041WDc4nDjjLpIiSyNCEI4h';
 
