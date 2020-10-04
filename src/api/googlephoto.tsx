@@ -5,7 +5,7 @@ import {
   GooglePhotoMediaResponse,
 } from '../utils/types';
 
-const pageSize = 50;
+const pageSize = 10;
 const includeAlbum = '[Anime]';
 const excludeAlbum = 'Detective Conan';
 
