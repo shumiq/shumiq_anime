@@ -54,7 +54,9 @@ export const AnimeFilter = (
   }
   if (filter.category === FilterEnum.ONLY_UNFINISH) {
     result = result.filter(
-      (entries) => entries[1].all_episode !== entries[1].download.toString()
+      (entries) =>
+        entries[1].all_episode !== entries[1].download.toString() ||
+        entries[1].download_url.length > 0
     );
   }
   if (filter.category === FilterEnum.ONLY_FINISH) {
