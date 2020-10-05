@@ -109,27 +109,31 @@ export const Database = {
     return response.reverse();
   },
   runAutoBackup: async (): Promise<boolean> => {
-    const autoBackupThreshold = 1000 * 60 * 60 * 24 * 7; // 1 Week
+    const autoBackupInterval = 1000 * 60 * 60 * 24 * 7; // 1 Week
     const currentTime = Date.now();
-    const backupFiles = await Database.backupFiles();
-    const latestBackup =
-      backupFiles.length > 0
-        ? new Date(backupFiles[0].timeCreated).getTime()
-        : 0;
+    const latestBackup = Number(getLocalStorage('last_backup')) || 0;
     const timeDiff = currentTime - latestBackup;
-    if (timeDiff > autoBackupThreshold) void Database.backup();
-    return timeDiff > autoBackupThreshold;
+    if (timeDiff > autoBackupInterval/2) { // half week
+      void await Database.backup();
+      setLocalStorage('last_backup', currentTime)
+    }
+    return timeDiff > autoBackupInterval;
   },
   runAutoDelete: async (): Promise<boolean> => {
-    const autoDeleteThreshold = 1000 * 60 * 60 * 24 * 90; // 3 month
+    const autoDeleteInterval = 1000 * 60 * 60 * 24 * 90; // 3 month
     const currentTime = Date.now();
-    const backupFiles = await Database.backupFiles();
-    backupFiles.forEach((file) => {
-      const createdTime = new Date(file.timeCreated).getTime();
-      const timeDiff = currentTime - createdTime;
-      if (timeDiff > autoDeleteThreshold)
-        void Firebase.storage.delete('backup', file.name);
-    });
+    const latestDeleteBackup = Number(getLocalStorage('last_delete_backup')) || 0;
+    const timeDiff = currentTime - latestDeleteBackup;
+    if (timeDiff > autoDeleteInterval/3) { // 1 month
+      const backupFiles = await Database.backupFiles();
+      for (const file of backupFiles) {
+        const createdTime = new Date(file.timeCreated).getTime();
+        const timeDiff = currentTime - createdTime;
+        if (timeDiff > autoDeleteInterval)
+          void await Firebase.storage.delete('backup', file.name);
+      }
+      setLocalStorage('last_delete_backup', currentTime)
+    }
     return true;
   },
   add: {

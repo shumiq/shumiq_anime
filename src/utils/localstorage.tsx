@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'MYAPP';
+const STORAGE_KEY = 'shumiq_anime';
 
 export const setLocalStorage = (key: string, value: unknown): void => {
   window.localStorage.setItem(`${STORAGE_KEY}_${key}`, JSON.stringify(value));
