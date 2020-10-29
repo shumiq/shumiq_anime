@@ -83,21 +83,21 @@ describe('<Sakura />', () => {
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     (GoogleDriveApi.getFiles as jest.Mock).mockResolvedValue([
       {
-        name: 'Sakuratte Kakenai 02 Eng.mp4',
+        name: 'Soko Magattara, Sakurazaka 02 Eng.mp4',
         id: 'thisisid1',
       },
       {
-        name: 'Sakuratte Kakenai 03 Eng.mp4',
+        name: 'Soko Magattara, Sakurazaka 03 Eng.mp4',
         id: 'thisisid2',
       },
     ]);
     (GooglePhotoApi.getMedias as jest.Mock).mockResolvedValue([
       {
-        filename: 'Sakuratte Kakenai 02 Eng.mp4',
+        filename: 'Soko Magattara, Sakurazaka 02 Eng.mp4',
         productUrl: 'thisisurl1',
       },
       {
-        filename: 'Sakuratte Kakenai 03 Eng.mp4',
+        filename: 'Soko Magattara, Sakurazaka 03 Eng.mp4',
         productUrl: 'thisisurl2',
       },
     ]);
@@ -117,22 +117,22 @@ describe('<Sakura />', () => {
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     (GoogleDriveApi.getFiles as jest.Mock).mockResolvedValue([
       {
-        name: 'Sakuratte Kakenai 02 Eng.mp4',
+        name: 'Soko Magattara, Sakurazaka 02 Eng.mp4',
         id: 'thisisid1',
       },
       {
-        name: 'Sakuratte Kakenai 03 Eng.mp4',
+        name: 'Soko Magattara, Sakurazaka 03 Eng.mp4',
         id: 'thisisid2',
       },
     ]);
     (GooglePhotoApi.getMedias as jest.Mock).mockResolvedValue([
       {
-        filename: 'Sakuratte Kakenai 02 Eng.mp4',
+        filename: 'Soko Magattara, Sakurazaka 02 Eng.mp4',
         productUrl: 'thisisurl1',
         id: 'thisisgphotoid1',
       },
       {
-        filename: 'Sakuratte Kakenai 03 Eng.mp4',
+        filename: 'Soko Magattara, Sakurazaka 03 Eng.mp4',
         productUrl: 'thisisurl2',
         id: 'thisisgphotoid2',
       },

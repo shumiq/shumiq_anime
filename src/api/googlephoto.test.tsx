@@ -20,7 +20,7 @@ describe('GooglePhotoApi', () => {
       expect(axios.get).toHaveBeenCalledWith(
         'https://photoslibrary.googleapis.com/v1/albums?access_token=' +
           UserDetail.getAccessToken() +
-          '&pageToken=&pageSize=50'
+          '&pageToken=&pageSize=10'
       );
     });
     it('should call api 2 times when get all albums', async () => {
@@ -29,7 +29,7 @@ describe('GooglePhotoApi', () => {
       const first_request =
         'https://photoslibrary.googleapis.com/v1/albums?access_token=' +
         UserDetail.getAccessToken() +
-        '&pageToken=&pageSize=50';
+        '&pageToken=&pageSize=10';
       (axios.get as jest.Mock).mockImplementation((request) =>
         request === first_request
           ? Promise.resolve({
@@ -60,7 +60,7 @@ describe('GooglePhotoApi', () => {
       ).toHaveBeenCalledWith(
         'https://photoslibrary.googleapis.com/v1/mediaItems:search?access_token=' +
           UserDetail.getAccessToken(),
-        { albumId: albumId, pageSize: 50, pageToken: '' }
+        { albumId: albumId, pageSize: 10, pageToken: '' }
       );
     });
   });
