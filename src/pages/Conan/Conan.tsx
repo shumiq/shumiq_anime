@@ -195,8 +195,10 @@ const Conan = (): JSX.Element => {
                             }
                             className="table-bordered border-left-0 border-right-0"
                           >
-                            <td>{conanList[key].case}</td>
-                            <td className="text-left">
+                            <td className="align-middle">
+                              {conanList[key].case}
+                            </td>
+                            <td className="text-left align-middle">
                               <span onClick={() => showInput(key)}>
                                 {conanList[key].name}
                               </span>

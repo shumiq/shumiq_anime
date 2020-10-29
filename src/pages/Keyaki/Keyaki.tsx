@@ -195,8 +195,10 @@ const Keyaki = (): JSX.Element => {
                             }
                             className="table-bordered border-left-0 border-right-0"
                           >
-                            <td>{keyakiList[key].ep}</td>
-                            <td className="text-left">
+                            <td className="align-middle">
+                              {keyakiList[key].ep}
+                            </td>
+                            <td className="text-left align-middle">
                               <span onClick={() => showInput(key)}>
                                 {keyakiList[key].name}
                               </span>

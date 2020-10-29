@@ -195,8 +195,10 @@ const Sakura = (): JSX.Element => {
                             }
                             className="table-bordered border-left-0 border-right-0"
                           >
-                            <td>{sakuraList[key].ep}</td>
-                            <td className="text-left">
+                            <td className="align-middle">
+                              {sakuraList[key].ep}
+                            </td>
+                            <td className="text-left align-middle">
                               <span onClick={() => showInput(key)}>
                                 {sakuraList[key].name}
                               </span>
