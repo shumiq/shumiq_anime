@@ -122,6 +122,16 @@ const Navbar = (): JSX.Element => {
                   Keyakitte Kakenai
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link
+                  id="link-sakura"
+                  className="nav-link btn"
+                  to="/sakura"
+                  onClick={() => setIsAnime(false)}
+                >
+                  Soko Magattara, Sakurazaka
+                </Link>
+              </li>
               {isAdmin && (
                 <li className="nav-item">
                   <Link

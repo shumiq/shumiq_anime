@@ -7,12 +7,14 @@ import {
   Anime,
   Conan,
   Keyaki,
+  Sakura,
 } from './types';
 import {
   validateDatabase,
   validateAnime,
   validateConan,
   validateKeyaki,
+  validateSakura,
 } from './validation';
 
 const databasePath = 'myanimelist_database';
@@ -54,6 +56,12 @@ export const Database = {
         sumKeyaki += Object.keys(database.keyaki[key].sub).length;
       }
     });
+    let sumSakura = 0;
+    Object.keys(database.sakura).forEach((key) => {
+      if (database.sakura[key]) {
+        sumSakura += Object.keys(database.sakura[key].sub).length;
+      }
+    });
     return {
       anime: {
         series: Object.keys(database.anime).length,
@@ -67,6 +75,10 @@ export const Database = {
       keyaki: {
         episodes: Object.keys(database.keyaki).length,
         files: sumKeyaki,
+      },
+      sakura: {
+        episodes: Object.keys(database.sakura).length,
+        files: sumSakura,
       },
     };
   },
@@ -83,6 +95,8 @@ export const Database = {
         conanFiles: status.conan?.files.toString() || '',
         keyakiEpisodes: status.keyaki?.episodes.toString() || '',
         keyakiFiles: status.keyaki?.files.toString() || '',
+        sakuraEpisodes: status.sakura?.episodes.toString() || '',
+        sakuraFiles: status.sakura?.files.toString() || '',
       },
     };
     await Firebase.storage.create(
@@ -113,26 +127,29 @@ export const Database = {
     const currentTime = Date.now();
     const latestBackup = Number(getLocalStorage('last_backup')) || 0;
     const timeDiff = currentTime - latestBackup;
-    if (timeDiff > autoBackupInterval/2) { // half week
-      void await Database.backup();
-      setLocalStorage('last_backup', currentTime)
+    if (timeDiff > autoBackupInterval / 2) {
+      // half week
+      void (await Database.backup());
+      setLocalStorage('last_backup', currentTime);
     }
     return timeDiff > autoBackupInterval;
   },
   runAutoDelete: async (): Promise<boolean> => {
     const autoDeleteInterval = 1000 * 60 * 60 * 24 * 90; // 3 month
     const currentTime = Date.now();
-    const latestDeleteBackup = Number(getLocalStorage('last_delete_backup')) || 0;
+    const latestDeleteBackup =
+      Number(getLocalStorage('last_delete_backup')) || 0;
     const timeDiff = currentTime - latestDeleteBackup;
-    if (timeDiff > autoDeleteInterval/3) { // 1 month
+    if (timeDiff > autoDeleteInterval / 3) {
+      // 1 month
       const backupFiles = await Database.backupFiles();
       for (const file of backupFiles) {
         const createdTime = new Date(file.timeCreated).getTime();
         const timeDiff = currentTime - createdTime;
         if (timeDiff > autoDeleteInterval)
-          void await Firebase.storage.delete('backup', file.name);
+          void (await Firebase.storage.delete('backup', file.name));
       }
-      setLocalStorage('last_delete_backup', currentTime)
+      setLocalStorage('last_delete_backup', currentTime);
     }
     return true;
   },
@@ -161,6 +178,17 @@ export const Database = {
         );
       } catch (error) {
         console.error('Push keyaki failed: Keyaki has invalid format');
+        console.error(error);
+      }
+    },
+    sakura: (sakura: Sakura): void => {
+      try {
+        Firebase.database.push(
+          databasePath + '/sakura/',
+          validateSakura(sakura)
+        );
+      } catch (error) {
+        console.error('Push sakura failed: Sakura has invalid format');
         console.error(error);
       }
     },
@@ -205,6 +233,17 @@ export const Database = {
         );
       } catch (error) {
         console.error('Update keyaki failed: Keyaki has invalid format');
+        console.error(error);
+      }
+    },
+    sakura: (key: string, sakura: Sakura): void => {
+      try {
+        Firebase.database.set(
+          databasePath + '/sakura/' + key,
+          sakura ? validateSakura(sakura) : null
+        );
+      } catch (error) {
+        console.error('Update sakura failed: Sakura has invalid format');
         console.error(error);
       }
     },

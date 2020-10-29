@@ -24,6 +24,10 @@ describe('<Backup />', () => {
         episodes: 6,
         files: 6,
       },
+      sakura: {
+        episodes: 6,
+        files: 6,
+      },
     });
     (Database.backupFiles as jest.Mock).mockResolvedValue([
       {
@@ -37,6 +41,8 @@ describe('<Backup />', () => {
           conanFiles: 7,
           keyakiEpisodes: 5,
           keyakiFiles: 5,
+          sakuraEpisodes: 5,
+          sakuraFiles: 5,
         },
         data: 1,
       },
@@ -51,6 +57,8 @@ describe('<Backup />', () => {
           conanFiles: 6,
           keyakiEpisodes: 4,
           keyakiFiles: 4,
+          sakuraEpisodes: 4,
+          sakuraFiles: 4,
         },
       },
     ]);

@@ -85,6 +85,7 @@ const Backup = (): JSX.Element => {
                   <th className="text-center">Anime</th>
                   <th className="text-center">Conan</th>
                   <th className="text-center">Keyaki</th>
+                  <th className="text-center">Sakura</th>
                   <th className="text-center"></th>
                 </tr>
               </thead>
@@ -114,6 +115,14 @@ const Backup = (): JSX.Element => {
                     </p>
                     <p className="m-0 p-0 small">
                       Download: {status?.keyaki?.files}
+                    </p>
+                  </td>
+                  <td>
+                    <p className="m-0 p-0 small">
+                      Episodes: {status?.sakura?.episodes}
+                    </p>
+                    <p className="m-0 p-0 small">
+                      Download: {status?.sakura?.files}
                     </p>
                   </td>
                   <td className="pt-3">
@@ -159,6 +168,14 @@ const Backup = (): JSX.Element => {
                         </p>
                         <p className="m-0 p-0 small">
                           Download: {file.customMetadata.keyakiFiles}
+                        </p>
+                      </td>
+                      <td className="align-middle">
+                        <p className="m-0 p-0 small">
+                          Episodes: {file.customMetadata.sakuraEpisodes}
+                        </p>
+                        <p className="m-0 p-0 small">
+                          Download: {file.customMetadata.sakuraFiles}
                         </p>
                       </td>
                       <td className="pt-3 align-middle">

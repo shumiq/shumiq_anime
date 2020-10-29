@@ -35,6 +35,10 @@ describe('Database', () => {
         episodes: 2,
         files: 3,
       },
+      sakura: {
+        episodes: 2,
+        files: 3,
+      },
     });
   });
 
@@ -54,6 +58,8 @@ describe('Database', () => {
           conanFiles: '5',
           keyakiEpisodes: '2',
           keyakiFiles: '3',
+          sakuraEpisodes: '2',
+          sakuraFiles: '3',
         },
       }
     );

@@ -2,6 +2,7 @@ export interface Database {
   anime: Record<string, Anime>;
   conan: Record<string, Conan>;
   keyaki: Record<string, Keyaki>;
+  sakura: Record<string, Sakura>;
 }
 
 export interface DatabaseStatus {
@@ -15,6 +16,10 @@ export interface DatabaseStatus {
     files: number;
   };
   keyaki?: {
+    episodes: number;
+    files: number;
+  };
+  sakura?: {
     episodes: number;
     files: number;
   };
@@ -53,6 +58,12 @@ export interface Conan {
 }
 
 export interface Keyaki {
+  ep: number;
+  name: string;
+  sub: Record<string, File>;
+}
+
+export interface Sakura {
   ep: number;
   name: string;
   sub: Record<string, File>;

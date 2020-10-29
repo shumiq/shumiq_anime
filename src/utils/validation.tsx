@@ -1,4 +1,4 @@
-import { Database, Anime, Conan, Keyaki, File } from './types';
+import { Database, Anime, Conan, Keyaki, Sakura, File } from './types';
 
 export const validateDatabase = (db: Database): Database | boolean => {
   Object.keys(db.conan).forEach((key) => {
@@ -11,6 +11,7 @@ export const validateDatabase = (db: Database): Database | boolean => {
     anime: db.anime,
     conan: db.conan,
     keyaki: db.keyaki,
+    sakura: db.sakura,
   };
 };
 
@@ -57,5 +58,13 @@ export const validateKeyaki = (keyaki: Keyaki): Keyaki => {
     ...keyaki,
     ep: parseInt(keyaki.ep.toString()),
     name: keyaki.name?.toString() || '',
+  };
+};
+
+export const validateSakura = (sakura: Sakura): Sakura => {
+  return {
+    ...sakura,
+    ep: parseInt(sakura.ep.toString()),
+    name: sakura.name?.toString() || '',
   };
 };
