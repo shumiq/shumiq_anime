@@ -65,18 +65,18 @@ describe('Database', () => {
     );
   });
 
-  it('should backup when latest is more than 1 week', async () => {
+  it('should backup when latest is more than 2 week', async () => {
     (Firebase.storage.list as jest.Mock).mockResolvedValue([
-      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 10 },
+      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 20 },
     ]);
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     await Database.runAutoBackup();
     expect(Firebase.storage.create).toHaveBeenCalled();
   });
 
-  it('should not backup when latest is less than 1 week', async () => {
+  it('should not backup when latest is less than 2 week', async () => {
     (Firebase.storage.list as jest.Mock).mockResolvedValue([
-      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 5 },
+      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 10 },
     ]);
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     await Database.runAutoBackup();
@@ -85,9 +85,9 @@ describe('Database', () => {
 
   it('should delete backups with older than 3 month', async () => {
     (Firebase.storage.list as jest.Mock).mockResolvedValue([
-      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 80 },
-      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 100 },
       { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 110 },
+      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 100 },
+      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 80 },
     ]);
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     await Database.runAutoDelete();
