@@ -2,8 +2,11 @@ import axios from 'axios';
 import UserDetail from '../utils/userdetail';
 import { GoogleDriveFileResponse, Anime } from '../utils/types';
 
-const uploadFolderId = '1o17TTtMpHFT-xdWYaiYqTkjb7PQVUwBF';
-const privateAnimeFolderId = '1teaWviknfgbuDsoFarRIsnny1HQ8zQe2';
+// const uploadFolderId = '1o17TTtMpHFT-xdWYaiYqTkjb7PQVUwBF';
+// const privateAnimeFolderId = '1teaWviknfgbuDsoFarRIsnny1HQ8zQe2';
+// const publicAnimeFolderId = '16MJ-jTxpa041WDc4nDjjLpIiSyNCEI4h';
+const uploadFolderId = '1WXOcGkGfi8r8-DcEGEALzzemDUa48O_-';
+const privateAnimeFolderId = '1IKxovnmmvfxCUB_G-nho3tHVegUh2_x9';
 const publicAnimeFolderId = '16MJ-jTxpa041WDc4nDjjLpIiSyNCEI4h';
 
 const GoogleDriveApi = {
@@ -46,7 +49,7 @@ const GoogleDriveApi = {
     return response;
   },
   getPrivateFolderId: async (anime: Anime): Promise<string> => {
-    if (anime.gdriveid) return anime.gdriveid;
+    //if (anime.gdriveid) return anime.gdriveid;
     const folderList = await GoogleDriveApi.getPrivateAnimeFolders();
     const animeFolder = folderList.filter(
       (folder) => folder.name === anime.title
@@ -59,7 +62,7 @@ const GoogleDriveApi = {
     return newFolder.id;
   },
   getPublicFolderId: async (anime: Anime): Promise<string> => {
-    if (anime.gdriveid_public) return anime.gdriveid_public;
+    //if (anime.gdriveid_public) return anime.gdriveid_public;
     const folderList = await GoogleDriveApi.getPublicAnimeFolders();
     const animeFolder = folderList.filter(
       (folder) => folder.name === anime.title
