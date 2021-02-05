@@ -19,15 +19,25 @@ const GoogleDriveApi = {
           files: GoogleDriveFileResponse[];
           nextPageToken: string | null;
         };
-      } = await axios.get(
-        'https://www.googleapis.com/drive/v3/files?access_token=' +
-          UserDetail.getAccessToken() +
-          '&pageToken=' +
-          nextPageToken +
-          "&q='" +
-          folderId +
-          "' in parents"
-      );
+      } = await axios
+        .get(
+          'https://www.googleapis.com/drive/v3/files?access_token=' +
+            UserDetail.getAccessToken() +
+            '&pageToken=' +
+            nextPageToken +
+            "&q='" +
+            folderId +
+            "' in parents"
+        )
+        .catch((error) => {
+          console.error(error);
+          return {
+            data: {
+              files: [],
+              nextPageToken: null,
+            },
+          };
+        });
       response.data.files.forEach((file) => {
         files.push(file);
       });
@@ -78,15 +88,24 @@ const GoogleDriveApi = {
     name: string,
     parentId: string
   ): Promise<{ id: string }> => {
-    const response: { data: { id: string } } = await axios.post(
-      'https://www.googleapis.com/drive/v3/files?access_token=' +
-        UserDetail.getAccessToken(),
-      {
-        name: name,
-        mimeType: 'application/vnd.google-apps.folder',
-        parents: [parentId],
-      }
-    );
+    const response: { data: { id: string } } = await axios
+      .post(
+        'https://www.googleapis.com/drive/v3/files?access_token=' +
+          UserDetail.getAccessToken(),
+        {
+          name: name,
+          mimeType: 'application/vnd.google-apps.folder',
+          parents: [parentId],
+        }
+      )
+      .catch((error) => {
+        console.error(error);
+        return {
+          data: {
+            id: 'error',
+          },
+        };
+      });
     return response.data;
   },
   moveUploadFile: async (

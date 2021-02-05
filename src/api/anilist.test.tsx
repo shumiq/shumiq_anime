@@ -8,6 +8,15 @@ describe('AnilistApi', () => {
 
   describe('searchAnime', () => {
     it('should call api', async () => {
+      (axios.post as jest.Mock).mockResolvedValue({
+        data: {
+          data: {
+            Page: {
+              media: [{ id: 1 }, { id: 2 }],
+            },
+          },
+        },
+      });
       const keyword = 'keyword';
       await AnilistApi.searchAnime(keyword);
       expect(axios.post).toHaveBeenCalledWith('https://graphql.anilist.co', {

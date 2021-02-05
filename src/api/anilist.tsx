@@ -3,9 +3,14 @@ import { AnilistInfoResponse } from '../utils/types';
 
 const AnilistApi = {
   searchAnime: async (keyword: string): Promise<AnilistInfoResponse[]> => {
-    const response = await axios.post('https://graphql.anilist.co', {
-      query: searchAnimeQueryBuilder(keyword),
-    });
+    const response = await axios
+      .post('https://graphql.anilist.co', {
+        query: searchAnimeQueryBuilder(keyword),
+      })
+      .catch((error) => {
+        console.error(error);
+        return null;
+      });
     return (response as {
       data: {
         data: {

@@ -21,14 +21,24 @@ const GooglePhotoApi = {
         albums: GooglePhotoAlbumResponse[];
         nextPageToken: string | null;
       };
-    } = await axios.get(
-      'https://photoslibrary.googleapis.com/v1/albums?access_token=' +
-        UserDetail.getAccessToken() +
-        '&pageToken=' +
-        (nextPageToken || '') +
-        '&pageSize=' +
-        pageSize.toString()
-    );
+    } = await axios
+      .get(
+        'https://photoslibrary.googleapis.com/v1/albums?access_token=' +
+          UserDetail.getAccessToken() +
+          '&pageToken=' +
+          (nextPageToken || '') +
+          '&pageSize=' +
+          pageSize.toString()
+      )
+      .catch((error) => {
+        console.error(error);
+        return {
+          data: {
+            albums: [],
+            nextPageToken: null,
+          },
+        };
+      });
     const albums: GooglePhotoAlbumResponse[] = [];
     response.data.albums.forEach((album) => {
       if (
@@ -69,15 +79,25 @@ const GooglePhotoApi = {
           mediaItems: GooglePhotoMediaResponse[];
           nextPageToken: string | null;
         };
-      } = await axios.post(
-        'https://photoslibrary.googleapis.com/v1/mediaItems:search?access_token=' +
-          UserDetail.getAccessToken(),
-        {
-          albumId: albumId,
-          pageToken: nextPageToken,
-          pageSize: pageSize,
-        }
-      );
+      } = await axios
+        .post(
+          'https://photoslibrary.googleapis.com/v1/mediaItems:search?access_token=' +
+            UserDetail.getAccessToken(),
+          {
+            albumId: albumId,
+            pageToken: nextPageToken,
+            pageSize: pageSize,
+          }
+        )
+        .catch((error) => {
+          console.error(error);
+          return {
+            data: {
+              mediaItems: [],
+              nextPageToken: null,
+            },
+          };
+        });
       response.data.mediaItems.forEach((media) => {
         medias.push(media);
       });
@@ -89,12 +109,19 @@ const GooglePhotoApi = {
   getDownloadUrl: async (mediaId: string): Promise<string> => {
     const res: {
       data: GooglePhotoMediaResponse;
-    } = await axios.get(
-      'https://photoslibrary.googleapis.com/v1/mediaItems/' +
-        mediaId +
-        '?access_token=' +
-        UserDetail.getAccessToken()
-    );
+    } = await axios
+      .get(
+        'https://photoslibrary.googleapis.com/v1/mediaItems/' +
+          mediaId +
+          '?access_token=' +
+          UserDetail.getAccessToken()
+      )
+      .catch((error) => {
+        console.error(error);
+        return {
+          data: { baseUrl: 'error' } as GooglePhotoMediaResponse,
+        };
+      });
     return res.data.baseUrl + '=dv';
   },
 };
