@@ -59,7 +59,7 @@ const GoogleDriveApi = {
     return response;
   },
   getPrivateFolderId: async (anime: Anime): Promise<string> => {
-    //if (anime.gdriveid) return anime.gdriveid;
+    if (anime.gdriveid) return anime.gdriveid;
     const folderList = await GoogleDriveApi.getPrivateAnimeFolders();
     const animeFolder = folderList.filter(
       (folder) => folder.name === anime.title
@@ -72,7 +72,7 @@ const GoogleDriveApi = {
     return newFolder.id;
   },
   getPublicFolderId: async (anime: Anime): Promise<string> => {
-    //if (anime.gdriveid_public) return anime.gdriveid_public;
+    if (anime.gdriveid_public) return anime.gdriveid_public;
     const folderList = await GoogleDriveApi.getPublicAnimeFolders();
     const animeFolder = folderList.filter(
       (folder) => folder.name === anime.title
