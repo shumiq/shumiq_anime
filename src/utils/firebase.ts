@@ -142,7 +142,7 @@ export const Database = {
     return timeDiff > autoBackupInterval;
   },
   runAutoDelete: async (): Promise<boolean> => {
-    const autoDeleteInterval = 1000 * 60 * 60 * 24 * 90; // 1 month
+    const autoDeleteInterval = 1000 * 60 * 60 * 24 * 30; // 1 month
     const currentTime = Date.now();
     let backupFiles = [] as {
       name: string;
