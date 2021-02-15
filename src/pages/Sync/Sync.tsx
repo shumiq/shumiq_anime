@@ -24,32 +24,32 @@ const Sync = (): JSX.Element => {
     Database.subscribe((db) => {
       setAnimeList(db.anime);
     });
-    // const fetchAlbums = async () => {
-    //   setPopup(
-    //     <GeneralPopup
-    //       show={true}
-    //       message="Loading..."
-    //       canClose={false}
-    //       onClose={() => setPopup('')}
-    //     />
-    //   );
-    //   const response = await GooglePhotoApi.getAlbums('');
-    //   const albums: Record<string, GooglePhotoAlbumResponse> = {};
-    //   response.albums.forEach((album) => {
-    //     if (album?.id) albums[album.id] = album;
-    //   });
-    //   setAlbumList(albums);
-    //   setNextPageToken(response.nextPageToken || '');
-    //   setPopup(
-    //     <GeneralPopup
-    //       show={false}
-    //       message="Loading..."
-    //       canClose={false}
-    //       onClose={() => setPopup('')}
-    //     />
-    //   );
-    // };
-    //void fetchAlbums();
+    const fetchAlbums = async () => {
+      setPopup(
+        <GeneralPopup
+          show={true}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
+      );
+      const response = await GooglePhotoApi.getAlbums('');
+      const albums: Record<string, GooglePhotoAlbumResponse> = {};
+      response.albums.forEach((album) => {
+        if (album?.id) albums[album.id] = album;
+      });
+      setAlbumList(albums);
+      setNextPageToken(response.nextPageToken || '');
+      setPopup(
+        <GeneralPopup
+          show={false}
+          message="Loading..."
+          canClose={false}
+          onClose={() => setPopup('')}
+        />
+      );
+    };
+    void fetchAlbums();
   }, []);
 
   const getAlbums = useCallback(
