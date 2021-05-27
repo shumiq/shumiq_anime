@@ -188,13 +188,13 @@ const EditAnimePopup = (props: {
                     defaultValue={anime.cover_url}
                     onChange={updateFormData}
                   />
-                  <small className="form-text text-muted">Folder URL</small>
+                  <small className="form-text text-muted">Path</small>
 
                   <input
                     type="text"
                     className="form-control"
-                    name="url"
-                    defaultValue={anime.url}
+                    name="path"
+                    defaultValue={anime.path}
                     onChange={updateFormData}
                   />
                   <small className="form-text text-muted">Download URL</small>

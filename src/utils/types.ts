@@ -31,30 +31,22 @@ export interface Anime {
   download: number;
   download_url: string;
   genres: string;
-  gdriveid: string;
-  gdriveid_public: string;
-  gphotoid: string;
   blacklist?: number[];
+  path: string;
+  size: number;
   info: string;
   score: string;
   season: number;
   studio: string;
   title: string;
-  url: string;
   view: number;
   year: number;
-}
-
-export interface File {
-  photoUrl: string | null;
-  url: string;
-  photoId: string | null;
 }
 
 export interface Conan {
   case: number;
   name: string;
-  episodes: Record<string, File>;
+  episodes: Record<string, string>;
 }
 
 export interface Keyaki {

@@ -1,30 +1,26 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { getLocalStorage } from '../../utils/localstorage';
 import { Database } from '../../utils/firebase';
-import GooglePhotoApi from '../../api/googlephoto';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
-import GoogleDriveApi from '../../api/googledrive';
-import {
-  Anime,
-  Database as DatabaseType,
-  GooglePhotoAlbumResponse,
-} from '../../utils/types';
+import { Anime, Database as DatabaseType } from '../../utils/types';
+import SynologyApi from '../../api/synology';
+import { ListResponse } from '../../models/SynologyApiModel';
 
 const Sync = (): JSX.Element => {
   const [animeList, setAnimeList] = useState<Record<string, Anime>>(
     (getLocalStorage('database') as DatabaseType).anime
   );
-  const [albumList, setAlbumList] = useState<
-    Record<string, GooglePhotoAlbumResponse>
-  >({});
-  const [nextPageToken, setNextPageToken] = useState('');
+  const [folderList, setFolderList] = useState<ListResponse>({
+    data: {},
+    success: false,
+  });
   const [popup, setPopup] = useState<JSX.Element | string>('');
 
   useEffect(() => {
     Database.subscribe((db) => {
       setAnimeList(db.anime);
     });
-    const fetchAlbums = async () => {
+    const fetchFolder = async () => {
       setPopup(
         <GeneralPopup
           show={true}
@@ -33,13 +29,8 @@ const Sync = (): JSX.Element => {
           onClose={() => setPopup('')}
         />
       );
-      const response = await GooglePhotoApi.getAlbums('');
-      const albums: Record<string, GooglePhotoAlbumResponse> = {};
-      response.albums.forEach((album) => {
-        if (album?.id) albums[album.id] = album;
-      });
-      setAlbumList(albums);
-      setNextPageToken(response.nextPageToken || '');
+      const folders = await SynologyApi.list('Anime', false, true);
+      setFolderList(folders);
       setPopup(
         <GeneralPopup
           show={false}
@@ -49,45 +40,12 @@ const Sync = (): JSX.Element => {
         />
       );
     };
-    void fetchAlbums();
+    void fetchFolder();
   }, []);
 
-  const getAlbums = useCallback(
-    async (all = false) => {
-      setPopup(
-        <GeneralPopup
-          show={true}
-          message="Loading..."
-          canClose={false}
-          onClose={() => setPopup('')}
-        />
-      );
-      const response = (await all)
-        ? await GooglePhotoApi.getAllAlbums(nextPageToken)
-        : await GooglePhotoApi.getAlbums(nextPageToken);
-      const albums = albumList;
-      response.albums.forEach((album) => {
-        if (album?.id) albums[album.id] = album;
-      });
-      setAlbumList(albums);
-      setNextPageToken(response.nextPageToken || '');
-      setPopup(
-        <GeneralPopup
-          show={false}
-          message="Loading..."
-          canClose={false}
-          onClose={() => setPopup('')}
-        />
-      );
-    },
-    [albumList, nextPageToken]
-  );
-
-  const unsync = useCallback((key: string, anime: Anime) => {
+  const unSync = useCallback((key: string, anime: Anime) => {
     if (window.confirm('Do you want to unsync "' + anime.title + '" ?')) {
-      anime.gphotoid = '';
-      anime.gdriveid = '';
-      anime.gdriveid_public = '';
+      anime.path = '';
       Database.update.anime(key, anime);
     }
   }, []);
@@ -102,19 +60,11 @@ const Sync = (): JSX.Element => {
           onClose={() => setPopup('')}
         />
       );
-      anime.gdriveid = await GoogleDriveApi.getPrivateFolderId(anime);
-      anime.gdriveid_public = await GoogleDriveApi.getPublicFolderId(anime);
-      const photo_medias = await GooglePhotoApi.getMedias(anime.gphotoid);
-      const drive_upload = await GoogleDriveApi.getUploadFiles();
-      photo_medias.forEach((media) => {
-        const file = drive_upload.filter(
-          (file) => file.name === media.filename
-        )[0];
-        if (file?.id) {
-          void GoogleDriveApi.moveUploadFile(file.id, anime.gdriveid);
-        }
-      });
-      anime.download = parseInt(albumList[anime.gphotoid].mediaItemsCount);
+      const folder = await SynologyApi.list(`Anime${anime.path}`);
+      anime.download = folder.data.total || 0;
+      anime.size =
+        folderList.data.files?.find((folder) => folder.name === anime.title)
+          ?.additional?.size || 0;
       Database.update.anime(key, anime);
       setPopup(
         <GeneralPopup
@@ -125,11 +75,11 @@ const Sync = (): JSX.Element => {
         />
       );
     },
-    [albumList]
+    [folderList]
   );
 
   const sync = useCallback(
-    async (key: string, anime: Anime) => {
+    (key: string, anime: Anime) => {
       setPopup(
         <GeneralPopup
           show={true}
@@ -138,11 +88,11 @@ const Sync = (): JSX.Element => {
           onClose={() => setPopup('')}
         />
       );
-      anime.gphotoid = Object.entries(albumList).filter(
-        (entry) => entry[1].title === '[Anime] ' + anime.title
-      )[0]?.[0];
-      anime.gdriveid = await GoogleDriveApi.getPrivateFolderId(anime);
-      anime.gdriveid_public = await GoogleDriveApi.getPublicFolderId(anime);
+      const folder = folderList.data.files?.find(
+        (folder) => folder.name === anime.title
+      );
+      anime.path = '';
+      if (folder?.name) anime.path = folder.name;
       Database.update.anime(key, anime);
       setPopup(
         <GeneralPopup
@@ -153,7 +103,7 @@ const Sync = (): JSX.Element => {
         />
       );
     },
-    [albumList]
+    [folderList]
   );
 
   return (
@@ -172,6 +122,7 @@ const Sync = (): JSX.Element => {
                 <th></th>
                 <th>Title</th>
                 <th>Download</th>
+                <th>Size</th>
                 <th>Sync</th>
               </tr>
             </thead>
@@ -202,58 +153,50 @@ const Sync = (): JSX.Element => {
                         className="row-anime table-bordered border-left-0 border-right-0"
                       >
                         <td className="text-center align-middle">
-                          <a href={anime.url} target="blank">
-                            <img
-                              src={anime.cover_url}
-                              style={{ height: '50px' }}
-                              alt="cover"
-                            />
-                          </a>
+                          <img
+                            src={anime.cover_url}
+                            style={{ height: '50px' }}
+                            alt="cover"
+                          />
                         </td>
                         <td className="text-left align-middle">
                           {anime.title}
                         </td>
                         <td className="text-center align-middle">
                           {anime.download}
-                          {albumList[anime.gphotoid] &&
-                            '/' + albumList[anime.gphotoid]?.mediaItemsCount}
                         </td>
                         <td className="text-center align-middle">
-                          {anime.gphotoid &&
-                            albumList[anime.gphotoid] &&
-                            anime.download.toString() !==
-                              albumList[
-                                anime.gphotoid
-                              ]?.mediaItemsCount.toString() &&
-                            !anime.title.includes('Conan') && (
+                          {(anime.path || '').length > 0 &&
+                            (folderList.data.files?.find(
+                              (folder) => folder.name === anime.title
+                            )?.additional?.size || 0) > anime.size && (
                               <button
                                 id="btn-update"
                                 type="button"
-                                className="btn btn-success mx-1"
+                                className="btn btn-success m-1"
                                 onClick={() => update(key, anime)}
                               >
                                 Update
                               </button>
                             )}
-                          {anime.gphotoid && (
+                          {(anime.path || '').length > 0 && anime.size > 0 && (
                             <button
                               id="btn-unsync"
                               type="button"
-                              className="btn btn-danger mx-1"
-                              onClick={() => unsync(key, anime)}
+                              className="btn btn-danger m-1"
+                              onClick={() => unSync(key, anime)}
                             >
                               Unsync
                             </button>
                           )}
-                          {!anime.gphotoid &&
-                            Object.entries(albumList).some(
-                              (entry) =>
-                                entry[1].title === '[Anime] ' + anime.title
+                          {(anime.path || '') === '' &&
+                            folderList.data.files?.find(
+                              (folder) => folder.name === anime.title
                             ) && (
                               <button
                                 id="btn-sync"
                                 type="button"
-                                className="btn btn-primary mx-1"
+                                className="btn btn-primary m-1"
                                 onClick={() => sync(key, anime)}
                               >
                                 Sync
@@ -268,52 +211,22 @@ const Sync = (): JSX.Element => {
         </div>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
           <div className="w-100 text-center">
-            <a
-              className="btn btn-primary m-2"
-              href="https://photos.google.com/search/_tra_"
+            <button
+              id="btn-load-more"
+              type="button"
+              className="btn btn-secondary m-2"
+              disabled
             >
-              Recent Files
-            </a>
-            {nextPageToken !== null && (
-              <span>
-                <button
-                  id="btn-load-more"
-                  type="button"
-                  className="btn btn-primary m-2"
-                  onClick={() => getAlbums(false)}
-                >
-                  Load more..
-                </button>
-                <button
-                  id="btn-load-all"
-                  type="button"
-                  className="btn btn-primary m-2"
-                  onClick={() => getAlbums(true)}
-                >
-                  Load all
-                </button>
-              </span>
-            )}
-            {nextPageToken === null && (
-              <span>
-                <button
-                  id="btn-load-more"
-                  type="button"
-                  className="btn btn-secondary m-2"
-                  disabled
-                >
-                  Load more..
-                </button>
-                <button
-                  id="btn-load-all"
-                  type="button"
-                  className="btn btn-secondary m-2"
-                  disabled
-                >
-                  Load all
-                </button>
-              </span>
-            )}
+              Update all
+            </button>
+            <button
+              id="btn-load-all"
+              type="button"
+              className="btn btn-secondary m-2"
+              disabled
+            >
+              Sync all
+            </button>
           </div>
         </nav>
         {popup}

@@ -5,7 +5,7 @@ import mockDatabase from '../../mock/database.json';
 import UserDetail from '../../utils/userdetail';
 import { Database } from '../../utils/firebase';
 import Sakura from './Sakura';
-import SynologyApi from "../../api/synology";
+import SynologyApi from '../../api/synology';
 
 jest.mock('../../utils/localstorage');
 jest.mock('../../utils/userdetail');
@@ -72,16 +72,23 @@ describe('<Sakura />', () => {
 
   it('should show loading popup when click update', async () => {
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
-    (SynologyApi.getDownloadURL as jest.Mock).mockImplementation((path : string) => path);
+    (SynologyApi.getDownloadURL as jest.Mock).mockImplementation(
+      (path: string) => path
+    );
     (SynologyApi.list as jest.Mock).mockResolvedValue({
-      data: {files: [{
-          name: 'Soko Magattara, Sakurazaka 02 Eng.mp4',
-          path: 'url2',
-        }, {
-          name: 'Soko Magattara, Sakurazaka 03 Eng.mp4',
-          path: 'url3',
-        }]},
-      success: true
+      data: {
+        files: [
+          {
+            name: 'Soko Magattara, Sakurazaka 02 Eng.mp4',
+            path: 'url2',
+          },
+          {
+            name: 'Soko Magattara, Sakurazaka 03 Eng.mp4',
+            path: 'url3',
+          },
+        ],
+      },
+      success: true,
     });
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Sakura />);
@@ -97,16 +104,23 @@ describe('<Sakura />', () => {
 
   it('should call Database.update.sakura after update', async () => {
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
-    (SynologyApi.getDownloadURL as jest.Mock).mockImplementation((path : string) => path);
+    (SynologyApi.getDownloadURL as jest.Mock).mockImplementation(
+      (path: string) => path
+    );
     (SynologyApi.list as jest.Mock).mockResolvedValue({
-      data: {files: [{
-          name: 'Soko Magattara, Sakurazaka 02 Eng.mp4',
-          path: 'url2',
-        }, {
-          name: 'Soko Magattara, Sakurazaka 03 Eng.mp4',
-          path: 'url3',
-        }]},
-      success: true
+      data: {
+        files: [
+          {
+            name: 'Soko Magattara, Sakurazaka 02 Eng.mp4',
+            path: 'url2',
+          },
+          {
+            name: 'Soko Magattara, Sakurazaka 03 Eng.mp4',
+            path: 'url3',
+          },
+        ],
+      },
+      success: true,
     });
     (UserDetail.isAdmin as jest.Mock).mockReturnValue(true);
     const wrapper = shallow(<Sakura />);
@@ -126,7 +140,7 @@ describe('<Sakura />', () => {
       sub: {
         Eng: 'url3',
       },
-      name: 'แก้ไข'
+      name: 'แก้ไข',
     });
   });
 

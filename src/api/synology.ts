@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {storage} from "../utils/localstorage";
-import {ListResponse, SignInResModel} from "../models/SynologyApiModel";
+import { storage } from '../utils/localstorage';
+import { ListResponse, SignInResModel } from '../models/SynologyApiModel';
 
 const hostName = 'http://shumiq.synology.me:5000';
 const endPoint = `${
@@ -26,9 +26,9 @@ const SynologyApi = {
   list: async (
     path: string,
     sortByDate = false,
-    isAdditional = false,
+    isAdditional = false
   ): Promise<ListResponse> => {
-    let sid = storage.get('synology_sid'); ;
+    let sid = storage.get('synology_sid');
     if (!sid || sid.length === 0) sid = await SynologyApi.signIn();
     const reqPath = `${path}${sortByDate ? sortBy.date : sortBy.name}${
       isAdditional ? additional : ''
@@ -42,7 +42,7 @@ const SynologyApi = {
     return `${hostName}${downloadPath}${path}`;
   },
   getAuthDownloadURL: (url: string): string => {
-    let sid = storage.get("synology_sid") ;
+    const sid = storage.get('synology_sid');
     if (sid && sid.length > 0) return `${url}&_sid=${sid}`;
     return '';
   },

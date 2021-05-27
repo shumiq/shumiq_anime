@@ -56,7 +56,7 @@ const Keyaki = (): JSX.Element => {
     };
     showLoadingPopup(true);
     const files = await SynologyApi.list(folderPath);
-    // @ts-ignore
+    if (!files.data.files) return;
     files.data.files.forEach((file) => {
       const ep = parseInt(file.name.split(' ')[2]);
       const sub = file.name.split(' ')[3].split('.')[0];
@@ -77,7 +77,7 @@ const Keyaki = (): JSX.Element => {
           ep: ep,
           name: 'แก้ไข',
         };
-        keyaki.sub[sub] = url
+        keyaki.sub[sub] = url;
         Database.add.keyaki(keyaki);
       }
     });

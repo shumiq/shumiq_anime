@@ -8,11 +8,9 @@ import AnimeInfoPopup from '../Popup/AnimeInfoPopup';
 import { getLocalStorage } from '../../utils/localstorage';
 import GeneralPopup from '../Popup/GeneralPopup';
 import AnimeFolderPopup from '../Popup/AnimeFolderPopup';
-import GoogleDriveApi from '../../api/googledrive';
-import GooglePhotoApi from '../../api/googlephoto';
-import FilesPopup from '../Popup/FilesPopup';
 import ClipboardPopup from '../Popup/ClipboardPopup';
 import { Anime } from '../../utils/types';
+import SynologyApi from '../../api/synology';
 
 const AnimeCard = (props: {
   anime: Anime;
@@ -38,7 +36,8 @@ const AnimeCard = (props: {
 
   const share = useCallback((): void => {
     const url =
-      (process.env.REACT_APP_API_ENDPOINT?.toString() || '') +
+      (process.env.REACT_APP_API_ENDPOINT?.toString() ||
+        'http://localhost:3000') +
       '/api/share?anime=' +
       key.toString();
     /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -102,8 +101,7 @@ const AnimeCard = (props: {
         onClose={() => setPopup('')}
       />
     );
-    const driveFiles = await GoogleDriveApi.getFiles(anime.gdriveid_public);
-    const photoFiles = await GooglePhotoApi.getMedias(anime.gphotoid);
+    const folder = await SynologyApi.list(`Anime${anime.path}`);
     setPopup(
       <GeneralPopup
         show={false}
@@ -112,38 +110,10 @@ const AnimeCard = (props: {
         onClose={() => setPopup('')}
       />
     );
-    const files: Record<
-      string,
-      {
-        name: string;
-        driveUrl?: string;
-        photoUrl?: string;
-        downloadUrl?: string;
-      }
-    > = {};
-    driveFiles.forEach((file) => {
-      files[file.name] = {
-        ...files[file.name],
-        name: file.name,
-        driveUrl:
-          'https://drive.google.com/file/d/' +
-          file.id +
-          '/preview?usp=drivesdk',
-      };
-    });
-    photoFiles.forEach((file) => {
-      files[file.filename] = {
-        ...files[file.filename],
-        name: file.filename,
-        photoUrl: file.productUrl,
-        downloadUrl: file.baseUrl + '=dv',
-      };
-    });
-
     const showFolderPopup = (show: boolean) => {
       setPopup(
         <AnimeFolderPopup
-          folderFiles={files}
+          folderFiles={folder.data.files || []}
           show={show}
           onClose={() => setPopup('')}
         />
@@ -164,26 +134,6 @@ const AnimeCard = (props: {
       );
     },
     [key, anime, setPopup]
-  );
-
-  const showFilesPopup = useCallback(
-    (show: boolean) => {
-      const driveUrl = anime.gdriveid_public
-        ? 'http://doc.google.com/drive/folders/' + anime.gdriveid_public
-        : '';
-      const photoUrl = anime.url ? anime.url : '';
-      setPopup(
-        <FilesPopup
-          driveUrl={driveUrl}
-          photoUrl={photoUrl}
-          show={show}
-          onClose={() => {
-            setPopup('');
-          }}
-        />
-      );
-    },
-    [anime, setPopup]
   );
 
   return (
@@ -335,31 +285,16 @@ const AnimeCard = (props: {
         </div>
         <div className="card-footer p-1">
           <div className="d-flex justify-content-around w-auto">
-            {UserDetail.isAdmin() &&
-              (!anime.gdriveid_public || !anime.gphotoid) && (
-                <button
-                  id="btn-folder-internal"
-                  className="btn btn-outline-secondary disabled h-auto border-0"
-                >
-                  <i className="material-icons align-middle">folder</i>
-                </button>
-              )}
-            {UserDetail.isAdmin() && anime.gdriveid_public && anime.gphotoid && (
-              <button
-                id="btn-folder-internal"
-                className="btn btn-outline-light h-auto border-0"
-                onClick={showFolder}
-              >
-                <i className="material-icons align-middle">folder</i>
-              </button>
-            )}
-
             <button
-              id="btn-folder-external"
-              className="btn btn-outline-light h-auto border-0"
-              onClick={() => showFilesPopup(true)}
+              id="btn-folder-internal"
+              className={`btn ${
+                anime.path === ''
+                  ? 'btn-outline-secondary disabled'
+                  : 'btn-outline-light'
+              } h-auto border-0`}
+              onClick={showFolder}
             >
-              <i className="material-icons align-middle">photo_library</i>
+              <i className="material-icons align-middle">folder</i>
             </button>
 
             {UserDetail.isAdmin() && anime.download_url === '' && (

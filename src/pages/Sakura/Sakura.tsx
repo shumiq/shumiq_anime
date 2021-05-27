@@ -56,7 +56,7 @@ const Sakura = (): JSX.Element => {
     };
     showLoadingPopup(true);
     const files = await SynologyApi.list(folderPath);
-    // @ts-ignore
+    if (!files.data.files) return;
     files.data.files.forEach((file) => {
       const ep = parseInt(file.name.split(' ')[3]);
       const sub = file.name.split(' ')[4].split('.')[0];

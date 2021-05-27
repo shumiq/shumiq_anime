@@ -47,10 +47,8 @@ const AddAnimePopup = (props: {
         studio: anime.studios?.nodes[0]?.name,
         view: 0,
         download: 0,
-        url: '',
-        gdriveid: '',
-        gdriveid_public: '',
-        gphotoid: '',
+        path: '',
+        size: 0,
         score: anime.averageScore
           ? (anime.averageScore / 10.0).toFixed(1)
           : '0.0',

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal } from 'bootstrap';
+import { File } from '../../models/SynologyApiModel';
+import SynologyApi from '../../api/synology';
 
 type Modal = {
   show: () => void;
@@ -9,13 +11,10 @@ type Modal = {
 const AnimeFolderPopup = (props: {
   show: boolean;
   onClose: () => void;
-  folderFiles: Record<
-    string,
-    { name: string; photoUrl?: string; driveUrl?: string; downloadUrl?: string }
-  >;
+  folderFiles: File[];
 }): JSX.Element => {
   const files = props.folderFiles;
-  const filenames = Object.keys(files).sort();
+  //const filenames = Object.keys(files).sort();
   const onClose = useCallback(() => props.onClose(), [props]);
   const [modal, setModal] = useState<Modal>();
   useEffect(() => {
@@ -38,27 +37,15 @@ const AnimeFolderPopup = (props: {
       popupElement.addEventListener('hidden.bs.modal', onClose);
     }
   }, [onClose]);
-  const play = useCallback((downloadUrl: string) => {
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT?.toString() || '';
-    window.open(baseUrl + '/api/view?url=' + downloadUrl, '_blank');
-  }, []);
-  const share = useCallback((downloadUrl: string) => {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    /* eslint-disable  @typescript-eslint/no-unsafe-call */
-    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
-    if ((navigator as any).share) {
-      void (navigator as any).share({
-        title: 'Download Video',
-        url: downloadUrl,
-      });
-    } else {
-      window.open(downloadUrl, '_blank');
-    }
+  const play = useCallback((path: string) => {
+    window.open(
+      SynologyApi.getDownloadURL(SynologyApi.getAuthDownloadURL(path))
+    );
   }, []);
   return (
     <div className="AnimeFolderPopup">
       <div className="modal fade">
-        <div className="modal-dialog modal-fullscreen">
+        <div className="modal-dialog">
           <div className="modal-content w-auto mx-auto">
             <div className="modal-header">
               <h5 className="modal-title">Folder</h5>
@@ -72,88 +59,30 @@ const AnimeFolderPopup = (props: {
               </button>
             </div>
             <div className="modal-body text-center">
-              <table className="table table-hover table-borderless w-auto mx-auto">
+              <table className="table table-hover table-borderless w-100 mx-auto">
                 <thead>
                   <tr>
                     <th className="text-center">File</th>
                     <th className="text-center" style={{ width: '50px' }}>
                       Play
                     </th>
-                    <th className="text-center" style={{ width: '50px' }}>
-                      G.Photo
-                    </th>
-                    <th className="text-center" style={{ width: '50px' }}>
-                      G.Drive
-                    </th>
-                    <th className="text-center" style={{ width: '50px' }}>
-                      Download
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filenames.map((name) => (
-                    <tr key={name}>
-                      <td className="align-middle">
-                        <small>{files[name].name}</small>
+                  {files.map((file) => (
+                    <tr key={file.name}>
+                      <td className="text-left align-middle">
+                        <small>{file.name}</small>
                       </td>
                       <td className="text-center align-middle">
                         <button
-                          className={
-                            'btn btn-outline-light h-auto border-0' +
-                            (files[name].downloadUrl ? '' : ' disabled')
-                          }
+                          className={'btn btn-outline-light h-auto border-0'}
                           type="button"
-                          onClick={() => play(files[name].downloadUrl || '')}
+                          onClick={() => play(file.path)}
                         >
                           <small>
                             <i className="material-icons align-middle">
                               play_circle_outline
-                            </i>
-                          </small>
-                        </button>
-                      </td>
-                      <td className="text-center align-middle">
-                        <a
-                          className={
-                            'btn btn-outline-light h-auto border-0' +
-                            (files[name].photoUrl ? '' : ' disabled')
-                          }
-                          type="button"
-                          href={files[name].photoUrl}
-                          target="blank"
-                        >
-                          <small>
-                            <i className="material-icons align-middle">movie</i>
-                          </small>
-                        </a>
-                      </td>
-                      <td className="text-center align-middle">
-                        <a
-                          className={
-                            'btn btn-outline-light h-auto border-0' +
-                            (files[name].driveUrl ? '' : ' disabled')
-                          }
-                          type="button"
-                          href={files[name].driveUrl}
-                          target="blank"
-                        >
-                          <small>
-                            <i className="material-icons align-middle">movie</i>
-                          </small>
-                        </a>
-                      </td>
-                      <td className="text-center align-middle">
-                        <button
-                          className={
-                            'btn btn-outline-light h-auto border-0' +
-                            (files[name].downloadUrl ? '' : ' disabled')
-                          }
-                          type="button"
-                          onClick={() => share(files[name].downloadUrl || '')}
-                        >
-                          <small>
-                            <i className="material-icons align-middle">
-                              vertical_align_bottom
                             </i>
                           </small>
                         </button>
