@@ -45,8 +45,8 @@
     "deploy:firebase": "npm run build && firebase deploy",
     "deploy:vercel": "vercel --prod",
     "eject": "react-scripts eject",
-    "lint": "eslint src && eslint api",
-    "lint:fix": "eslint --fix src && eslint --fix api"
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
@@ -54,7 +54,6 @@
       "project": "tsconfig.json"
     },
     "extends": [
-      "react-app",
       "plugin:prettier/recommended",
       "plugin:react-hooks/recommended",
       "eslint:recommended",

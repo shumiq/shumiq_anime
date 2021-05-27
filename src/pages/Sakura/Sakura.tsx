@@ -3,7 +3,7 @@ import { Database } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import UserDetail from '../../utils/userdetail';
-import SynologyApi from "../../api/synology";
+import SynologyApi from '../../api/synology';
 import InputPopup from '../../components/Popup/InputPopup';
 import {
   Database as DatabaseType,
@@ -56,20 +56,20 @@ const Sakura = (): JSX.Element => {
     };
     showLoadingPopup(true);
     const files = await SynologyApi.list(folderPath);
-    files.data.files.forEach(file => {
+    files.data.files.forEach((file) => {
       const ep = parseInt(file.name.split(' ')[3]);
       const sub = file.name.split(' ')[4].split('.')[0];
       const url = SynologyApi.getDownloadURL(file.path);
       if (
-          Object.entries(sakuraList).filter(([key, sakura]) => sakura.ep === ep)
-              .length > 0
+        Object.entries(sakuraList).filter(([key, sakura]) => sakura.ep === ep)
+          .length > 0
       ) {
         Object.entries(sakuraList)
-            .filter(([key, sakura]) => sakura.ep === ep)
-            .forEach(([key, sakura]) => {
-              sakura.sub[sub] = url;
-              Database.update.sakura(key, sakura);
-            });
+          .filter(([key, sakura]) => sakura.ep === ep)
+          .forEach(([key, sakura]) => {
+            sakura.sub[sub] = url;
+            Database.update.sakura(key, sakura);
+          });
       } else {
         const sakura: SakuraType = {
           sub: {} as Record<string, string>,
