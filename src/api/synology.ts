@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {storage} from "../utils/localstorage";
+import {ListResponse, SignInResModel} from "../models/SynologyApiModel";
 
 const hostName = 'http://shumiq.synology.me:5000';
 const endPoint = `${
@@ -12,70 +14,35 @@ const sortBy = {
   date: '&sort_by=mtime&sort_direction=desc',
 };
 
-interface signInResModel {
-  data: {
-    sid: string;
-  };
-  success: boolean;
-}
-
-export interface listResModel {
-  data: {
-    files: {
-      additional?: {
-        size: number;
-        time: {
-          atime: number;
-          crtime: number;
-          ctime: number;
-          mtime: number;
-        };
-      };
-      isdir?: boolean;
-      name: string;
-      path: string;
-    }[];
-    offset?: number;
-    total?: number;
-  };
-  success?: boolean;
-}
-
 const SynologyApi = {
   signIn: async (): Promise<string> => {
     const response: {
-      data: signInResModel;
+      data: SignInResModel;
     } = await axios.get(`${endPoint}/signin`);
     const sid = response.data.success ? response.data.data.sid : '';
-    localStorage.setItem('synology_sid', sid);
+    storage.set('synology_sid', sid);
     return sid;
   },
   list: async (
     path: string,
     sortByDate = false,
     isAdditional = false,
-    isRetry = false
-  ): Promise<listResModel> => {
-    let sid = localStorage.getItem('synology_sid');
+  ): Promise<ListResponse> => {
+    let sid = storage.get('synology_sid'); ;
     if (!sid || sid.length === 0) sid = await SynologyApi.signIn();
     const reqPath = `${path}${sortByDate ? sortBy.date : sortBy.name}${
       isAdditional ? additional : ''
     }&_sid=${sid}`;
-    const response: { data: listResModel; status: string } = await axios.get(
+    const response: { data: ListResponse; status: string } = await axios.get(
       `${endPoint}/list?path=${encodeURIComponent(reqPath)}`
     );
-    if (response.data.success || !isRetry) {
-      return response.data;
-    } else {
-      await SynologyApi.signIn();
-      return SynologyApi.list(path, sortByDate, isAdditional, false);
-    }
+    return response.data;
   },
   getDownloadURL: (path: string): string => {
     return `${hostName}${downloadPath}${path}`;
   },
   getAuthDownloadURL: (url: string): string => {
-    const sid = localStorage.getItem('synology_sid');
+    let sid = storage.get("synology_sid") ;
     if (sid && sid.length > 0) return `${url}&_sid=${sid}`;
     return '';
   },
