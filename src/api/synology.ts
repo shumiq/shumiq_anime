@@ -22,7 +22,7 @@ interface signInResModel {
 export interface listResModel {
   data: {
     files: {
-      additional: {
+      additional?: {
         size: number;
         time: {
           atime: number;
@@ -31,14 +31,14 @@ export interface listResModel {
           mtime: number;
         };
       };
-      isdir: boolean;
+      isdir?: boolean;
       name: string;
       path: string;
     }[];
-    offset: number;
-    total: number;
+    offset?: number;
+    total?: number;
   };
-  success: boolean;
+  success?: boolean;
 }
 
 const SynologyApi = {
