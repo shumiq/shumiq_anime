@@ -3,20 +3,14 @@ import { Database } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import UserDetail from '../../utils/userdetail';
-import GoogleDriveApi from '../../api/googledrive';
-import GooglePhotoApi from '../../api/googlephoto';
-import FilesPopup from '../../components/Popup/FilesPopup';
+import SynologyApi from '../../api/synology';
 import InputPopup from '../../components/Popup/InputPopup';
 import {
   Database as DatabaseType,
   Keyaki as KeyakiType,
-  File,
 } from '../../utils/types';
 
-// const driveFolderId = '16jhCH2CkhVgZdmSx0cWhh364a1oqUm8U';
-const driveFolderId = '1_jfMEecB4T6cRPAcT9R0UfvIM15i4-jA';
-const photoAlbumId =
-  'ACKboXDVl0yynHYnKsDhn5HNlV7AxRTmboF6WNjWyFek8nloYNKJ1B0fxWQZ5A7Vk-kh-FOmRTJE';
+const folderPath = 'Keyakitte Kakenai';
 
 const Keyaki = (): JSX.Element => {
   const [keyakiList, setKeyakiList] = useState<Record<string, KeyakiType>>(
@@ -45,24 +39,8 @@ const Keyaki = (): JSX.Element => {
     UpdateKeyakiRef();
   }, [keyakiList]);
 
-  const showFiles = useCallback((files: File) => {
-    const url = files.url ? files.url : '';
-    const photoUrl = files.photoUrl ? files.photoUrl : '';
-    const photoId = files.photoId ? files.photoId : '';
-    const showFilesPopup = (show: boolean) => {
-      setPopup(
-        <FilesPopup
-          driveUrl={url}
-          photoUrl={photoUrl}
-          photoId={photoId}
-          show={show}
-          onClose={() => {
-            setPopup('');
-          }}
-        />
-      );
-    };
-    showFilesPopup(true);
+  const showFiles = useCallback((file: string) => {
+    window.open(SynologyApi.getAuthDownloadURL(file));
   }, []);
 
   const update = useCallback(async () => {
@@ -77,16 +55,12 @@ const Keyaki = (): JSX.Element => {
       );
     };
     showLoadingPopup(true);
-    const driveFiles = await GoogleDriveApi.getFiles(driveFolderId);
-    const photoFiles = await GooglePhotoApi.getMedias(photoAlbumId);
-    driveFiles.forEach((file: { name: string; id: string }) => {
+    const files = await SynologyApi.list(folderPath);
+    // @ts-ignore
+    files.data.files.forEach((file) => {
       const ep = parseInt(file.name.split(' ')[2]);
       const sub = file.name.split(' ')[3].split('.')[0];
-      const url =
-        'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
-      const photoUrl = photoFiles.filter((f) => f.filename === file.name)[0]
-        ?.productUrl;
-      const photoId = photoFiles.filter((f) => f.filename === file.name)[0]?.id;
+      const url = SynologyApi.getDownloadURL(file.path);
       if (
         Object.entries(keyakiList).filter(([key, keyaki]) => keyaki.ep === ep)
           .length > 0
@@ -94,24 +68,16 @@ const Keyaki = (): JSX.Element => {
         Object.entries(keyakiList)
           .filter(([key, keyaki]) => keyaki.ep === ep)
           .forEach(([key, keyaki]) => {
-            keyaki.sub[sub] = {
-              url: url,
-              photoUrl: photoUrl ? photoUrl : null,
-              photoId: photoId ? photoId : null,
-            };
+            keyaki.sub[sub] = url;
             Database.update.keyaki(key, keyaki);
           });
       } else {
         const keyaki: KeyakiType = {
-          sub: {} as Record<string, File>,
+          sub: {} as Record<string, string>,
           ep: ep,
           name: 'แก้ไข',
         };
-        keyaki.sub[sub] = {
-          url: url,
-          photoUrl: photoUrl ? photoUrl : null,
-          photoId: photoId ? photoId : null,
-        };
+        keyaki.sub[sub] = url
         Database.add.keyaki(keyaki);
       }
     });
@@ -207,7 +173,7 @@ const Keyaki = (): JSX.Element => {
                             <td>
                               {Object.keys(keyakiList[key].sub).map(
                                 (sub) =>
-                                  keyakiList[key].sub[sub]?.url && (
+                                  keyakiList[key].sub[sub] && (
                                     <button
                                       className="btn btn-primary m-1"
                                       onClick={() =>
@@ -232,15 +198,6 @@ const Keyaki = (): JSX.Element => {
           </div>
           <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
             <div className="w-100 text-center">
-              <a
-                className="btn"
-                href={
-                  'https://drive.google.com/drive/u/0/folders/' + driveFolderId
-                }
-                target="blank"
-              >
-                <i className="material-icons">folder</i>
-              </a>
               <button id="btn-random" className="btn" onClick={randomEp}>
                 <i className="material-icons">shuffle</i>
               </button>

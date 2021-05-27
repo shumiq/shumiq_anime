@@ -60,7 +60,7 @@ export interface Conan {
 export interface Keyaki {
   ep: number;
   name: string;
-  sub: Record<string, File>;
+  sub: Record<string, string>;
 }
 
 export interface Sakura {
