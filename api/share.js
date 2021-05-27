@@ -1,7 +1,5 @@
 import opengraphGenerator from './utils/animeOg';
-import { NowRequest, NowResponse } from '@vercel/node';
 import admin, { ServiceAccount } from 'firebase-admin';
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
 require('dotenv').config({ path: '.env.local' });
 const serviceAccount = {
   type: 'service_account',
@@ -18,24 +16,16 @@ const serviceAccount = {
 };
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as ServiceAccount),
+  credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://shumiq-anime.firebaseio.com',
 });
 
-export default async (req: NowRequest, res: NowResponse): Promise<void> => {
+export default async (req, res) => {
   const snapshot = await admin
     .database()
     .ref('myanimelist_database/anime/' + req.query.anime.toString())
     .once('value');
-  const anime = snapshot.val() as {
-    title: string;
-    score: string;
-    year: number;
-    season: number;
-    download: number;
-    info: string;
-    cover_url: string;
-  };
+  const anime = snapshot.val();
   const resHtml = opengraphGenerator(anime);
   res.send(resHtml);
 };

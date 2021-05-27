@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
 require('dotenv').config({ path: '.env.local' });
 const default_url = process.env.ENDPOINT;
 const opengraphTemplate = `<!doctype html>
@@ -18,11 +17,7 @@ const opengraphTemplate = `<!doctype html>
   </body>
 </html>`;
 
-const getMeta = (org: {
-  name: string;
-  logo_url: string;
-  desc: string;
-}): string => {
+const getMeta = (org) => {
   let og = `<meta property="og:type" content="website" />\n`;
   og += `<meta property="og:title" content="${org.name}" />\n`;
   og += `<meta property="og:image" content="${org.logo_url}" />\n`;
@@ -30,15 +25,7 @@ const getMeta = (org: {
   return og;
 };
 
-export default (anime: {
-  title: string;
-  score: string;
-  year: number;
-  season: number;
-  download: number;
-  info: string;
-  cover_url: string;
-}): string => {
+export default (anime) => {
   let indexHTML = opengraphTemplate;
   const enumSeason = ['', 'Winter', 'Spring', 'Summer', 'Fall'];
   const openGraphPlaceholder = '<meta name="functions-insert-dynamic-og">';
