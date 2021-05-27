@@ -66,7 +66,7 @@ export interface Keyaki {
 export interface Sakura {
   ep: number;
   name: string;
-  sub: Record<string, File>;
+  sub: Record<string, string>;
 }
 
 export interface Router {

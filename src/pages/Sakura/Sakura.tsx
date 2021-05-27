@@ -3,20 +3,14 @@ import { Database } from '../../utils/firebase';
 import { getLocalStorage } from '../../utils/localstorage';
 import GeneralPopup from '../../components/Popup/GeneralPopup';
 import UserDetail from '../../utils/userdetail';
-import GoogleDriveApi from '../../api/googledrive';
-import GooglePhotoApi from '../../api/googlephoto';
-import FilesPopup from '../../components/Popup/FilesPopup';
+import SynologyApi from "../../api/synology";
 import InputPopup from '../../components/Popup/InputPopup';
 import {
   Database as DatabaseType,
   Sakura as SakuraType,
-  File,
 } from '../../utils/types';
 
-// const driveFolderId = '1RGMvXyS9Qmve8i4VMRM3_lgzWzMtJko8';
-const driveFolderId = '1FPyQYBofiyK8O3D5Z-Co3NnEN0eWvosd';
-const photoAlbumId =
-  'ACKboXDga5uYAkASW3i4lF-0pS5q5AoNWkT1qK9bGXiKycfhNaLLY_tInT_OZ2QNxSnTr8hyUz84';
+const folderPath = 'Soko Magattara Sakurazaka';
 
 const Sakura = (): JSX.Element => {
   const [sakuraList, setSakuraList] = useState<Record<string, SakuraType>>(
@@ -45,24 +39,8 @@ const Sakura = (): JSX.Element => {
     UpdateSakuraRef();
   }, [sakuraList]);
 
-  const showFiles = useCallback((files: File) => {
-    const url = files.url ? files.url : '';
-    const photoUrl = files.photoUrl ? files.photoUrl : '';
-    const photoId = files.photoId ? files.photoId : '';
-    const showFilesPopup = (show: boolean) => {
-      setPopup(
-        <FilesPopup
-          driveUrl={url}
-          photoUrl={photoUrl}
-          photoId={photoId}
-          show={show}
-          onClose={() => {
-            setPopup('');
-          }}
-        />
-      );
-    };
-    showFilesPopup(true);
+  const showFiles = useCallback((file: string) => {
+    window.open(SynologyApi.getAuthDownloadURL(file));
   }, []);
 
   const update = useCallback(async () => {
@@ -77,41 +55,28 @@ const Sakura = (): JSX.Element => {
       );
     };
     showLoadingPopup(true);
-    const driveFiles = await GoogleDriveApi.getFiles(driveFolderId);
-    const photoFiles = await GooglePhotoApi.getMedias(photoAlbumId);
-    driveFiles.forEach((file: { name: string; id: string }) => {
+    const files = await SynologyApi.list(folderPath);
+    files.data.files.forEach(file => {
       const ep = parseInt(file.name.split(' ')[3]);
       const sub = file.name.split(' ')[4].split('.')[0];
-      const url =
-        'https://drive.google.com/file/d/' + file.id + '/preview?usp=drivesdk';
-      const photoUrl = photoFiles.filter((f) => f.filename === file.name)[0]
-        ?.productUrl;
-      const photoId = photoFiles.filter((f) => f.filename === file.name)[0]?.id;
+      const url = SynologyApi.getDownloadURL(file.path);
       if (
-        Object.entries(sakuraList).filter(([key, sakura]) => sakura.ep === ep)
-          .length > 0
+          Object.entries(sakuraList).filter(([key, sakura]) => sakura.ep === ep)
+              .length > 0
       ) {
         Object.entries(sakuraList)
-          .filter(([key, sakura]) => sakura.ep === ep)
-          .forEach(([key, sakura]) => {
-            sakura.sub[sub] = {
-              url: url,
-              photoUrl: photoUrl ? photoUrl : null,
-              photoId: photoId ? photoId : null,
-            };
-            Database.update.sakura(key, sakura);
-          });
+            .filter(([key, sakura]) => sakura.ep === ep)
+            .forEach(([key, sakura]) => {
+              sakura.sub[sub] = url;
+              Database.update.sakura(key, sakura);
+            });
       } else {
         const sakura: SakuraType = {
-          sub: {} as Record<string, File>,
+          sub: {} as Record<string, string>,
           ep: ep,
           name: 'แก้ไข',
         };
-        sakura.sub[sub] = {
-          url: url,
-          photoUrl: photoUrl ? photoUrl : null,
-          photoId: photoId ? photoId : null,
-        };
+        sakura.sub[sub] = url;
         Database.add.sakura(sakura);
       }
     });
@@ -207,7 +172,7 @@ const Sakura = (): JSX.Element => {
                             <td>
                               {Object.keys(sakuraList[key].sub).map(
                                 (sub) =>
-                                  sakuraList[key].sub[sub]?.url && (
+                                  sakuraList[key].sub[sub] && (
                                     <button
                                       className="btn btn-primary m-1"
                                       onClick={() =>
@@ -232,15 +197,6 @@ const Sakura = (): JSX.Element => {
           </div>
           <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
             <div className="w-100 text-center">
-              <a
-                className="btn"
-                href={
-                  'https://drive.google.com/drive/u/0/folders/' + driveFolderId
-                }
-                target="blank"
-              >
-                <i className="material-icons">folder</i>
-              </a>
               <button id="btn-random" className="btn" onClick={randomEp}>
                 <i className="material-icons">shuffle</i>
               </button>
