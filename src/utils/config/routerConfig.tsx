@@ -1,10 +1,10 @@
 import Anime from '../../pages/Anime/Anime';
-import Sync from '../../pages/Sync/Sync';
-import Conan from '../../pages/Conan/Conan';
-import Keyaki from '../../pages/Keyaki/Keyaki';
-import Backup from '../../pages/Backup/Backup';
+import Sync from '../../pages/old/Sync/Sync';
+import Conan from '../../pages/old/Conan/Conan';
+import Keyaki from '../../pages/old/Keyaki/Keyaki';
+import Backup from '../../pages/old/Backup/Backup';
 import { Router } from '../types';
-import Sakura from '../../pages/Sakura/Sakura';
+import Sakura from '../../pages/old/Sakura/Sakura';
 
 export const ROUTER_CONFIG: Router[] = [
   {

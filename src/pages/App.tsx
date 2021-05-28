@@ -1,11 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import { getRouterConfig } from '../utils/router';
-import Navbar from '../components/Navbar/Navbar';
-import { Database } from '../utils/firebase';
-import UserDetail from '../utils/userdetail';
+import Navbar from '../containers/Navbar/Navbar';
+// import { Database } from '../utils/firebase';
+// import UserDetail from '../utils/userdetail';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 const App = (): JSX.Element => {
+  const darkTheme = createMuiTheme({
+    palette: {
+      type: 'dark',
+    },
+  });
   const getRouters = () => {
     return getRouterConfig().map((route, index) => {
       const props = {
@@ -17,24 +23,27 @@ const App = (): JSX.Element => {
     });
   };
 
-  useEffect(() => {
-    if (UserDetail.isAdmin()) {
-      void Database.runAutoDelete();
-      void Database.runAutoBackup();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (UserDetail.isAdmin()) {
+  //     void Database.runAutoDelete();
+  //     void Database.runAutoBackup();
+  //   }
+  // }, []);
 
   return (
-    <div className="app">
-      <main className="app__container">
-        <BrowserRouter>
-          <Navbar />
-          <div className="mt-5">
-            <Switch>{getRouters()}</Switch>
-          </div>
-        </BrowserRouter>
-      </main>
-    </div>
+    <ThemeProvider theme={darkTheme}>
+      <div className="app">
+        <main className="app__container">
+          <BrowserRouter>
+            <Navbar>
+              <div className="mt-5">
+                <Switch>{getRouters()}</Switch>
+              </div>
+            </Navbar>
+          </BrowserRouter>
+        </main>
+      </div>
+    </ThemeProvider>
   );
 };
 
