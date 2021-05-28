@@ -1,5 +1,5 @@
-import { FilterEnum, SeasonEnum } from '../../../utils/enum';
-import { Anime } from '../../../utils/types';
+import { FilterEnum, SeasonEnum } from '../../utils/enum';
+import { Anime } from '../../utils/types';
 
 export const defaultFilter = {
   season: FilterEnum.LATEST_SEASON,

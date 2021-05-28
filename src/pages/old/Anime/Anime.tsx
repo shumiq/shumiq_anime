@@ -2,7 +2,7 @@ import { Database } from '../../../utils/firebase';
 import { getLocalStorage } from '../../../utils/localstorage';
 import AnimeCard from '../../../components/old/Card/AnimeCard';
 import Filterbar from '../../../components/old/Filterbar/Filterbar';
-import { AnimeFilter, SeasonList } from './Anime.filter';
+import { AnimeFilter, SeasonList } from '../../Anime/Anime.filter';
 import React, { useState, useEffect, useCallback } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {

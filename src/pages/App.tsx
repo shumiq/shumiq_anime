@@ -5,11 +5,15 @@ import Navbar from '../containers/Navbar/Navbar';
 // import { Database } from '../utils/firebase';
 // import UserDetail from '../utils/userdetail';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const App = (): JSX.Element => {
   const darkTheme = createMuiTheme({
     palette: {
       type: 'dark',
+      text: {
+        secondary: 'rgba(255,255,255,0.5)',
+      },
     },
   });
   const getRouters = () => {
@@ -32,6 +36,7 @@ const App = (): JSX.Element => {
 
   return (
     <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
       <div className="app">
         <main className="app__container">
           <BrowserRouter>

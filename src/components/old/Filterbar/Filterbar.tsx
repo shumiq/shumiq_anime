@@ -1,6 +1,6 @@
 import React, { useCallback, ChangeEvent, KeyboardEvent } from 'react';
 import { SeasonEnum, FilterEnum } from '../../../utils/enum';
-import { defaultFilter } from '../../../pages/old/Anime/Anime.filter';
+import { defaultFilter } from '../../../pages/Anime/Anime.filter';
 import UserDetail from '../../../utils/userdetail';
 import { Collapse } from 'bootstrap';
 
