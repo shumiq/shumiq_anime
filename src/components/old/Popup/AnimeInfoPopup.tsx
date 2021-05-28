@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal } from 'bootstrap';
-import { Database } from '../../../utils/firebase';
-import UserDetail from '../../../utils/userdetail';
-import { Anime, AnilistInfoResponse } from '../../../utils/types';
+import { Database } from '../../../services/Firebase/Firebase';
+import UserDetail from '../../../services/UserDetail/UserDetail';
+import { Anime } from '../../../models/Type';
+import { AnilistInfoResponse } from '../../../models/AnilistApi';
 
 type Modal = {
   show: () => void;

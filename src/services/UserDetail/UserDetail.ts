@@ -1,5 +1,5 @@
-import { getLocalStorage } from './localstorage';
-import { User } from './types';
+import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
+import { User } from '../../models/Type';
 
 export default {
   getUser: (): User | null => {

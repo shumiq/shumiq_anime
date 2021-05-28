@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getLocalStorage } from '../../../utils/localstorage';
-import { Database } from '../../../utils/firebase';
+import { getLocalStorage } from '../../../utils/LocalStorage/LocalStorage';
+import { Database } from '../../../services/Firebase/Firebase';
 import GeneralPopup from '../../../components/old/Popup/GeneralPopup';
-import { Anime, Database as DatabaseType } from '../../../utils/types';
-import SynologyApi from '../../../api/synology';
-import { ListResponse } from '../../../models/SynologyApiModel';
+import { Anime, Database as DatabaseType } from '../../../models/Type';
+import SynologyApi from '../../../services/Synology/Synology';
+import { ListResponse } from '../../../models/SynologyApi';
 
 const Sync = (): JSX.Element => {
   const [animeList, setAnimeList] = useState<Record<string, Anime>>(

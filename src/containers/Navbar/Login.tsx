@@ -4,10 +4,13 @@ import GoogleLogin, {
   GoogleLoginResponseOffline,
 } from 'react-google-login';
 import React, { useState, useCallback } from 'react';
-import { setLocalStorage, removeLocalStorage } from '../../utils/localstorage';
-import { Auth } from '../../utils/firebase';
-import UserDetail from '../../utils/userdetail';
-import { User } from '../../utils/types';
+import {
+  setLocalStorage,
+  removeLocalStorage,
+} from '../../utils/LocalStorage/LocalStorage';
+import { Auth } from '../../services/Firebase/Firebase';
+import UserDetail from '../../services/UserDetail/UserDetail';
+import { User } from '../../models/Type';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';

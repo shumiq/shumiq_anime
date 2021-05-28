@@ -1,10 +1,10 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import mockDatabase from '../../../mock/database.json';
-import UserDetail from '../../../utils/userdetail';
-import { Database } from '../../../utils/firebase';
+import mockDatabase from '../../../models/mock/database.json';
+import UserDetail from '../../../services/UserDetail/UserDetail';
+import { Database } from '../../../services/Firebase/Firebase';
 import AnimeInfoPopup from './AnimeInfoPopup';
-import { Anime, Database as DatabaseType } from '../../../utils/types';
+import { Anime, Database as DatabaseType } from '../../../models/Type';
 
 jest.mock('../../utils/userdetail');
 jest.mock('../../utils/firebase');

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { Modal } from 'bootstrap';
-import { Database } from '../../../utils/firebase';
-import AnilistApi from '../../../api/anilist';
-import { SeasonEnum } from '../../../utils/enum';
-import { AnilistInfoResponse, Anime } from '../../../utils/types';
+import { Database } from '../../../services/Firebase/Firebase';
+import AnilistApi from '../../../services/Anilist/anilist';
+import { SeasonEnum } from '../../../models/Constants';
+import { Anime } from '../../../models/Type';
+import { AnilistInfoResponse } from '../../../models/AnilistApi';
 
 type Modal = {
   show: () => void;

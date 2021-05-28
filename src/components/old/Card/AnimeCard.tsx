@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
-import { SeasonEnum, CardLayout } from '../../../utils/enum';
-import UserDetail from '../../../utils/userdetail';
+import { SeasonEnum, CardLayout } from '../../../models/Constants';
+import UserDetail from '../../../services/UserDetail/UserDetail';
 import EditAnimePopup from '../Popup/EditAnimePopup';
-import { Database } from '../../../utils/firebase';
-import AnilistApi from '../../../api/anilist';
+import { Database } from '../../../services/Firebase/Firebase';
+import AnilistApi from '../../../services/Anilist/anilist';
 import AnimeInfoPopup from '../Popup/AnimeInfoPopup';
-import { getLocalStorage } from '../../../utils/localstorage';
+import { getLocalStorage } from '../../../utils/LocalStorage/LocalStorage';
 import GeneralPopup from '../Popup/GeneralPopup';
 import AnimeFolderPopup from '../Popup/AnimeFolderPopup';
 import ClipboardPopup from '../Popup/ClipboardPopup';
-import { Anime } from '../../../utils/types';
-import SynologyApi from '../../../api/synology';
+import { Anime } from '../../../models/Type';
+import SynologyApi from '../../../services/Synology/Synology';
 
 const AnimeCard = (props: {
   anime: Anime;

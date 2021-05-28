@@ -1,11 +1,14 @@
 import axios from 'axios';
-import UserDetail from '../utils/userdetail';
-import SynologyApi from './synology';
-import { setLocalStorage, storage } from '../utils/localstorage';
+import UserDetail from '../UserDetail/UserDetail';
+import SynologyApi from './Synology';
+import {
+  setLocalStorage,
+  storage,
+} from '../../utils/LocalStorage/LocalStorage';
 
 jest.mock('axios');
-jest.mock('../utils/userdetail');
-jest.mock('../utils/localstorage');
+jest.mock('../UserDetail/UserDetail');
+jest.mock('../../utils/LocalStorage/LocalStorage');
 
 describe('SynologyApi', () => {
   const flushPromises = () => new Promise(setImmediate);

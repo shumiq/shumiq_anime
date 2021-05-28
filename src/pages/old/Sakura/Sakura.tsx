@@ -1,14 +1,14 @@
 import React, { useState, createRef, useEffect, useCallback } from 'react';
-import { Database } from '../../../utils/firebase';
-import { getLocalStorage } from '../../../utils/localstorage';
+import { Database } from '../../../services/Firebase/Firebase';
+import { getLocalStorage } from '../../../utils/LocalStorage/LocalStorage';
 import GeneralPopup from '../../../components/old/Popup/GeneralPopup';
-import UserDetail from '../../../utils/userdetail';
-import SynologyApi from '../../../api/synology';
+import UserDetail from '../../../services/UserDetail/UserDetail';
+import SynologyApi from '../../../services/Synology/Synology';
 import InputPopup from '../../../components/old/Popup/InputPopup';
 import {
   Database as DatabaseType,
   Sakura as SakuraType,
-} from '../../../utils/types';
+} from '../../../models/Type';
 
 const folderPath = 'Soko Magattara Sakurazaka';
 

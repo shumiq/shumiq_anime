@@ -1,7 +1,7 @@
 import React, { useCallback, ChangeEvent, KeyboardEvent } from 'react';
-import { SeasonEnum, FilterEnum } from '../../../utils/enum';
+import { SeasonEnum, FilterEnum } from '../../../models/Constants';
 import { defaultFilter } from '../../../pages/Anime/Anime.filter';
-import UserDetail from '../../../utils/userdetail';
+import UserDetail from '../../../services/UserDetail/UserDetail';
 import { Collapse } from 'bootstrap';
 
 interface filterType {

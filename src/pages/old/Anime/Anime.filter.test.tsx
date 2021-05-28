@@ -1,7 +1,7 @@
-import mockDatabase from '../../../mock/database.json';
-import { FilterEnum } from '../../../utils/enum';
+import mockDatabase from '../../../models/mock/database.json';
+import { FilterEnum } from '../../../models/Constants';
 import { AnimeFilter, SeasonList } from '../../Anime/Anime.filter';
-import { Anime, Database } from '../../../utils/types';
+import { Anime, Database } from '../../../models/Type';
 
 const mockAnimeList: Record<
   string,

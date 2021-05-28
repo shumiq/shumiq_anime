@@ -1,16 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { getLocalStorage } from '../../../utils/localstorage';
-import mockDatabase from '../../../mock/database.json';
-import UserDetail from '../../../utils/userdetail';
-import { Database } from '../../../utils/firebase';
+import { getLocalStorage } from '../../../utils/LocalStorage/LocalStorage';
+import mockDatabase from '../../../models/mock/database.json';
+import UserDetail from '../../../services/UserDetail/UserDetail';
+import { Database } from '../../../services/Firebase/Firebase';
 import Sakura from './Sakura';
-import SynologyApi from '../../../api/synology';
+import SynologyApi from '../../../services/Synology/Synology';
 
 jest.mock('../../utils/localstorage');
 jest.mock('../../utils/userdetail');
 jest.mock('../../utils/firebase');
-jest.mock('../../api/synology');
+jest.mock('../../api/Synology');
 
 describe('<Sakura />', () => {
   const flushPromises = () => new Promise(setImmediate);

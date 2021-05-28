@@ -15,15 +15,15 @@ import ShareIcon from '@material-ui/icons/Share';
 import StarIcon from '@material-ui/icons/Star';
 import MoreInfoIcon from '@material-ui/icons/InfoOutlined';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Anime } from '../../utils/types';
+import { Anime } from '../../models/Type';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import TableRow from '@material-ui/core/TableRow';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
-import { SeasonEnum } from '../../utils/enum';
-import Share from '../../utils/share';
+import { SeasonEnum } from '../../models/Constants';
+import Share from '../../utils/Share/Share';
 
 export default function AnimeCard({
   anime,

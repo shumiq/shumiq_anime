@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal } from 'bootstrap';
-import { Database } from '../../../utils/firebase';
-import { Anime } from '../../../utils/types';
+import { Database } from '../../../services/Firebase/Firebase';
+import { Anime } from '../../../models/Type';
 
 type Modal = {
   show: () => void;

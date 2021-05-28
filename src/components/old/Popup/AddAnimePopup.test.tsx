@@ -1,10 +1,10 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
-import AnilistApi from '../../../api/anilist';
-import { getLocalStorage } from '../../../utils/localstorage';
-import mockDatabase from '../../../mock/database.json';
-import { Database } from '../../../utils/firebase';
+import AnilistApi from '../../../services/Anilist/anilist';
+import { getLocalStorage } from '../../../utils/LocalStorage/LocalStorage';
+import mockDatabase from '../../../models/mock/database.json';
+import { Database } from '../../../services/Firebase/Firebase';
 import AddAnimePopup from './AddAnimePopup';
 
 jest.mock('../../api/anilist');

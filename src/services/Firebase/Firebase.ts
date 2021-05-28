@@ -1,5 +1,8 @@
-import { setLocalStorage, getLocalStorage } from './localstorage';
-import Firebase from './config/firebaseConfig';
+import {
+  setLocalStorage,
+  getLocalStorage,
+} from '../../utils/LocalStorage/LocalStorage';
+import Firebase from './FirebaseCore';
 import firebase from 'firebase/app';
 import {
   Database as DatabaseType,
@@ -8,14 +11,14 @@ import {
   Conan,
   Keyaki,
   Sakura,
-} from './types';
+} from '../../models/Type';
 import {
   validateDatabase,
   validateAnime,
   validateConan,
   validateKeyaki,
   validateSakura,
-} from './validation';
+} from '../../utils/Validation';
 
 const databasePath = 'myanimelist_database';
 

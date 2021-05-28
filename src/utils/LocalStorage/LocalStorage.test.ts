@@ -2,7 +2,7 @@ import {
   getLocalStorage,
   setLocalStorage,
   removeLocalStorage,
-} from './localstorage';
+} from './LocalStorage';
 
 describe('LocalStorage', () => {
   it('should return correct value', () => {

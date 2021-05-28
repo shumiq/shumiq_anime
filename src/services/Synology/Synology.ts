@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { storage } from '../utils/localstorage';
-import { ListResponse, SignInResModel } from '../models/SynologyApiModel';
+import { storage } from '../../utils/LocalStorage/LocalStorage';
+import { ListResponse, SignInResModel } from '../../models/SynologyApi';
 
 const hostName = 'http://shumiq.synology.me:5000';
 const endPoint = `${

@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { FilterEnum } from '../../../utils/enum';
+import { FilterEnum } from '../../../models/Constants';
 import Filterbar from './Filterbar';
 
 interface filterType {

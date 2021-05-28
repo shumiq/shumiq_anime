@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AnilistInfoResponse } from '../utils/types';
+import { AnilistInfoResponse } from '../../models/AnilistApi';
 
 const AnilistApi = {
   searchAnime: async (keyword: string): Promise<AnilistInfoResponse[]> => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal } from 'bootstrap';
-import { File } from '../../../models/SynologyApiModel';
-import SynologyApi from '../../../api/synology';
+import { File } from '../../../models/SynologyApi';
+import SynologyApi from '../../../services/Synology/Synology';
 
 type Modal = {
   show: () => void;

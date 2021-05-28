@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-import AnimeCard from '../../components/Card/AnimeCard';
+import AnimeCard from '../../containers/AnimeCard/AnimeCard';
 import Grid from '@material-ui/core/Grid';
 import {
   Anime as AnimeType,
   Database as DatabaseType,
-} from '../../utils/types';
-import { getLocalStorage } from '../../utils/localstorage';
+} from '../../models/Type';
+import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
 import { AnimeFilter } from './Anime.filter';
-import { Auth, Database } from '../../utils/firebase';
+import { Auth, Database } from '../../services/Firebase/Firebase';
 import queryString from 'query-string';
-import UserDetail from '../../utils/userdetail';
+import UserDetail from '../../services/UserDetail/UserDetail';
 
 const Anime = ({ location }) => {
   const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(

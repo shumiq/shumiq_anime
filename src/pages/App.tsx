@@ -1,9 +1,7 @@
 import React from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
-import { getRouterConfig } from '../utils/router';
+import { getRouterConfig } from '../utils/Router/Router';
 import Navbar from '../containers/Navbar/Navbar';
-// import { Database } from '../utils/firebase';
-// import UserDetail from '../utils/userdetail';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -26,13 +24,6 @@ const App = (): JSX.Element => {
       return <Route key={index} {...props} />;
     });
   };
-
-  // useEffect(() => {
-  //   if (UserDetail.isAdmin()) {
-  //     void Database.runAutoDelete();
-  //     void Database.runAutoBackup();
-  //   }
-  // }, []);
 
   return (
     <ThemeProvider theme={darkTheme}>

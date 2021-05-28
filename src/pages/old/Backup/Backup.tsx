@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useCallback } from 'react';
 import GeneralPopup from '../../../components/old/Popup/GeneralPopup';
-import { Database } from '../../../utils/firebase';
+import { Database } from '../../../services/Firebase/Firebase';
 
 const Backup = (): JSX.Element => {
   const [backupFiles, setBackupFiles] = useState<

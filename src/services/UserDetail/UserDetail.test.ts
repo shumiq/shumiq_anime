@@ -1,9 +1,9 @@
-import { getLocalStorage } from './localstorage';
-import UserDetail from './userdetail';
+import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
+import UserDetail from './UserDetail';
 
-jest.mock('./localstorage');
+jest.mock('../../utils/LocalStorage/LocalStorage');
 
-describe('userdetail', () => {
+describe('UserDetail', () => {
   it('should return user if has user', () => {
     (getLocalStorage as jest.Mock).mockReturnValue({ email: 'test_user' });
     const user = UserDetail.getUser();

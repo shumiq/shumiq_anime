@@ -1,4 +1,4 @@
-import { Database, Anime, Conan, Keyaki, Sakura } from './types';
+import { Database, Anime, Conan, Keyaki, Sakura } from '../models/Type';
 
 export const validateDatabase = (db: Database): Database | boolean => {
   Object.keys(db.conan).forEach((key) => {

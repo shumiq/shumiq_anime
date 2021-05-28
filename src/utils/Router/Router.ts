@@ -1,12 +1,19 @@
+import UserDetail from '../../services/UserDetail/UserDetail';
 import Anime from '../../pages/Anime/Anime';
 import Sync from '../../pages/old/Sync/Sync';
+import Backup from '../../pages/old/Backup/Backup';
 import Conan from '../../pages/old/Conan/Conan';
 import Keyaki from '../../pages/old/Keyaki/Keyaki';
-import Backup from '../../pages/old/Backup/Backup';
-import { Router } from '../types';
 import Sakura from '../../pages/old/Sakura/Sakura';
 
-export const ROUTER_CONFIG: Router[] = [
+interface Router {
+  path: string;
+  exact: boolean;
+  component: React.ComponentClass | (() => JSX.Element);
+  auth: string[];
+}
+
+const ROUTER_CONFIG: Router[] = [
   {
     path: '/',
     exact: true,
@@ -44,3 +51,9 @@ export const ROUTER_CONFIG: Router[] = [
     auth: [''],
   },
 ];
+
+export const getRouterConfig = (): Router[] => {
+  if (!UserDetail.isAdmin())
+    return ROUTER_CONFIG.filter((router) => !router.auth.includes('Admin'));
+  else return ROUTER_CONFIG;
+};

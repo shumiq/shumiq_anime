@@ -1,5 +1,5 @@
-import { Database } from '../../../utils/firebase';
-import { getLocalStorage } from '../../../utils/localstorage';
+import { Database } from '../../../services/Firebase/Firebase';
+import { getLocalStorage } from '../../../utils/LocalStorage/LocalStorage';
 import AnimeCard from '../../../components/old/Card/AnimeCard';
 import Filterbar from '../../../components/old/Filterbar/Filterbar';
 import { AnimeFilter, SeasonList } from '../../Anime/Anime.filter';
@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Database as DatabaseType,
   Anime as AnimeType,
-} from '../../../utils/types';
+} from '../../../models/Type';
 import queryString from 'query-string';
 
 type TParams = { search: string };

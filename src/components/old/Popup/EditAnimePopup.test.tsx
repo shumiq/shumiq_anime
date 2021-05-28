@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import mockDatabase from '../../../mock/database.json';
-import { Database } from '../../../utils/firebase';
+import mockDatabase from '../../../models/mock/database.json';
+import { Database } from '../../../services/Firebase/Firebase';
 import EditAnimePopup from './EditAnimePopup';
-import { Anime, Database as DatabaseType } from '../../../utils/types';
+import { Anime, Database as DatabaseType } from '../../../models/Type';
 
 jest.mock('../../utils/firebase');
 

@@ -1,12 +1,12 @@
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import React from 'react';
-import mockDatabase from '../../../mock/database.json';
-import UserDetail from '../../../utils/userdetail';
-import AnilistApi from '../../../api/anilist';
-import { Database } from '../../../utils/firebase';
-import { getLocalStorage } from '../../../utils/localstorage';
-import { CardLayout } from '../../../utils/enum';
+import mockDatabase from '../../../models/mock/database.json';
+import UserDetail from '../../../services/UserDetail/UserDetail';
+import AnilistApi from '../../../services/Anilist/anilist';
+import { Database } from '../../../services/Firebase/Firebase';
+import { getLocalStorage } from '../../../utils/LocalStorage/LocalStorage';
+import { CardLayout } from '../../../models/Constants';
 import GoogleDriveApi from '../../api/googledrive';
 import GooglePhotoApi from '../../api/googlephoto';
 import EditAnimePopup from '../Popup/EditAnimePopup';

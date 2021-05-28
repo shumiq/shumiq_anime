@@ -1,10 +1,10 @@
-import mockDatabase from '../mock/database.json';
-import { Database } from './firebase';
-import { getLocalStorage } from './localstorage';
-import Firebase from './config/firebaseConfig';
+import mockDatabase from '../../models/mock/database.json';
+import { Database } from './Firebase';
+import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
+import Firebase from './FirebaseCore';
 
-jest.mock('./localstorage');
-jest.mock('./config/firebaseConfig');
+jest.mock('../../utils/LocalStorage/LocalStorage');
+jest.mock('./FirebaseCore');
 
 const currentDate = (): string => {
   const ts = new Date(Date.now());
@@ -83,11 +83,11 @@ describe('Database', () => {
     expect(Firebase.storage.create).not.toHaveBeenCalled();
   });
 
-  it('should delete backups with older than 3 month', async () => {
+  it('should delete backups with older than 1 month', async () => {
     (Firebase.storage.list as jest.Mock).mockResolvedValue([
-      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 110 },
-      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 100 },
-      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 80 },
+      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 75 },
+      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 45 },
+      { timeCreated: Date.now() - 1000 * 60 * 60 * 24 * 15 },
     ]);
     (getLocalStorage as jest.Mock).mockReturnValue(mockDatabase);
     await Database.runAutoDelete();

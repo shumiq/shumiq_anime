@@ -3,9 +3,9 @@ import 'firebase/database';
 import 'firebase/auth';
 import 'firebase/storage';
 import axios from 'axios';
-import { Database } from '../types';
+import { Database } from '../../models/Type';
 
-const firebaseConfig = {
+const firebaseCore = {
   apiKey: 'AIzaSyC44si2Y_SRkWS8xvpODaLAm7GgMT35Xl4',
   authDomain: 'shumiq-anime.firebaseapp.com',
   databaseURL: 'https://shumiq-anime.firebaseio.com',
@@ -24,7 +24,7 @@ const firebaseConfig = {
   ],
 };
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseCore);
 
 export default {
   database: {

@@ -16,8 +16,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
-import { Auth } from '../../utils/firebase';
-import UserDetail from '../../utils/userdetail';
+import { Auth } from '../../services/Firebase/Firebase';
+import UserDetail from '../../services/UserDetail/UserDetail';
 import { Link } from 'react-router-dom';
 import Login from './Login';
 
