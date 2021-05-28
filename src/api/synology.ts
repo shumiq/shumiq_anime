@@ -7,7 +7,7 @@ const endPoint = `${
   process.env.REACT_APP_API_ENDPOINT?.toString() || 'http//:localhost:3000'
 }/api/drive`;
 const downloadPath =
-  '/webapi/entry.cgi?api=SYNO.FileStation.Download&version=2&method=download&mode=open&path=';
+  '/webapi/entry.cgi?api=SYNO.FileStation.Download&version=2&method=download&mode=download&path=';
 const additional = '&additional=["size","time"]';
 const sortBy = {
   name: '&sort_by=name',
