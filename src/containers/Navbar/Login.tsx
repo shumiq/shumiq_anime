@@ -3,7 +3,7 @@ import GoogleLogin, {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from 'react-google-login';
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   setLocalStorage,
   removeLocalStorage,
@@ -16,29 +16,33 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Avatar } from '@material-ui/core';
+import {useDispatch} from "react-redux";
+import {Action} from "../../utils/Store/AppStore";
 
 const Login = (): JSX.Element => {
   const [user, setUser] = useState<User>({});
 
-  const login = useCallback(
-    (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
+  const dispatch = useDispatch();
+
+  const login = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
+      const user = (response as GoogleLoginResponse).profileObj as User;
       setLocalStorage('user', (response as GoogleLoginResponse).profileObj);
       setLocalStorage(
         'accessToken',
         (response as GoogleLoginResponse).accessToken
       );
+      dispatch(Action.signIn(user));
       setUser(UserDetail.getUser() || {});
       Auth.signIn((response as GoogleLoginResponse).tokenId);
-    },
-    []
-  );
+  };
 
-  const logout = useCallback(() => {
+  const logout = () => {
     removeLocalStorage('user');
     removeLocalStorage('accessToken');
+      dispatch(Action.signOut());
     setUser(UserDetail.getUser() || {});
     Auth.signOut();
-  }, []);
+  };
 
   return (
     <div className="Login">

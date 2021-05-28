@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import AnimeCard from '../../containers/AnimeCard/AnimeCard';
@@ -9,9 +9,10 @@ import {
 } from '../../models/Type';
 import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
 import { AnimeFilter } from './Anime.filter';
-import { Auth, Database } from '../../services/Firebase/Firebase';
+import { Database } from '../../services/Firebase/Firebase';
 import queryString from 'query-string';
-import UserDetail from '../../services/UserDetail/UserDetail';
+import {useSelector} from "react-redux";
+import {Selector} from "../../utils/Store/AppStore";
 
 const Anime = ({ location }) => {
   const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(
@@ -21,13 +22,7 @@ const Anime = ({ location }) => {
     AnimeFilter(animeList)
   );
   const [filter, setFilter] = useState({});
-  const [isAdmin, setIsAdmin] = useState<boolean>(UserDetail.isAdmin());
-
-  useEffect(() => {
-    Auth.subscribe(() => {
-      setIsAdmin(UserDetail.isAdmin());
-    });
-  }, []);
+  const isAdmin = useSelector(Selector.isAdmin);
 
   useEffect(() => {
     Database.subscribe((db: DatabaseType) => {

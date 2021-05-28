@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -16,10 +16,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
-import { Auth } from '../../services/Firebase/Firebase';
-import UserDetail from '../../services/UserDetail/UserDetail';
 import { Link } from 'react-router-dom';
 import Login from './Login';
+import {useSelector} from "react-redux";
+import {Selector} from "../../utils/Store/AppStore";
 
 const drawerWidth = 240;
 
@@ -59,18 +59,12 @@ const useStyles = makeStyles((theme) => ({
 function NavBar({ children }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(UserDetail.isAdmin());
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const isAdmin = useSelector(Selector.isAdmin);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  useEffect(() => {
-    Auth.subscribe(() => {
-      setIsAdmin(UserDetail.isAdmin());
-    });
-  }, []);
 
   const drawer = (
     <div>
