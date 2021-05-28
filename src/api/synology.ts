@@ -18,7 +18,7 @@ const SynologyApi = {
   signIn: async (): Promise<string> => {
     const response: {
       data: SignInResModel;
-    } = await axios.get(`${endPoint}/signin`);
+    } = await axios.get(encodeURI(`${endPoint}/signin`));
     const sid = response.data.success ? response.data.data.sid : '';
     storage.set('synology_sid', sid);
     return sid;
@@ -34,7 +34,7 @@ const SynologyApi = {
       isAdditional ? additional : ''
     }&_sid=${sid}`;
     const response: { data: ListResponse; status: string } = await axios.get(
-      `${endPoint}/list?path=${encodeURIComponent(reqPath)}`
+      encodeURI(`${endPoint}/list?path=${encodeURIComponent(reqPath)}`)
     );
     return response.data;
   },
@@ -43,7 +43,7 @@ const SynologyApi = {
   },
   getAuthDownloadURL: (url: string): string => {
     const sid = storage.get('synology_sid');
-    if (sid && sid.length > 0) return `${url}&_sid=${sid}`;
+    if (sid && sid.length > 0) return encodeURI(`${url}&_sid=${sid}`);
     return '';
   },
 };

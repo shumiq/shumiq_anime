@@ -122,7 +122,6 @@ const Sync = (): JSX.Element => {
                 <th></th>
                 <th>Title</th>
                 <th>Download</th>
-                <th>Size</th>
                 <th>Sync</th>
               </tr>
             </thead>

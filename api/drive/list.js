@@ -6,7 +6,7 @@ const listUrl =
 export default async (req, res) => {
   const path = req.query.path.toString();
   const listRes = await axios.get(
-    listUrl.replace('__PATH__', decodeURIComponent(path))
+    listUrl.replace('__PATH__', encodeURI(decodeURIComponent(path)))
   );
   res.send(listRes.data);
 };
