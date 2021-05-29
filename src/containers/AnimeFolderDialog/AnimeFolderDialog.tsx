@@ -18,35 +18,77 @@ import PlayIcon from '@material-ui/icons/PlayCircleOutline';
 import DownloadIcon from '@material-ui/icons/GetApp';
 import Link from '@material-ui/core/Link';
 import SynologyApi from '../../services/Synology/Synology';
+import Checkbox from '@material-ui/core/Checkbox';
+import { Anime } from '../../models/Type';
+import { Database } from '../../services/Firebase/Firebase';
 
 export default function AnimeFolderDialog() {
   const dispatch = useDispatch();
   const open = useSelector(Selector.isAnimeFolderOpen);
-  const folder = useSelector(Selector.getOpenedAnimeFolder);
+  const anime = useSelector(Selector.getOpenedAnimeFolder);
+  const isAdmin = useSelector(Selector.isAdmin);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const animeName = folder !== null ? folder[0].path.split('/')[3] : '';
 
   const handleClose = () => {
     dispatch(Action.closeAnimeFolder());
   };
 
+  const isView = (fileName: string) => {
+    if (anime === null) return false;
+    const view = anime.anime.view;
+    const fileIndex =
+      anime.folder.findIndex((file) => file.name === fileName) + 1;
+    return fileIndex <= view;
+  };
+
+  const updateView = (fileName: string) => {
+    if (anime === null) return;
+    const currentView = anime.anime.view;
+    const fileIndex =
+      anime.folder.findIndex((file) => file.name === fileName) + 1;
+    const targetView = fileIndex === currentView ? fileIndex - 1 : fileIndex;
+    const updatedAnime = {
+      ...anime.anime,
+      view: targetView,
+    } as Anime;
+    Database.update.anime(anime.key, updatedAnime);
+    dispatch(
+      Action.openAnimeFolder({
+        key: anime.key,
+        anime: updatedAnime,
+        folder: anime.folder,
+      })
+    );
+  };
+
   return (
     <Dialog fullScreen={fullScreen} open={open} onClose={handleClose}>
-      <DialogTitle>{animeName}</DialogTitle>
+      <DialogTitle>{anime?.anime.title || ''}</DialogTitle>
       <DialogContent>
         <Table>
           <TableHead>
             <TableRow>
+              {isAdmin && <TableCell align={'center'}></TableCell>}
               <TableCell align={'center'}>Name</TableCell>
               <TableCell align={'center'}>Watch</TableCell>
               <TableCell align={'center'}>Download</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {folder !== null &&
-              folder.map((file) => (
+            {anime !== null &&
+              anime.folder !== null &&
+              anime.folder.map((file) => (
                 <TableRow key={file.name}>
+                  {isAdmin && (
+                    <TableCell align={'center'}>
+                      <Checkbox
+                        color={'default'}
+                        checked={isView(file.name)}
+                        onClick={() => updateView(file.name)}
+                      />
+                    </TableCell>
+                  )}
                   <TableCell>{file.name}</TableCell>
                   <TableCell align={'center'}>
                     <Link

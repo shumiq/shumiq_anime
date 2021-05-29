@@ -57,7 +57,11 @@ export default function AnimeCard({
     dispatch(Action.setLoading(true));
     const folder = await SynologyApi.list(`Anime${anime.path}`);
     dispatch(Action.setLoading(false));
-    dispatch(Action.openAnimeFolder(folder.data.files || null));
+    dispatch(
+      Action.openAnimeFolder(
+        { key: animeKey, anime: anime, folder: folder.data.files } || null
+      )
+    );
   };
 
   return (

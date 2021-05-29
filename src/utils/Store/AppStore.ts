@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AnimeFilter, AnimePartialFilter, User } from '../../models/Type';
+import {
+  Anime,
+  AnimeFilter,
+  AnimePartialFilter,
+  User,
+} from '../../models/Type';
 import { FilterOption } from '../../models/Constants';
 import { File } from '../../models/SynologyApi';
 
@@ -7,7 +12,7 @@ interface AppState {
   isSignIn: boolean;
   user: User | null;
   animeFilter: AnimeFilter;
-  openedAnimeFolder: File[] | null;
+  openedAnimeFolder: { key: string; anime: Anime; folder: File[] } | null;
   loading: boolean;
 }
 
@@ -41,7 +46,11 @@ const slice = createSlice({
       state.animeFilter = { ...state.animeFilter, ...filter };
     },
     openAnimeFolder: (state, action) => {
-      state.openedAnimeFolder = action.payload as File[];
+      state.openedAnimeFolder = action.payload as {
+        key: string;
+        anime: Anime;
+        folder: File[];
+      };
     },
     closeAnimeFolder: (state) => {
       state.openedAnimeFolder = null;
