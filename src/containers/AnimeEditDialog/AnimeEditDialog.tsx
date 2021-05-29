@@ -8,25 +8,11 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import Table from '@material-ui/core/Table';
-import { TableHead } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import PlayIcon from '@material-ui/icons/PlayCircleOutline';
-import DownloadIcon from '@material-ui/icons/GetApp';
-import Link from '@material-ui/core/Link';
-import SynologyApi from '../../services/Synology/Synology';
-import Checkbox from '@material-ui/core/Checkbox';
-import { Anime } from '../../models/Type';
 import { Database } from '../../services/Firebase/Firebase';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { FilterOption } from '../../models/Constants';
-import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 
 export default function AnimeEditDialog() {

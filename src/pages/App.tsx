@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { Selector } from '../utils/Store/AppStore';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import MessageDialog from '../containers/MessageDialog/MessageDialog';
+import VideoDialog from '../containers/VideoDialog/VideoDialog';
 
 const App = (): JSX.Element => {
   const classes = useStyles();
@@ -56,6 +57,7 @@ const App = (): JSX.Element => {
         <CircularProgress color="inherit" />
       </Backdrop>
       <MessageDialog />
+      <VideoDialog />
     </ThemeProvider>
   );
 };

@@ -62,6 +62,13 @@ export default function AnimeFolderDialog() {
     );
   };
 
+  const handlePlay = (path: string) => {
+    const url = SynologyApi.getAuthDownloadURL(
+      SynologyApi.getDownloadURL(path, true)
+    );
+    dispatch(Action.openVideo(url));
+  };
+
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -97,16 +104,9 @@ export default function AnimeFolderDialog() {
                   )}
                   <TableCell>{file.name}</TableCell>
                   <TableCell align={'center'}>
-                    <Link
-                      href={SynologyApi.getAuthDownloadURL(
-                        SynologyApi.getDownloadURL(file.path)
-                      )}
-                      target={'blank'}
-                    >
-                      <IconButton>
-                        <PlayIcon />
-                      </IconButton>
-                    </Link>
+                    <IconButton onClick={() => handlePlay(file.path)}>
+                      <PlayIcon />
+                    </IconButton>
                   </TableCell>
                   <TableCell align={'center'}>
                     <Link
