@@ -17,27 +17,35 @@ const forceDownload = '&mode=download';
 
 const SynologyApi = {
   signIn: async (): Promise<string> => {
-    const response: {
-      data: SignInResModel;
-    } = await axios.get(encodeURI(`${endPoint}/signin`));
-    const sid = response.data.success ? response.data.data.sid : '';
-    storage.set('synology_sid', sid);
-    return sid;
+    try {
+      const response: {
+        data: SignInResModel;
+      } = await axios.get(encodeURI(`${endPoint}/signin`));
+      const sid = response.data.success ? response.data.data.sid : '';
+      storage.set('synology_sid', sid);
+      return sid;
+    } catch (e) {
+      return '';
+    }
   },
   list: async (
     path: string,
     sortByDate = false,
     isAdditional = false
   ): Promise<ListResponse> => {
-    let sid = storage.get('synology_sid');
-    if (!sid || sid.length === 0) sid = await SynologyApi.signIn();
-    const reqPath = `${path}${sortByDate ? sortBy.date : sortBy.name}${
-      isAdditional ? additional : ''
-    }&_sid=${sid}`;
-    const response: { data: ListResponse; status: string } = await axios.get(
-      encodeURI(`${endPoint}/list?path=${encodeURIComponent(reqPath)}`)
-    );
-    return response.data;
+    try {
+      let sid = storage.get('synology_sid');
+      if (!sid || sid.length === 0) sid = await SynologyApi.signIn();
+      const reqPath = `${path}${sortByDate ? sortBy.date : sortBy.name}${
+        isAdditional ? additional : ''
+      }&_sid=${sid}`;
+      const response: { data: ListResponse; status: string } = await axios.get(
+        encodeURI(`${endPoint}/list?path=${encodeURIComponent(reqPath)}`)
+      );
+      return response.data;
+    } catch (e) {
+      return { data: {}, success: false };
+    }
   },
   getDownloadURL: (path: string, isDownload = false): string => {
     return `${hostName}${downloadPath}${path}${

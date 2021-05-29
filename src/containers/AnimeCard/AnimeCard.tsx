@@ -56,14 +56,18 @@ export default function AnimeCard({
   };
 
   const handleOpenFolder = async () => {
-    dispatch(Action.setLoading(true));
+    dispatch(Action.showLoading(true));
     const folder = await SynologyApi.list(`Anime${anime.path}`);
-    dispatch(Action.setLoading(false));
-    dispatch(
-      Action.openAnimeFolder(
-        { key: animeKey, anime: anime, folder: folder.data.files } || null
-      )
-    );
+    dispatch(Action.showLoading(false));
+    if (folder.success)
+      dispatch(
+        Action.openAnimeFolder(
+          { key: animeKey, anime: anime, folder: folder.data.files } || null
+        )
+      );
+    else {
+      dispatch(Action.showMessage(`Cannot load "${anime.title}"`));
+    }
   };
 
   return (

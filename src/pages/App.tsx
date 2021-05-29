@@ -14,6 +14,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useSelector } from 'react-redux';
 import { Selector } from '../utils/Store/AppStore';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import MessageDialog from '../containers/MessageDialog/MessageDialog';
 
 const App = (): JSX.Element => {
   const classes = useStyles();
@@ -54,6 +55,7 @@ const App = (): JSX.Element => {
       <Backdrop open={isLoading} className={classes.backdrop}>
         <CircularProgress color="inherit" />
       </Backdrop>
+      <MessageDialog />
     </ThemeProvider>
   );
 };

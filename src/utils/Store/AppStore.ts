@@ -14,6 +14,7 @@ interface AppState {
   animeFilter: AnimeFilter;
   openedAnimeFolder: { key: string; anime: Anime; folder: File[] } | null;
   loading: boolean;
+  message: string;
 }
 
 const initialState: AppState = {
@@ -27,6 +28,7 @@ const initialState: AppState = {
   },
   openedAnimeFolder: null,
   loading: false,
+  message: '',
 };
 
 const slice = createSlice({
@@ -55,8 +57,11 @@ const slice = createSlice({
     closeAnimeFolder: (state) => {
       state.openedAnimeFolder = null;
     },
-    setLoading: (state, action) => {
+    showLoading: (state, action) => {
       state.loading = action.payload as boolean;
+    },
+    showMessage: (state, action) => {
+      state.message = action.payload as string;
     },
   },
 });
@@ -83,6 +88,9 @@ export const Selector = {
   },
   isLoading: (state: { app: AppState }) => {
     return state.app.loading;
+  },
+  getMessage: (state: { app: AppState }) => {
+    return state.app.message;
   },
 };
 
