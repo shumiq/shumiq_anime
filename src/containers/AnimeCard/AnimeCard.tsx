@@ -27,6 +27,7 @@ import Share from '../../utils/Share/Share';
 import SynologyApi from '../../services/Synology/Synology';
 import { useDispatch } from 'react-redux';
 import { Action } from '../../utils/Store/AppStore';
+import Link from '@material-ui/core/Link';
 
 export default function AnimeCard({
   anime,
@@ -40,6 +41,7 @@ export default function AnimeCard({
   const dispatch = useDispatch();
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const isUnFinish = isAdmin && anime.download > anime.view;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -65,7 +67,11 @@ export default function AnimeCard({
   };
 
   return (
-    <Card className={classes.root}>
+    <Card
+      className={clsx(classes.root, {
+        [classes.watch]: isUnFinish,
+      })}
+    >
       <Box
         className={classes.score}
         display="flex"
@@ -144,13 +150,14 @@ export default function AnimeCard({
             <IconButton aria-label="edit">
               <EditIcon />
             </IconButton>
-            <IconButton
-              aria-label="download"
-              disabled={anime.download_url === ''}
-              onClick={() => window.open(anime.download_url)}
-            >
-              <DownloadIcon />
-            </IconButton>
+            <Link href={anime.download_url} target={'blank'}>
+              <IconButton
+                aria-label="download"
+                disabled={anime.download_url === ''}
+              >
+                <DownloadIcon />
+              </IconButton>
+            </Link>
           </>
         )}
         <IconButton
@@ -181,6 +188,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: 360,
     },
+  },
+  watch: {
+    border: 'solid 1px #00FF00',
   },
   media: {
     height: 0,
