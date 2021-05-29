@@ -2,7 +2,7 @@ import axios from 'axios';
 import { storage } from '../../utils/LocalStorage/LocalStorage';
 import { ListResponse, SignInResModel } from '../../models/SynologyApi';
 
-const hostName = 'http://shumiq.synology.me:5000';
+const hostName = 'https://shumiq.synology.me:5001';
 const endPoint = `${
   process.env.REACT_APP_API_ENDPOINT?.toString() || 'http//:localhost:3000'
 }/api/drive`;

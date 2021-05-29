@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const listUrl =
-  'http://shumiq.synology.me:5000/webapi/entry.cgi?api=SYNO.FileStation.List&version=2&method=list&folder_path=/public_video/__PATH__';
+  'https://shumiq.synology.me:5001/webapi/entry.cgi?api=SYNO.FileStation.List&version=2&method=list&folder_path=/public_video/__PATH__';
 
 export default async (req, res) => {
   const path = req.query.path.toString();
