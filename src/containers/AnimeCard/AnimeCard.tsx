@@ -22,8 +22,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
-import { SeasonEnum } from '../../models/Constants';
+import { Season } from '../../models/Constants';
 import Share from '../../utils/Share/Share';
+import {drawerWidth} from "../Navbar/Navbar";
 
 export default function AnimeCard({
   anime,
@@ -93,7 +94,7 @@ export default function AnimeCard({
             <TableRow hover={true}>
               <TableCell>Season</TableCell>
               <TableCell align={'right'}>
-                {anime.year} {SeasonEnum[anime.season.toString()]}
+                {anime.year} {Season[anime.season.toString()]}
               </TableCell>
             </TableRow>
             {isAdmin && (
@@ -158,7 +159,10 @@ export default function AnimeCard({
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 360,
+    width: 280,
+    [theme.breakpoints.up('md')]: {
+      width: 360,
+    },
   },
   media: {
     height: 0,

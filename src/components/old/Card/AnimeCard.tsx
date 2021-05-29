@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { SeasonEnum, CardLayout } from '../../../models/Constants';
+import { Season, CardLayout } from '../../../models/Constants';
 import UserDetail from '../../../services/UserDetail/UserDetail';
 import EditAnimePopup from '../Popup/EditAnimePopup';
 import { Database } from '../../../services/Firebase/Firebase';
@@ -231,7 +231,7 @@ const AnimeCard = (props: {
                 </td>
                 <td className="text-right px-3">
                   <small>
-                    {anime.year} {SeasonEnum[anime.season.toString()]}
+                    {anime.year} {Season[anime.season.toString()]}
                   </small>
                 </td>
               </tr>

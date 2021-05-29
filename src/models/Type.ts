@@ -69,3 +69,17 @@ export interface User {
   imageUrl?: string;
   name?: string;
 }
+
+export interface AnimeFilter {
+  season: number | string;
+  category: number;
+  keyword: string;
+  orderBy: number;
+}
+
+export interface AnimePartialFilter {
+  season?: number | string;
+  category?: number;
+  keyword?: string;
+  orderBy?: number;
+}

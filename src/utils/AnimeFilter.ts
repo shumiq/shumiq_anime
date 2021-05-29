@@ -1,42 +1,33 @@
-import { FilterEnum, SeasonEnum } from '../../models/Constants';
-import { Anime } from '../../models/Type';
+import { FilterOption, Season } from '../models/Constants';
+import {Anime, AnimeFilter, AnimePartialFilter} from '../models/Type';
 
-export const defaultFilter = {
-  season: FilterEnum.LATEST_SEASON,
-  category: FilterEnum.ALL_ANIME,
+const defaultFilter : AnimeFilter = {
+  season: FilterOption.LATEST_SEASON,
+  category: FilterOption.ALL_ANIME,
   keyword: '',
-  orderby: FilterEnum.SORT_BY_SEASON,
+  orderBy: FilterOption.SORT_BY_SEASON,
 };
 
-export const AnimeFilter = (
+export const Filter = (
   animeList: Record<string, Anime>,
-  inputFilter: {
-    season?: number | string;
-    category?: number;
-    keyword?: string;
-    orderby?: number;
-  } = {}
+  inputFilter: AnimeFilter
 ): [string, Anime][] => {
   if (animeList == null) return [];
   let result: [string, Anime][] = [];
-  const filter = { ...defaultFilter, ...inputFilter };
-
-  // ParseInt if not int
-  // filter.category = parseInt(filter.category);
-  // filter.orderby = parseInt(filter.orderby);
+  let filter = {...defaultFilter, ...inputFilter}
 
   // Replace season to all season when..
-  if (filter.category === FilterEnum.ONLY_UNFINISH)
-    filter.season = FilterEnum.ALL_SEASON;
-  if (filter.category === FilterEnum.ONLY_UNSEEN)
-    filter.season = FilterEnum.ALL_SEASON;
-  if (filter.keyword.trim().length > 0) filter.season = FilterEnum.ALL_SEASON;
+  if (filter.category === FilterOption.ONLY_UNFINISH)
+    filter.season = FilterOption.ALL_SEASON;
+  if (filter.category === FilterOption.ONLY_UNSEEN)
+    filter.season = FilterOption.ALL_SEASON;
+  if (filter.keyword.trim().length > 0) filter.season = FilterOption.ALL_SEASON;
 
   // Filter by Season
   const seasonList = SeasonList(animeList);
-  if (filter.season.toString() !== FilterEnum.ALL_SEASON.toString()) {
+  if (filter.season.toString() !== FilterOption.ALL_SEASON.toString()) {
     let season = filter.season;
-    if (season.toString() === FilterEnum.LATEST_SEASON.toString())
+    if (season.toString() === FilterOption.LATEST_SEASON.toString())
       season = Object.keys(seasonList).sort().pop() || 'undefined';
     result = Object.entries(animeList).filter((entries) => {
       const anime = entries[1];
@@ -47,19 +38,19 @@ export const AnimeFilter = (
   }
 
   // Filter by Category
-  if (filter.category === FilterEnum.ONLY_UNSEEN) {
+  if (filter.category === FilterOption.ONLY_UNSEEN) {
     result = result.filter(
       (entries) => entries[1].view !== entries[1].download
     );
   }
-  if (filter.category === FilterEnum.ONLY_UNFINISH) {
+  if (filter.category === FilterOption.ONLY_UNFINISH) {
     result = result.filter(
       (entries) =>
         entries[1].all_episode !== entries[1].download.toString() ||
         entries[1].download_url.length > 0
     );
   }
-  if (filter.category === FilterEnum.ONLY_FINISH) {
+  if (filter.category === FilterOption.ONLY_FINISH) {
     result = result.filter(
       (entries) => entries[1].all_episode === entries[1].download.toString()
     );
@@ -75,7 +66,7 @@ export const AnimeFilter = (
           anime.studio.toString().toLowerCase(),
           anime.genres.toString().toLowerCase(),
           anime.year.toString().toLowerCase(),
-          (SeasonEnum[anime.season] as string).toString().toLowerCase(),
+          (Season[anime.season] as string).toString().toLowerCase(),
         ];
         let isInclude = true;
         filter.keyword
@@ -94,7 +85,7 @@ export const AnimeFilter = (
   }
 
   // Sort Result
-  if (filter.orderby === FilterEnum.SORT_BY_SEASON) {
+  if (filter.orderBy === FilterOption.SORT_BY_SEASON) {
     result = result.sort((entriesA, entriesB) => {
       const animeA = entriesA[1];
       const animeB = entriesB[1];
@@ -111,7 +102,7 @@ export const AnimeFilter = (
       }
     });
   }
-  if (filter.orderby === FilterEnum.SORT_BY_SCORE) {
+  if (filter.orderBy === FilterOption.SORT_BY_SCORE) {
     result = result.sort((entriesA, entriesB) => {
       const animeA = entriesA[1];
       const animeB = entriesB[1];

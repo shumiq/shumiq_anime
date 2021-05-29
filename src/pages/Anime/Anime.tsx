@@ -8,21 +8,23 @@ import {
   Database as DatabaseType,
 } from '../../models/Type';
 import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
-import { AnimeFilter } from './Anime.filter';
+import {Filter, SeasonList} from '../../utils/AnimeFilter';
 import { Database } from '../../services/Firebase/Firebase';
 import queryString from 'query-string';
-import {useSelector} from "react-redux";
-import {Selector} from "../../utils/Store/AppStore";
+import {useDispatch, useSelector} from "react-redux";
+import {Action, Selector} from "../../utils/Store/AppStore";
+import FilterBar from "../../containers/FilterBar/FilterBar";
 
 const Anime = ({ location }) => {
+  const dispatch = useDispatch();
+  const filter = useSelector(Selector.getFilter);
+  const isAdmin = useSelector(Selector.isAdmin);
   const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(
     (getLocalStorage('database') as DatabaseType).anime
   );
   const [pageList, setPageList] = useState<[string, AnimeType][]>(
-    AnimeFilter(animeList)
+    Filter(animeList, filter)
   );
-  const [filter, setFilter] = useState({});
-  const isAdmin = useSelector(Selector.isAdmin);
 
   useEffect(() => {
     Database.subscribe((db: DatabaseType) => {
@@ -31,7 +33,7 @@ const Anime = ({ location }) => {
   }, []);
 
   useEffect(() => {
-    setPageList(AnimeFilter(animeList, filter));
+    setPageList(Filter(animeList, filter));
   }, [animeList, filter]);
 
   useEffect(() => {
@@ -40,9 +42,9 @@ const Anime = ({ location }) => {
       search: string;
     };
     if (params.search) {
-      setFilter({
+      dispatch(Action.applyFilter({
         keyword: params.search,
-      });
+      }));
     }
   }, [location]);
 
@@ -58,8 +60,10 @@ const Anime = ({ location }) => {
             )
         )}
       </Grid>
+      <FilterBar seasonList={SeasonList(animeList)}/>
     </Container>
   );
 };
 
+// @ts-ignore
 export default withRouter(Anime);

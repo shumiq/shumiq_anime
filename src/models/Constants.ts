@@ -1,4 +1,4 @@
-export const SeasonEnum = {
+export const Season = {
   '1': 'Winter',
   '2': 'Spring',
   '3': 'Summer',
@@ -9,7 +9,7 @@ export const SeasonEnum = {
   Fall: '4',
 };
 
-export const FilterEnum = {
+export const FilterOption = {
   ALL_SEASON: 0,
   LATEST_SEASON: 1,
   ALL_ANIME: 2,

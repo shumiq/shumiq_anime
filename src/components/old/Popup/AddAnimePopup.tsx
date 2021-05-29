@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { Modal } from 'bootstrap';
 import { Database } from '../../../services/Firebase/Firebase';
 import AnilistApi from '../../../services/Anilist/anilist';
-import { SeasonEnum } from '../../../models/Constants';
+import { Season } from '../../../models/Constants';
 import { Anime } from '../../../models/Type';
 import { AnilistInfoResponse } from '../../../models/AnilistApi';
 
@@ -56,7 +56,7 @@ const AddAnimePopup = (props: {
         download_url: '',
         all_episode: anime.episodes ? anime.episodes.toString() : '?',
         season: parseInt(
-          SeasonEnum[
+          Season[
             anime.season.charAt(0) + anime.season.slice(1).toLowerCase()
           ] as string
         ),
