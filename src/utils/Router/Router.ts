@@ -1,6 +1,6 @@
 import UserDetail from '../../services/UserDetail/UserDetail';
 import Anime from '../../pages/Anime/Anime';
-import Sync from '../../pages/old/Sync/Sync';
+import Sync from '../../pages/Sync/Sync';
 import Backup from '../../pages/old/Backup/Backup';
 import Conan from '../../pages/old/Conan/Conan';
 import Keyaki from '../../pages/old/Keyaki/Keyaki';

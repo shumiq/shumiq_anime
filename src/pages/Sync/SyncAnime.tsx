@@ -1,0 +1,170 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import { Container } from '@material-ui/core';
+import {
+  Anime,
+  Anime as AnimeType,
+  Database as DatabaseType,
+} from '../../models/Type';
+import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
+import { Database } from '../../services/Firebase/Firebase';
+import { useDispatch } from 'react-redux';
+import { Action } from '../../utils/Store/AppStore';
+import Typography from '@material-ui/core/Typography';
+import SyncIcon from '@material-ui/icons/Sync';
+import SyncDisabledIcon from '@material-ui/icons/SyncDisabled';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import TableBody from '@material-ui/core/TableBody';
+import IconButton from '@material-ui/core/IconButton';
+import Avatar from '@material-ui/core/Avatar';
+import { ListResponse } from '../../models/SynologyApi';
+import SynologyApi from '../../services/Synology/Synology';
+
+const SyncAnime = ({ active }: { active: boolean }) => {
+  const dispatch = useDispatch();
+  const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(
+    (getLocalStorage('database') as DatabaseType).anime
+  );
+  const [folderList, setFolderList] = useState<ListResponse>({
+    data: {},
+    success: false,
+  });
+  useEffect(() => {
+    Database.subscribe((db: DatabaseType) => {
+      setAnimeList(db?.anime);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (active) {
+      dispatch(Action.showLoading(true));
+      void SynologyApi.list('Anime', false, true).then((folders) => {
+        setFolderList(folders);
+        dispatch(Action.showLoading(false));
+      });
+    }
+  }, [active]);
+
+  const handleSync = useCallback((key: string, anime: Anime) => {
+    const folder = folderList.data.files?.find(
+      (folder) => folder.name === anime.title
+    );
+    if (folder) anime.path = '/' + folder.name;
+    Database.update.anime(key, anime);
+    void handleUpdate(key, anime);
+  }, []);
+
+  const handleUnSync = useCallback((key: string, anime: Anime) => {
+    if (window.confirm('Do you want to cancel sync "' + anime.title + '" ?')) {
+      anime.path = '';
+      anime.size = 0;
+      Database.update.anime(key, anime);
+    }
+  }, []);
+
+  const handleUpdate = useCallback(async (key: string, anime: Anime) => {
+    dispatch(Action.showLoading(true));
+    const folder = await SynologyApi.list(`Anime${anime.path}`);
+    if (!folder.data) {
+      dispatch(Action.showLoading(false));
+      return;
+    }
+    anime.download = folder.data.total || 0;
+    anime.size =
+      folderList.data.files?.find((folder) => folder.name === anime.title)
+        ?.additional?.size || 0;
+    Database.update.anime(key, anime);
+    dispatch(Action.showLoading(false));
+  }, []);
+
+  return (
+    <React.Fragment>
+      <Container maxWidth="lg">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell>
+                <Typography align={'center'}>Title</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography align={'center'}>Downloaded</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography align={'center'}>Sync</Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.entries(animeList)
+              .sort((entriesA, entriesB) => {
+                const a = entriesA[1];
+                const b = entriesB[1];
+                if (
+                  b.year * 10 +
+                    (b.season % 10) -
+                    (a.year * 10 + (a.season % 10)) ===
+                  0
+                )
+                  return a.title < b.title ? -1 : 1;
+                else
+                  return (
+                    b.year * 10 +
+                    (b.season % 10) -
+                    (a.year * 10 + (a.season % 10))
+                  );
+              })
+              .map(
+                ([key, anime]) =>
+                  anime !== null && (
+                    <TableRow key={key}>
+                      <TableCell align={'center'}>
+                        <Avatar src={anime.cover_url} />
+                      </TableCell>
+                      <TableCell align={'left'}>{anime.title}</TableCell>
+                      <TableCell align={'center'}>{anime.download}</TableCell>
+                      <TableCell align={'center'}>
+                        {(anime.path || '').length > 0 &&
+                          (folderList.data.files?.find(
+                            (folder) => folder.name === anime.title
+                          )?.additional?.size || 0) > anime.size && (
+                            <IconButton
+                              color={'primary'}
+                              onClick={() => handleUpdate(key, anime)}
+                            >
+                              <SyncIcon />
+                            </IconButton>
+                          )}
+                        {(anime.path || '') === '' &&
+                          folderList.data.files?.find(
+                            (folder) => folder.name === anime.title
+                          ) && (
+                            <IconButton
+                              color={'primary'}
+                              onClick={() => handleSync(key, anime)}
+                            >
+                              <SyncIcon />
+                            </IconButton>
+                          )}
+                        {(anime.path || '').length > 0 && anime.size > 0 && (
+                          <IconButton
+                            color={'secondary'}
+                            onClick={() => handleUnSync(key, anime)}
+                          >
+                            <SyncDisabledIcon />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  )
+              )}
+          </TableBody>
+        </Table>
+      </Container>
+    </React.Fragment>
+  );
+};
+
+export default SyncAnime;

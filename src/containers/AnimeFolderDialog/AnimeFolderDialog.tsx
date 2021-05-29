@@ -64,7 +64,7 @@ export default function AnimeFolderDialog() {
 
   const handlePlay = (path: string) => {
     const url = SynologyApi.getAuthDownloadURL(
-      SynologyApi.getDownloadURL(path, true)
+      SynologyApi.getDownloadURL(path)
     );
     dispatch(Action.openVideo(url));
   };
