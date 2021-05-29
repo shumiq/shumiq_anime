@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 import {
   Anime,
   Anime as AnimeType,
@@ -11,7 +11,6 @@ import { useDispatch } from 'react-redux';
 import { Action } from '../../utils/Store/AppStore';
 import Typography from '@material-ui/core/Typography';
 import SyncIcon from '@material-ui/icons/Sync';
-import SyncDisabledIcon from '@material-ui/icons/SyncDisabled';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -19,7 +18,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
-import { ListResponse } from '../../models/SynologyApi';
+import { File, ListResponse } from '../../models/SynologyApi';
 import SynologyApi from '../../services/Synology/Synology';
 
 const SyncAnime = ({ active }: { active: boolean }) => {
@@ -27,6 +26,8 @@ const SyncAnime = ({ active }: { active: boolean }) => {
   const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(
     (getLocalStorage('database') as DatabaseType).anime
   );
+  const [animeFolder, setAnimeFolder] = useState<Record<string, File>>({});
+  const [sortedAnimeList, setSortedAnimeList] = useState<[string, Anime][]>([]);
   const [folderList, setFolderList] = useState<ListResponse>({
     data: {},
     success: false,
@@ -45,39 +46,74 @@ const SyncAnime = ({ active }: { active: boolean }) => {
         dispatch(Action.showLoading(false));
       });
     }
-  }, [active]);
+  }, [dispatch, active]);
 
-  const handleSync = useCallback((key: string, anime: Anime) => {
-    const folder = folderList.data.files?.find(
-      (folder) => folder.name === anime.title
-    );
-    if (folder) anime.path = '/' + folder.name;
-    Database.update.anime(key, anime);
-    void handleUpdate(key, anime);
-  }, []);
+  useEffect(() => {
+    if (folderList?.data?.files && Object.entries(animeList)) {
+      const tempAnimeFolder: Record<string, File> = {};
+      Object.entries(animeList).forEach(([key, anime]) => {
+        const folder = folderList.data.files?.find(
+          (f) => f.name === anime.title
+        );
+        if (folder) tempAnimeFolder[key] = folder;
+      });
+      setAnimeFolder(tempAnimeFolder);
+    }
+  }, [animeList, folderList]);
 
-  const handleUnSync = useCallback((key: string, anime: Anime) => {
-    if (window.confirm('Do you want to cancel sync "' + anime.title + '" ?')) {
-      anime.path = '';
+  useEffect(() => {
+    if (Object.entries(animeList)) {
+      const sortedList = Object.entries(animeList)
+        .sort((entriesA, entriesB) => {
+          const a = entriesA[1];
+          const b = entriesB[1];
+          if (
+            b.year * 10 + (b.season % 10) - (a.year * 10 + (a.season % 10)) ===
+            0
+          )
+            return a.title < b.title ? -1 : 1;
+          else
+            return (
+              b.year * 10 + (b.season % 10) - (a.year * 10 + (a.season % 10))
+            );
+        })
+        .filter(([key, anime]) => !anime.title.includes('Conan')); // Exclude Conan
+      setSortedAnimeList(sortedList);
+    }
+  }, [animeList]);
+
+  const handleUpdate = useCallback(
+    async (key: string, anime: Anime) => {
+      dispatch(Action.showLoading(true));
+      const folder = await SynologyApi.list(`Anime${anime.path}`);
+      if (!folder.data) {
+        dispatch(Action.showLoading(false));
+        return;
+      }
+      anime.download = folder.data.total || 0;
+      anime.size = animeFolder[key]?.additional?.size || 0;
+      Database.update.anime(key, anime);
+      dispatch(Action.showLoading(false));
+    },
+    [dispatch, animeFolder]
+  );
+
+  const handleSync = useCallback(
+    (key: string, anime: Anime) => {
+      const folder = animeFolder[key];
+      if (folder) anime.path = '/' + folder.name;
       anime.size = 0;
       Database.update.anime(key, anime);
-    }
-  }, []);
+      void handleUpdate(key, anime);
+    },
+    [animeFolder, handleUpdate]
+  );
 
-  const handleUpdate = useCallback(async (key: string, anime: Anime) => {
-    dispatch(Action.showLoading(true));
-    const folder = await SynologyApi.list(`Anime${anime.path}`);
-    if (!folder.data) {
-      dispatch(Action.showLoading(false));
-      return;
-    }
-    anime.download = folder.data.total || 0;
-    anime.size =
-      folderList.data.files?.find((folder) => folder.name === anime.title)
-        ?.additional?.size || 0;
-    Database.update.anime(key, anime);
-    dispatch(Action.showLoading(false));
-  }, []);
+  const onlyUpdateAnime = sortedAnimeList.filter(
+    ([key, anime]) =>
+      anime.path === '' ||
+      (animeFolder[key]?.additional?.size || 0) > anime.size
+  );
 
   return (
     <React.Fragment>
@@ -98,68 +134,35 @@ const SyncAnime = ({ active }: { active: boolean }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(animeList)
-              .sort((entriesA, entriesB) => {
-                const a = entriesA[1];
-                const b = entriesB[1];
-                if (
-                  b.year * 10 +
-                    (b.season % 10) -
-                    (a.year * 10 + (a.season % 10)) ===
-                  0
-                )
-                  return a.title < b.title ? -1 : 1;
-                else
-                  return (
-                    b.year * 10 +
-                    (b.season % 10) -
-                    (a.year * 10 + (a.season % 10))
-                  );
-              })
-              .map(
-                ([key, anime]) =>
-                  anime !== null && (
-                    <TableRow key={key}>
-                      <TableCell align={'center'}>
-                        <Avatar src={anime.cover_url} />
-                      </TableCell>
-                      <TableCell align={'left'}>{anime.title}</TableCell>
-                      <TableCell align={'center'}>{anime.download}</TableCell>
-                      <TableCell align={'center'}>
-                        {(anime.path || '').length > 0 &&
-                          (folderList.data.files?.find(
-                            (folder) => folder.name === anime.title
-                          )?.additional?.size || 0) > anime.size && (
-                            <IconButton
-                              color={'primary'}
-                              onClick={() => handleUpdate(key, anime)}
-                            >
-                              <SyncIcon />
-                            </IconButton>
-                          )}
-                        {(anime.path || '') === '' &&
-                          folderList.data.files?.find(
-                            (folder) => folder.name === anime.title
-                          ) && (
-                            <IconButton
-                              color={'primary'}
-                              onClick={() => handleSync(key, anime)}
-                            >
-                              <SyncIcon />
-                            </IconButton>
-                          )}
-                        {(anime.path || '').length > 0 && anime.size > 0 && (
+            {onlyUpdateAnime.map(
+              ([key, anime]) =>
+                anime !== null && (
+                  <TableRow key={key}>
+                    <TableCell align={'center'}>
+                      <Avatar src={anime.cover_url} />
+                    </TableCell>
+                    <TableCell align={'left'}>{anime.title}</TableCell>
+                    <TableCell align={'center'}>{anime.download}</TableCell>
+                    <TableCell align={'center'}>
+                      {anime.path.length > 0 &&
+                        (animeFolder[key]?.additional?.size || 0) >
+                          anime.size && (
                           <IconButton
-                            color={'secondary'}
-                            onClick={() => handleUnSync(key, anime)}
+                            color={'primary'}
+                            onClick={() => handleUpdate(key, anime)}
                           >
-                            <SyncDisabledIcon />
+                            <SyncIcon />
                           </IconButton>
                         )}
-                      </TableCell>
-                    </TableRow>
-                  )
-              )}
+                      {anime.path === '' && animeFolder[key] && (
+                        <IconButton onClick={() => handleSync(key, anime)}>
+                          <SyncIcon />
+                        </IconButton>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )
+            )}
           </TableBody>
         </Table>
       </Container>

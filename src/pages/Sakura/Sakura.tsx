@@ -8,7 +8,7 @@ import {
 } from '../../models/Type';
 import { useSelector } from 'react-redux';
 import { Selector } from '../../utils/Store/AppStore';
-import { Container } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Table from '@material-ui/core/Table';

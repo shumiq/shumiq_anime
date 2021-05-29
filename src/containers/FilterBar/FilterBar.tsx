@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import NextIcon from '@material-ui/icons/NavigateNext';
 import BackIcon from '@material-ui/icons/NavigateBefore';
-import { AppBar } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { drawerWidth } from '../Navbar/Navbar';
 import Paper from '@material-ui/core/Paper';

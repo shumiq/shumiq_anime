@@ -1,26 +1,17 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Container } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
-import AnimeCard from '../../containers/AnimeCard/AnimeCard';
-import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
 import {
   Anime,
   Anime as AnimeType,
   Database as DatabaseType,
 } from '../../models/Type';
 import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
-import { Filter, SeasonList } from '../../utils/AnimeFilter';
 import { Database } from '../../services/Firebase/Firebase';
-import queryString from 'query-string';
-import { useDispatch, useSelector } from 'react-redux';
-import { Action, Selector } from '../../utils/Store/AppStore';
-import FilterBar from '../../containers/FilterBar/FilterBar';
-import AnimeFolderDialog from '../../containers/AnimeFolderDialog/AnimeFolderDialog';
-import AnimeEditDialog from '../../containers/AnimeEditDialog/AnimeEditDialog';
-import AnimeInfoDialog from '../../containers/AnimeInfoDialog/AnimeInfoDialog';
-import Paper from '@material-ui/core/Paper';
+import { useDispatch } from 'react-redux';
+import { Action } from '../../utils/Store/AppStore';
 import Typography from '@material-ui/core/Typography';
-import { AddCircle, CheckCircle, TextFields } from '@material-ui/icons';
+import AddCircle from '@material-ui/icons/AddCircle';
+import CheckCircle from '@material-ui/icons/CheckCircle';
 import TextField from '@material-ui/core/TextField';
 import AnilistApi from '../../services/Anilist/Anilist';
 import { AnilistInfoResponse } from '../../models/AnilistApi';

@@ -15,7 +15,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Avatar } from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
 import { useDispatch } from 'react-redux';
 import { Action } from '../../utils/Store/AppStore';
 

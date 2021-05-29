@@ -7,7 +7,7 @@ import {
   createStyles,
   Theme,
   ThemeProvider,
-} from '@material-ui/core';
+} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';

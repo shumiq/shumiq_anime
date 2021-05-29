@@ -47,6 +47,18 @@ export default function AnimeEditDialog() {
     if (event.target.name) formState[event.target.name] = event.target.value;
   };
 
+  const handleUnSync = () => {
+    if (
+      window.confirm('Do you want to remove sync "' + data.anime.title + '" ?')
+    ) {
+      const state = { ...data.anime };
+      state.path = '';
+      state.size = 0;
+      Database.update.anime(data.key, state);
+      handleClose();
+    }
+  };
+
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -178,10 +190,13 @@ export default function AnimeEditDialog() {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={handleSave} color="default">
+        <Button onClick={handleSave} color="default">
           Save
         </Button>
-        <Button autoFocus onClick={handleDelete} color="default">
+        <Button onClick={handleUnSync} color="default">
+          Remove Sync
+        </Button>
+        <Button onClick={handleDelete} color="default">
           Delete
         </Button>
         <Button autoFocus onClick={handleClose} color="default">
