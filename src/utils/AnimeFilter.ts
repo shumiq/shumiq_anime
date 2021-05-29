@@ -1,7 +1,7 @@
 import { FilterOption, Season } from '../models/Constants';
-import {Anime, AnimeFilter, AnimePartialFilter} from '../models/Type';
+import { Anime, AnimeFilter } from '../models/Type';
 
-const defaultFilter : AnimeFilter = {
+const defaultFilter: AnimeFilter = {
   season: FilterOption.LATEST_SEASON,
   category: FilterOption.ALL_ANIME,
   keyword: '',
@@ -14,7 +14,7 @@ export const Filter = (
 ): [string, Anime][] => {
   if (animeList == null) return [];
   let result: [string, Anime][] = [];
-  let filter = {...defaultFilter, ...inputFilter}
+  const filter = { ...defaultFilter, ...inputFilter };
 
   // Replace season to all season when..
   if (filter.category === FilterOption.ONLY_UNFINISH)

@@ -7,12 +7,13 @@ const endPoint = `${
   process.env.REACT_APP_API_ENDPOINT?.toString() || 'http//:localhost:3000'
 }/api/drive`;
 const downloadPath =
-  '/webapi/entry.cgi?api=SYNO.FileStation.Download&version=2&method=download&mode=download&path=';
+  '/webapi/entry.cgi?api=SYNO.FileStation.Download&version=2&method=download&path=';
 const additional = '&additional=["size","time"]';
 const sortBy = {
   name: '&sort_by=name',
   date: '&sort_by=mtime&sort_direction=desc',
 };
+const forceDownload = '&mode=download';
 
 const SynologyApi = {
   signIn: async (): Promise<string> => {
@@ -38,8 +39,10 @@ const SynologyApi = {
     );
     return response.data;
   },
-  getDownloadURL: (path: string): string => {
-    return `${hostName}${downloadPath}${path}`;
+  getDownloadURL: (path: string, isDownload = false): string => {
+    return `${hostName}${downloadPath}${path}${
+      isDownload ? forceDownload : ''
+    }`;
   },
   getAuthDownloadURL: (url: string): string => {
     const sid = storage.get('synology_sid');

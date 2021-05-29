@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -24,7 +24,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import { Season } from '../../models/Constants';
 import Share from '../../utils/Share/Share';
-import {drawerWidth} from "../Navbar/Navbar";
+import SynologyApi from '../../services/Synology/Synology';
+import { useDispatch } from 'react-redux';
+import { Action } from '../../utils/Store/AppStore';
 
 export default function AnimeCard({
   anime,
@@ -35,6 +37,7 @@ export default function AnimeCard({
   animeKey: string;
   isAdmin: boolean;
 }) {
+  const dispatch = useDispatch();
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -48,6 +51,13 @@ export default function AnimeCard({
       process.env.REACT_APP_API_ENDPOINT?.toString() || 'http://localhost:3000';
     const url = `${host}/api/share?anime=${encodeURIComponent(animeKey)}`;
     Share(title, url);
+  };
+
+  const handleOpenFolder = async () => {
+    dispatch(Action.setLoading(true));
+    const folder = await SynologyApi.list(`Anime${anime.path}`);
+    dispatch(Action.setLoading(false));
+    dispatch(Action.openAnimeFolder(folder.data.files || null));
   };
 
   return (
@@ -115,7 +125,11 @@ export default function AnimeCard({
         </Table>
       </CardContent>
       <CardActions disableSpacing style={{ justifyContent: 'space-around' }}>
-        <IconButton aria-label="view" disabled={anime.path === ''}>
+        <IconButton
+          aria-label="view"
+          disabled={anime.path === ''}
+          onClick={handleOpenFolder}
+        >
           <FolderIcon />
         </IconButton>
         <IconButton aria-label="share" onClick={share}>

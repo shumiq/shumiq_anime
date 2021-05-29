@@ -18,8 +18,8 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Login from './Login';
-import {useSelector} from "react-redux";
-import {Selector} from "../../utils/Store/AppStore";
+import { useSelector } from 'react-redux';
+import { Selector } from '../../utils/Store/AppStore';
 
 export const drawerWidth = 240;
 

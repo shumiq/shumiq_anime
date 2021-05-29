@@ -8,12 +8,13 @@ import {
   Database as DatabaseType,
 } from '../../models/Type';
 import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
-import {Filter, SeasonList} from '../../utils/AnimeFilter';
+import { Filter, SeasonList } from '../../utils/AnimeFilter';
 import { Database } from '../../services/Firebase/Firebase';
 import queryString from 'query-string';
-import {useDispatch, useSelector} from "react-redux";
-import {Action, Selector} from "../../utils/Store/AppStore";
-import FilterBar from "../../containers/FilterBar/FilterBar";
+import { useDispatch, useSelector } from 'react-redux';
+import { Action, Selector } from '../../utils/Store/AppStore';
+import FilterBar from '../../containers/FilterBar/FilterBar';
+import AnimeFolderDialog from '../../containers/AnimeFolderDialog/AnimeFolderDialog';
 
 const Anime = ({ location }) => {
   const dispatch = useDispatch();
@@ -42,28 +43,32 @@ const Anime = ({ location }) => {
       search: string;
     };
     if (params.search) {
-      dispatch(Action.applyFilter({
-        keyword: params.search,
-      }));
+      dispatch(
+        Action.applyFilter({
+          keyword: params.search,
+        })
+      );
     }
-  }, [location]);
+  }, [location, dispatch]);
 
   return (
-    <Container maxWidth="lg">
-      <Grid container spacing={3} justify={'space-evenly'}>
-        {pageList.map(
-          ([key, anime]) =>
-            anime !== null && (
-              <Grid item key={key}>
-                <AnimeCard anime={anime} animeKey={key} isAdmin={isAdmin} />
-              </Grid>
-            )
-        )}
-      </Grid>
-      <FilterBar seasonList={SeasonList(animeList)}/>
-    </Container>
+    <React.Fragment>
+      <Container maxWidth="lg">
+        <Grid container spacing={3} justify={'space-evenly'}>
+          {pageList.map(
+            ([key, anime]) =>
+              anime !== null && (
+                <Grid item key={key}>
+                  <AnimeCard anime={anime} animeKey={key} isAdmin={isAdmin} />
+                </Grid>
+              )
+          )}
+        </Grid>
+        <FilterBar seasonList={SeasonList(animeList)} />
+      </Container>
+      <AnimeFolderDialog />
+    </React.Fragment>
   );
 };
 
-// @ts-ignore
 export default withRouter(Anime);
