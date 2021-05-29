@@ -16,6 +16,8 @@ import { Selector } from '../utils/Store/AppStore';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import MessageDialog from '../containers/MessageDialog/MessageDialog';
 import VideoDialog from '../containers/VideoDialog/VideoDialog';
+import Container from '@material-ui/core/Container';
+import OpenVideoDialog from '../containers/Dialog/OpenVideoDialog';
 
 const App = (): JSX.Element => {
   const classes = useStyles();
@@ -58,6 +60,7 @@ const App = (): JSX.Element => {
       </Backdrop>
       <MessageDialog />
       <VideoDialog />
+      <OpenVideoDialog />
     </ThemeProvider>
   );
 };

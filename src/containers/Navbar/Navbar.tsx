@@ -87,7 +87,13 @@ function NavBar({ children }) {
               </ListItemIcon>
               <ListItemText primary={'Sync'} />
             </ListItem>
-            <ListItem button key={'backup'} component={Link} to="/backup">
+            <ListItem
+              button
+              key={'backup'}
+              component={Link}
+              to="/backup"
+              disabled
+            >
               <ListItemIcon>
                 <BackupIcon />
               </ListItemIcon>

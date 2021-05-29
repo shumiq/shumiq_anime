@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
 import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
+import SynologyApi from '../../services/Synology/Synology';
 import {
+  Conan as ConanType,
   Database as DatabaseType,
-  Sakura as SakuraType,
 } from '../../models/Type';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
@@ -17,17 +18,17 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Button from '@material-ui/core/Button';
 
-const Sakura = (): JSX.Element => {
+const Conan = (): JSX.Element => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(Selector.isAdmin);
   const [editMode, setEditMode] = useState('');
-  const [sakuraList, setSakuraList] = useState<Record<string, SakuraType>>(
-    (getLocalStorage('database') as DatabaseType)?.sakura
+  const [conanList, setConanList] = useState<Record<string, ConanType>>(
+    (getLocalStorage('database') as DatabaseType)?.conan
   );
 
   useEffect(() => {
-    Database.subscribe((db) => {
-      setSakuraList(db?.sakura);
+    Database.subscribe((db: DatabaseType) => {
+      setConanList(db?.conan);
     });
   }, []);
 
@@ -36,9 +37,9 @@ const Sakura = (): JSX.Element => {
   }, []);
 
   const handleUpdate = (name: string, key: string) => {
-    const state = { ...sakuraList[key] };
+    const state = { ...conanList[key] };
     state.name = name;
-    Database.update.sakura(key, state);
+    Database.update.conan(key, state);
     setEditMode('');
   };
 
@@ -58,14 +59,14 @@ const Sakura = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sakuraList &&
-              Object.entries(sakuraList)
-                .sort((entryA, entryB) => entryA[1].ep - entryB[1].ep)
-                .map(([key, sakura]) => (
+            {conanList &&
+              Object.entries(conanList)
+                .sort((entryA, entryB) => entryA[1].case - entryB[1].case)
+                .map(([key, conan]) => (
                   <TableRow key={key} hover>
                     <TableCell>
                       <Typography align={'center'} color={'textSecondary'}>
-                        {sakura.ep}
+                        {conan.case}
                       </Typography>
                     </TableCell>
                     <TableCell
@@ -75,7 +76,7 @@ const Sakura = (): JSX.Element => {
                     >
                       {(!isAdmin || editMode !== key) && (
                         <Typography align={'left'} color={'textSecondary'}>
-                          {sakura.name}
+                          {conan.name}
                         </Typography>
                       )}
                       {isAdmin && editMode === key && (
@@ -83,7 +84,7 @@ const Sakura = (): JSX.Element => {
                           <TextField
                             variant={'outlined'}
                             onBlur={(e) => handleUpdate(e.target.value, key)}
-                            defaultValue={sakura.name}
+                            defaultValue={conan.name}
                             style={{ width: '100%' }}
                             multiline
                             autoFocus
@@ -93,16 +94,18 @@ const Sakura = (): JSX.Element => {
                     </TableCell>
                     <TableCell>
                       <Typography align={'right'}>
-                        {Object.keys(sakura.sub).map(
-                          (sub) =>
-                            sakura.sub[sub] && (
+                        {Object.keys(conan.episodes).map(
+                          (episode: string) =>
+                            conanList[key].episodes[parseInt(episode)] && (
                               <Button
                                 variant="contained"
-                                onClick={() => showFiles(sakura.sub[sub])}
-                                key={`${key}_${sub}`}
+                                onClick={() =>
+                                  showFiles(conan.episodes[episode])
+                                }
+                                key={`${key}_${episode}`}
                                 style={{ margin: '2px' }}
                               >
-                                {sub}
+                                {episode}
                               </Button>
                             )
                         )}
@@ -117,4 +120,4 @@ const Sakura = (): JSX.Element => {
   );
 };
 
-export default Sakura;
+export default Conan;

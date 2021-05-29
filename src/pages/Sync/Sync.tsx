@@ -5,9 +5,10 @@ import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SyncAnime from './SyncAnime';
+import SyncOther from './SyncOther';
 
 const Sync = () => {
-  const [selectedTab, setTab] = React.useState(1);
+  const [selectedTab, setTab] = React.useState(0);
 
   const handleChange = (_, tab: number) => {
     setTab(tab);
@@ -31,9 +32,13 @@ const Sync = () => {
           </Tabs>
         </Paper>
         <Container>
-          {selectedTab === 0 && <Typography>One</Typography>}
+          {selectedTab === 0 && (
+            <Typography align={'center'} style={{ margin: '50px' }}>
+              Under Construction
+            </Typography>
+          )}
           {selectedTab === 1 && <SyncAnime active={selectedTab === 1} />}
-          {selectedTab === 2 && <Typography>Three</Typography>}
+          {selectedTab === 2 && <SyncOther active={selectedTab === 2} />}
         </Container>
       </Container>
     </React.Fragment>

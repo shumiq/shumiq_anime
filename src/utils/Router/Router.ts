@@ -2,8 +2,8 @@ import UserDetail from '../../services/UserDetail/UserDetail';
 import Anime from '../../pages/Anime/Anime';
 import Sync from '../../pages/Sync/Sync';
 import Backup from '../../pages/old/Backup/Backup';
-import Conan from '../../pages/old/Conan/Conan';
-import Keyaki from '../../pages/old/Keyaki/Keyaki';
+import Conan from '../../pages/Conan/Conan';
+import Keyaki from '../../pages/Keyaki/Keyaki';
 import Sakura from '../../pages/Sakura/Sakura';
 import AddAnime from '../../pages/Anime/AddAnime';
 

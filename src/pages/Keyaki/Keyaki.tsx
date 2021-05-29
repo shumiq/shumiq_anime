@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
 import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
+import SynologyApi from '../../services/Synology/Synology';
 import {
   Database as DatabaseType,
-  Sakura as SakuraType,
+  Keyaki as KeyakiType,
 } from '../../models/Type';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
@@ -17,17 +18,17 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Button from '@material-ui/core/Button';
 
-const Sakura = (): JSX.Element => {
+const Keyaki = (): JSX.Element => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(Selector.isAdmin);
   const [editMode, setEditMode] = useState('');
-  const [sakuraList, setSakuraList] = useState<Record<string, SakuraType>>(
-    (getLocalStorage('database') as DatabaseType)?.sakura
+  const [keyakiList, setKeyakiList] = useState<Record<string, KeyakiType>>(
+    (getLocalStorage('database') as DatabaseType)?.keyaki
   );
 
   useEffect(() => {
     Database.subscribe((db) => {
-      setSakuraList(db?.sakura);
+      setKeyakiList(db?.keyaki);
     });
   }, []);
 
@@ -36,9 +37,9 @@ const Sakura = (): JSX.Element => {
   }, []);
 
   const handleUpdate = (name: string, key: string) => {
-    const state = { ...sakuraList[key] };
+    const state = { ...keyakiList[key] };
     state.name = name;
-    Database.update.sakura(key, state);
+    Database.update.keyaki(key, state);
     setEditMode('');
   };
 
@@ -58,14 +59,14 @@ const Sakura = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sakuraList &&
-              Object.entries(sakuraList)
+            {keyakiList &&
+              Object.entries(keyakiList)
                 .sort((entryA, entryB) => entryA[1].ep - entryB[1].ep)
-                .map(([key, sakura]) => (
+                .map(([key, keyaki]) => (
                   <TableRow key={key} hover>
                     <TableCell>
                       <Typography align={'center'} color={'textSecondary'}>
-                        {sakura.ep}
+                        {keyaki.ep}
                       </Typography>
                     </TableCell>
                     <TableCell
@@ -75,7 +76,7 @@ const Sakura = (): JSX.Element => {
                     >
                       {(!isAdmin || editMode !== key) && (
                         <Typography align={'left'} color={'textSecondary'}>
-                          {sakura.name}
+                          {keyaki.name}
                         </Typography>
                       )}
                       {isAdmin && editMode === key && (
@@ -83,7 +84,7 @@ const Sakura = (): JSX.Element => {
                           <TextField
                             variant={'outlined'}
                             onBlur={(e) => handleUpdate(e.target.value, key)}
-                            defaultValue={sakura.name}
+                            defaultValue={keyaki.name}
                             style={{ width: '100%' }}
                             multiline
                             autoFocus
@@ -93,12 +94,12 @@ const Sakura = (): JSX.Element => {
                     </TableCell>
                     <TableCell>
                       <Typography align={'right'}>
-                        {Object.keys(sakura.sub).map(
+                        {Object.keys(keyaki.sub).map(
                           (sub) =>
-                            sakura.sub[sub] && (
+                            keyaki.sub[sub] && (
                               <Button
                                 variant="contained"
-                                onClick={() => showFiles(sakura.sub[sub])}
+                                onClick={() => showFiles(keyaki.sub[sub])}
                                 key={`${key}_${sub}`}
                                 style={{ margin: '2px' }}
                               >
@@ -117,4 +118,4 @@ const Sakura = (): JSX.Element => {
   );
 };
 
-export default Sakura;
+export default Keyaki;

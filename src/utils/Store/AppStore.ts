@@ -23,6 +23,7 @@ interface AppState {
   loading: boolean;
   message: string;
   openedVideo: string;
+  openedVideoAlt: string;
 }
 
 const initialState: AppState = {
@@ -38,6 +39,7 @@ const initialState: AppState = {
   openedAnimeInfo: null,
   openedAnimeEdit: null,
   openedVideo: '',
+  openedVideoAlt: '',
   loading: false,
   message: '',
 };
@@ -82,6 +84,12 @@ const slice = createSlice({
     },
     closeVideo: (state) => {
       state.openedVideo = '';
+    },
+    openVideoAlt: (state, action) => {
+      state.openedVideoAlt = action.payload as string;
+    },
+    closeVideoAlt: (state) => {
+      state.openedVideoAlt = '';
     },
     openAnimeInfo: (state, action) => {
       state.openedAnimeInfo = action.payload as {
@@ -139,6 +147,9 @@ export const Selector = {
   },
   getVideo: (state: { app: AppState }) => {
     return state.app.openedVideo;
+  },
+  getVideoAlt: (state: { app: AppState }) => {
+    return state.app.openedVideoAlt;
   },
 };
 
