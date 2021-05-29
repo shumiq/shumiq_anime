@@ -30,7 +30,7 @@ export default function VideoDialog() {
         if ((e.target as any).id !== 'video-player') handleClose();
       }}
     >
-      <video id="video-player" controls className={classes.video}>
+      <video id="video-player" controls autoPlay className={classes.video}>
         <source src={videoUrl} type={'video/mp4'} />
       </video>
     </Dialog>
