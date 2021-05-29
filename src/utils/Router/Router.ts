@@ -4,7 +4,7 @@ import Sync from '../../pages/old/Sync/Sync';
 import Backup from '../../pages/old/Backup/Backup';
 import Conan from '../../pages/old/Conan/Conan';
 import Keyaki from '../../pages/old/Keyaki/Keyaki';
-import Sakura from '../../pages/old/Sakura/Sakura';
+import Sakura from '../../pages/Sakura/Sakura';
 import AddAnime from '../../pages/Anime/AddAnime';
 
 interface Router {
