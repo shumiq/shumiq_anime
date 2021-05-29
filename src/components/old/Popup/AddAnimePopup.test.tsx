@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
-import AnilistApi from '../../../services/Anilist/anilist';
+import AnilistApi from '../../../services/Anilist/Anilist';
 import { getLocalStorage } from '../../../utils/LocalStorage/LocalStorage';
 import mockDatabase from '../../../models/mock/database.json';
 import { Database } from '../../../services/Firebase/Firebase';

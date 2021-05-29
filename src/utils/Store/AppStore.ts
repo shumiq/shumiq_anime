@@ -7,6 +7,7 @@ import {
 } from '../../models/Type';
 import { FilterOption } from '../../models/Constants';
 import { File } from '../../models/SynologyApi';
+import { AnilistInfoResponse } from '../../models/AnilistApi';
 
 interface AppState {
   isSignIn: boolean;
@@ -14,6 +15,11 @@ interface AppState {
   animeFilter: AnimeFilter;
   openedAnimeFolder: { key: string; anime: Anime; folder: File[] } | null;
   openedAnimeEdit: { key: string; anime: Anime } | null;
+  openedAnimeInfo: {
+    key: string;
+    anime: Anime;
+    animeInfo: AnilistInfoResponse;
+  } | null;
   loading: boolean;
   message: string;
   openedVideo: string;
@@ -29,6 +35,7 @@ const initialState: AppState = {
     orderBy: FilterOption.SORT_BY_SEASON,
   },
   openedAnimeFolder: null,
+  openedAnimeInfo: null,
   openedAnimeEdit: null,
   openedVideo: '',
   loading: false,
@@ -76,6 +83,16 @@ const slice = createSlice({
     closeVideo: (state) => {
       state.openedVideo = '';
     },
+    openAnimeInfo: (state, action) => {
+      state.openedAnimeInfo = action.payload as {
+        key: string;
+        anime: Anime;
+        animeInfo: AnilistInfoResponse;
+      };
+    },
+    closeAnimeInfo: (state) => {
+      state.openedAnimeInfo = null;
+    },
     showLoading: (state, action) => {
       state.loading = action.payload as boolean;
     },
@@ -110,6 +127,9 @@ export const Selector = {
   },
   getOpenedAnimeEdit: (state: { app: AppState }) => {
     return state.app.openedAnimeEdit;
+  },
+  getOpenedAnimeInfo: (state: { app: AppState }) => {
+    return state.app.openedAnimeInfo;
   },
   isLoading: (state: { app: AppState }) => {
     return state.app.loading;

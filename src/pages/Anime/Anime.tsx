@@ -16,6 +16,7 @@ import { Action, Selector } from '../../utils/Store/AppStore';
 import FilterBar from '../../containers/FilterBar/FilterBar';
 import AnimeFolderDialog from '../../containers/AnimeFolderDialog/AnimeFolderDialog';
 import AnimeEditDialog from '../../containers/AnimeEditDialog/AnimeEditDialog';
+import AnimeInfoDialog from '../../containers/AnimeInfoDialog/AnimeInfoDialog';
 
 const Anime = ({ location }) => {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ const Anime = ({ location }) => {
       </Container>
       <AnimeFolderDialog />
       <AnimeEditDialog />
+      <AnimeInfoDialog />
     </React.Fragment>
   );
 };

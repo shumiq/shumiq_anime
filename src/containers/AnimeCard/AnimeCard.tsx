@@ -28,6 +28,7 @@ import SynologyApi from '../../services/Synology/Synology';
 import { useDispatch } from 'react-redux';
 import { Action } from '../../utils/Store/AppStore';
 import Link from '@material-ui/core/Link';
+import AnilistApi from '../../services/Anilist/Anilist';
 
 export default function AnimeCard({
   anime,
@@ -74,6 +75,26 @@ export default function AnimeCard({
     }
   };
 
+  const handleAnimeInfo = async () => {
+    dispatch(Action.showLoading(true));
+    const anilistResult = await AnilistApi.getAnime(
+      anime.title,
+      anime.blacklist
+    );
+    dispatch(Action.showLoading(false));
+    if (anilistResult)
+      dispatch(
+        Action.openAnimeInfo({
+          key: animeKey,
+          anime: anime,
+          animeInfo: anilistResult,
+        })
+      );
+    else {
+      dispatch(Action.showMessage(`Not found`));
+    }
+  };
+
   return (
     <Card
       className={clsx(classes.root, {
@@ -105,7 +126,7 @@ export default function AnimeCard({
               </Typography>
             </Grid>
             <Grid item xs={2} className={'MuiTypography-alignRight'}>
-              <IconButton aria-label="edit">
+              <IconButton onClick={handleAnimeInfo}>
                 <MoreInfoIcon />
               </IconButton>
             </Grid>

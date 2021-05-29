@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { Modal } from 'bootstrap';
 import { Database } from '../../../services/Firebase/Firebase';
-import AnilistApi from '../../../services/Anilist/anilist';
+import AnilistApi from '../../../services/Anilist/Anilist';
 import { Season } from '../../../models/Constants';
 import { Anime } from '../../../models/Type';
 import { AnilistInfoResponse } from '../../../models/AnilistApi';

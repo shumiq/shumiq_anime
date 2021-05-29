@@ -3,34 +3,42 @@ import { AnilistInfoResponse } from '../../models/AnilistApi';
 
 const AnilistApi = {
   searchAnime: async (keyword: string): Promise<AnilistInfoResponse[]> => {
-    const response = await axios
-      .post('https://graphql.anilist.co', {
-        query: searchAnimeQueryBuilder(keyword),
-      })
-      .catch((error) => {
-        console.error(error);
-        return null;
-      });
-    return (response as {
-      data: {
+    try {
+      const response = await axios
+        .post('https://graphql.anilist.co', {
+          query: searchAnimeQueryBuilder(keyword),
+        })
+        .catch((error) => {
+          console.error(error);
+          return null;
+        });
+      return (response as {
         data: {
-          Page: { media: AnilistInfoResponse[] };
+          data: {
+            Page: { media: AnilistInfoResponse[] };
+          };
         };
-      };
-    })?.data.data.Page.media;
+      })?.data.data.Page.media;
+    } catch (e) {
+      return [];
+    }
   },
   getAnime: async (
     keyword: string,
     blacklist: number[] = []
   ): Promise<AnilistInfoResponse | null> => {
-    const searchResult = await AnilistApi.searchAnime(keyword);
-    for (const key in searchResult) {
-      const anime = searchResult[key];
-      if (!blacklist.includes(anime.id)) {
-        return anime;
+    try {
+      const searchResult = await AnilistApi.searchAnime(keyword);
+      for (const key in searchResult) {
+        const anime = searchResult[key];
+        if (!blacklist.includes(anime.id)) {
+          return anime;
+        }
       }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   },
 };
 
