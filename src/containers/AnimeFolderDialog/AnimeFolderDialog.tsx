@@ -25,46 +25,52 @@ import { Database } from '../../services/Firebase/Firebase';
 export default function AnimeFolderDialog() {
   const dispatch = useDispatch();
   const open = useSelector(Selector.isAnimeFolderOpen);
-  const anime = useSelector(Selector.getOpenedAnimeFolder);
+  const data = useSelector(Selector.getOpenedAnimeFolder);
   const isAdmin = useSelector(Selector.isAdmin);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
   const handleClose = () => {
     dispatch(Action.closeAnimeFolder());
   };
 
   const isView = (fileName: string) => {
-    if (anime === null) return false;
-    const view = anime.anime.view;
+    if (data === null) return false;
+    const view = data.anime.view;
     const fileIndex =
-      anime.folder.findIndex((file) => file.name === fileName) + 1;
+      data.folder.findIndex((file) => file.name === fileName) + 1;
     return fileIndex <= view;
   };
 
   const updateView = (fileName: string) => {
-    if (anime === null) return;
-    const currentView = anime.anime.view;
+    if (data === null) return;
+    const currentView = data.anime.view;
     const fileIndex =
-      anime.folder.findIndex((file) => file.name === fileName) + 1;
+      data.folder.findIndex((file) => file.name === fileName) + 1;
     const targetView = fileIndex === currentView ? fileIndex - 1 : fileIndex;
     const updatedAnime = {
-      ...anime.anime,
+      ...data.anime,
       view: targetView,
     } as Anime;
-    Database.update.anime(anime.key, updatedAnime);
+    Database.update.anime(data.key, updatedAnime);
     dispatch(
       Action.openAnimeFolder({
-        key: anime.key,
+        key: data.key,
         anime: updatedAnime,
-        folder: anime.folder,
+        folder: data.folder,
       })
     );
   };
 
   return (
-    <Dialog fullScreen={fullScreen} open={open} onClose={handleClose}>
-      <DialogTitle>{anime?.anime.title || ''}</DialogTitle>
+    <Dialog
+      fullScreen={fullScreen}
+      open={open}
+      onClose={handleClose}
+      fullWidth={true}
+      maxWidth="sm"
+    >
+      <DialogTitle>{data?.anime.title || ''}</DialogTitle>
       <DialogContent>
         <Table>
           <TableHead>
@@ -76,9 +82,9 @@ export default function AnimeFolderDialog() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {anime !== null &&
-              anime.folder !== null &&
-              anime.folder.map((file) => (
+            {data !== null &&
+              data.folder !== null &&
+              data.folder.map((file) => (
                 <TableRow key={file.name}>
                   {isAdmin && (
                     <TableCell align={'center'}>

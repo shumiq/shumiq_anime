@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
 import FilterBar from '../../containers/FilterBar/FilterBar';
 import AnimeFolderDialog from '../../containers/AnimeFolderDialog/AnimeFolderDialog';
+import AnimeEditDialog from '../../containers/AnimeEditDialog/AnimeEditDialog';
 
 const Anime = ({ location }) => {
   const dispatch = useDispatch();
@@ -67,6 +68,7 @@ const Anime = ({ location }) => {
         <FilterBar seasonList={SeasonList(animeList)} />
       </Container>
       <AnimeFolderDialog />
+      <AnimeEditDialog />
     </React.Fragment>
   );
 };

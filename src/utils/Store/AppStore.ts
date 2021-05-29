@@ -13,6 +13,7 @@ interface AppState {
   user: User | null;
   animeFilter: AnimeFilter;
   openedAnimeFolder: { key: string; anime: Anime; folder: File[] } | null;
+  openedAnimeEdit: { key: string; anime: Anime } | null;
   loading: boolean;
   message: string;
 }
@@ -27,6 +28,7 @@ const initialState: AppState = {
     orderBy: FilterOption.SORT_BY_SEASON,
   },
   openedAnimeFolder: null,
+  openedAnimeEdit: null,
   loading: false,
   message: '',
 };
@@ -57,6 +59,15 @@ const slice = createSlice({
     closeAnimeFolder: (state) => {
       state.openedAnimeFolder = null;
     },
+    editAnime: (state, action) => {
+      state.openedAnimeEdit = action.payload as {
+        key: string;
+        anime: Anime;
+      };
+    },
+    closeEditAnime: (state) => {
+      state.openedAnimeEdit = null;
+    },
     showLoading: (state, action) => {
       state.loading = action.payload as boolean;
     },
@@ -85,6 +96,12 @@ export const Selector = {
   },
   getOpenedAnimeFolder: (state: { app: AppState }) => {
     return state.app.openedAnimeFolder;
+  },
+  isAnimeEditOpen: (state: { app: AppState }) => {
+    return state.app.openedAnimeEdit !== null;
+  },
+  getOpenedAnimeEdit: (state: { app: AppState }) => {
+    return state.app.openedAnimeEdit;
   },
   isLoading: (state: { app: AppState }) => {
     return state.app.loading;

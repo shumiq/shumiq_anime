@@ -47,12 +47,16 @@ export default function AnimeCard({
     setExpanded(!expanded);
   };
 
-  const share = () => {
+  const handleShare = () => {
     const title = anime.title;
     const host =
       process.env.REACT_APP_API_ENDPOINT?.toString() || 'http://localhost:3000';
     const url = `${host}/api/share?anime=${encodeURIComponent(animeKey)}`;
     Share(title, url);
+  };
+
+  const handleEdit = () => {
+    dispatch(Action.editAnime({ key: animeKey, anime: anime }));
   };
 
   const handleOpenFolder = async () => {
@@ -146,12 +150,12 @@ export default function AnimeCard({
         >
           <FolderIcon />
         </IconButton>
-        <IconButton aria-label="share" onClick={share}>
+        <IconButton aria-label="share" onClick={handleShare}>
           <ShareIcon />
         </IconButton>
         {isAdmin && (
           <>
-            <IconButton aria-label="edit">
+            <IconButton aria-label="edit" onClick={handleEdit}>
               <EditIcon />
             </IconButton>
             <Link href={anime.download_url} target={'blank'}>
