@@ -34,6 +34,13 @@ export default function AnimeEditDialog() {
     handleClose();
   };
 
+  const handleDelete = () => {
+    if (window.confirm(`Delete "${data.anime.title}"?`)) {
+      Database.update.anime(data.key, null);
+      handleClose();
+    }
+  };
+
   const handleUpdateFormData = (
     event: ChangeEvent<{ name?: string | undefined; value: unknown }>
   ) => {
@@ -173,6 +180,9 @@ export default function AnimeEditDialog() {
       <DialogActions>
         <Button autoFocus onClick={handleSave} color="default">
           Save
+        </Button>
+        <Button autoFocus onClick={handleDelete} color="default">
+          Delete
         </Button>
         <Button autoFocus onClick={handleClose} color="default">
           Close

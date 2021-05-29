@@ -5,6 +5,7 @@ import Backup from '../../pages/old/Backup/Backup';
 import Conan from '../../pages/old/Conan/Conan';
 import Keyaki from '../../pages/old/Keyaki/Keyaki';
 import Sakura from '../../pages/old/Sakura/Sakura';
+import AddAnime from '../../pages/Anime/AddAnime';
 
 interface Router {
   path: string;
@@ -19,6 +20,12 @@ const ROUTER_CONFIG: Router[] = [
     exact: true,
     component: Anime,
     auth: [''],
+  },
+  {
+    path: '/add',
+    exact: true,
+    component: AddAnime,
+    auth: ['Admin'],
   },
   {
     path: '/sync',
