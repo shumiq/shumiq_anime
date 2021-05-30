@@ -22,11 +22,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { Anime } from '../../models/Type';
 import { Database } from '../../services/Firebase/Firebase';
 
-export default function AnimeFolderDialog() {
+export default function AnimeFolderDialog({ isAdmin }: { isAdmin: boolean }) {
   const dispatch = useDispatch();
-  const open = useSelector(Selector.isAnimeFolderOpen);
   const data = useSelector(Selector.getOpenedAnimeFolder);
-  const isAdmin = useSelector(Selector.isAdmin);
+  const open = data !== null;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 

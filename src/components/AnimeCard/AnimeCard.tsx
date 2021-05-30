@@ -34,12 +34,19 @@ export default function AnimeCard({
   anime,
   animeKey,
   isAdmin,
+  handleShare,
+  handleEdit,
+  handleOpenFolder,
+  handleAnimeInfo,
 }: {
   anime: Anime;
   animeKey: string;
   isAdmin: boolean;
+  handleShare: (key: string, anime: Anime) => void;
+  handleEdit: (key: string, anime: Anime) => void;
+  handleOpenFolder: (key: string, anime: Anime) => void;
+  handleAnimeInfo: (key: string, anime: Anime) => void;
 }) {
-  const dispatch = useDispatch();
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const isUnFinish = isAdmin && anime.download > anime.view;
@@ -47,54 +54,6 @@ export default function AnimeCard({
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  const handleShare = () => {
-    const title = anime.title;
-    const host =
-      process.env.REACT_APP_API_ENDPOINT?.toString() || 'http://localhost:3000';
-    const url = `${host}/api/share?anime=${encodeURIComponent(animeKey)}`;
-    Share(title, url);
-  };
-
-  const handleEdit = () => {
-    dispatch(Action.editAnime({ key: animeKey, anime: anime }));
-  };
-
-  const handleOpenFolder = async () => {
-    dispatch(Action.showLoading(true));
-    const folder = await SynologyApi.list(`Anime${anime.path}`);
-    dispatch(Action.showLoading(false));
-    if (folder.success)
-      dispatch(
-        Action.openAnimeFolder(
-          { key: animeKey, anime: anime, folder: folder.data.files } || null
-        )
-      );
-    else {
-      dispatch(Action.showMessage(`Cannot load "${anime.title}"`));
-    }
-  };
-
-  const handleAnimeInfo = async () => {
-    dispatch(Action.showLoading(true));
-    const anilistResult = await AnilistApi.getAnime(
-      anime.title,
-      anime.blacklist
-    );
-    dispatch(Action.showLoading(false));
-    if (anilistResult)
-      dispatch(
-        Action.openAnimeInfo({
-          key: animeKey,
-          anime: anime,
-          animeInfo: anilistResult,
-        })
-      );
-    else {
-      dispatch(Action.showMessage(`Not found`));
-    }
-  };
-
   return (
     <Card
       className={clsx(classes.root, {
@@ -126,7 +85,7 @@ export default function AnimeCard({
               </Typography>
             </Grid>
             <Grid item xs={2} className={'MuiTypography-alignRight'}>
-              <IconButton onClick={handleAnimeInfo}>
+              <IconButton onClick={() => handleAnimeInfo(animeKey, anime)}>
                 <MoreInfoIcon />
               </IconButton>
             </Grid>
@@ -167,16 +126,22 @@ export default function AnimeCard({
         <IconButton
           aria-label="view"
           disabled={anime.path === ''}
-          onClick={handleOpenFolder}
+          onClick={() => handleOpenFolder(animeKey, anime)}
         >
           <FolderIcon />
         </IconButton>
-        <IconButton aria-label="share" onClick={handleShare}>
+        <IconButton
+          aria-label="share"
+          onClick={() => handleShare(animeKey, anime)}
+        >
           <ShareIcon />
         </IconButton>
         {isAdmin && (
           <>
-            <IconButton aria-label="edit" onClick={handleEdit}>
+            <IconButton
+              aria-label="edit"
+              onClick={() => handleEdit(animeKey, anime)}
+            >
               <EditIcon />
             </IconButton>
             <Link href={anime.download_url} target={'blank'}>

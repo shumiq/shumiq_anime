@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
-import AnimeCard from '../../components/AnimeCard/AnimeCard';
-import Grid from '@material-ui/core/Grid';
 import {
   Anime as AnimeType,
   Database as DatabaseType,
@@ -17,6 +15,7 @@ import FilterBar from '../../components/FilterBar/FilterBar';
 import AnimeFolderDialog from '../../components/Dialog/AnimeFolderDialog';
 import AnimeEditDialog from '../../components/Dialog/AnimeEditDialog';
 import AnimeInfoDialog from '../../components/Dialog/AnimeInfoDialog';
+import AnimeCardList from '../../components/AnimeCard/AnimeCardList';
 
 const Anime = ({ location }) => {
   const dispatch = useDispatch();
@@ -56,21 +55,12 @@ const Anime = ({ location }) => {
   return (
     <React.Fragment>
       <Container maxWidth="lg">
-        <Grid container spacing={3} justify={'space-evenly'}>
-          {pageList.map(
-            ([key, anime]) =>
-              anime !== null && (
-                <Grid item key={key}>
-                  <AnimeCard anime={anime} animeKey={key} isAdmin={isAdmin} />
-                </Grid>
-              )
-          )}
-        </Grid>
+        <AnimeCardList pageList={pageList} isAdmin={isAdmin} />
         <FilterBar seasonList={SeasonList(animeList)} />
       </Container>
-      <AnimeFolderDialog />
-      <AnimeEditDialog />
-      <AnimeInfoDialog />
+      <AnimeFolderDialog isAdmin={isAdmin} />
+      {isAdmin && <AnimeEditDialog />}
+      <AnimeInfoDialog isAdmin={isAdmin} />
     </React.Fragment>
   );
 };

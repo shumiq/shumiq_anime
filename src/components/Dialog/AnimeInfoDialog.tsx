@@ -13,9 +13,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import Typography from '@material-ui/core/Typography';
 import { Anime } from '../../models/Type';
 
-export default function AnimeInfoDialog() {
+export default function AnimeInfoDialog({ isAdmin }: { isAdmin: boolean }) {
   const dispatch = useDispatch();
-  const isAdmin = useSelector(Selector.isAdmin);
   const data = useSelector(Selector.getOpenedAnimeInfo);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
