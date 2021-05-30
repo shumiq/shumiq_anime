@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
-import { Anime } from '../../models/Type';
+import { Anime} from '../../models/Type';
 import Grid from '@material-ui/core/Grid';
 import Share from '../../utils/Share/Share';
-import SynologyApi from '../../services/Synology/Synology';
 import { useDispatch } from 'react-redux';
 import { Action } from '../../utils/Store/AppStore';
 import AnilistApi from '../../services/Anilist/Anilist';
@@ -11,9 +10,11 @@ import AnimeCard from './AnimeCard';
 export default function AnimeCardList({
   pageList,
   isAdmin,
+    handleOpenFolder
 }: {
   pageList: [string, Anime][];
   isAdmin: boolean;
+  handleOpenFolder: (key: string, anime: Anime) => Promise<void>;
 }) {
   const dispatch = useDispatch();
 
@@ -28,24 +29,6 @@ export default function AnimeCardList({
   const handleEdit = useCallback(
     (key: string, anime: Anime) => {
       dispatch(Action.editAnime({ key: key, anime: anime }));
-    },
-    [dispatch]
-  );
-
-  const handleOpenFolder = useCallback(
-    async (key: string, anime: Anime) => {
-      dispatch(Action.showLoading(true));
-      const folder = await SynologyApi.list(`Anime${anime.path}`);
-      dispatch(Action.showLoading(false));
-      if (folder.success)
-        dispatch(
-          Action.openAnimeFolder(
-            { key: key, anime: anime, folder: folder.data.files } || null
-          )
-        );
-      else {
-        dispatch(Action.showMessage(`Cannot load "${anime.title}"`));
-      }
     },
     [dispatch]
   );

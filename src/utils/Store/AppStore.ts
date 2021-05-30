@@ -28,6 +28,7 @@ interface AppState {
   openedVideo: string;
   openedVideoAlt: string;
   database: Database;
+  random: boolean;
 }
 
 const initialState: AppState = {
@@ -47,6 +48,7 @@ const initialState: AppState = {
   loading: false,
   message: '',
   database: getLocalStorage('database') as DatabaseType,
+  random: false,
 };
 
 const slice = createSlice({
@@ -115,6 +117,9 @@ const slice = createSlice({
     updateDatabase: (state, action) => {
       state.database = action.payload as Database;
     },
+    setRandom: (state, action) => {
+      state.random = action.payload as boolean;
+    },
   },
 });
 
@@ -171,6 +176,9 @@ export const Selector = {
   },
   getDatabase: (state: { app: AppState }): Database => {
     return state.app.database;
+  },
+  isRandom: (state: { app: AppState }): boolean => {
+    return state.app.random;
   },
 };
 
