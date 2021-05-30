@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
@@ -14,10 +14,12 @@ import { File, ListResponse } from '../../models/SynologyApi';
 import SynologyApi from '../../services/Synology/Synology';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 
 const SyncDownload = ({ active }: { active: boolean }) => {
   const dispatch = useDispatch();
   const db = useSelector(Selector.getDatabase);
+  const [password, setPassword] = useState('');
   const [fileList, setFileList] = useState<ListResponse>({
     data: {},
     success: false,
@@ -26,17 +28,21 @@ const SyncDownload = ({ active }: { active: boolean }) => {
     Record<string, { target: string; candidates: string[] }>
   >({});
 
+  const fetchFiles = useCallback(() => {
+    dispatch(Action.showLoading(true));
+    void SynologyApi.list('Downloads', false, true).then((folder) => {
+      if (folder.data.files) {
+        setFileList(folder);
+      }
+      dispatch(Action.showLoading(false));
+    });
+  }, [dispatch]);
+
   useEffect(() => {
     if (active) {
-      dispatch(Action.showLoading(true));
-      void SynologyApi.list('Downloads', false, true).then((folder) => {
-        if (folder.data.files) {
-          setFileList(folder);
-        }
-        dispatch(Action.showLoading(false));
-      });
+      void fetchFiles();
     }
-  }, [dispatch, active]);
+  }, [dispatch, active, fetchFiles]);
 
   useEffect(() => {
     const getCandidateTarget = (file: File) => {
@@ -69,9 +75,21 @@ const SyncDownload = ({ active }: { active: boolean }) => {
     }
   }, [fileList, db, targetPath]);
 
-  const handleMove = (filePath: string) => {
+  const handleMove = async (filePath: string) => {
     if (targetPath[filePath]?.target) {
-      console.log(filePath, targetPath[filePath].target);
+      if (password !== null && password !== '') {
+        dispatch(Action.showLoading(true));
+        const success = await SynologyApi.move(
+          filePath,
+          targetPath[filePath].target,
+          password
+        );
+        dispatch(Action.showLoading(false));
+        if (success) fetchFiles();
+        else dispatch(Action.showMessage('Something wrong'));
+      } else {
+        dispatch(Action.showMessage('Please put your password'));
+      }
     }
   };
 
@@ -88,14 +106,15 @@ const SyncDownload = ({ active }: { active: boolean }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>
-                <Typography align={'left'}>File Name</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography align={'center'}>Sync to...</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography align={'center'}>Sync</Typography>
+              <TableCell align={'center'}>File Name</TableCell>
+              <TableCell align={'center'}>Sync to...</TableCell>
+              <TableCell align={'right'}>
+                <TextField
+                  type={'password'}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={'Password...'}
+                  style={{ maxWidth: '200px' }}
+                />
               </TableCell>
             </TableRow>
           </TableHead>

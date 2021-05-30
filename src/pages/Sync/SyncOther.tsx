@@ -61,8 +61,9 @@ const SyncOther = () => {
         Object.entries(db.sakura)
           .filter(([key, sakura]) => sakura.ep === ep)
           .forEach(([key, sakura]) => {
-            sakura.sub[sub] = url;
-            Database.update.sakura(key, sakura);
+            const updated = JSON.parse(JSON.stringify(sakura)) as SakuraType;
+            updated.sub[sub] = url;
+            Database.update.sakura(key, updated);
           });
       } else {
         const sakura: SakuraType = {
@@ -93,8 +94,9 @@ const SyncOther = () => {
         Object.entries(db.keyaki)
           .filter(([key, keyaki]) => keyaki.ep === ep)
           .forEach(([key, keyaki]) => {
-            keyaki.sub[sub] = url;
-            Database.update.keyaki(key, keyaki);
+            const updated = JSON.parse(JSON.stringify(keyaki)) as KeyakiType;
+            updated.sub[sub] = url;
+            Database.update.keyaki(key, updated);
           });
       } else {
         const keyaki: KeyakiType = {
@@ -125,8 +127,9 @@ const SyncOther = () => {
         Object.entries(db.conan)
           .filter(([key, conan]) => conan.case === cs)
           .forEach(([key, conan]) => {
-            conan.episodes[ep] = url;
-            Database.update.conan(key, conan);
+            const updated = JSON.parse(JSON.stringify(conan)) as ConanType;
+            updated.episodes[ep] = url;
+            Database.update.conan(key, updated);
           });
       } else {
         const conan: ConanType = {

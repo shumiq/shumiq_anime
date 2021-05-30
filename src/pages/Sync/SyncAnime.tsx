@@ -137,13 +137,15 @@ const SyncAnime = ({ active }: { active: boolean }) => {
                           anime.size && (
                           <IconButton
                             color={'primary'}
-                            onClick={() => handleUpdate(key, anime)}
+                            onClick={() => handleUpdate(key, { ...anime })}
                           >
                             <SyncIcon />
                           </IconButton>
                         )}
                       {anime.path === '' && animeFolder[key] && (
-                        <IconButton onClick={() => handleSync(key, anime)}>
+                        <IconButton
+                          onClick={() => handleSync(key, { ...anime })}
+                        >
                           <SyncIcon />
                         </IconButton>
                       )}

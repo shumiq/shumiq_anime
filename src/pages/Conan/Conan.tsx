@@ -66,16 +66,14 @@ const Conan = (): JSX.Element => {
                         </Typography>
                       )}
                       {isAdmin && editMode === key && (
-                        <Typography align={'left'} color={'textSecondary'}>
-                          <TextField
-                            variant={'outlined'}
-                            onBlur={(e) => handleUpdate(e.target.value, key)}
-                            defaultValue={conan.name}
-                            fullWidth
-                            multiline
-                            autoFocus
-                          />
-                        </Typography>
+                        <TextField
+                          variant={'outlined'}
+                          onBlur={(e) => handleUpdate(e.target.value, key)}
+                          defaultValue={conan.name}
+                          fullWidth
+                          multiline
+                          autoFocus
+                        />
                       )}
                     </TableCell>
                     <TableCell>
