@@ -23,12 +23,7 @@ import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import { Season } from '../../models/Constants';
-import Share from '../../utils/Share/Share';
-import SynologyApi from '../../services/Synology/Synology';
-import { useDispatch } from 'react-redux';
-import { Action } from '../../utils/Store/AppStore';
 import Link from '@material-ui/core/Link';
-import AnilistApi from '../../services/Anilist/Anilist';
 
 export default function AnimeCard({
   anime,
@@ -93,7 +88,7 @@ export default function AnimeCard({
         </CardContent>
       </CardMedia>
       <CardContent style={{ padding: 0 }}>
-        <Table className={classes.table} size={'small'}>
+        <Table size={'small'}>
           <TableBody>
             <TableRow hover={true}>
               <TableCell>Studio</TableCell>
@@ -206,12 +201,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     fontSize: '12px',
     fontWeight: 'bold',
-  },
-  table: {
-    '& $td': {
-      color: theme.palette.text.secondary,
-      fontSize: theme.typography.caption.fontSize,
-    },
   },
   expand: {
     transform: 'rotate(0deg)',

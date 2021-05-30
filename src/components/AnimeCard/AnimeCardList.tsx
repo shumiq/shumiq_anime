@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Anime } from '../../models/Type';
 import Grid from '@material-ui/core/Grid';
 import Share from '../../utils/Share/Share';
@@ -17,52 +17,61 @@ export default function AnimeCardList({
 }) {
   const dispatch = useDispatch();
 
-  const handleShare = (key: string, anime: Anime) => {
+  const handleShare = useCallback((key: string, anime: Anime) => {
     const title = anime.title;
     const host =
       process.env.REACT_APP_API_ENDPOINT?.toString() || 'http://localhost:3000';
     const url = `${host}/api/share?anime=${encodeURIComponent(key)}`;
     Share(title, url);
-  };
+  }, []);
 
-  const handleEdit = (key: string, anime: Anime) => {
-    dispatch(Action.editAnime({ key: key, anime: anime }));
-  };
+  const handleEdit = useCallback(
+    (key: string, anime: Anime) => {
+      dispatch(Action.editAnime({ key: key, anime: anime }));
+    },
+    [dispatch]
+  );
 
-  const handleOpenFolder = async (key: string, anime: Anime) => {
-    dispatch(Action.showLoading(true));
-    const folder = await SynologyApi.list(`Anime${anime.path}`);
-    dispatch(Action.showLoading(false));
-    if (folder.success)
-      dispatch(
-        Action.openAnimeFolder(
-          { key: key, anime: anime, folder: folder.data.files } || null
-        )
+  const handleOpenFolder = useCallback(
+    async (key: string, anime: Anime) => {
+      dispatch(Action.showLoading(true));
+      const folder = await SynologyApi.list(`Anime${anime.path}`);
+      dispatch(Action.showLoading(false));
+      if (folder.success)
+        dispatch(
+          Action.openAnimeFolder(
+            { key: key, anime: anime, folder: folder.data.files } || null
+          )
+        );
+      else {
+        dispatch(Action.showMessage(`Cannot load "${anime.title}"`));
+      }
+    },
+    [dispatch]
+  );
+
+  const handleAnimeInfo = useCallback(
+    async (key: string, anime: Anime) => {
+      dispatch(Action.showLoading(true));
+      const anilistResult = await AnilistApi.getAnime(
+        anime.title,
+        anime.blacklist
       );
-    else {
-      dispatch(Action.showMessage(`Cannot load "${anime.title}"`));
-    }
-  };
-
-  const handleAnimeInfo = async (key: string, anime: Anime) => {
-    dispatch(Action.showLoading(true));
-    const anilistResult = await AnilistApi.getAnime(
-      anime.title,
-      anime.blacklist
-    );
-    dispatch(Action.showLoading(false));
-    if (anilistResult)
-      dispatch(
-        Action.openAnimeInfo({
-          key: key,
-          anime: anime,
-          animeInfo: anilistResult,
-        })
-      );
-    else {
-      dispatch(Action.showMessage(`Not found`));
-    }
-  };
+      dispatch(Action.showLoading(false));
+      if (anilistResult)
+        dispatch(
+          Action.openAnimeInfo({
+            key: key,
+            anime: anime,
+            animeInfo: anilistResult,
+          })
+        );
+      else {
+        dispatch(Action.showMessage(`Not found`));
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <Grid container spacing={3} justify={'space-evenly'}>
