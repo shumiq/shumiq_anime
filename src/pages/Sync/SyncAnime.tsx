@@ -1,14 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
-import {
-  Anime,
-  Anime as AnimeType,
-  Database as DatabaseType,
-} from '../../models/Type';
-import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
+import { Anime } from '../../models/Type';
 import { Database } from '../../services/Firebase/Firebase';
-import { useDispatch } from 'react-redux';
-import { Action } from '../../utils/Store/AppStore';
+import { useDispatch, useSelector } from 'react-redux';
+import { Action, Selector } from '../../utils/Store/AppStore';
 import Typography from '@material-ui/core/Typography';
 import SyncIcon from '@material-ui/icons/Sync';
 import Table from '@material-ui/core/Table';
@@ -23,20 +18,13 @@ import SynologyApi from '../../services/Synology/Synology';
 
 const SyncAnime = ({ active }: { active: boolean }) => {
   const dispatch = useDispatch();
-  const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(
-    (getLocalStorage('database') as DatabaseType).anime
-  );
+  const animeList = useSelector(Selector.getDatabase).anime;
   const [animeFolder, setAnimeFolder] = useState<Record<string, File>>({});
   const [sortedAnimeList, setSortedAnimeList] = useState<[string, Anime][]>([]);
   const [folderList, setFolderList] = useState<ListResponse>({
     data: {},
     success: false,
   });
-  useEffect(() => {
-    Database.subscribe((db: DatabaseType) => {
-      setAnimeList(db?.anime);
-    });
-  }, []);
 
   useEffect(() => {
     if (active) {

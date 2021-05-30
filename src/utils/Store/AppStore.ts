@@ -3,11 +3,14 @@ import {
   Anime,
   AnimeFilter,
   AnimePartialFilter,
+  Database as DatabaseType,
+  Database,
   User,
 } from '../../models/Type';
 import { FilterOption } from '../../models/Constants';
 import { File } from '../../models/SynologyApi';
 import { AnilistInfoResponse } from '../../models/AnilistApi';
+import { getLocalStorage } from '../LocalStorage/LocalStorage';
 
 interface AppState {
   isSignIn: boolean;
@@ -24,6 +27,7 @@ interface AppState {
   message: string;
   openedVideo: string;
   openedVideoAlt: string;
+  database: Database;
 }
 
 const initialState: AppState = {
@@ -42,6 +46,7 @@ const initialState: AppState = {
   openedVideoAlt: '',
   loading: false,
   message: '',
+  database: getLocalStorage('database') as DatabaseType,
 };
 
 const slice = createSlice({
@@ -107,6 +112,9 @@ const slice = createSlice({
     showMessage: (state, action) => {
       state.message = action.payload as string;
     },
+    updateDatabase: (state, action) => {
+      state.database = action.payload as Database;
+    },
   },
 });
 
@@ -160,6 +168,9 @@ export const Selector = {
   },
   getVideoAlt: (state: { app: AppState }): string => {
     return state.app.openedVideoAlt;
+  },
+  getDatabase: (state: { app: AppState }): Database => {
+    return state.app.database;
   },
 };
 

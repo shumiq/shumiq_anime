@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
-import {
-  Anime as AnimeType,
-  Database as DatabaseType,
-} from '../../models/Type';
-import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
+import { Anime as AnimeType } from '../../models/Type';
 import { Filter, SeasonList } from '../../utils/AnimeFilter';
-import { Database } from '../../services/Firebase/Firebase';
 import queryString from 'query-string';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
@@ -21,18 +16,10 @@ const Anime = ({ location }) => {
   const dispatch = useDispatch();
   const filter = useSelector(Selector.getFilter);
   const isAdmin = useSelector(Selector.isAdmin);
-  const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(
-    (getLocalStorage('database') as DatabaseType).anime
-  );
+  const animeList = useSelector(Selector.getDatabase).anime;
   const [pageList, setPageList] = useState<[string, AnimeType][]>(
     Filter(animeList, filter)
   );
-
-  useEffect(() => {
-    Database.subscribe((db: DatabaseType) => {
-      setAnimeList(db?.anime);
-    });
-  }, []);
 
   useEffect(() => {
     setPageList(Filter(animeList, filter));

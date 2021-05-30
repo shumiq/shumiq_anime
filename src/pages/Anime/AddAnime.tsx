@@ -1,14 +1,9 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
-import {
-  Anime,
-  Anime as AnimeType,
-  Database as DatabaseType,
-} from '../../models/Type';
-import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
+import { Anime } from '../../models/Type';
 import { Database } from '../../services/Firebase/Firebase';
-import { useDispatch } from 'react-redux';
-import { Action } from '../../utils/Store/AppStore';
+import { useDispatch, useSelector } from 'react-redux';
+import { Action, Selector } from '../../utils/Store/AppStore';
 import Typography from '@material-ui/core/Typography';
 import AddCircle from '@material-ui/icons/AddCircle';
 import CheckCircle from '@material-ui/icons/CheckCircle';
@@ -27,15 +22,7 @@ import { Season } from '../../models/Constants';
 const AddAnime = () => {
   const dispatch = useDispatch();
   const [searchResult, setSearchResult] = useState<AnilistInfoResponse[]>([]);
-  const [animeList, setAnimeList] = useState<Record<string, AnimeType>>(
-    (getLocalStorage('database') as DatabaseType).anime
-  );
-
-  useEffect(() => {
-    Database.subscribe((db: DatabaseType) => {
-      setAnimeList(db?.anime);
-    });
-  }, []);
+  const animeList = useSelector(Selector.getDatabase).anime;
 
   const handleSearch = async (
     e: ChangeEvent<{ name?: string | undefined; value: unknown }>

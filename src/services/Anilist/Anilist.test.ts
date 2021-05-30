@@ -1,5 +1,5 @@
 import axios from 'axios';
-import AnilistApi, { searchAnimeQueryBuilder } from './anilist';
+import AnilistApi, { searchAnimeQueryBuilder } from './Anilist';
 
 jest.mock('axios');
 

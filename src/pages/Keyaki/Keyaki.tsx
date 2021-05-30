@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
-import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
-import {
-  Database as DatabaseType,
-  Keyaki as KeyakiType,
-} from '../../models/Type';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
 import Container from '@material-ui/core/Container';
@@ -21,15 +16,7 @@ const Keyaki = (): JSX.Element => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(Selector.isAdmin);
   const [editMode, setEditMode] = useState('');
-  const [keyakiList, setKeyakiList] = useState<Record<string, KeyakiType>>(
-    (getLocalStorage('database') as DatabaseType)?.keyaki
-  );
-
-  useEffect(() => {
-    Database.subscribe((db) => {
-      setKeyakiList(db?.keyaki);
-    });
-  }, []);
+  const keyakiList = useSelector(Selector.getDatabase).keyaki;
 
   const showFiles = (file: string) => {
     dispatch(Action.openVideoAlt(file));

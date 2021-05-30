@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
-import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
-import {
-  Database as DatabaseType,
-  Sakura as SakuraType,
-} from '../../models/Type';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
 import Container from '@material-ui/core/Container';
@@ -21,15 +16,7 @@ const Sakura = (): JSX.Element => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(Selector.isAdmin);
   const [editMode, setEditMode] = useState('');
-  const [sakuraList, setSakuraList] = useState<Record<string, SakuraType>>(
-    (getLocalStorage('database') as DatabaseType)?.sakura
-  );
-
-  useEffect(() => {
-    Database.subscribe((db) => {
-      setSakuraList(db?.sakura);
-    });
-  }, []);
+  const sakuraList = useSelector(Selector.getDatabase).sakura;
 
   const showFiles = (file: string) => {
     dispatch(Action.openVideoAlt(file));

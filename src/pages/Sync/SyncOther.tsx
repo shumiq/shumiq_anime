@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Container from '@material-ui/core/Container';
 import {
   Conan as ConanType,
-  Database as DatabaseType,
   Keyaki as KeyakiType,
   Sakura as SakuraType,
 } from '../../models/Type';
-import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
 import { Database } from '../../services/Firebase/Firebase';
-import { useDispatch } from 'react-redux';
-import { Action } from '../../utils/Store/AppStore';
+import { useDispatch, useSelector } from 'react-redux';
+import { Action, Selector } from '../../utils/Store/AppStore';
 import Typography from '@material-ui/core/Typography';
 import SyncIcon from '@material-ui/icons/Sync';
 import Table from '@material-ui/core/Table';
@@ -22,57 +20,30 @@ import SynologyApi from '../../services/Synology/Synology';
 
 const SyncOther = () => {
   const dispatch = useDispatch();
-  const [status, setStatus] = useState({
-    sakura: [0, 0],
-    keyaki: [0, 0],
-    conan: [0, 0],
-  });
-  const [sakuraList, setSakuraList] = useState<Record<string, SakuraType>>(
-    (getLocalStorage('database') as DatabaseType)?.sakura
-  );
-  const [keyakiList, setKeyakiList] = useState<Record<string, KeyakiType>>(
-    (getLocalStorage('database') as DatabaseType)?.keyaki
-  );
-  const [conanList, setConanList] = useState<Record<string, ConanType>>(
-    (getLocalStorage('database') as DatabaseType)?.conan
-  );
-  useEffect(() => {
-    Database.subscribe((db: DatabaseType) => {
-      setSakuraList(db?.sakura);
-      setKeyakiList(db?.keyaki);
-      setConanList(db?.conan);
-      const newStatus = {
-        sakura: [0, 0],
-        keyaki: [0, 0],
-        conan: [0, 0],
-      };
-      if (db.keyaki)
-        newStatus.keyaki = [
-          Object.entries(db.keyaki).length,
-          Object.entries(db.keyaki).reduce(
-            (c1, [_, ep]) => c1 + Object.entries(ep.sub).length,
-            0
-          ),
-        ];
-      if (db.sakura)
-        newStatus.sakura = [
-          Object.entries(db.sakura).length,
-          Object.entries(db.sakura).reduce(
-            (c1, [_, ep]) => c1 + Object.entries(ep.sub).length,
-            0
-          ),
-        ];
-      if (db.conan)
-        newStatus.conan = [
-          Object.entries(db.conan).length,
-          Object.entries(db.conan).reduce(
-            (c1, [_, ep]) => c1 + Object.entries(ep.episodes).length,
-            0
-          ),
-        ];
-      setStatus(newStatus);
-    });
-  }, []);
+  const db = useSelector(Selector.getDatabase);
+  const status = {
+    sakura: [
+      Object.entries(db.sakura).length,
+      Object.entries(db.sakura).reduce(
+        (c1, [_, ep]) => c1 + Object.entries(ep.sub).length,
+        0
+      ),
+    ],
+    keyaki: [
+      Object.entries(db.keyaki).length,
+      Object.entries(db.keyaki).reduce(
+        (c1, [_, ep]) => c1 + Object.entries(ep.sub).length,
+        0
+      ),
+    ],
+    conan: [
+      Object.entries(db.conan).length,
+      Object.entries(db.conan).reduce(
+        (c1, [_, ep]) => c1 + Object.entries(ep.episodes).length,
+        0
+      ),
+    ],
+  };
 
   const handleSyncSakura = async () => {
     dispatch(Action.showLoading(true));
@@ -84,10 +55,10 @@ const SyncOther = () => {
       const sub = file.name.split(' ')[4].split('.')[0];
       const url = file.path;
       if (
-        Object.entries(sakuraList).filter(([key, sakura]) => sakura.ep === ep)
+        Object.entries(db.sakura).filter(([key, sakura]) => sakura.ep === ep)
           .length > 0
       ) {
-        Object.entries(sakuraList)
+        Object.entries(db.sakura)
           .filter(([key, sakura]) => sakura.ep === ep)
           .forEach(([key, sakura]) => {
             sakura.sub[sub] = url;
@@ -116,10 +87,10 @@ const SyncOther = () => {
       const sub = file.name.split(' ')[3].split('.')[0];
       const url = file.path;
       if (
-        Object.entries(keyakiList).filter(([key, keyaki]) => keyaki.ep === ep)
+        Object.entries(db.keyaki).filter(([key, keyaki]) => keyaki.ep === ep)
           .length > 0
       ) {
-        Object.entries(keyakiList)
+        Object.entries(db.keyaki)
           .filter(([key, keyaki]) => keyaki.ep === ep)
           .forEach(([key, keyaki]) => {
             keyaki.sub[sub] = url;
@@ -148,10 +119,10 @@ const SyncOther = () => {
       const ep = parseInt(file.name.split(' ')[3].split('.')[0]);
       const url = file.path;
       if (
-        Object.entries(conanList).filter(([key, conan]) => conan.case === cs)
+        Object.entries(db.conan).filter(([key, conan]) => conan.case === cs)
           .length > 0
       ) {
-        Object.entries(conanList)
+        Object.entries(db.conan)
           .filter(([key, conan]) => conan.case === cs)
           .forEach(([key, conan]) => {
             conan.episodes[ep] = url;

@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
-import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
-import {
-  Conan as ConanType,
-  Database as DatabaseType,
-} from '../../models/Type';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
 import Container from '@material-ui/core/Container';
@@ -21,15 +16,7 @@ const Conan = (): JSX.Element => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(Selector.isAdmin);
   const [editMode, setEditMode] = useState('');
-  const [conanList, setConanList] = useState<Record<string, ConanType>>(
-    (getLocalStorage('database') as DatabaseType)?.conan
-  );
-
-  useEffect(() => {
-    Database.subscribe((db: DatabaseType) => {
-      setConanList(db?.conan);
-    });
-  }, []);
+  const conanList = useSelector(Selector.getDatabase).conan;
 
   const showFiles = (file: string) => {
     dispatch(Action.openVideoAlt(file));
