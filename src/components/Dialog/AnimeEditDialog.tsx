@@ -151,7 +151,16 @@ export default function AnimeEditDialog() {
               onChange={handleUpdateFormData}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              label="Alternative Name"
+              name="alt_title"
+              defaultValue={data.anime.alt_title}
+              onChange={handleUpdateFormData}
+            />
+          </Grid>
+          <Grid item xs={6}>
             <TextField
               fullWidth
               label="Folder Path"

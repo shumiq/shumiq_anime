@@ -9,7 +9,6 @@ import { useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
 import { Database } from '../../services/Firebase/Firebase';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import Typography from '@material-ui/core/Typography';
 import { Anime } from '../../models/Type';
 

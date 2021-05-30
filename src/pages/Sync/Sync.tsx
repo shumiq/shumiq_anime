@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SyncAnime from './SyncAnime';
 import SyncOther from './SyncOther';
+import SyncDownload from './SyncDownload';
 
 const Sync = () => {
   const [selectedTab, setTab] = React.useState(0);
@@ -32,11 +33,7 @@ const Sync = () => {
           </Tabs>
         </Paper>
         <Container>
-          {selectedTab === 0 && (
-            <Typography align={'center'} style={{ margin: '50px' }}>
-              Under Construction
-            </Typography>
-          )}
+          {selectedTab === 0 && <SyncDownload active={selectedTab === 0} />}
           {selectedTab === 1 && <SyncAnime active={selectedTab === 1} />}
           {selectedTab === 2 && <SyncOther />}
         </Container>

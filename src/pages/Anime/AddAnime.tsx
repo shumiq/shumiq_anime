@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { Anime } from '../../models/Type';
 import { Database } from '../../services/Firebase/Firebase';
@@ -75,6 +75,7 @@ const AddAnime = () => {
       info: anime.description,
       genres: anime.genres.join(', '),
       cover_url: anime.coverImage.large,
+      alt_title: '',
     };
     Database.add.anime(newAnime);
   };
