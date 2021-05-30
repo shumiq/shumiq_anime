@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
-import AnimeCard from '../../containers/AnimeCard/AnimeCard';
+import AnimeCard from '../../components/AnimeCard/AnimeCard';
 import Grid from '@material-ui/core/Grid';
 import {
   Anime as AnimeType,
@@ -13,10 +13,10 @@ import { Database } from '../../services/Firebase/Firebase';
 import queryString from 'query-string';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
-import FilterBar from '../../containers/FilterBar/FilterBar';
-import AnimeFolderDialog from '../../containers/AnimeFolderDialog/AnimeFolderDialog';
-import AnimeEditDialog from '../../containers/AnimeEditDialog/AnimeEditDialog';
-import AnimeInfoDialog from '../../containers/AnimeInfoDialog/AnimeInfoDialog';
+import FilterBar from '../../components/FilterBar/FilterBar';
+import AnimeFolderDialog from '../../components/Dialog/AnimeFolderDialog';
+import AnimeEditDialog from '../../components/Dialog/AnimeEditDialog';
+import AnimeInfoDialog from '../../components/Dialog/AnimeInfoDialog';
 
 const Anime = ({ location }) => {
   const dispatch = useDispatch();

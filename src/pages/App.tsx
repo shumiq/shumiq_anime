@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import { getRouterConfig } from '../utils/Router/Router';
-import Navbar from '../containers/Navbar/Navbar';
+import Navbar from '../components/Navbar/Navbar';
 import {
   createMuiTheme,
   createStyles,
@@ -14,10 +14,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useSelector } from 'react-redux';
 import { Selector } from '../utils/Store/AppStore';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import MessageDialog from '../containers/MessageDialog/MessageDialog';
-import VideoDialog from '../containers/VideoDialog/VideoDialog';
-import Container from '@material-ui/core/Container';
-import OpenVideoDialog from '../containers/Dialog/OpenVideoDialog';
+import MessageDialog from '../components/Dialog/MessageDialog';
+import VideoDialog from '../components/Dialog/VideoDialog';
+import VideoAltDialog from '../components/Dialog/VideoAltDialog';
 
 const App = (): JSX.Element => {
   const classes = useStyles();
@@ -60,7 +59,7 @@ const App = (): JSX.Element => {
       </Backdrop>
       <MessageDialog />
       <VideoDialog />
-      <OpenVideoDialog />
+      <VideoAltDialog />
     </ThemeProvider>
   );
 };

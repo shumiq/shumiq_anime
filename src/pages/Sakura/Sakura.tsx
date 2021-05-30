@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
 import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
 import {

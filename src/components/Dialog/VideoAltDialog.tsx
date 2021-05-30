@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import SynologyApi from '../../services/Synology/Synology';
 import Link from '@material-ui/core/Link';
 
-export default function OpenVideoDialog() {
+export default function VideoAltDialog() {
   const dispatch = useDispatch();
   const path = useSelector(Selector.getVideoAlt);
   const open = path !== '';

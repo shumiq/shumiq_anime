@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
 import { getLocalStorage } from '../../utils/LocalStorage/LocalStorage';
-import SynologyApi from '../../services/Synology/Synology';
 import {
   Database as DatabaseType,
   Keyaki as KeyakiType,
