@@ -71,7 +71,7 @@ const Keyaki = (): JSX.Element => {
                             variant={'outlined'}
                             onBlur={(e) => handleUpdate(e.target.value, key)}
                             defaultValue={keyaki.name}
-                            style={{ width: '100%' }}
+                            fullWidth
                             multiline
                             autoFocus
                           />

@@ -71,7 +71,7 @@ const Sakura = (): JSX.Element => {
                             variant={'outlined'}
                             onBlur={(e) => handleUpdate(e.target.value, key)}
                             defaultValue={sakura.name}
-                            style={{ width: '100%' }}
+                            fullWidth
                             multiline
                             autoFocus
                           />

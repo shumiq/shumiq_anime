@@ -71,7 +71,7 @@ const Conan = (): JSX.Element => {
                             variant={'outlined'}
                             onBlur={(e) => handleUpdate(e.target.value, key)}
                             defaultValue={conan.name}
-                            style={{ width: '100%' }}
+                            fullWidth
                             multiline
                             autoFocus
                           />

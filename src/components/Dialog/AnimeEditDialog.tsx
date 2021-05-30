@@ -72,7 +72,7 @@ export default function AnimeEditDialog() {
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               label="Title"
               name="title"
               defaultValue={data.anime.title}
@@ -81,7 +81,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={6}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               label="Studio"
               name="studio"
               defaultValue={data.anime.studio}
@@ -90,7 +90,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={4}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               type="number"
               label="View"
               name="view"
@@ -100,7 +100,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={4}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               type="number"
               label="Download"
               name="download"
@@ -110,7 +110,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={4}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               label="All Episode"
               name="all_episode"
               defaultValue={data.anime.all_episode}
@@ -119,7 +119,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={4}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               type="number"
               label="Year"
               name="year"
@@ -130,7 +130,7 @@ export default function AnimeEditDialog() {
           <Grid item xs={4}>
             <InputLabel>Season</InputLabel>
             <Select
-              style={{ width: '100%' }}
+              fullWidth
               name="season"
               defaultValue={data.anime.season}
               onChange={handleUpdateFormData}
@@ -143,7 +143,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={4}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               type="number"
               label="Score"
               name="score"
@@ -153,7 +153,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               label="Folder Path"
               name="path"
               defaultValue={data.anime.path}
@@ -162,7 +162,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               label="Cover Image Url"
               name="cover_url"
               defaultValue={data.anime.cover_url}
@@ -171,7 +171,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               label="Download Url"
               name="download_url"
               defaultValue={data.anime.download_url}
@@ -180,7 +180,7 @@ export default function AnimeEditDialog() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              style={{ width: '100%' }}
+              fullWidth
               label="Tags"
               name="genres"
               defaultValue={data.anime.genres}

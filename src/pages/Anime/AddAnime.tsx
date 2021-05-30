@@ -82,14 +82,12 @@ const AddAnime = () => {
   return (
     <React.Fragment>
       <Container maxWidth="lg">
-        <Typography align={'center'}>
-          <TextField
-            variant={'outlined'}
-            placeholder={'Search...'}
-            onBlur={handleSearch}
-            style={{ width: '100%', maxWidth: '300px' }}
-          />
-        </Typography>
+        <TextField
+          variant={'outlined'}
+          placeholder={'Search...'}
+          onBlur={handleSearch}
+          fullWidth
+        />
         {searchResult.length > 0 && (
           <Table>
             <TableHead>

@@ -75,56 +75,54 @@ export default function AnimeInfoDialog({ isAdmin }: { isAdmin: boolean }) {
     >
       <DialogTitle>{data.anime.title}</DialogTitle>
       <DialogContent>
-        <DialogContentText>
+        <Typography variant="body1">
+          <b>Title</b>: {info.title.romaji}{' '}
+          {info.title.english &&
+            info.title.english !== info.title.romaji &&
+            '/ ' + info.title.english}
+        </Typography>
+        <Typography variant="body1">
+          <b>Studio</b>: {info.studios?.nodes[0]?.name}
+        </Typography>
+        <Typography variant="body1">
+          <b>Source</b>: {info.source}
+        </Typography>
+        <Typography variant="body1">
+          <b>Episodes</b>: {info.episodes}
+        </Typography>
+        {info.nextAiringEpisode != null && (
           <Typography variant="body1">
-            <b>Title</b>: {info.title.romaji}{' '}
-            {info.title.english &&
-              info.title.english !== info.title.romaji &&
-              '/ ' + info.title.english}
+            <b>Next Airing</b>: EP{info.nextAiringEpisode.episode} in{' '}
+            {secondToDuration(info.nextAiringEpisode.timeUntilAiring)}
           </Typography>
-          <Typography variant="body1">
-            <b>Studio</b>: {info.studios?.nodes[0]?.name}
-          </Typography>
-          <Typography variant="body1">
-            <b>Source</b>: {info.source}
-          </Typography>
-          <Typography variant="body1">
-            <b>Episodes</b>: {info.episodes}
-          </Typography>
-          {info.nextAiringEpisode != null && (
-            <Typography variant="body1">
-              <b>Next Airing</b>: EP{info.nextAiringEpisode.episode} in{' '}
-              {secondToDuration(info.nextAiringEpisode.timeUntilAiring)}
-            </Typography>
-          )}
-          <Typography variant="body1">
-            <b>Season</b>: {info.startDate.year} {info.season}
-          </Typography>
-          <Typography variant="body1">
-            <b>Score</b>: {info.averageScore / 10.0}
-          </Typography>
-          <Typography variant="body1">
-            <b>Genres</b>: {info.genres.join(', ')}
-          </Typography>
-          {info.bannerImage != null && (
-            <img src={info.bannerImage} width="100%" alt="banner" />
-          )}
-          <Typography variant="body1" paragraph>
-            {info.description}
-          </Typography>
+        )}
+        <Typography variant="body1">
+          <b>Season</b>: {info.startDate.year} {info.season}
+        </Typography>
+        <Typography variant="body1">
+          <b>Score</b>: {info.averageScore / 10.0}
+        </Typography>
+        <Typography variant="body1">
+          <b>Genres</b>: {info.genres.join(', ')}
+        </Typography>
+        {info.bannerImage != null && (
+          <img src={info.bannerImage} width="100%" alt="banner" />
+        )}
+        <Typography variant="body1" paragraph>
+          {info.description}
+        </Typography>
 
-          {info.relations?.nodes && (
-            <Typography variant="body1">
-              <b>Related Media</b>:{' '}
-              {info.relations.nodes
-                .map(
-                  (related) =>
-                    related.title.userPreferred + ' (' + related.type + ')'
-                )
-                .join(', ')}
-            </Typography>
-          )}
-        </DialogContentText>
+        {info.relations?.nodes && (
+          <Typography variant="body1">
+            <b>Related Media</b>:{' '}
+            {info.relations.nodes
+              .map(
+                (related) =>
+                  related.title.userPreferred + ' (' + related.type + ')'
+              )
+              .join(', ')}
+          </Typography>
+        )}
       </DialogContent>
       <DialogActions>
         {isAdmin && (
