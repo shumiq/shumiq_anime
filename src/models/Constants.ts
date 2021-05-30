@@ -9,6 +9,8 @@ export const Season = {
   Fall: '4',
 };
 
+export const PageSize = 10;
+
 export const FilterOption = {
   ALL_SEASON: 0,
   LATEST_SEASON: 1,

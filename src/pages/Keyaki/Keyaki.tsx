@@ -11,12 +11,17 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import { PageSize } from '../../models/Constants';
 
 const Keyaki = (): JSX.Element => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(Selector.isAdmin);
   const [editMode, setEditMode] = useState('');
   const keyakiList = useSelector(Selector.getDatabase).keyaki;
+  const [page, setPage] = useState(1);
+  const totalPage = Math.ceil(Object.entries(keyakiList).length / 10.0);
 
   const showFiles = (file: string) => {
     dispatch(Action.openVideoAlt(file));
@@ -41,13 +46,33 @@ const Keyaki = (): JSX.Element => {
               <TableCell>
                 <Typography align={'left'}>Name</Typography>
               </TableCell>
-              <TableCell></TableCell>
+              <TableCell align={'right'}>
+                <Select
+                  onChange={(e) =>
+                    setPage(parseInt(e.target.value as string) || 1)
+                  }
+                  defaultValue={1}
+                  variant={'outlined'}
+                >
+                  {/* eslint-disable @typescript-eslint/no-unsafe-assignment */}
+                  {[...Array(totalPage)].map((e, i) => (
+                    <MenuItem value={i + 1} key={i + 1}>
+                      {PageSize * i + 1} - {PageSize * (i + 1)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {keyakiList &&
               Object.entries(keyakiList)
                 .sort((entryA, entryB) => entryA[1].ep - entryB[1].ep)
+                .filter(
+                  ([key, keyaki]) =>
+                    keyaki.ep > PageSize * (page - 1) &&
+                    keyaki.ep <= PageSize * page
+                )
                 .map(([key, keyaki]) => (
                   <TableRow key={key} hover>
                     <TableCell>
