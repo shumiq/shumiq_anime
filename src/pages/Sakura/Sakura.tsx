@@ -31,9 +31,9 @@ const Sakura = (): JSX.Element => {
     });
   }, []);
 
-  const showFiles = useCallback((file: string) => {
+  const showFiles = (file: string) => {
     dispatch(Action.openVideoAlt(file));
-  }, []);
+  };
 
   const handleUpdate = (name: string, key: string) => {
     const state = { ...sakuraList[key] };

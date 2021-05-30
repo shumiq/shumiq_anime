@@ -1,7 +1,6 @@
 import UserDetail from '../../services/UserDetail/UserDetail';
 import Anime from '../../pages/Anime/Anime';
 import Sync from '../../pages/Sync/Sync';
-import Backup from '../../pages/old/Backup/Backup';
 import Conan from '../../pages/Conan/Conan';
 import Keyaki from '../../pages/Keyaki/Keyaki';
 import Sakura from '../../pages/Sakura/Sakura';
@@ -33,12 +32,12 @@ const ROUTER_CONFIG: Router[] = [
     component: Sync,
     auth: ['Admin'],
   },
-  {
-    path: '/backup',
-    exact: true,
-    component: Backup,
-    auth: ['Admin'],
-  },
+  // {
+  //   path: '/backup',
+  //   exact: true,
+  //   component: Backup,
+  //   auth: ['Admin'],
+  // },
   {
     path: '/conan',
     exact: true,

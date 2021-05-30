@@ -26,8 +26,8 @@ export default function VideoDialog() {
         },
       }}
       onClick={(e) => {
-        /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
-        if ((e.target as any).id !== 'video-player') handleClose();
+        if (((e.target as unknown) as { id: string }).id !== 'video-player')
+          handleClose();
       }}
     >
       <video id="video-player" controls autoPlay className={classes.video}>

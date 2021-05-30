@@ -111,44 +111,54 @@ const slice = createSlice({
 });
 
 export const Selector = {
-  isSignIn: (state: { app: AppState }) => {
+  isSignIn: (state: { app: AppState }): boolean => {
     return state.app.isSignIn;
   },
-  getUser: (state: { app: AppState }) => {
+  getUser: (state: { app: AppState }): User | null => {
     return state.app.user;
   },
-  isAdmin: (state: { app: AppState }) => {
+  isAdmin: (state: { app: AppState }): boolean => {
     const user = Selector.getUser(state);
     return user?.email === 'iq.at.sk131@gmail.com';
   },
-  getFilter: (state: { app: AppState }) => {
+  getFilter: (state: { app: AppState }): AnimeFilter => {
     return state.app.animeFilter;
   },
-  isAnimeFolderOpen: (state: { app: AppState }) => {
+  isAnimeFolderOpen: (state: { app: AppState }): boolean => {
     return state.app.openedAnimeFolder !== null;
   },
-  getOpenedAnimeFolder: (state: { app: AppState }) => {
+  getOpenedAnimeFolder: (state: {
+    app: AppState;
+  }): { key: string; anime: Anime; folder: File[] } | null => {
     return state.app.openedAnimeFolder;
   },
-  isAnimeEditOpen: (state: { app: AppState }) => {
+  isAnimeEditOpen: (state: { app: AppState }): boolean => {
     return state.app.openedAnimeEdit !== null;
   },
-  getOpenedAnimeEdit: (state: { app: AppState }) => {
+  getOpenedAnimeEdit: (state: {
+    app: AppState;
+  }): { key: string; anime: Anime } | null => {
     return state.app.openedAnimeEdit;
   },
-  getOpenedAnimeInfo: (state: { app: AppState }) => {
+  getOpenedAnimeInfo: (state: {
+    app: AppState;
+  }): {
+    key: string;
+    anime: Anime;
+    animeInfo: AnilistInfoResponse;
+  } | null => {
     return state.app.openedAnimeInfo;
   },
-  isLoading: (state: { app: AppState }) => {
+  isLoading: (state: { app: AppState }): boolean => {
     return state.app.loading;
   },
-  getMessage: (state: { app: AppState }) => {
+  getMessage: (state: { app: AppState }): string => {
     return state.app.message;
   },
-  getVideo: (state: { app: AppState }) => {
+  getVideo: (state: { app: AppState }): string => {
     return state.app.openedVideo;
   },
-  getVideoAlt: (state: { app: AppState }) => {
+  getVideoAlt: (state: { app: AppState }): string => {
     return state.app.openedVideoAlt;
   },
 };

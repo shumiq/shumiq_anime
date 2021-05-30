@@ -68,7 +68,9 @@
       "@typescript-eslint/unbound-method": "off",
       "@typescript-eslint/no-for-in-array": "off",
       "@typescript-eslint/prefer-regexp-exec": "off",
-      "no-constant-condition": "off"
+      "no-constant-condition": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off"
     },
     "plugins": [
       "import"

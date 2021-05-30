@@ -38,7 +38,7 @@ const Sync = () => {
             </Typography>
           )}
           {selectedTab === 1 && <SyncAnime active={selectedTab === 1} />}
-          {selectedTab === 2 && <SyncOther active={selectedTab === 2} />}
+          {selectedTab === 2 && <SyncOther />}
         </Container>
       </Container>
     </React.Fragment>

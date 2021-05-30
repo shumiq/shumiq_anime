@@ -1,8 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import {
-  Anime,
-  Anime as AnimeType,
   Conan as ConanType,
   Database as DatabaseType,
   Keyaki as KeyakiType,
@@ -20,12 +18,9 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/Avatar';
-import { File, ListResponse } from '../../models/SynologyApi';
 import SynologyApi from '../../services/Synology/Synology';
-import { Icon } from '@material-ui/core';
 
-const SyncOther = ({ active }: { active: boolean }) => {
+const SyncOther = () => {
   const dispatch = useDispatch();
   const [status, setStatus] = useState({
     sakura: [0, 0],
@@ -41,18 +36,16 @@ const SyncOther = ({ active }: { active: boolean }) => {
   const [conanList, setConanList] = useState<Record<string, ConanType>>(
     (getLocalStorage('database') as DatabaseType)?.conan
   );
-  const [animeFolder, setAnimeFolder] = useState<Record<string, File>>({});
-  const [sortedAnimeList, setSortedAnimeList] = useState<[string, Anime][]>([]);
-  const [folderList, setFolderList] = useState<ListResponse>({
-    data: {},
-    success: false,
-  });
   useEffect(() => {
     Database.subscribe((db: DatabaseType) => {
       setSakuraList(db?.sakura);
       setKeyakiList(db?.keyaki);
       setConanList(db?.conan);
-      const newStatus = { ...status };
+      const newStatus = {
+        sakura: [0, 0],
+        keyaki: [0, 0],
+        conan: [0, 0],
+      };
       if (db.keyaki)
         newStatus.keyaki = [
           Object.entries(db.keyaki).length,
