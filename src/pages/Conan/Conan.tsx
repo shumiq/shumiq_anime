@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
@@ -23,10 +23,29 @@ const Conan = (): JSX.Element => {
   const isRandom = useSelector(Selector.isRandom);
   const [page, setPage] = useState(1);
   const totalPage = Math.ceil(Object.entries(conanList).length / PageSize);
+  const sortedConanList = Object.entries(conanList).sort(
+    (entryA, entryB) => entryA[1].case - entryB[1].case
+  );
+  const playList = sortedConanList.reduce((result, entry) => {
+    const eps = Object.keys(entry[1].episodes);
+    eps.forEach((ep, index) => {
+      result.push([
+        `คดีที่ ${entry[1].case} - ` +
+          entry[1].name +
+          ` ${index + 1}/${eps.length} (ตอนที่ ${ep})`,
+        entry[1].episodes[ep],
+      ]);
+    });
+    return result;
+  }, [] as [string, string][]);
 
-  const showFiles = (file: string) => {
-    dispatch(Action.openVideoAlt(file));
-  };
+  const showFiles = useCallback(
+    (file: string) => {
+      dispatch(Action.setPlaylist(playList));
+      dispatch(Action.openVideo(file));
+    },
+    [dispatch, playList]
+  );
 
   const handleUpdate = (name: string, key: string) => {
     const state = { ...conanList[key] };
@@ -75,8 +94,7 @@ const Conan = (): JSX.Element => {
           </TableHead>
           <TableBody>
             {conanList &&
-              Object.entries(conanList)
-                .sort((entryA, entryB) => entryA[1].case - entryB[1].case)
+              sortedConanList
                 .filter(
                   ([key, conan]) =>
                     conan.case > PageSize * (page - 1) &&

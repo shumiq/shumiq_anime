@@ -23,12 +23,29 @@ const Sakura = (): JSX.Element => {
   const isRandom = useSelector(Selector.isRandom);
   const [page, setPage] = useState(1);
   const totalPage = Math.ceil(Object.entries(sakuraList).length / PageSize);
+  const sortedSakuraList = Object.entries(sakuraList).sort(
+    (entryA, entryB) => entryA[1].ep - entryB[1].ep
+  );
+  const playList = sortedSakuraList.reduce((result, entry) => {
+    if (entry[1].sub['Thai'])
+      result.push([
+        `Ep:${entry[1].ep} ` + entry[1].name + ' [ซับไทย]',
+        entry[1].sub['Thai'],
+      ]);
+    if (entry[1].sub['Eng'])
+      result.push([
+        `Ep:${entry[1].ep} ` + entry[1].name + ' [ซับอังกฤษ]',
+        entry[1].sub['Eng'],
+      ]);
+    return result;
+  }, [] as [string, string][]);
 
   const showFiles = useCallback(
     (file: string) => {
-      dispatch(Action.openVideoAlt(file));
+      dispatch(Action.setPlaylist(playList));
+      dispatch(Action.openVideo(file));
     },
-    [dispatch]
+    [dispatch, playList]
   );
 
   const handleUpdate = (name: string, key: string) => {
@@ -80,8 +97,7 @@ const Sakura = (): JSX.Element => {
           </TableHead>
           <TableBody>
             {sakuraList &&
-              Object.entries(sakuraList)
-                .sort((entryA, entryB) => entryA[1].ep - entryB[1].ep)
+              sortedSakuraList
                 .filter(
                   ([key, sakura]) =>
                     sakura.ep > PageSize * (page - 1) &&

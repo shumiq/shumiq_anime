@@ -16,7 +16,6 @@ import { Action, Selector } from '../utils/Store/AppStore';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import MessageDialog from '../components/Dialog/MessageDialog';
 import VideoDialog from '../components/Dialog/VideoDialog';
-import VideoAltDialog from '../components/Dialog/VideoAltDialog';
 import { Database } from '../services/Firebase/Firebase';
 import { Database as DatabaseType } from '../models/Type';
 
@@ -68,7 +67,6 @@ const App = (): JSX.Element => {
       </Backdrop>
       <MessageDialog />
       <VideoDialog />
-      <VideoAltDialog />
     </ThemeProvider>
   );
 };

@@ -26,9 +26,9 @@ interface AppState {
   loading: boolean;
   message: string;
   openedVideo: string;
-  openedVideoAlt: string;
   database: Database;
   random: boolean;
+  playList: [string, string][];
 }
 
 const initialState: AppState = {
@@ -44,11 +44,11 @@ const initialState: AppState = {
   openedAnimeInfo: null,
   openedAnimeEdit: null,
   openedVideo: '',
-  openedVideoAlt: '',
   loading: false,
   message: '',
   database: getLocalStorage('database') as DatabaseType,
   random: false,
+  playList: [],
 };
 
 const slice = createSlice({
@@ -92,12 +92,6 @@ const slice = createSlice({
     closeVideo: (state) => {
       state.openedVideo = '';
     },
-    openVideoAlt: (state, action) => {
-      state.openedVideoAlt = action.payload as string;
-    },
-    closeVideoAlt: (state) => {
-      state.openedVideoAlt = '';
-    },
     openAnimeInfo: (state, action) => {
       state.openedAnimeInfo = action.payload as {
         key: string;
@@ -119,6 +113,9 @@ const slice = createSlice({
     },
     setRandom: (state, action) => {
       state.random = action.payload as boolean;
+    },
+    setPlaylist: (state, action) => {
+      state.playList = action.payload as [string, string][];
     },
   },
 });
@@ -171,14 +168,14 @@ export const Selector = {
   getVideo: (state: { app: AppState }): string => {
     return state.app.openedVideo;
   },
-  getVideoAlt: (state: { app: AppState }): string => {
-    return state.app.openedVideoAlt;
-  },
   getDatabase: (state: { app: AppState }): Database => {
     return state.app.database;
   },
   isRandom: (state: { app: AppState }): boolean => {
     return state.app.random;
+  },
+  getPlayList: (state: { app: AppState }): [string, string][] => {
+    return state.app.playList;
   },
 };
 

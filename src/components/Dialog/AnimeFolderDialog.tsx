@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -28,6 +28,22 @@ export default function AnimeFolderDialog({ isAdmin }: { isAdmin: boolean }) {
   const open = data !== null;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
+  const getPlayList = useCallback(() => {
+    return (
+      data?.folder.reduce(
+        (result, file, index) =>
+          result.concat([
+            [
+              `${data.anime.title} ตอนที่ ${index + 1}/${
+                data.anime.all_episode
+              }`,
+              file.path,
+            ],
+          ]),
+        [] as [string, string][]
+      ) || []
+    );
+  }, [data]);
 
   const handleClose = () => {
     dispatch(Action.closeAnimeFolder());
@@ -61,12 +77,13 @@ export default function AnimeFolderDialog({ isAdmin }: { isAdmin: boolean }) {
     );
   };
 
-  const handlePlay = (path: string) => {
-    const url = SynologyApi.getAuthDownloadURL(
-      SynologyApi.getDownloadURL(path)
-    );
-    dispatch(Action.openVideo(url));
-  };
+  const handlePlay = useCallback(
+    (file: string) => {
+      dispatch(Action.setPlaylist(getPlayList()));
+      dispatch(Action.openVideo(file));
+    },
+    [dispatch, getPlayList]
+  );
 
   return (
     <Dialog
@@ -84,7 +101,6 @@ export default function AnimeFolderDialog({ isAdmin }: { isAdmin: boolean }) {
               {isAdmin && <TableCell align={'center'}></TableCell>}
               <TableCell align={'center'}>Name</TableCell>
               <TableCell align={'center'}>Watch</TableCell>
-              <TableCell align={'center'}>Download</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -106,17 +122,6 @@ export default function AnimeFolderDialog({ isAdmin }: { isAdmin: boolean }) {
                     <IconButton onClick={() => handlePlay(file.path)}>
                       <PlayIcon />
                     </IconButton>
-                  </TableCell>
-                  <TableCell align={'center'}>
-                    <Link
-                      href={SynologyApi.getAuthDownloadURL(
-                        SynologyApi.getDownloadURL(file.path, true)
-                      )}
-                    >
-                      <IconButton>
-                        <DownloadIcon />
-                      </IconButton>
-                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
