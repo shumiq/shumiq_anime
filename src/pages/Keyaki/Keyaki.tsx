@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
@@ -20,12 +20,16 @@ const Keyaki = (): JSX.Element => {
   const isAdmin = useSelector(Selector.isAdmin);
   const [editMode, setEditMode] = useState('');
   const keyakiList = useSelector(Selector.getDatabase).keyaki;
+  const isRandom = useSelector(Selector.isRandom);
   const [page, setPage] = useState(1);
-  const totalPage = Math.ceil(Object.entries(keyakiList).length / 10.0);
+  const totalPage = Math.ceil(Object.entries(keyakiList).length / PageSize);
 
-  const showFiles = (file: string) => {
-    dispatch(Action.openVideoAlt(file));
-  };
+  const showFiles = useCallback(
+    (file: string) => {
+      dispatch(Action.openVideoAlt(file));
+    },
+    [dispatch]
+  );
 
   const handleUpdate = (name: string, key: string) => {
     const state = { ...keyakiList[key] };
@@ -33,6 +37,16 @@ const Keyaki = (): JSX.Element => {
     Database.update.keyaki(key, state);
     setEditMode('');
   };
+
+  useEffect(() => {
+    if (isRandom) {
+      const allKeyaki = Object.entries(keyakiList);
+      const keyaki = allKeyaki[Math.floor(Math.random() * allKeyaki.length)];
+      if (keyaki[1].sub['Thai']) void showFiles(keyaki[1].sub['Thai']);
+      else if (keyaki[1].sub['Eng']) void showFiles(keyaki[1].sub['Eng']);
+      dispatch(Action.setRandom(false));
+    }
+  }, [isRandom, showFiles, dispatch, keyakiList]);
 
   return (
     <React.Fragment>

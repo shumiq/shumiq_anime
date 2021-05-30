@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
 import { Anime as AnimeType } from '../../models/Type';
@@ -11,7 +11,7 @@ import AnimeFolderDialog from '../../components/Dialog/AnimeFolderDialog';
 import AnimeEditDialog from '../../components/Dialog/AnimeEditDialog';
 import AnimeInfoDialog from '../../components/Dialog/AnimeInfoDialog';
 import AnimeCardList from '../../components/AnimeCard/AnimeCardList';
-import SynologyApi from "../../services/Synology/Synology";
+import SynologyApi from '../../services/Synology/Synology';
 
 const Anime = ({ location }) => {
   const dispatch = useDispatch();
@@ -41,27 +41,26 @@ const Anime = ({ location }) => {
     }
   }, [location, dispatch]);
 
-
   const handleOpenFolder = useCallback(
-      async (key: string, anime: AnimeType) => {
-        dispatch(Action.showLoading(true));
-        const folder = await SynologyApi.list(`Anime${anime.path}`);
-        dispatch(Action.showLoading(false));
-        if (folder.success)
-          dispatch(
-              Action.openAnimeFolder(
-                  { key: key, anime: anime, folder: folder.data.files } || null
-              )
-          );
-        else {
-          dispatch(Action.showMessage(`Cannot load "${anime.title}"`));
-        }
-      },
-      [dispatch]
+    async (key: string, anime: AnimeType) => {
+      dispatch(Action.showLoading(true));
+      const folder = await SynologyApi.list(`Anime${anime.path}`);
+      dispatch(Action.showLoading(false));
+      if (folder.success)
+        dispatch(
+          Action.openAnimeFolder(
+            { key: key, anime: anime, folder: folder.data.files } || null
+          )
+        );
+      else {
+        dispatch(Action.showMessage(`Cannot load "${anime.title}"`));
+      }
+    },
+    [dispatch]
   );
 
   useEffect(() => {
-    if(isRandom) {
+    if (isRandom) {
       const allAnime = Object.entries(animeList);
       const anime = allAnime[Math.floor(Math.random() * allAnime.length)];
       void handleOpenFolder(anime[0], anime[1]);
@@ -72,7 +71,11 @@ const Anime = ({ location }) => {
   return (
     <React.Fragment>
       <Container maxWidth="lg">
-        <AnimeCardList pageList={pageList} isAdmin={isAdmin} handleOpenFolder={handleOpenFolder} />
+        <AnimeCardList
+          pageList={pageList}
+          isAdmin={isAdmin}
+          handleOpenFolder={handleOpenFolder}
+        />
         <FilterBar seasonList={SeasonList(animeList)} />
       </Container>
       <AnimeFolderDialog isAdmin={isAdmin} />

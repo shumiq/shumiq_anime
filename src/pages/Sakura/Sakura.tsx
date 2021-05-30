@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
@@ -20,12 +20,16 @@ const Sakura = (): JSX.Element => {
   const isAdmin = useSelector(Selector.isAdmin);
   const [editMode, setEditMode] = useState('');
   const sakuraList = useSelector(Selector.getDatabase).sakura;
+  const isRandom = useSelector(Selector.isRandom);
   const [page, setPage] = useState(1);
-  const totalPage = Math.ceil(Object.entries(sakuraList).length / 10.0);
+  const totalPage = Math.ceil(Object.entries(sakuraList).length / PageSize);
 
-  const showFiles = (file: string) => {
-    dispatch(Action.openVideoAlt(file));
-  };
+  const showFiles = useCallback(
+    (file: string) => {
+      dispatch(Action.openVideoAlt(file));
+    },
+    [dispatch]
+  );
 
   const handleUpdate = (name: string, key: string) => {
     const state = { ...sakuraList[key] };
@@ -33,6 +37,16 @@ const Sakura = (): JSX.Element => {
     Database.update.sakura(key, state);
     setEditMode('');
   };
+
+  useEffect(() => {
+    if (isRandom) {
+      const allSakura = Object.entries(sakuraList);
+      const sakura = allSakura[Math.floor(Math.random() * allSakura.length)];
+      if (sakura[1].sub['Thai']) void showFiles(sakura[1].sub['Thai']);
+      else if (sakura[1].sub['Eng']) void showFiles(sakura[1].sub['Eng']);
+      dispatch(Action.setRandom(false));
+    }
+  }, [isRandom, showFiles, dispatch, sakuraList]);
 
   return (
     <React.Fragment>

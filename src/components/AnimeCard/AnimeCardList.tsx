@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Anime} from '../../models/Type';
+import { Anime } from '../../models/Type';
 import Grid from '@material-ui/core/Grid';
 import Share from '../../utils/Share/Share';
 import { useDispatch } from 'react-redux';
@@ -10,7 +10,7 @@ import AnimeCard from './AnimeCard';
 export default function AnimeCardList({
   pageList,
   isAdmin,
-    handleOpenFolder
+  handleOpenFolder,
 }: {
   pageList: [string, Anime][];
   isAdmin: boolean;

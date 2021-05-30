@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
@@ -20,8 +20,9 @@ const Conan = (): JSX.Element => {
   const isAdmin = useSelector(Selector.isAdmin);
   const [editMode, setEditMode] = useState('');
   const conanList = useSelector(Selector.getDatabase).conan;
+  const isRandom = useSelector(Selector.isRandom);
   const [page, setPage] = useState(1);
-  const totalPage = Math.ceil(Object.entries(conanList).length / 10.0);
+  const totalPage = Math.ceil(Object.entries(conanList).length / PageSize);
 
   const showFiles = (file: string) => {
     dispatch(Action.openVideoAlt(file));
@@ -33,6 +34,14 @@ const Conan = (): JSX.Element => {
     Database.update.conan(key, state);
     setEditMode('');
   };
+
+  useEffect(() => {
+    if (isRandom) {
+      const page = Math.ceil(Math.random() * totalPage);
+      setPage(page);
+      dispatch(Action.setRandom(false));
+    }
+  }, [isRandom, totalPage, dispatch]);
 
   return (
     <React.Fragment>
