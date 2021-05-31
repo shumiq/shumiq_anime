@@ -56,11 +56,12 @@ const Conan = (): JSX.Element => {
 
   useEffect(() => {
     if (isRandom) {
-      const page = Math.ceil(Math.random() * totalPage);
-      setPage(page);
+      const allConan = Object.values(conanList);
+      const conan = allConan[Math.floor(Math.random() * allConan.length)];
+      void showFiles(Object.values(conan.episodes)[0]);
       dispatch(Action.setRandom(false));
     }
-  }, [isRandom, totalPage, dispatch]);
+  }, [isRandom, conanList, dispatch, showFiles]);
 
   return (
     <React.Fragment>
