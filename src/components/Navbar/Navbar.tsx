@@ -125,7 +125,11 @@ function NavBar({ children }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography
+            variant="h6"
+            noWrap
+            onClick={() => window.open('/', '_self')}
+          >
             IQ's Anime
           </Typography>
         </Toolbar>
