@@ -62,7 +62,16 @@ export default function VideoDialog() {
       onMouseMove={() => setStartHidden(false)}
       onTouchStart={() => setStartHidden(false)}
     >
-      <video id="video-player" controls autoPlay className={classes.video}>
+      <video
+        id="video-player"
+        controls
+        autoPlay
+        className={classes.video}
+        onEnded={() => {
+          if (currentIndex < playList.length - 1)
+            handleNext(playList[currentIndex + 1][1]);
+        }}
+      >
         <source src={videoUrl} type={'video/mp4'} />
       </video>
       <Box
