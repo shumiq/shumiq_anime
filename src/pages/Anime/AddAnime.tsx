@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import { Anime } from '../../models/Type';
 import { Database } from '../../services/Firebase/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { Action, Selector } from '../../utils/Store/AppStore';
+import { Selector } from '../../utils/Store/AppStore';
 import Typography from '@material-ui/core/Typography';
 import AddCircle from '@material-ui/icons/AddCircle';
 import CheckCircle from '@material-ui/icons/CheckCircle';
@@ -18,10 +18,11 @@ import TableBody from '@material-ui/core/TableBody';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import { Season } from '../../models/Constants';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const AddAnime = () => {
-  const dispatch = useDispatch();
   const [searchResult, setSearchResult] = useState<AnilistInfoResponse[]>([]);
+  const [loading, setLoading] = useState(false);
   const animeList = useSelector(Selector.getDatabase).anime;
 
   const handleSearch = async (
@@ -33,9 +34,9 @@ const AddAnime = () => {
       setSearchResult([]);
       return;
     }
-    dispatch(Action.showLoading(true));
+    setLoading(true);
     const result = await AnilistApi.searchAnime(keyword);
-    dispatch(Action.showLoading(false));
+    setLoading(false);
     setSearchResult(result);
   };
 
@@ -89,7 +90,7 @@ const AddAnime = () => {
           onBlur={handleSearch}
           fullWidth
         />
-        {searchResult.length > 0 && (
+        {(loading || searchResult.length) > 0 && (
           <Table>
             <TableHead>
               <TableRow>
@@ -104,6 +105,13 @@ const AddAnime = () => {
               </TableRow>
             </TableHead>
             <TableBody>
+              {loading && (
+                <TableRow>
+                  <TableCell width={4} align={'center'} colSpan={6}>
+                    <CircularProgress color="inherit" />
+                  </TableCell>
+                </TableRow>
+              )}
               {searchResult.map(
                 (anime) =>
                   anime &&

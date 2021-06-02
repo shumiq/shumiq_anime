@@ -15,11 +15,13 @@ import SynologyApi from '../../services/Synology/Synology';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const SyncDownload = ({ active }: { active: boolean }) => {
   const dispatch = useDispatch();
   const db = useSelector(Selector.getDatabase);
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState<ListResponse>({
     data: {},
     success: false,
@@ -29,14 +31,14 @@ const SyncDownload = ({ active }: { active: boolean }) => {
   >({});
 
   const fetchFiles = useCallback(() => {
-    dispatch(Action.showLoading(true));
+    setLoading(true);
     void SynologyApi.list('Downloads', false, true).then((folder) => {
       if (folder.data.files) {
         setFileList(folder);
       }
-      dispatch(Action.showLoading(false));
+      setLoading(false);
     });
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (active) {
@@ -119,6 +121,13 @@ const SyncDownload = ({ active }: { active: boolean }) => {
             </TableRow>
           </TableHead>
           <TableBody>
+            {loading && (
+              <TableRow>
+                <TableCell width={3} align={'center'} colSpan={6}>
+                  <CircularProgress color="inherit" />
+                </TableCell>
+              </TableRow>
+            )}
             {fileList.data.files &&
               fileList.data.files.map((file) => (
                 <TableRow key={file.name}>

@@ -15,10 +15,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import { File, ListResponse } from '../../models/SynologyApi';
 import SynologyApi from '../../services/Synology/Synology';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const SyncAnime = ({ active }: { active: boolean }) => {
   const dispatch = useDispatch();
   const animeList = useSelector(Selector.getDatabase).anime;
+  const [loading, setLoading] = useState(false);
   const [animeFolder, setAnimeFolder] = useState<Record<string, File>>({});
   const [sortedAnimeList, setSortedAnimeList] = useState<[string, Anime][]>([]);
   const [folderList, setFolderList] = useState<ListResponse>({
@@ -28,10 +30,10 @@ const SyncAnime = ({ active }: { active: boolean }) => {
 
   useEffect(() => {
     if (active) {
-      dispatch(Action.showLoading(true));
+      setLoading(true);
       void SynologyApi.list('Anime', false, true).then((folders) => {
         setFolderList(folders);
-        dispatch(Action.showLoading(false));
+        setLoading(false);
       });
     }
   }, [dispatch, active]);
@@ -122,6 +124,13 @@ const SyncAnime = ({ active }: { active: boolean }) => {
             </TableRow>
           </TableHead>
           <TableBody>
+            {loading && (
+              <TableRow>
+                <TableCell width={4} align={'center'} colSpan={6}>
+                  <CircularProgress color="inherit" />
+                </TableCell>
+              </TableRow>
+            )}
             {onlyUpdateAnime.map(
               ([key, anime]) =>
                 anime !== null && (
