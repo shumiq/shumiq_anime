@@ -36,7 +36,7 @@ const SynologyApi = {
     try {
       let sid = storage.get('synology_sid');
       if (!sid || sid.length === 0) sid = await SynologyApi.signIn();
-      const reqPath = `${path}${sortByDate ? sortBy.date : sortBy.name}${
+      const reqPath = `${encodeURIComponent(path)}${sortByDate ? sortBy.date : sortBy.name}${
         isAdditional ? additional : ''
       }&_sid=${sid}`;
       const response: { data: ListResponse; status: string } = await axios.get(
@@ -48,13 +48,13 @@ const SynologyApi = {
     }
   },
   getDownloadURL: (path: string, isDownload = false): string => {
-    return `${hostName}${downloadPath}${path}${
+    return `${hostName}${downloadPath}${encodeURIComponent(path)}${
       isDownload ? forceDownload : ''
     }`;
   },
   getAuthDownloadURL: (url: string): string => {
     const sid = storage.get('synology_sid');
-    if (sid && sid.length > 0) return encodeURI(`${url}&_sid=${sid}`);
+    if (sid && sid.length > 0) return `${url}&_sid=${sid}`;
     return '';
   },
   move: async (from: string, to: string, password: string) => {
