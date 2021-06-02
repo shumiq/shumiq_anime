@@ -3,6 +3,10 @@ export interface Database {
   conan: Record<string, Conan>;
   keyaki: Record<string, Keyaki>;
   sakura: Record<string, Sakura>;
+  backup: {
+    latest_backup: number;
+    oldest_backup: number;
+  };
 }
 
 export interface DatabaseStatus {

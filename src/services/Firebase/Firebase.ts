@@ -2,7 +2,7 @@ import {
   setLocalStorage,
   getLocalStorage,
 } from '../../utils/LocalStorage/LocalStorage';
-import Firebase from './FirebaseCore';
+import Firebase, { currentTimestamp } from './FirebaseCore';
 import firebase from 'firebase/app';
 import {
   Database as DatabaseType,
@@ -99,6 +99,10 @@ export const Database = {
         sakuraFiles: status.sakura?.files.toString() || '',
       },
     };
+    Firebase.database.set(
+      `/${databasePath}/backup/latest_backup`,
+      currentTimestamp
+    );
     await Firebase.storage.create(
       'backup',
       fileName,
@@ -122,60 +126,39 @@ export const Database = {
     const response = await Firebase.storage.list('backup');
     return response.reverse();
   },
-  // runAutoBackup: async (): Promise<boolean> => {
-  //   const autoBackupInterval = 1000 * 60 * 60 * 24 * 14; // 2 Week
-  //   const currentTime = Date.now();
-  //   let latestBackup = Number(getLocalStorage('last_backup')) || 0;
-  //   if (latestBackup === 0) {
-  //     const backupFiles = await Database.backupFiles();
-  //     latestBackup =
-  //       backupFiles.length > 0
-  //         ? new Date(backupFiles[0].timeCreated).getTime()
-  //         : 0;
-  //     setLocalStorage('last_backup', latestBackup);
-  //   }
-  //   const timeDiff = currentTime - latestBackup;
-  //   if (timeDiff > autoBackupInterval) {
-  //     void (await Database.backup());
-  //     setLocalStorage('last_backup', currentTime);
-  //   }
-  //   return timeDiff > autoBackupInterval;
-  // },
-  // runAutoDelete: async (): Promise<boolean> => {
-  //   const autoDeleteInterval = 1000 * 60 * 60 * 24 * 30; // 1 month
-  //   const currentTime = Date.now();
-  //   let backupFiles = [] as {
-  //     name: string;
-  //     timeCreated: number;
-  //     generation: string;
-  //     customMetadata: Record<string, string>;
-  //     data: unknown;
-  //     download: string;
-  //   }[];
-  //   let oldestBackup = Number(getLocalStorage('oldest_backup')) || 0;
-  //   if (oldestBackup === 0) {
-  //     backupFiles = await Database.backupFiles();
-  //     oldestBackup =
-  //       backupFiles.length > 0
-  //         ? new Date(backupFiles[backupFiles.length - 1].timeCreated).getTime()
-  //         : 0;
-  //     setLocalStorage('oldest_backup', oldestBackup);
-  //   }
-  //   const timeDiff = currentTime - oldestBackup;
-  //   if (timeDiff > autoDeleteInterval) {
-  //     if (backupFiles.length === 0) backupFiles = await Database.backupFiles();
-  //     for (const file of backupFiles) {
-  //       const createdTime = new Date(file.timeCreated).getTime();
-  //       const timeDiff = currentTime - createdTime;
-  //       if (timeDiff > autoDeleteInterval) {
-  //         void (await Firebase.storage.delete('backup', file.name));
-  //       } else {
-  //         setLocalStorage('oldest_backup', createdTime);
-  //       }
-  //     }
-  //   }
-  //   return true;
-  // },
+  runAutoBackup: async (
+    database: DatabaseType,
+    lastestBackup: number
+  ): Promise<boolean> => {
+    const autoBackupInterval = 1000 * 60 * 60 * 24 * 7; // 1 Week
+    const currentTime = Date.now();
+    if (currentTime - lastestBackup > autoBackupInterval) {
+      void (await Database.backup(database));
+      return true;
+    }
+    return false;
+  },
+  runAutoDeleteBackup: async (oldestBackup: number): Promise<boolean> => {
+    const autoDeleteInterval = 1000 * 60 * 60 * 24 * 30 * 3; // 3 month
+    const currentTime = Date.now();
+    if (currentTime - oldestBackup > autoDeleteInterval) {
+      const backupFiles = await Database.backupFiles();
+      for (const file of backupFiles) {
+        const createdTime = new Date(file.timeCreated).getTime();
+        const timeDiff = currentTime - createdTime;
+        if (timeDiff > autoDeleteInterval) {
+          void (await Firebase.storage.delete('backup', file.name));
+        } else {
+          Firebase.database.set(
+            `/${databasePath}/backup/oldest_backup`,
+            createdTime
+          );
+        }
+      }
+      return true;
+    }
+    return false;
+  },
   add: {
     anime: (anime: Anime): void => {
       try {

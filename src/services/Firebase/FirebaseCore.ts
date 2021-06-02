@@ -112,3 +112,5 @@ export default {
     },
   },
 };
+
+export const currentTimestamp = firebase.database.ServerValue.TIMESTAMP;

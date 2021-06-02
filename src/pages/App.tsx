@@ -27,6 +27,8 @@ const App = (): JSX.Element => {
   useEffect(() => {
     Database.subscribe((db: DatabaseType) => {
       dispatch(Action.updateDatabase(db));
+      void Database.runAutoBackup(db, db.backup.latest_backup);
+      void Database.runAutoDeleteBackup(db.backup.oldest_backup);
     });
   }, [dispatch]);
   const darkTheme = createMuiTheme({

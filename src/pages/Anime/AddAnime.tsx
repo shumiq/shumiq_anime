@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { Anime } from '../../models/Type';
 import { Database } from '../../services/Firebase/Firebase';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Selector } from '../../utils/Store/AppStore';
 import Typography from '@material-ui/core/Typography';
 import AddCircle from '@material-ui/icons/AddCircle';
