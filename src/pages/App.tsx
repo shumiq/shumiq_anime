@@ -18,6 +18,8 @@ import MessageDialog from '../components/Dialog/MessageDialog';
 import VideoDialog from '../components/Dialog/VideoDialog';
 import { Database } from '../services/Firebase/Firebase';
 import { Database as DatabaseType } from '../models/Type';
+import storage from '../utils/LocalStorage/LocalStorage';
+import Synology from '../services/Synology/Synology';
 
 const App = (): JSX.Element => {
   const classes = useStyles();
@@ -30,6 +32,10 @@ const App = (): JSX.Element => {
       void Database.runAutoBackup(db, db.backup.latest_backup);
       void Database.runAutoDeleteBackup(db.backup.oldest_backup);
     });
+    const sid = storage.get('synology_sid');
+    if (!sid || sid.length === 0) {
+      void Synology.signIn();
+    }
   }, [dispatch]);
   const darkTheme = createMuiTheme({
     palette: {

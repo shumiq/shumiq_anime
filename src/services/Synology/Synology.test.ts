@@ -1,7 +1,7 @@
 import axios from 'axios';
 import UserDetail from '../UserDetail/UserDetail';
 import SynologyApi from './Synology';
-import { storage } from '../../utils/LocalStorage/LocalStorage';
+import storage from '../../utils/LocalStorage/LocalStorage';
 
 jest.mock('axios');
 jest.mock('../UserDetail/UserDetail');

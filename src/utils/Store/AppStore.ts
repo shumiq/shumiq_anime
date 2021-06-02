@@ -10,7 +10,7 @@ import {
 import { FilterOption } from '../../models/Constants';
 import { File } from '../../models/SynologyApi';
 import { AnilistInfoResponse } from '../../models/AnilistApi';
-import { getLocalStorage } from '../LocalStorage/LocalStorage';
+import storage from '../LocalStorage/LocalStorage';
 
 interface AppState {
   isSignIn: boolean;
@@ -46,7 +46,7 @@ const initialState: AppState = {
   openedVideo: '',
   loading: false,
   message: '',
-  database: getLocalStorage('database') as DatabaseType,
+  database: JSON.parse(storage.get('database') || '{}') as DatabaseType,
   random: false,
   playList: [],
 };

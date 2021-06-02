@@ -1,7 +1,3 @@
-import {
-  setLocalStorage,
-  getLocalStorage,
-} from '../../utils/LocalStorage/LocalStorage';
 import Firebase, { currentTimestamp } from './FirebaseCore';
 import firebase from 'firebase/app';
 import {
@@ -19,6 +15,7 @@ import {
   validateKeyaki,
   validateSakura,
 } from '../../utils/Validation';
+import storage from '../../utils/LocalStorage/LocalStorage';
 
 const databasePath = 'myanimelist_database';
 
@@ -27,8 +24,11 @@ export const Database = {
     Firebase.database.subscribe(
       '/' + databasePath,
       (database: DatabaseType): void => {
-        setLocalStorage('database', validateDatabase(database));
-        callback(getLocalStorage('database') as DatabaseType);
+        const db = validateDatabase(database);
+        if (db) {
+          storage.set('database', JSON.stringify(database));
+          callback(db as DatabaseType);
+        } else console.error('Invalid database format');
       }
     );
   },

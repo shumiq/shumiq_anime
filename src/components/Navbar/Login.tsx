@@ -4,10 +4,6 @@ import GoogleLogin, {
   GoogleLoginResponseOffline,
 } from 'react-google-login';
 import React, { useState } from 'react';
-import {
-  setLocalStorage,
-  removeLocalStorage,
-} from '../../utils/LocalStorage/LocalStorage';
 import { Auth } from '../../services/Firebase/Firebase';
 import UserDetail from '../../services/UserDetail/UserDetail';
 import { User } from '../../models/Type';
@@ -18,6 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import { useDispatch } from 'react-redux';
 import { Action } from '../../utils/Store/AppStore';
+import storage from '../../utils/LocalStorage/LocalStorage';
 
 const Login = (): JSX.Element => {
   const [user, setUser] = useState<User>({});
@@ -28,10 +25,13 @@ const Login = (): JSX.Element => {
     response: GoogleLoginResponse | GoogleLoginResponseOffline
   ): void => {
     const user = (response as GoogleLoginResponse).profileObj as User;
-    setLocalStorage('user', (response as GoogleLoginResponse).profileObj);
-    setLocalStorage(
+    storage.set(
+      'user',
+      JSON.stringify((response as GoogleLoginResponse).profileObj)
+    );
+    storage.set(
       'accessToken',
-      (response as GoogleLoginResponse).accessToken
+      JSON.stringify((response as GoogleLoginResponse).accessToken)
     );
     dispatch(Action.signIn(user));
     setUser(UserDetail.getUser() || {});
@@ -39,8 +39,8 @@ const Login = (): JSX.Element => {
   };
 
   const logout = () => {
-    removeLocalStorage('user');
-    removeLocalStorage('accessToken');
+    storage.remove('user');
+    storage.remove('accessToken');
     dispatch(Action.signOut());
     setUser(UserDetail.getUser() || {});
     Auth.signOut();
