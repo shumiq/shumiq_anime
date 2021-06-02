@@ -32,9 +32,7 @@ export const Database = {
       }
     );
   },
-  status: (): DatabaseStatus => {
-    const database = getLocalStorage('database') as DatabaseType;
-    if (!database) return {};
+  status: (database: DatabaseType): DatabaseStatus => {
     let sumAnime = 0;
     Object.keys(database.anime).forEach((key) => {
       if (database.anime[key]) {
@@ -85,10 +83,9 @@ export const Database = {
       },
     };
   },
-  backup: async (): Promise<void> => {
-    const database = getLocalStorage('database');
+  backup: async (database: DatabaseType): Promise<void> => {
     const fileName = currentDate() + '.json';
-    const status = Database.status();
+    const status = Database.status(database);
     const metadata: firebase.storage.UploadMetadata = {
       customMetadata: {
         animeSeries: status.anime?.series.toString() || '',
@@ -125,60 +122,60 @@ export const Database = {
     const response = await Firebase.storage.list('backup');
     return response.reverse();
   },
-  runAutoBackup: async (): Promise<boolean> => {
-    const autoBackupInterval = 1000 * 60 * 60 * 24 * 14; // 2 Week
-    const currentTime = Date.now();
-    let latestBackup = Number(getLocalStorage('last_backup')) || 0;
-    if (latestBackup === 0) {
-      const backupFiles = await Database.backupFiles();
-      latestBackup =
-        backupFiles.length > 0
-          ? new Date(backupFiles[0].timeCreated).getTime()
-          : 0;
-      setLocalStorage('last_backup', latestBackup);
-    }
-    const timeDiff = currentTime - latestBackup;
-    if (timeDiff > autoBackupInterval) {
-      void (await Database.backup());
-      setLocalStorage('last_backup', currentTime);
-    }
-    return timeDiff > autoBackupInterval;
-  },
-  runAutoDelete: async (): Promise<boolean> => {
-    const autoDeleteInterval = 1000 * 60 * 60 * 24 * 30; // 1 month
-    const currentTime = Date.now();
-    let backupFiles = [] as {
-      name: string;
-      timeCreated: number;
-      generation: string;
-      customMetadata: Record<string, string>;
-      data: unknown;
-      download: string;
-    }[];
-    let oldestBackup = Number(getLocalStorage('oldest_backup')) || 0;
-    if (oldestBackup === 0) {
-      backupFiles = await Database.backupFiles();
-      oldestBackup =
-        backupFiles.length > 0
-          ? new Date(backupFiles[backupFiles.length - 1].timeCreated).getTime()
-          : 0;
-      setLocalStorage('oldest_backup', oldestBackup);
-    }
-    const timeDiff = currentTime - oldestBackup;
-    if (timeDiff > autoDeleteInterval) {
-      if (backupFiles.length === 0) backupFiles = await Database.backupFiles();
-      for (const file of backupFiles) {
-        const createdTime = new Date(file.timeCreated).getTime();
-        const timeDiff = currentTime - createdTime;
-        if (timeDiff > autoDeleteInterval) {
-          void (await Firebase.storage.delete('backup', file.name));
-        } else {
-          setLocalStorage('oldest_backup', createdTime);
-        }
-      }
-    }
-    return true;
-  },
+  // runAutoBackup: async (): Promise<boolean> => {
+  //   const autoBackupInterval = 1000 * 60 * 60 * 24 * 14; // 2 Week
+  //   const currentTime = Date.now();
+  //   let latestBackup = Number(getLocalStorage('last_backup')) || 0;
+  //   if (latestBackup === 0) {
+  //     const backupFiles = await Database.backupFiles();
+  //     latestBackup =
+  //       backupFiles.length > 0
+  //         ? new Date(backupFiles[0].timeCreated).getTime()
+  //         : 0;
+  //     setLocalStorage('last_backup', latestBackup);
+  //   }
+  //   const timeDiff = currentTime - latestBackup;
+  //   if (timeDiff > autoBackupInterval) {
+  //     void (await Database.backup());
+  //     setLocalStorage('last_backup', currentTime);
+  //   }
+  //   return timeDiff > autoBackupInterval;
+  // },
+  // runAutoDelete: async (): Promise<boolean> => {
+  //   const autoDeleteInterval = 1000 * 60 * 60 * 24 * 30; // 1 month
+  //   const currentTime = Date.now();
+  //   let backupFiles = [] as {
+  //     name: string;
+  //     timeCreated: number;
+  //     generation: string;
+  //     customMetadata: Record<string, string>;
+  //     data: unknown;
+  //     download: string;
+  //   }[];
+  //   let oldestBackup = Number(getLocalStorage('oldest_backup')) || 0;
+  //   if (oldestBackup === 0) {
+  //     backupFiles = await Database.backupFiles();
+  //     oldestBackup =
+  //       backupFiles.length > 0
+  //         ? new Date(backupFiles[backupFiles.length - 1].timeCreated).getTime()
+  //         : 0;
+  //     setLocalStorage('oldest_backup', oldestBackup);
+  //   }
+  //   const timeDiff = currentTime - oldestBackup;
+  //   if (timeDiff > autoDeleteInterval) {
+  //     if (backupFiles.length === 0) backupFiles = await Database.backupFiles();
+  //     for (const file of backupFiles) {
+  //       const createdTime = new Date(file.timeCreated).getTime();
+  //       const timeDiff = currentTime - createdTime;
+  //       if (timeDiff > autoDeleteInterval) {
+  //         void (await Firebase.storage.delete('backup', file.name));
+  //       } else {
+  //         setLocalStorage('oldest_backup', createdTime);
+  //       }
+  //     }
+  //   }
+  //   return true;
+  // },
   add: {
     anime: (anime: Anime): void => {
       try {
