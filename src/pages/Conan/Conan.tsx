@@ -131,7 +131,7 @@ const Conan = (): JSX.Element => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Typography align={'right'}>
+                      <Typography align={'center'}>
                         {conan.episodes && Object.keys(conan.episodes).map(
                           (episode: string) =>
                             conanList[key].episodes[parseInt(episode)] && (

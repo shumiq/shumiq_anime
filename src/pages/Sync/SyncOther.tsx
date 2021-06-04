@@ -25,14 +25,14 @@ const SyncOther = () => {
     sakura: [
       Object.entries(db.sakura).length,
       Object.entries(db.sakura).reduce(
-        (c1, [_, ep]) => c1 + Object.entries(ep.sub).length,
+        (c1, [_, ep]) => c1 + (ep.sub ? Object.entries(ep.sub).length : 0),
         0
       ),
     ],
     keyaki: [
       Object.entries(db.keyaki).length,
       Object.entries(db.keyaki).reduce(
-        (c1, [_, ep]) => c1 + Object.entries(ep.sub).length,
+        (c1, [_, ep]) => c1 + (ep.sub ? Object.entries(ep.sub).length : 0),
         0
       ),
     ],
@@ -62,8 +62,11 @@ const SyncOther = () => {
           .filter(([key, sakura]) => sakura.ep === ep)
           .forEach(([key, sakura]) => {
             const updated = JSON.parse(JSON.stringify(sakura)) as SakuraType;
+            if(!updated.sub) updated["sub"] = {} as Record<string, string>;
             updated.sub[sub] = url;
-            Database.update.sakura(key, updated);
+            if (JSON.stringify(updated) !== JSON.stringify(sakura)) {
+              Database.update.sakura(key, updated);
+            }
           });
       } else {
         const sakura: SakuraType = {
@@ -73,6 +76,26 @@ const SyncOther = () => {
         };
         sakura.sub[sub] = url;
         Database.add.sakura(sakura);
+      }
+    });
+
+    Object.entries(db.sakura).forEach(([key, sakura]) => {
+      const updated = JSON.parse(JSON.stringify(sakura)) as SakuraType;
+      if(sakura.sub)
+        Object.keys(sakura.sub).forEach((sub) => {
+          let filename = `Soko Magattara, Sakurazaka ${('00' + sakura.ep.toString()).slice(
+              -2
+          )} ${sub}`;
+          if(sakura.ep >= 100) filename = `Soko Magattara, Sakurazaka ${sakura.ep} ${sub}`;
+          const isExisted = (files.data.files || []).find(
+              (file) => file.name.includes(filename)
+          );
+          if (!isExisted) {
+            delete updated.sub[sub];
+          }
+        });
+      if (JSON.stringify(updated) !== JSON.stringify(sakura)) {
+        Database.update.sakura(key, updated);
       }
     });
     dispatch(Action.showLoading(false));
@@ -95,8 +118,11 @@ const SyncOther = () => {
           .filter(([key, keyaki]) => keyaki.ep === ep)
           .forEach(([key, keyaki]) => {
             const updated = JSON.parse(JSON.stringify(keyaki)) as KeyakiType;
+            if(!updated.sub) updated["sub"] = {} as Record<string, string>;
             updated.sub[sub] = url;
-            Database.update.keyaki(key, updated);
+            if (JSON.stringify(updated) !== JSON.stringify(keyaki)) {
+              Database.update.keyaki(key, updated);
+            }
           });
       } else {
         const keyaki: KeyakiType = {
@@ -106,6 +132,26 @@ const SyncOther = () => {
         };
         keyaki.sub[sub] = url;
         Database.add.keyaki(keyaki);
+      }
+    });
+
+    Object.entries(db.keyaki).forEach(([key, keyaki]) => {
+      const updated = JSON.parse(JSON.stringify(keyaki)) as KeyakiType;
+      if(keyaki.sub)
+        Object.keys(keyaki.sub).forEach((sub) => {
+          let filename = `Keyakitte Kakenai ${('00' + keyaki.ep.toString()).slice(
+              -2
+          )} ${sub}`;
+          if(keyaki.ep >= 100) filename = `Keyakitte Kakenai ${keyaki.ep} ${sub}`;
+          const isExisted = (files.data.files || []).find(
+              (file) => file.name.includes(filename)
+          );
+          if (!isExisted) {
+            delete updated.sub[sub];
+          }
+        });
+      if (JSON.stringify(updated) !== JSON.stringify(keyaki)) {
+        Database.update.keyaki(key, updated);
       }
     });
     dispatch(Action.showLoading(false));

@@ -27,6 +27,7 @@ const Keyaki = (): JSX.Element => {
     (entryA, entryB) => entryA[1].ep - entryB[1].ep
   );
   const playList = sortedKeyakiList.reduce((result, entry) => {
+    if(!entry[1].sub) return result;
     if (entry[1].sub['Thai'])
       result.push([
         `Ep:${entry[1].ep} ` + entry[1].name + ' [ซับไทย]',
@@ -133,7 +134,7 @@ const Keyaki = (): JSX.Element => {
                     </TableCell>
                     <TableCell>
                       <Typography align={'right'}>
-                        {Object.keys(keyaki.sub).map(
+                        {keyaki.sub && Object.keys(keyaki.sub).map(
                           (sub) =>
                             keyaki.sub[sub] && (
                               <Button
