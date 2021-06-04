@@ -39,7 +39,8 @@ const SyncOther = () => {
     conan: [
       Object.entries(db.conan).length,
       Object.entries(db.conan).reduce(
-        (c1, [_, ep]) => c1 + (ep.episodes ? Object.entries(ep.episodes).length : 0),
+        (c1, [_, ep]) =>
+          c1 + (ep.episodes ? Object.entries(ep.episodes).length : 0),
         0
       ),
     ],
@@ -62,7 +63,7 @@ const SyncOther = () => {
           .filter(([key, sakura]) => sakura.ep === ep)
           .forEach(([key, sakura]) => {
             const updated = JSON.parse(JSON.stringify(sakura)) as SakuraType;
-            if(!updated.sub) updated["sub"] = {} as Record<string, string>;
+            if (!updated.sub) updated['sub'] = {} as Record<string, string>;
             updated.sub[sub] = url;
             if (JSON.stringify(updated) !== JSON.stringify(sakura)) {
               Database.update.sakura(key, updated);
@@ -81,14 +82,15 @@ const SyncOther = () => {
 
     Object.entries(db.sakura).forEach(([key, sakura]) => {
       const updated = JSON.parse(JSON.stringify(sakura)) as SakuraType;
-      if(sakura.sub)
+      if (sakura.sub)
         Object.keys(sakura.sub).forEach((sub) => {
-          let filename = `Soko Magattara, Sakurazaka ${('00' + sakura.ep.toString()).slice(
-              -2
-          )} ${sub}`;
-          if(sakura.ep >= 100) filename = `Soko Magattara, Sakurazaka ${sakura.ep} ${sub}`;
-          const isExisted = (files.data.files || []).find(
-              (file) => file.name.includes(filename)
+          let filename = `Soko Magattara, Sakurazaka ${(
+            '00' + sakura.ep.toString()
+          ).slice(-2)} ${sub}`;
+          if (sakura.ep >= 100)
+            filename = `Soko Magattara, Sakurazaka ${sakura.ep} ${sub}`;
+          const isExisted = (files.data.files || []).find((file) =>
+            file.name.includes(filename)
           );
           if (!isExisted) {
             delete updated.sub[sub];
@@ -118,7 +120,7 @@ const SyncOther = () => {
           .filter(([key, keyaki]) => keyaki.ep === ep)
           .forEach(([key, keyaki]) => {
             const updated = JSON.parse(JSON.stringify(keyaki)) as KeyakiType;
-            if(!updated.sub) updated["sub"] = {} as Record<string, string>;
+            if (!updated.sub) updated['sub'] = {} as Record<string, string>;
             updated.sub[sub] = url;
             if (JSON.stringify(updated) !== JSON.stringify(keyaki)) {
               Database.update.keyaki(key, updated);
@@ -137,14 +139,15 @@ const SyncOther = () => {
 
     Object.entries(db.keyaki).forEach(([key, keyaki]) => {
       const updated = JSON.parse(JSON.stringify(keyaki)) as KeyakiType;
-      if(keyaki.sub)
+      if (keyaki.sub)
         Object.keys(keyaki.sub).forEach((sub) => {
-          let filename = `Keyakitte Kakenai ${('00' + keyaki.ep.toString()).slice(
-              -2
-          )} ${sub}`;
-          if(keyaki.ep >= 100) filename = `Keyakitte Kakenai ${keyaki.ep} ${sub}`;
-          const isExisted = (files.data.files || []).find(
-              (file) => file.name.includes(filename)
+          let filename = `Keyakitte Kakenai ${(
+            '00' + keyaki.ep.toString()
+          ).slice(-2)} ${sub}`;
+          if (keyaki.ep >= 100)
+            filename = `Keyakitte Kakenai ${keyaki.ep} ${sub}`;
+          const isExisted = (files.data.files || []).find((file) =>
+            file.name.includes(filename)
           );
           if (!isExisted) {
             delete updated.sub[sub];
@@ -174,7 +177,8 @@ const SyncOther = () => {
           .filter(([key, conan]) => conan.case === cs)
           .forEach(([key, conan]) => {
             const updated = JSON.parse(JSON.stringify(conan)) as ConanType;
-            if(!updated.episodes) updated["episodes"] = {} as Record<string, string>;
+            if (!updated.episodes)
+              updated['episodes'] = {} as Record<string, string>;
             updated.episodes[ep] = url;
             if (JSON.stringify(updated) !== JSON.stringify(conan)) {
               Database.update.conan(key, updated);
@@ -193,18 +197,18 @@ const SyncOther = () => {
 
     Object.entries(db.conan).forEach(([key, conan]) => {
       const updated = JSON.parse(JSON.stringify(conan)) as ConanType;
-      if(conan.episodes)
-      Object.keys(conan.episodes).forEach((ep) => {
-        const filename = `conan ${('0000' + conan.case.toString()).slice(
-          -4
-        )} - ${('0000' + ep).slice(-4)}.mp4`;
-        const isExisted = (files.data.files || []).find(
-          (file) => file.name.toLowerCase() === filename
-        );
-        if (!isExisted) {
-          delete updated.episodes[ep];
-        }
-      });
+      if (conan.episodes)
+        Object.keys(conan.episodes).forEach((ep) => {
+          const filename = `conan ${('0000' + conan.case.toString()).slice(
+            -4
+          )} - ${('0000' + ep).slice(-4)}.mp4`;
+          const isExisted = (files.data.files || []).find(
+            (file) => file.name.toLowerCase() === filename
+          );
+          if (!isExisted) {
+            delete updated.episodes[ep];
+          }
+        });
       if (JSON.stringify(updated) !== JSON.stringify(conan)) {
         Database.update.conan(key, updated);
       }

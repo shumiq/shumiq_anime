@@ -27,7 +27,7 @@ const Sakura = (): JSX.Element => {
     (entryA, entryB) => entryA[1].ep - entryB[1].ep
   );
   const playList = sortedSakuraList.reduce((result, entry) => {
-    if(!entry[1].sub) return result;
+    if (!entry[1].sub) return result;
     if (entry[1].sub['Thai'])
       result.push([
         `Ep:${entry[1].ep} ` + entry[1].name + ' [ซับไทย]',
@@ -134,19 +134,20 @@ const Sakura = (): JSX.Element => {
                     </TableCell>
                     <TableCell>
                       <Typography align={'right'}>
-                        {sakura.sub && Object.keys(sakura.sub).map(
-                          (sub) =>
-                            sakura.sub[sub] && (
-                              <Button
-                                variant="contained"
-                                onClick={() => showFiles(sakura.sub[sub])}
-                                key={`${key}_${sub}`}
-                                style={{ margin: '2px' }}
-                              >
-                                {sub}
-                              </Button>
-                            )
-                        )}
+                        {sakura.sub &&
+                          Object.keys(sakura.sub).map(
+                            (sub) =>
+                              sakura.sub[sub] && (
+                                <Button
+                                  variant="contained"
+                                  onClick={() => showFiles(sakura.sub[sub])}
+                                  key={`${key}_${sub}`}
+                                  style={{ margin: '2px' }}
+                                >
+                                  {sub}
+                                </Button>
+                              )
+                          )}
                       </Typography>
                     </TableCell>
                   </TableRow>

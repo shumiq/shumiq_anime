@@ -11,8 +11,8 @@ const signOutUrl =
 
 export default async (req, res) => {
     const password = req.query.password.toString();
-    const from = req.query.from.toString();
-    const to = req.query.to.toString();
+    const from = encodeURIComponent(req.query.from.toString());
+    const to = encodeURIComponent(req.query.to.toString());
     const signInRes = await axios.get(signInUrl.replace("__PASSWORD__",password));
     if(!signInRes.data.success) {
         res.status(401).send();

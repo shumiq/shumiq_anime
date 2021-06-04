@@ -59,6 +59,8 @@ const SyncDownload = ({ active }: { active: boolean }) => {
         .filter(
           (anime) =>
             anime.path !== '' &&
+            (anime.download.toString() !== anime.all_episode.toString() ||
+              anime.download_url !== '') &&
             (file.name.toLowerCase().includes(anime.title.toLowerCase()) ||
               (anime.alt_title &&
                 anime.alt_title.length > 0 &&

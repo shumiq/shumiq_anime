@@ -27,7 +27,7 @@ const Conan = (): JSX.Element => {
     (entryA, entryB) => entryA[1].case - entryB[1].case
   );
   const playList = sortedConanList.reduce((result, entry) => {
-    if(!entry[1].episodes) return result;
+    if (!entry[1].episodes) return result;
     const eps = Object.keys(entry[1].episodes);
     eps.forEach((ep, index) => {
       result.push([
@@ -132,21 +132,22 @@ const Conan = (): JSX.Element => {
                     </TableCell>
                     <TableCell>
                       <Typography align={'center'}>
-                        {conan.episodes && Object.keys(conan.episodes).map(
-                          (episode: string) =>
-                            conanList[key].episodes[parseInt(episode)] && (
-                              <Button
-                                variant="contained"
-                                onClick={() =>
-                                  showFiles(conan.episodes[episode])
-                                }
-                                key={`${key}_${episode}`}
-                                style={{ margin: '2px' }}
-                              >
-                                {episode}
-                              </Button>
-                            )
-                        )}
+                        {conan.episodes &&
+                          Object.keys(conan.episodes).map(
+                            (episode: string) =>
+                              conanList[key].episodes[parseInt(episode)] && (
+                                <Button
+                                  variant="contained"
+                                  onClick={() =>
+                                    showFiles(conan.episodes[episode])
+                                  }
+                                  key={`${key}_${episode}`}
+                                  style={{ margin: '2px' }}
+                                >
+                                  {episode}
+                                </Button>
+                              )
+                          )}
                       </Typography>
                     </TableCell>
                   </TableRow>
