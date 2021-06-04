@@ -129,7 +129,9 @@ const SyncOther = () => {
           .forEach(([key, conan]) => {
             const updated = JSON.parse(JSON.stringify(conan)) as ConanType;
             updated.episodes[ep] = url;
-            Database.update.conan(key, updated);
+            if (JSON.stringify(updated) !== JSON.stringify(conan)) {
+              Database.update.conan(key, updated);
+            }
           });
       } else {
         const conan: ConanType = {
@@ -139,6 +141,24 @@ const SyncOther = () => {
         };
         conan.episodes[ep] = url;
         Database.add.conan(conan);
+      }
+    });
+
+    Object.entries(db.conan).forEach(([key, conan]) => {
+      const updated = JSON.parse(JSON.stringify(conan)) as ConanType;
+      Object.keys(conan.episodes).forEach((ep) => {
+        const filename = `conan ${('0000' + conan.case.toString()).slice(
+          -4
+        )} - ${('0000' + ep).slice(-4)}.mp4`;
+        const isExisted = (files.data.files || []).find(
+          (file) => file.name.toLowerCase() === filename
+        );
+        if (!isExisted) {
+          delete updated.episodes[ep];
+        }
+      });
+      if (JSON.stringify(updated) !== JSON.stringify(conan)) {
+        Database.update.conan(key, updated);
       }
     });
     dispatch(Action.showLoading(false));

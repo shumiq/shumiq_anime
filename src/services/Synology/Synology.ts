@@ -36,9 +36,9 @@ const SynologyApi = {
     try {
       let sid = storage.get('synology_sid');
       if (!sid || sid.length === 0) sid = await SynologyApi.signIn();
-      const reqPath = `${encodeURIComponent(path)}${sortByDate ? sortBy.date : sortBy.name}${
-        isAdditional ? additional : ''
-      }&_sid=${sid}`;
+      const reqPath = `${encodeURIComponent(path)}${
+        sortByDate ? sortBy.date : sortBy.name
+      }${isAdditional ? additional : ''}&_sid=${sid}`;
       const response: { data: ListResponse; status: string } = await axios.get(
         encodeURI(`${endPoint}/list?path=${encodeURIComponent(reqPath)}`)
       );
@@ -66,7 +66,7 @@ const SynologyApi = {
         ? encodeURIComponent(to)
         : encodeURIComponent(`/public_video${to}`);
       await axios.get(
-        encodeURI(`${endPoint}/move?from=${from}&to=${to}&password=${password}`)
+        `${endPoint}/move?from=${from}&to=${to}&password=${password}`
       );
       return true;
     } catch (e) {
