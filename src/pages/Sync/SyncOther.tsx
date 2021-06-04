@@ -39,7 +39,7 @@ const SyncOther = () => {
     conan: [
       Object.entries(db.conan).length,
       Object.entries(db.conan).reduce(
-        (c1, [_, ep]) => c1 + Object.entries(ep.episodes).length,
+        (c1, [_, ep]) => c1 + (ep.episodes ? Object.entries(ep.episodes).length : 0),
         0
       ),
     ],
@@ -128,6 +128,7 @@ const SyncOther = () => {
           .filter(([key, conan]) => conan.case === cs)
           .forEach(([key, conan]) => {
             const updated = JSON.parse(JSON.stringify(conan)) as ConanType;
+            if(!updated.episodes) updated["episodes"] = {} as Record<string, string>;
             updated.episodes[ep] = url;
             if (JSON.stringify(updated) !== JSON.stringify(conan)) {
               Database.update.conan(key, updated);
@@ -146,6 +147,7 @@ const SyncOther = () => {
 
     Object.entries(db.conan).forEach(([key, conan]) => {
       const updated = JSON.parse(JSON.stringify(conan)) as ConanType;
+      if(conan.episodes)
       Object.keys(conan.episodes).forEach((ep) => {
         const filename = `conan ${('0000' + conan.case.toString()).slice(
           -4

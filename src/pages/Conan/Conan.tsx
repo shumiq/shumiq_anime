@@ -27,6 +27,7 @@ const Conan = (): JSX.Element => {
     (entryA, entryB) => entryA[1].case - entryB[1].case
   );
   const playList = sortedConanList.reduce((result, entry) => {
+    if(!entry[1].episodes) return result;
     const eps = Object.keys(entry[1].episodes);
     eps.forEach((ep, index) => {
       result.push([
@@ -131,7 +132,7 @@ const Conan = (): JSX.Element => {
                     </TableCell>
                     <TableCell>
                       <Typography align={'right'}>
-                        {Object.keys(conan.episodes).map(
+                        {conan.episodes && Object.keys(conan.episodes).map(
                           (episode: string) =>
                             conanList[key].episodes[parseInt(episode)] && (
                               <Button
