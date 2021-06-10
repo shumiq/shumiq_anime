@@ -46,7 +46,7 @@ export interface Anime {
   view: number;
   year: number;
   alt_title?: string;
-  last_update?: number;
+  last_update: number;
 }
 
 export interface Conan {

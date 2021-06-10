@@ -77,6 +77,7 @@ const AddAnime = () => {
       genres: anime.genres.join(', '),
       cover_url: anime.coverImage.large,
       alt_title: '',
+      last_update: 0,
     };
     Database.add.anime(newAnime);
   };

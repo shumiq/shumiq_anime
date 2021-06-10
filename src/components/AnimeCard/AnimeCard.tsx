@@ -45,17 +45,17 @@ export default function AnimeCard({
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const isUnFinish = isAdmin && anime.download > anime.view;
-  const focusDownload = anime.all_episode.toString() !== anime.download.toString() && anime.last_update !== undefined && Date.now() - anime.last_update > 1000*60*60*24*7;
+  const focusDownload =
+    anime.download_url !== '' &&
+    anime.all_episode.toString() !== anime.download.toString() &&
+    anime.last_update !== undefined &&
+    Date.now() - anime.last_update > 1000 * 60 * 60 * 24 * 7;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
   return (
-    <Card
-      className={clsx(classes.root, {
-        [classes.watch]: isUnFinish,
-      })}
-    >
+    <Card className={clsx(classes.root)}>
       <Box
         className={classes.score}
         display="flex"
@@ -104,7 +104,12 @@ export default function AnimeCard({
             {isAdmin && (
               <TableRow hover={true}>
                 <TableCell>View</TableCell>
-                <TableCell align={'right'}>
+                <TableCell
+                  align={'right'}
+                  className={clsx({
+                    [classes.focusField]: isUnFinish,
+                  })}
+                >
                   {anime.view}/{anime.download}
                 </TableCell>
               </TableRow>
@@ -145,7 +150,7 @@ export default function AnimeCard({
                 aria-label="download"
                 disabled={anime.download_url === ''}
                 className={clsx({
-                  [classes.focusIcon]: focusDownload,
+                  [classes.focusField]: focusDownload,
                 })}
               >
                 <DownloadIcon />
@@ -182,9 +187,6 @@ const useStyles = makeStyles((theme) => ({
       width: 360,
     },
   },
-  watch: {
-    boxShadow: "0px 0px 10px #00AA00",
-  },
   media: {
     height: 0,
     paddingTop: '100%',
@@ -215,7 +217,7 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
-  focusIcon: {
+  focusField: {
     color: '#00FF00',
-  }
+  },
 }));
