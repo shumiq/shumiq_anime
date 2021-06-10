@@ -82,6 +82,7 @@ const SyncAnime = ({ active }: { active: boolean }) => {
       }
       anime.download = folder.data.total || 0;
       anime.size = animeFolder[key]?.additional?.size || 0;
+      anime.last_update = Date.now();
       Database.update.anime(key, anime);
       dispatch(Action.showLoading(false));
     },

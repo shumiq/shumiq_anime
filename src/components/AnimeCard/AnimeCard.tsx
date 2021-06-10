@@ -45,6 +45,7 @@ export default function AnimeCard({
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const isUnFinish = isAdmin && anime.download > anime.view;
+  const focusDownload = anime.all_episode.toString() !== anime.download.toString() && anime.last_update !== undefined && Date.now() - anime.last_update > 1000*60*60*24*7;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -143,6 +144,9 @@ export default function AnimeCard({
               <IconButton
                 aria-label="download"
                 disabled={anime.download_url === ''}
+                className={clsx({
+                  [classes.focusIcon]: focusDownload,
+                })}
               >
                 <DownloadIcon />
               </IconButton>
@@ -179,7 +183,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   watch: {
-    border: 'solid 1px #00FF00',
+    boxShadow: "0px 0px 10px #00AA00",
   },
   media: {
     height: 0,
@@ -211,4 +215,7 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  focusIcon: {
+    color: '#00FF00',
+  }
 }));
