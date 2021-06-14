@@ -49,7 +49,7 @@ export default function AnimeCard({
     anime.download_url !== '' &&
     anime.all_episode.toString() !== anime.download.toString() &&
     anime.last_update !== undefined &&
-    Date.now() - anime.last_update > 1000 * 60 * 60 * 24 * 7;
+    Date.now() - anime.last_update > 1000 * 60 * 60 * 24 * 6;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);

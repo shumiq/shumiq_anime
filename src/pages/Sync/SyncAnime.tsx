@@ -20,6 +20,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 const SyncAnime = ({ active }: { active: boolean }) => {
   const dispatch = useDispatch();
   const animeList = useSelector(Selector.getDatabase).anime;
+  //const database = useSelector(Selector.getDatabase);
   const [loading, setLoading] = useState(false);
   const [animeFolder, setAnimeFolder] = useState<Record<string, File>>({});
   const [sortedAnimeList, setSortedAnimeList] = useState<[string, Anime][]>([]);
@@ -41,12 +42,17 @@ const SyncAnime = ({ active }: { active: boolean }) => {
   useEffect(() => {
     if (folderList?.data?.files && Object.entries(animeList)) {
       const tempAnimeFolder: Record<string, File> = {};
+      //const tempDatabase = JSON.parse(JSON.stringify(database)) as DatabaseType;
       Object.entries(animeList).forEach(([key, anime]) => {
         const folder = folderList.data.files?.find(
           (f) => f.name === anime.title
         );
-        if (folder) tempAnimeFolder[key] = folder;
+        if (folder) {
+            tempAnimeFolder[key] = folder;
+        }
+        //tempDatabase.anime[key].last_update = (folder?.additional?.time.mtime || 0) * 1000;
       });
+      //Database.update.database(tempDatabase);
       setAnimeFolder(tempAnimeFolder);
     }
   }, [animeList, folderList]);
@@ -82,7 +88,7 @@ const SyncAnime = ({ active }: { active: boolean }) => {
       }
       anime.download = folder.data.total || 0;
       anime.size = animeFolder[key]?.additional?.size || 0;
-      anime.last_update = Date.now();
+      anime.last_update = (animeFolder[key]?.additional?.time?.mtime || 0) * 1000 || Date.now();
       Database.update.anime(key, anime);
       dispatch(Action.showLoading(false));
     },
