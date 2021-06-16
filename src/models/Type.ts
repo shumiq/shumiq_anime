@@ -3,6 +3,7 @@ export interface Database {
   conan: Record<string, Conan>;
   keyaki: Record<string, Keyaki>;
   sakura: Record<string, Sakura>;
+  vtuber: Record<string, Vtuber>;
   backup: {
     latest_backup: number;
     oldest_backup: number;
@@ -27,6 +28,17 @@ export interface DatabaseStatus {
     episodes: number;
     files: number;
   };
+}
+
+export interface Vtuber {
+  url: string;
+  id: string;
+  title: string;
+  cover_url: string;
+  channel: string;
+  tags: string;
+  collaboration: string;
+  like: boolean;
 }
 
 export interface Anime {

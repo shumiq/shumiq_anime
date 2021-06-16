@@ -6,6 +6,7 @@ import Keyaki from '../../pages/Keyaki/Keyaki';
 import Sakura from '../../pages/Sakura/Sakura';
 import AddAnime from '../../pages/Anime/AddAnime';
 import Backup from '../../pages/Backup/Backup';
+import AddVtuber from "../../pages/Vtuber/AddVtuber";
 
 interface Router {
   path: string;
@@ -22,9 +23,21 @@ const ROUTER_CONFIG: Router[] = [
     auth: [''],
   },
   {
-    path: '/add',
+    path: '/anime',
+    exact: true,
+    component: Anime,
+    auth: [''],
+  },
+  {
+    path: '/anime/add',
     exact: true,
     component: AddAnime,
+    auth: ['Admin'],
+  },
+  {
+    path: '/vtuber/add',
+    exact: true,
+    component: AddVtuber,
     auth: ['Admin'],
   },
   {

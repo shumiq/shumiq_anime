@@ -47,7 +47,7 @@ function NavBar({ children }) {
       </List>
       <Divider />
       <List>
-        <ListItem button key={'anime'} component={Link} to="/">
+        <ListItem button key={'anime'} component={Link} to="/anime">
           <ListItemIcon>
             <MovieIcon />
           </ListItemIcon>
@@ -82,7 +82,7 @@ function NavBar({ children }) {
         <>
           <Divider />
           <List>
-            <ListItem button key={'add'} component={Link} to="/add">
+            <ListItem button key={'add'} component={Link} to="/anime/add">
               <ListItemIcon>
                 <AddBoxIcon />
               </ListItemIcon>

@@ -7,6 +7,7 @@ import {
   Conan,
   Keyaki,
   Sakura,
+  Vtuber,
 } from '../../models/Type';
 import {
   validateDatabase,
@@ -198,6 +199,14 @@ export const Database = {
         console.error(error);
       }
     },
+    vtuber: (vtuber: Vtuber): void => {
+      try {
+        Firebase.database.set(databasePath + '/vtuber/' + vtuber.id, vtuber);
+      } catch (error) {
+        console.error('Push vtuber failed: Vtuber has invalid format');
+        console.error(error);
+      }
+    },
   },
   update: {
     database: (db: DatabaseType): void => {
@@ -250,6 +259,14 @@ export const Database = {
         );
       } catch (error) {
         console.error('Update sakura failed: Sakura has invalid format');
+        console.error(error);
+      }
+    },
+    vtuber: (key: string, vtuber: Vtuber): void => {
+      try {
+        Firebase.database.set(databasePath + '/vtuber/' + key, vtuber);
+      } catch (error) {
+        console.error('Update vtuber failed: Vtuber has invalid format');
         console.error(error);
       }
     },

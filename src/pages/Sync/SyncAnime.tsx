@@ -48,7 +48,7 @@ const SyncAnime = ({ active }: { active: boolean }) => {
           (f) => f.name === anime.title
         );
         if (folder) {
-            tempAnimeFolder[key] = folder;
+          tempAnimeFolder[key] = folder;
         }
         //tempDatabase.anime[key].last_update = (folder?.additional?.time.mtime || 0) * 1000;
       });
@@ -88,7 +88,8 @@ const SyncAnime = ({ active }: { active: boolean }) => {
       }
       anime.download = folder.data.total || 0;
       anime.size = animeFolder[key]?.additional?.size || 0;
-      anime.last_update = (animeFolder[key]?.additional?.time?.mtime || 0) * 1000 || Date.now();
+      anime.last_update =
+        (animeFolder[key]?.additional?.time?.mtime || 0) * 1000 || Date.now();
       Database.update.anime(key, anime);
       dispatch(Action.showLoading(false));
     },
