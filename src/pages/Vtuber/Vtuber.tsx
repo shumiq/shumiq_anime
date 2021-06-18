@@ -87,7 +87,7 @@ const Vtuber = (): JSX.Element => {
               sortedVtuberList
                 .filter(([, vtuber]) => page === timestampToYearMonth(vtuber.startTime))
                 .map(([id, vtuber]) => (
-                  <TableRow key={id} hover>
+                  <TableRow key={id} hover selected={(new Date(vtuber.startTime)).getDay() % 6 === 0}>
                     <TableCell align={'center'} style={{ padding: '0' }}>
                       {isAdmin && (
                         <IconButton onClick={() => handleLike({ ...vtuber })}>
