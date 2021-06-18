@@ -55,6 +55,14 @@ function NavBar({ children }) {
         </ListItem>
       </List>
       <List>
+        <ListItem button key={'vtuber'} component={Link} to="/vtuber">
+          <ListItemIcon>
+            <MovieIcon />
+          </ListItemIcon>
+          <ListItemText primary={'Vtuber'} />
+        </ListItem>
+      </List>
+      <List>
         <ListItem button key={'conan'} component={Link} to="/conan">
           <ListItemIcon>
             <MovieIcon />
@@ -82,11 +90,22 @@ function NavBar({ children }) {
         <>
           <Divider />
           <List>
-            <ListItem button key={'add'} component={Link} to="/anime/add">
+            <ListItem button key={'addAnime'} component={Link} to="/anime/add">
               <ListItemIcon>
                 <AddBoxIcon />
               </ListItemIcon>
               <ListItemText primary={'Add Anime'} />
+            </ListItem>
+            <ListItem
+              button
+              key={'addVtuber'}
+              component={Link}
+              to="/vtuber/add"
+            >
+              <ListItemIcon>
+                <AddBoxIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Add Vtuber'} />
             </ListItem>
             <ListItem button key={'sync'} component={Link} to="/sync">
               <ListItemIcon>

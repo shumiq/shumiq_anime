@@ -12,7 +12,7 @@ export const validateDatabase = (db: Database): Database | boolean => {
     conan: db.conan,
     keyaki: db.keyaki,
     sakura: db.sakura,
-    vtuber: db.vtuber
+    vtuber: db.vtuber,
   };
 };
 

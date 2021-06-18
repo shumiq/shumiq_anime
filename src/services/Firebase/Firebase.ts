@@ -262,7 +262,7 @@ export const Database = {
         console.error(error);
       }
     },
-    vtuber: (key: string, vtuber: Vtuber): void => {
+    vtuber: (key: string, vtuber: Vtuber | null): void => {
       try {
         Firebase.database.set(databasePath + '/vtuber/' + key, vtuber);
       } catch (error) {

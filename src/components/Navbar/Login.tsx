@@ -29,10 +29,7 @@ const Login = (): JSX.Element => {
       'user',
       JSON.stringify((response as GoogleLoginResponse).profileObj)
     );
-    storage.set(
-      'accessToken',
-      JSON.stringify((response as GoogleLoginResponse).accessToken)
-    );
+    storage.set('accessToken', (response as GoogleLoginResponse).accessToken);
     dispatch(Action.signIn(user));
     setUser(UserDetail.getUser() || {});
     Auth.signIn((response as GoogleLoginResponse).tokenId);
@@ -53,7 +50,7 @@ const Login = (): JSX.Element => {
           clientId="557663136777-f5pcv9r46pipto60jqmepd6btmmlp86f.apps.googleusercontent.com"
           onSuccess={login}
           onFailure={logout}
-          scope="profile email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/photoslibrary.readonly"
+          scope="profile email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/photoslibrary.readonly https://www.googleapis.com/auth/youtube.readonly"
           isSignedIn={true}
           render={(renderProps) => (
             <ListItem

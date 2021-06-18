@@ -39,6 +39,8 @@ export interface Vtuber {
   tags: string;
   collaboration: string;
   like: boolean;
+  startTime: number;
+  endTime: number;
 }
 
 export interface Anime {
