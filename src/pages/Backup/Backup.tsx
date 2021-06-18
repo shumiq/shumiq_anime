@@ -80,6 +80,7 @@ const Backup = () => {
             <TableRow>
               <TableCell align={'left'}>Filename</TableCell>
               <TableCell align={'left'}>Anime</TableCell>
+              <TableCell align={'left'}>Vtuber</TableCell>
               <TableCell align={'left'}>Conan</TableCell>
               <TableCell align={'left'}>Keyakizaka46</TableCell>
               <TableCell align={'left'}>Sakurazaka46</TableCell>
@@ -118,6 +119,15 @@ const Backup = () => {
                   display={'block'}
                 >
                   Views: {currentDatabaseStatus.anime?.view}
+                </Typography>
+              </TableCell>
+              <TableCell align={'left'}>
+                <Typography
+                    variant={'caption'}
+                    color={'textSecondary'}
+                    display={'block'}
+                >
+                  Links: {currentDatabaseStatus.vtuber?.links}
                 </Typography>
               </TableCell>
               <TableCell align={'left'}>
@@ -176,7 +186,7 @@ const Backup = () => {
             </TableRow>
             {loading && (
               <TableRow>
-                <TableCell width={6} align={'center'} colSpan={6}>
+                <TableCell width={6} align={'center'} colSpan={7}>
                   <CircularProgress color="inherit" />
                 </TableCell>
               </TableRow>
@@ -214,6 +224,15 @@ const Backup = () => {
                       display={'block'}
                     >
                       Views: {backupFile.customMetadata.animeView}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align={'left'}>
+                    <Typography
+                        variant={'caption'}
+                        color={'textSecondary'}
+                        display={'block'}
+                    >
+                      Links: {backupFile.customMetadata.vtuberLinks}
                     </Typography>
                   </TableCell>
                   <TableCell align={'left'}>

@@ -28,6 +28,9 @@ export interface DatabaseStatus {
     episodes: number;
     files: number;
   };
+  vtuber?: {
+    links: number;
+  };
 }
 
 export interface Vtuber {

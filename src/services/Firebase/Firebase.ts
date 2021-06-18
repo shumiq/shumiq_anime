@@ -82,6 +82,7 @@ export const Database = {
         episodes: Object.keys(database.sakura).length,
         files: sumSakura,
       },
+      vtuber: {links: Object.keys(database.vtuber).length}
     };
   },
   backup: async (database: DatabaseType): Promise<void> => {
@@ -98,6 +99,7 @@ export const Database = {
         keyakiFiles: status.keyaki?.files.toString() || '',
         sakuraEpisodes: status.sakura?.episodes.toString() || '',
         sakuraFiles: status.sakura?.files.toString() || '',
+        vtuberLinks: status.vtuber?.links.toString() || '',
       },
     };
     Firebase.database.set(
