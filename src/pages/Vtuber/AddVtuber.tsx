@@ -18,6 +18,7 @@ const AddAnime = () => {
   const database = useSelector(Selector.getDatabase);
 
   const handleAddVtuber = async () => {
+    setInput('');
     const urls = input.split('\n');
     const databaseClone = JSON.parse(JSON.stringify(database)) as DatabaseType;
     if (!databaseClone.vtuber)
@@ -27,6 +28,7 @@ const AddAnime = () => {
         const plainUrl = url.split('&')[0];
         if (url.length === 0) return;
         const id = plainUrl.split('?v=')[1];
+        if(databaseClone.vtuber[id]) return;
         databaseClone.vtuber[id] = {
           url: plainUrl,
           channel: '',
@@ -39,7 +41,6 @@ const AddAnime = () => {
           startTime: 0,
           endTime: 0,
         };
-        //YoutubeApi.getVideo(id).then(r => console.log(r));
       } catch (e) {
         console.error(`Invalid url: ${url}`);
       }
@@ -56,7 +57,6 @@ const AddAnime = () => {
       );
     });
     Database.update.database(databaseClone);
-    setInput('');
   };
 
   return (

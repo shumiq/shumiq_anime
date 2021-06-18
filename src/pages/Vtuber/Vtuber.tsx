@@ -9,7 +9,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
-import { PageSize } from '../../models/Constants';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import SyncIcon from '@material-ui/icons/Sync';
@@ -25,13 +24,13 @@ const Vtuber = (): JSX.Element => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(Selector.isAdmin);
   const vtuberList = useSelector(Selector.getDatabase).vtuber;
-  const [page, setPage] = useState(1);
-  const totalPage = Math.ceil(Object.entries(vtuberList).length / PageSize);
   const sortedVtuberList = Object.entries(vtuberList).sort((vtuber1, vtuber2) =>
     vtuber1[1].startTime !== vtuber2[1].startTime
       ? vtuber2[1].startTime - vtuber1[1].startTime
       : vtuber2[1].endTime - vtuber1[1].endTime
   );
+  const monthList = getMonthList(sortedVtuberList.map(([, vtuber]) => vtuber));
+  const [page, setPage] = useState(monthList[0]);
 
   const handleSync = async (id: string) => {
     dispatch(Action.showLoading(true));
@@ -68,15 +67,15 @@ const Vtuber = (): JSX.Element => {
               <TableCell align={'right'}>
                 <Select
                   onChange={(e) =>
-                    setPage(parseInt(e.target.value as string) || 1)
+                    setPage(e.target.value as string)
                   }
-                  defaultValue={1}
+                  defaultValue={monthList[0]}
                   variant={'outlined'}
                 >
                   {/* eslint-disable @typescript-eslint/no-unsafe-assignment */}
-                  {[...Array(totalPage)].map((e, i) => (
-                    <MenuItem value={i + 1} key={i + 1}>
-                      {PageSize * i + 1} - {PageSize * (i + 1)}
+                  {monthList.map((month) => (
+                    <MenuItem value={month} key={month}>
+                      {month}
                     </MenuItem>
                   ))}
                 </Select>
@@ -86,7 +85,7 @@ const Vtuber = (): JSX.Element => {
           <TableBody>
             {vtuberList &&
               sortedVtuberList
-                .splice(PageSize * (page - 1), PageSize)
+                .filter(([, vtuber]) => page === timestampToYearMonth(vtuber.startTime))
                 .map(([id, vtuber]) => (
                   <TableRow key={id} hover>
                     <TableCell align={'center'} style={{ padding: '0' }}>
@@ -157,5 +156,19 @@ const Vtuber = (): JSX.Element => {
     </React.Fragment>
   );
 };
+
+const timestampToYearMonth = (timestamp : number) : string => {
+  const date = new Date(timestamp);
+  return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+}
+
+const getMonthList = (vtuberList : VtuberType[]) : string[] => {
+  let monthList : string[] = []
+  vtuberList.forEach(vtuber => {
+    const month = timestampToYearMonth(vtuber.startTime);
+    if(!monthList.find(m => m===month)) monthList.push(month);
+  });
+  return monthList;
+}
 
 export default Vtuber;
