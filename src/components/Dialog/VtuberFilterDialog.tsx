@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -26,20 +26,31 @@ export const defaultFilter: VtuberFilter = {
   tag: [],
 };
 
-export const tagList = [
-  'Collab',
-  'Game',
-  'Minecraft',
-  'Horror',
-  'Sing',
-  'News',
-  'Short Clip',
-  'Free Talk',
-];
+const checkKeywords = (vtuber: VtuberType, keywords : string[]) : boolean => {
+  for (const keyword of keywords) {
+    if([vtuber.title, vtuber.tags].join(" ").toLowerCase().includes(keyword.toLowerCase())) return true;
+  }
+  return false;
+}
+
+export const tagList = {
+  "Collab" : (vtuber : VtuberType) : boolean => vtuber.collaboration.length > 0 || checkKeywords(vtuber,["ft.", "feat", "คอแลป"]),
+  "Sing" : (vtuber : VtuberType) : boolean => checkKeywords(vtuber,["sing", "music", "song", "cover", "ร้อง", "เพลง", "ไมค์", "คอนเสิร์ต", "ลูกทุ่ง"]),
+  "Game" : (vtuber : VtuberType) : boolean => checkKeywords(vtuber,["เกม", "เล่น", "game", "play", "ฝึก", "หัด", "ฆ่า", "Project Winter", "A Way Out", "Aniki", "It Takes Two", "Among", "Hidden Agenda", "Valheim"]) || tagList.Minecraft(vtuber) || tagList.Horror(vtuber) || tagList.Casual(vtuber) || tagList.MOBA(vtuber),
+  "Horror" : (vtuber : VtuberType) : boolean => checkKeywords(vtuber,["ผี", "ghost", "ราตรี", "horror", "visage", "devour", "Penguin", "Phasmophobia", "HSH", "home sweet home", "witch", "outlast", "out last", "ดบดล", "dead", "dbdl"]),
+  "Minecraft" : (vtuber : VtuberType) : boolean => checkKeywords(vtuber,["minecraft", "คราฟ", "craft", "12TimeWeCCG"]),
+  "Casual" : (vtuber : VtuberType) : boolean => checkKeywords(vtuber,["uno", "ultimate", "Getting Over It", "minesweeper", "zuma", "Overcook", "mario", "Simulator", "ระเบิด", "Bunny", "pummel", "Gartic", "marathon", "ดูเอล", "Tools Up", "biped", "President", "PHOGS"]),
+  "MOBA" : (vtuber : VtuberType) : boolean => checkKeywords(vtuber,["lol", "rov", "league", "ป้อม"]),
+  "Debut" : (vtuber : VtuberType) : boolean => checkKeywords(vtuber,["New", "เปิดตัว", "ครั้งแรก", "debut", "CYPHER"]),
+  "Short Clip" : (vtuber : VtuberType) : boolean => vtuber.endTime - vtuber.startTime < 1000*60*60,
+  "Free Talk" : (vtuber : VtuberType) : boolean => checkKeywords(vtuber,["พูด", "คุย", "สนทนา", "talk", "tea", "ดื่มชา", "ถาม", "ตอบ", "ทาย", "วาด", "ตามหา", "ล้วง", "ลับ", "เล่า", "รวมตัว", "เสปค", "แกง", "อย่างไร", "time", "ยังไง", "แจก", "วันเกิด", "ประชัน", "ควรรู้", "Class", "แฟน", "ไถ่บาป", "จดหมาย", "ทดสอบ", "แบบไหน", "ฉลอง", "ส่อง", "มีม", "meme", "แฟน"]) || tagList.Debut(vtuber),
+}
 
 export const analystTag = (vtuber: VtuberType): string[] => {
   const availableTag = [] as string[];
-  if (vtuber.collaboration.length > 0) availableTag.push('Collab');
+  Object.entries(tagList).forEach(([tag, isInclude]) => {
+    if(isInclude(vtuber))availableTag.push(tag)
+  });
   return availableTag;
 };
 
@@ -63,6 +74,10 @@ export default function VtuberFilterDialog({
   const [filter, setFilter] = useState(
     currentFilter ? currentFilter : defaultFilter
   );
+
+  useEffect(() => {
+    setFilter(currentFilter)
+  }, [currentFilter]);
 
   const handleClose = () => {
     onClose();
@@ -205,7 +220,7 @@ export default function VtuberFilterDialog({
                     })
                   }
                 />
-                {tagList.map((tag) => (
+                {Object.keys(tagList).map((tag) => (
                   <Chip
                     color={filter.tag.includes(tag) ? 'primary' : 'default'}
                     label={tag}

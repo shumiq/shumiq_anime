@@ -17,6 +17,7 @@ import Link from '@material-ui/core/Link';
 import YoutubeApi from '../../services/Youtube/Youtube';
 import { Vtuber as VtuberType, VtuberFilter } from '../../models/Type';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ResetIcon from '@material-ui/icons/RotateLeft';
 import Chip from '@material-ui/core/Chip';
 import FilterIcon from '@material-ui/icons/FilterList';
 import VtuberFilterDialog, {
@@ -44,11 +45,7 @@ const Vtuber = (): JSX.Element => {
     sortedVtuberList.map(([, vtuber]) => vtuber)
   );
   const [page, setPage] = useState(1);
-  const [filter, setFilter] = useState({
-    ...defaultFilter,
-    start: sortedVtuberList[sortedVtuberList.length - 1][1].startTime,
-    end: sortedVtuberList[0][1].endTime,
-  });
+  const [filter, setFilter] = useState(defaultFilter);
   const [filterOpen, setFilterOpen] = useState(false);
   const filteredSortedVtuberList = applyFilter(sortedVtuberList, filter);
   const totalPage = Math.ceil(filteredSortedVtuberList.length / PageSize);
@@ -102,6 +99,9 @@ const Vtuber = (): JSX.Element => {
               <TableCell align={'right'}>
                 <IconButton onClick={() => setFilterOpen(true)}>
                   <FilterIcon />
+                </IconButton>
+                <IconButton onClick={() => setFilter(defaultFilter)}>
+                  <ResetIcon />
                 </IconButton>
               </TableCell>
             </TableRow>
@@ -194,7 +194,7 @@ const Vtuber = (): JSX.Element => {
         currentFilter={filter}
         setCurrentFilter={setFilter}
         open={filterOpen}
-        onClose={() => setFilterOpen(false)}
+        onClose={() => {setFilterOpen(false);setPage(1);}}
         channelList={channelList}
         collabList={collabList}
       />
