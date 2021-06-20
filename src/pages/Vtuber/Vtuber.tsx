@@ -77,15 +77,14 @@ const Vtuber = (): JSX.Element => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>
+              <TableCell colSpan={3}>
+                <Typography align={'center'}>Title</Typography>
+              </TableCell>
+              <TableCell align={'right'}>
                 <IconButton onClick={() => setFilterOpen(true)}>
                   <FilterIcon />
                 </IconButton>
               </TableCell>
-              <TableCell colSpan={2}>
-                <Typography align={'center'}>Title</Typography>
-              </TableCell>
-              <TableCell align={'right'}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -210,6 +209,15 @@ const applyFilter = (
   filter: VtuberFilter
 ): [string, VtuberType][] => {
   let filteredVtuberList = [...vtuberList];
+  if (filter.keyword.trim().length > 0) {
+    filteredVtuberList = filteredVtuberList.filter(([, vtuber]) =>
+        filter.keyword.split(" ").reduce(
+            (isInclude, keyword) =>
+                isInclude && [vtuber.title, vtuber.channel, vtuber.collaboration, vtuber.tags].join(" ").toLowerCase().includes(keyword.toLowerCase()),
+            true as boolean
+        )
+    );
+  }
   if (filter.channel.length > 0) {
     filteredVtuberList = filteredVtuberList.filter(([, vtuber]) =>
       filter.channel.includes(vtuber.channel)
@@ -222,6 +230,11 @@ const applyFilter = (
           isInclude && vtuber.collaboration.includes(collab),
         true as boolean
       )
+    );
+  }
+  if (filter.favorite) {
+    filteredVtuberList = filteredVtuberList.filter(([, vtuber]) =>
+        vtuber.like
     );
   }
   return filteredVtuberList;

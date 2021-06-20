@@ -79,7 +79,12 @@ export default function VtuberFilterDialog({
           <TableBody>
             <TableRow>
               <TableCell>Search</TableCell>
-              <TableCell></TableCell>
+              <TableCell><TextField fullWidth onChange={(e) =>
+                  setFilter({
+                    ...filter,
+                    keyword: e.target.value.toString()
+                  })
+              } value={filter.keyword} /></TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Channel</TableCell>
@@ -125,6 +130,25 @@ export default function VtuberFilterDialog({
                     }
                   />
                 ))}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell>Tags</TableCell>
+              <TableCell>
+                  <Chip
+                      color={
+                        filter.favorite ? 'primary' : 'default'
+                      }
+                      label={"Favorite"}
+                      style={{ margin: '2px' }}
+                      onClick={() =>
+                          setFilter({
+                            ...filter,
+                            favorite: !filter.favorite
+                          })
+                      }
+                  />
               </TableCell>
             </TableRow>
           </TableBody>
