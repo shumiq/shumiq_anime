@@ -12,9 +12,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Button from '@material-ui/core/Button';
 import { PageSize } from '../../models/Constants';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from '@material-ui/lab/Pagination';
 
 const Sakura = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -64,7 +62,7 @@ const Sakura = (): JSX.Element => {
       const sakura = allSakura[Math.floor(Math.random() * allSakura.length)];
       if (sakura[1].sub['Thai']) void showFiles(sakura[1].sub['Thai']);
       else if (sakura[1].sub['Eng']) void showFiles(sakura[1].sub['Eng']);
-      setPage(Math.ceil(sakura[1].ep/PageSize));
+      setPage(Math.ceil(sakura[1].ep / PageSize));
       setSelect(sakura[1].ep);
       dispatch(Action.setRandom(false));
     }
@@ -82,8 +80,7 @@ const Sakura = (): JSX.Element => {
               <TableCell>
                 <Typography align={'left'}>Name</Typography>
               </TableCell>
-              <TableCell align={'right'}>
-              </TableCell>
+              <TableCell align={'right'}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -95,7 +92,7 @@ const Sakura = (): JSX.Element => {
                     sakura.ep <= PageSize * page
                 )
                 .map(([key, sakura]) => (
-                  <TableRow key={key} hover  selected={sakura.ep === select}>
+                  <TableRow key={key} hover selected={sakura.ep === select}>
                     <TableCell>
                       <Typography align={'center'} color={'textSecondary'}>
                         {sakura.ep}
@@ -146,10 +143,13 @@ const Sakura = (): JSX.Element => {
             <TableRow>
               <TableCell colSpan={3} align={'center'}>
                 <Pagination
-                    count={totalPage}
-                    page={page}
-                    onChange={(event, newPage) => {setPage(newPage); setSelect(0);}}
-                    style={{ justifyContent: 'center', display: 'flex' }}
+                  count={totalPage}
+                  page={page}
+                  onChange={(event, newPage) => {
+                    setPage(newPage);
+                    setSelect(0);
+                  }}
+                  style={{ justifyContent: 'center', display: 'flex' }}
                 />
               </TableCell>
             </TableRow>

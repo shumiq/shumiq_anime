@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Database } from '../../services/Firebase/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action, Selector } from '../../utils/Store/AppStore';
@@ -28,7 +28,9 @@ import Pagination from '@material-ui/lab/Pagination';
 const Vtuber = (): JSX.Element => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(Selector.isAdmin);
+  const isRandom = useSelector(Selector.isRandom);
   const vtuberList = useSelector(Selector.getDatabase).vtuber;
+  const [select, setSelect] = useState('');
   const sortedVtuberList = Object.entries(vtuberList).sort((vtuber1, vtuber2) =>
     vtuber1[1].startTime !== vtuber2[1].startTime
       ? vtuber2[1].startTime - vtuber1[1].startTime
@@ -44,9 +46,7 @@ const Vtuber = (): JSX.Element => {
   const [filter, setFilter] = useState(defaultFilter);
   const [filterOpen, setFilterOpen] = useState(false);
   const filteredSortedVtuberList = applyFilter(sortedVtuberList, filter);
-  const totalPage = Math.ceil(
-    Object.entries(filteredSortedVtuberList).length / PageSize
-  );
+  const totalPage = Math.ceil(filteredSortedVtuberList.length / PageSize);
 
   const handleSync = async (id: string) => {
     dispatch(Action.showLoading(true));
@@ -71,6 +71,20 @@ const Vtuber = (): JSX.Element => {
     }
   };
 
+  useEffect(() => {
+    if (isRandom) {
+      const vtuber =
+        filteredSortedVtuberList[
+          Math.floor(Math.random() * filteredSortedVtuberList.length)
+        ];
+      window.open(vtuber[1].url, 'blank');
+      const item = filteredSortedVtuberList.indexOf(vtuber) + 1;
+      setPage(Math.ceil(item / PageSize));
+      setSelect(vtuber[0]);
+      dispatch(Action.setRandom(false));
+    }
+  }, [isRandom, dispatch, filteredSortedVtuberList]);
+
   return (
     <React.Fragment>
       <Container maxWidth="lg">
@@ -89,14 +103,10 @@ const Vtuber = (): JSX.Element => {
           </TableHead>
           <TableBody>
             {vtuberList &&
-              filteredSortedVtuberList
+              [...filteredSortedVtuberList]
                 .splice(PageSize * (page - 1), PageSize)
                 .map(([id, vtuber]) => (
-                  <TableRow
-                    key={id}
-                    hover
-                    selected={new Date(vtuber.startTime).getDay() % 6 === 0}
-                  >
+                  <TableRow key={id} hover selected={select === vtuber.id}>
                     <TableCell align={'center'} style={{ padding: '0' }}>
                       {isAdmin && (
                         <IconButton onClick={() => handleLike({ ...vtuber })}>
@@ -164,7 +174,10 @@ const Vtuber = (): JSX.Element => {
                 <Pagination
                   count={totalPage}
                   page={page}
-                  onChange={(event, newPage) => setPage(newPage)}
+                  onChange={(event, newPage) => {
+                    setPage(newPage);
+                    setSelect('');
+                  }}
                   style={{ justifyContent: 'center', display: 'flex' }}
                 />
               </TableCell>
@@ -211,10 +224,16 @@ const applyFilter = (
   let filteredVtuberList = [...vtuberList];
   if (filter.keyword.trim().length > 0) {
     filteredVtuberList = filteredVtuberList.filter(([, vtuber]) =>
-        filter.keyword.split(" ").reduce(
-            (isInclude, keyword) =>
-                isInclude && [vtuber.title, vtuber.channel, vtuber.collaboration, vtuber.tags].join(" ").toLowerCase().includes(keyword.toLowerCase()),
-            true as boolean
+      filter.keyword
+        .split(' ')
+        .reduce(
+          (isInclude, keyword) =>
+            isInclude &&
+            [vtuber.title, vtuber.channel, vtuber.collaboration, vtuber.tags]
+              .join(' ')
+              .toLowerCase()
+              .includes(keyword.toLowerCase()),
+          true as boolean
         )
     );
   }
@@ -233,9 +252,7 @@ const applyFilter = (
     );
   }
   if (filter.favorite) {
-    filteredVtuberList = filteredVtuberList.filter(([, vtuber]) =>
-        vtuber.like
-    );
+    filteredVtuberList = filteredVtuberList.filter(([, vtuber]) => vtuber.like);
   }
   return filteredVtuberList;
 };

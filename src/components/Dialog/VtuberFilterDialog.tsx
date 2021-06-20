@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -6,14 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { Action, Selector } from '../../utils/Store/AppStore';
-import { Database } from '../../services/Firebase/Firebase';
-import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
 import { VtuberFilter } from '../../models/Type';
 import TableBody from '@material-ui/core/TableBody';
 import Table from '@material-ui/core/Table';
@@ -79,12 +72,18 @@ export default function VtuberFilterDialog({
           <TableBody>
             <TableRow>
               <TableCell>Search</TableCell>
-              <TableCell><TextField fullWidth onChange={(e) =>
-                  setFilter({
-                    ...filter,
-                    keyword: e.target.value.toString()
-                  })
-              } value={filter.keyword} /></TableCell>
+              <TableCell>
+                <TextField
+                  fullWidth
+                  onChange={(e) =>
+                    setFilter({
+                      ...filter,
+                      keyword: e.target.value.toString(),
+                    })
+                  }
+                  value={filter.keyword}
+                />
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Channel</TableCell>
@@ -136,19 +135,17 @@ export default function VtuberFilterDialog({
             <TableRow>
               <TableCell>Tags</TableCell>
               <TableCell>
-                  <Chip
-                      color={
-                        filter.favorite ? 'primary' : 'default'
-                      }
-                      label={"Favorite"}
-                      style={{ margin: '2px' }}
-                      onClick={() =>
-                          setFilter({
-                            ...filter,
-                            favorite: !filter.favorite
-                          })
-                      }
-                  />
+                <Chip
+                  color={filter.favorite ? 'primary' : 'default'}
+                  label={'Favorite'}
+                  style={{ margin: '2px' }}
+                  onClick={() =>
+                    setFilter({
+                      ...filter,
+                      favorite: !filter.favorite,
+                    })
+                  }
+                />
               </TableCell>
             </TableRow>
           </TableBody>

@@ -64,11 +64,11 @@ const Anime = ({ location }) => {
       const allAnime = Object.entries(animeList);
       const anime = allAnime[Math.floor(Math.random() * allAnime.length)];
       void handleOpenFolder(anime[0], anime[1]);
-        dispatch(
-            Action.applyFilter({
-                season: `${anime[1].year},${anime[1].season}`,
-            })
-        );
+      dispatch(
+        Action.applyFilter({
+          season: `${anime[1].year},${anime[1].season}`,
+        })
+      );
       dispatch(Action.setRandom(false));
     }
   }, [isRandom, handleOpenFolder, dispatch, animeList]);

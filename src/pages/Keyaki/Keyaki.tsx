@@ -11,10 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Button from '@material-ui/core/Button';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import { PageSize } from '../../models/Constants';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from '@material-ui/lab/Pagination';
 
 const Keyaki = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -64,7 +62,7 @@ const Keyaki = (): JSX.Element => {
       const keyaki = allKeyaki[Math.floor(Math.random() * allKeyaki.length)];
       if (keyaki[1].sub['Thai']) void showFiles(keyaki[1].sub['Thai']);
       else if (keyaki[1].sub['Eng']) void showFiles(keyaki[1].sub['Eng']);
-      setPage(Math.ceil(keyaki[1].ep/PageSize));
+      setPage(Math.ceil(keyaki[1].ep / PageSize));
       setSelect(keyaki[1].ep);
       dispatch(Action.setRandom(false));
     }
@@ -82,8 +80,7 @@ const Keyaki = (): JSX.Element => {
               <TableCell>
                 <Typography align={'left'}>Name</Typography>
               </TableCell>
-              <TableCell align={'right'}>
-              </TableCell>
+              <TableCell align={'right'}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -146,10 +143,13 @@ const Keyaki = (): JSX.Element => {
             <TableRow>
               <TableCell colSpan={3} align={'center'}>
                 <Pagination
-                    count={totalPage}
-                    page={page}
-                    onChange={(event, newPage) => {setPage(newPage); setSelect(0);}}
-                    style={{ justifyContent: 'center', display: 'flex' }}
+                  count={totalPage}
+                  page={page}
+                  onChange={(event, newPage) => {
+                    setPage(newPage);
+                    setSelect(0);
+                  }}
+                  style={{ justifyContent: 'center', display: 'flex' }}
                 />
               </TableCell>
             </TableRow>

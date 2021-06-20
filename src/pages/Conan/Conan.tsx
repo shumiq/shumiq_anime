@@ -11,10 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Button from '@material-ui/core/Button';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import { PageSize } from '../../models/Constants';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from '@material-ui/lab/Pagination';
 
 const Conan = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -62,7 +60,7 @@ const Conan = (): JSX.Element => {
       const allConan = Object.values(conanList);
       const conan = allConan[Math.floor(Math.random() * allConan.length)];
       void showFiles(Object.values(conan.episodes)[0]);
-      setPage(Math.ceil(conan.case/PageSize));
+      setPage(Math.ceil(conan.case / PageSize));
       setSelect(conan.case);
       dispatch(Action.setRandom(false));
     }
@@ -80,8 +78,7 @@ const Conan = (): JSX.Element => {
               <TableCell>
                 <Typography align={'left'}>Name</Typography>
               </TableCell>
-              <TableCell align={'right'}>
-              </TableCell>
+              <TableCell align={'right'}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -146,10 +143,13 @@ const Conan = (): JSX.Element => {
             <TableRow>
               <TableCell colSpan={3} align={'center'}>
                 <Pagination
-                    count={totalPage}
-                    page={page}
-                    onChange={(event, newPage) => {setPage(newPage); setSelect(0);}}
-                    style={{ justifyContent: 'center', display: 'flex' }}
+                  count={totalPage}
+                  page={page}
+                  onChange={(event, newPage) => {
+                    setPage(newPage);
+                    setSelect(0);
+                  }}
+                  style={{ justifyContent: 'center', display: 'flex' }}
                 />
               </TableCell>
             </TableRow>
