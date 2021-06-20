@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { PageSize } from '../../models/Constants';
+import Pagination from "@material-ui/lab/Pagination";
 
 const Keyaki = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const Keyaki = (): JSX.Element => {
   const [editMode, setEditMode] = useState('');
   const keyakiList = useSelector(Selector.getDatabase).keyaki;
   const isRandom = useSelector(Selector.isRandom);
+  const [select, setSelect] = useState(0);
   const [page, setPage] = useState(1);
   const totalPage = Math.ceil(Object.entries(keyakiList).length / PageSize);
   const sortedKeyakiList = Object.entries(keyakiList).sort(
@@ -62,6 +64,8 @@ const Keyaki = (): JSX.Element => {
       const keyaki = allKeyaki[Math.floor(Math.random() * allKeyaki.length)];
       if (keyaki[1].sub['Thai']) void showFiles(keyaki[1].sub['Thai']);
       else if (keyaki[1].sub['Eng']) void showFiles(keyaki[1].sub['Eng']);
+      setPage(Math.ceil(keyaki[1].ep/PageSize));
+      setSelect(keyaki[1].ep);
       dispatch(Action.setRandom(false));
     }
   }, [isRandom, showFiles, dispatch, keyakiList]);
@@ -79,20 +83,6 @@ const Keyaki = (): JSX.Element => {
                 <Typography align={'left'}>Name</Typography>
               </TableCell>
               <TableCell align={'right'}>
-                <Select
-                  onChange={(e) =>
-                    setPage(parseInt(e.target.value as string) || 1)
-                  }
-                  defaultValue={1}
-                  variant={'outlined'}
-                >
-                  {/* eslint-disable @typescript-eslint/no-unsafe-assignment */}
-                  {[...Array(totalPage)].map((e, i) => (
-                    <MenuItem value={i + 1} key={i + 1}>
-                      {PageSize * i + 1} - {PageSize * (i + 1)}
-                    </MenuItem>
-                  ))}
-                </Select>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -105,7 +95,7 @@ const Keyaki = (): JSX.Element => {
                     keyaki.ep <= PageSize * page
                 )
                 .map(([key, keyaki]) => (
-                  <TableRow key={key} hover>
+                  <TableRow key={key} hover selected={keyaki.ep === select}>
                     <TableCell>
                       <Typography align={'center'} color={'textSecondary'}>
                         {keyaki.ep}
@@ -152,6 +142,17 @@ const Keyaki = (): JSX.Element => {
                     </TableCell>
                   </TableRow>
                 ))}
+
+            <TableRow>
+              <TableCell colSpan={3} align={'center'}>
+                <Pagination
+                    count={totalPage}
+                    page={page}
+                    onChange={(event, newPage) => {setPage(newPage); setSelect(0);}}
+                    style={{ justifyContent: 'center', display: 'flex' }}
+                />
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </Container>

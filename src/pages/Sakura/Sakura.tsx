@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import { PageSize } from '../../models/Constants';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Pagination from "@material-ui/lab/Pagination";
 
 const Sakura = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const Sakura = (): JSX.Element => {
   const [editMode, setEditMode] = useState('');
   const sakuraList = useSelector(Selector.getDatabase).sakura;
   const isRandom = useSelector(Selector.isRandom);
+  const [select, setSelect] = useState(0);
   const [page, setPage] = useState(1);
   const totalPage = Math.ceil(Object.entries(sakuraList).length / PageSize);
   const sortedSakuraList = Object.entries(sakuraList).sort(
@@ -62,6 +64,8 @@ const Sakura = (): JSX.Element => {
       const sakura = allSakura[Math.floor(Math.random() * allSakura.length)];
       if (sakura[1].sub['Thai']) void showFiles(sakura[1].sub['Thai']);
       else if (sakura[1].sub['Eng']) void showFiles(sakura[1].sub['Eng']);
+      setPage(Math.ceil(sakura[1].ep/PageSize));
+      setSelect(sakura[1].ep);
       dispatch(Action.setRandom(false));
     }
   }, [isRandom, showFiles, dispatch, sakuraList]);
@@ -79,20 +83,6 @@ const Sakura = (): JSX.Element => {
                 <Typography align={'left'}>Name</Typography>
               </TableCell>
               <TableCell align={'right'}>
-                <Select
-                  onChange={(e) =>
-                    setPage(parseInt(e.target.value as string) || 1)
-                  }
-                  defaultValue={1}
-                  variant={'outlined'}
-                >
-                  {/* eslint-disable @typescript-eslint/no-unsafe-assignment */}
-                  {[...Array(totalPage)].map((e, i) => (
-                    <MenuItem value={i + 1} key={i + 1}>
-                      {PageSize * i + 1} - {PageSize * (i + 1)}
-                    </MenuItem>
-                  ))}
-                </Select>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -105,7 +95,7 @@ const Sakura = (): JSX.Element => {
                     sakura.ep <= PageSize * page
                 )
                 .map(([key, sakura]) => (
-                  <TableRow key={key} hover>
+                  <TableRow key={key} hover  selected={sakura.ep === select}>
                     <TableCell>
                       <Typography align={'center'} color={'textSecondary'}>
                         {sakura.ep}
@@ -152,6 +142,17 @@ const Sakura = (): JSX.Element => {
                     </TableCell>
                   </TableRow>
                 ))}
+
+            <TableRow>
+              <TableCell colSpan={3} align={'center'}>
+                <Pagination
+                    count={totalPage}
+                    page={page}
+                    onChange={(event, newPage) => {setPage(newPage); setSelect(0);}}
+                    style={{ justifyContent: 'center', display: 'flex' }}
+                />
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </Container>
