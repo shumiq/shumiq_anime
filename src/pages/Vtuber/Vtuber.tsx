@@ -154,7 +154,7 @@ const Vtuber = (): JSX.Element => {
                         }
                         label={vtuber.channel}
                         style={{ margin: '2px' }}
-                        onClick={() =>
+                        onClick={() => {
                           setFilter({
                             ...filter,
                             channel: filter.channel.includes(vtuber.channel)
@@ -162,8 +162,9 @@ const Vtuber = (): JSX.Element => {
                                   (ch) => ch !== vtuber.channel
                                 )
                               : filter.channel.concat([vtuber.channel]),
-                          })
-                        }
+                          });
+                          setPage(1);
+                        }}
                       />
                       {analystTag(vtuber).map((tag, tagId) => (
                         <Chip
@@ -173,14 +174,16 @@ const Vtuber = (): JSX.Element => {
                           label={tag}
                           style={{ margin: '2px' }}
                           key={id + tagId.toString()}
-                          onClick={() =>
+                          onClick={() => {
                             setFilter({
                               ...filter,
                               tag: filter.tag.includes(tag)
                                 ? filter.tag.filter((t) => t !== tag)
                                 : filter.tag.concat([tag]),
-                            })
-                          }
+                            });
+
+                            setPage(1);
+                          }}
                         />
                       ))}
                     </TableCell>
