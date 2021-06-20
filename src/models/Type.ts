@@ -110,16 +110,7 @@ export interface AnimePartialFilter {
 export interface VtuberFilter {
   channel: string[];
   keyword: string;
-  tag: (
-    | 'Minecraft'
-    | 'Game'
-    | 'Horror'
-    | 'Collab'
-    | 'Sing'
-    | 'News'
-    | 'Short Clip'
-    | 'Free Talk'
-  )[];
+  tag: string[];
   collab: string[];
   favorite: boolean;
   start: number;

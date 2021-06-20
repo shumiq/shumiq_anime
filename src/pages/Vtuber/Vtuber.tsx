@@ -21,6 +21,7 @@ import Chip from '@material-ui/core/Chip';
 import FilterIcon from '@material-ui/icons/FilterList';
 import VtuberFilterDialog, {
   defaultFilter,
+  analystTag,
 } from '../../components/Dialog/VtuberFilterDialog';
 import { PageSize } from '../../models/Constants';
 import Pagination from '@material-ui/lab/Pagination';
@@ -43,7 +44,10 @@ const Vtuber = (): JSX.Element => {
     sortedVtuberList.map(([, vtuber]) => vtuber)
   );
   const [page, setPage] = useState(1);
-  const [filter, setFilter] = useState({...defaultFilter,start: sortedVtuberList[sortedVtuberList.length-1][1].startTime, end: sortedVtuberList[0][1].endTime
+  const [filter, setFilter] = useState({
+    ...defaultFilter,
+    start: sortedVtuberList[sortedVtuberList.length - 1][1].startTime,
+    end: sortedVtuberList[0][1].endTime,
   });
   const [filterOpen, setFilterOpen] = useState(false);
   const filteredSortedVtuberList = applyFilter(sortedVtuberList, filter);
@@ -143,7 +147,7 @@ const Vtuber = (): JSX.Element => {
                             ).toLocaleTimeString()}`
                           : ''}
                       </Typography>
-                      {vtuber.tags.split(', ').map((tag, tagId) => (
+                      {analystTag(vtuber).map((tag, tagId) => (
                         <Chip
                           label={tag}
                           style={{ margin: '2px' }}
@@ -254,6 +258,14 @@ const applyFilter = (
   }
   if (filter.favorite) {
     filteredVtuberList = filteredVtuberList.filter(([, vtuber]) => vtuber.like);
+  }
+  if (filter.tag.length > 0) {
+    filteredVtuberList = filteredVtuberList.filter(([, vtuber]) =>
+      filter.tag.reduce(
+        (isInclude, tag) => isInclude && analystTag(vtuber).includes(tag),
+        true as boolean
+      )
+    );
   }
   // const oneDay = 1000*60*60*24;
   // filteredVtuberList = filteredVtuberList.filter(([, vtuber]) => vtuber.startTime > filter.start - oneDay && vtuber.endTime < filter.end + oneDay);

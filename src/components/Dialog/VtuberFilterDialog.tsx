@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { VtuberFilter } from '../../models/Type';
+import { Vtuber as VtuberType, VtuberFilter } from '../../models/Type';
 import TableBody from '@material-ui/core/TableBody';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
@@ -24,6 +24,23 @@ export const defaultFilter: VtuberFilter = {
   keyword: '',
   start: 0,
   tag: [],
+};
+
+export const tagList = [
+  'Collab',
+  'Game',
+  'Minecraft',
+  'Horror',
+  'Sing',
+  'News',
+  'Short Clip',
+  'Free Talk',
+];
+
+export const analystTag = (vtuber: VtuberType): string[] => {
+  const availableTag = [] as string[];
+  if (vtuber.collaboration.length > 0) availableTag.push('Collab');
+  return availableTag;
 };
 
 export default function VtuberFilterDialog({
@@ -188,6 +205,22 @@ export default function VtuberFilterDialog({
                     })
                   }
                 />
+                {tagList.map((tag) => (
+                  <Chip
+                    color={filter.tag.includes(tag) ? 'primary' : 'default'}
+                    label={tag}
+                    style={{ margin: '2px' }}
+                    key={'filter_' + tag}
+                    onClick={() =>
+                      setFilter({
+                        ...filter,
+                        tag: filter.tag.includes(tag)
+                          ? filter.tag.filter((t) => t !== tag)
+                          : filter.tag.concat([tag]),
+                      })
+                    }
+                  />
+                ))}
               </TableCell>
             </TableRow>
           </TableBody>
