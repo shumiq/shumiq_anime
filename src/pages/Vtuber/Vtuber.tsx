@@ -43,7 +43,8 @@ const Vtuber = (): JSX.Element => {
     sortedVtuberList.map(([, vtuber]) => vtuber)
   );
   const [page, setPage] = useState(1);
-  const [filter, setFilter] = useState(defaultFilter);
+  const [filter, setFilter] = useState({...defaultFilter,start: sortedVtuberList[sortedVtuberList.length-1][1].startTime, end: sortedVtuberList[0][1].endTime
+  });
   const [filterOpen, setFilterOpen] = useState(false);
   const filteredSortedVtuberList = applyFilter(sortedVtuberList, filter);
   const totalPage = Math.ceil(filteredSortedVtuberList.length / PageSize);
@@ -254,6 +255,8 @@ const applyFilter = (
   if (filter.favorite) {
     filteredVtuberList = filteredVtuberList.filter(([, vtuber]) => vtuber.like);
   }
+  // const oneDay = 1000*60*60*24;
+  // filteredVtuberList = filteredVtuberList.filter(([, vtuber]) => vtuber.startTime > filter.start - oneDay && vtuber.endTime < filter.end + oneDay);
   return filteredVtuberList;
 };
 

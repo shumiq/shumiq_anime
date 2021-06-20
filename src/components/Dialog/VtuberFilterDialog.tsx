@@ -13,6 +13,8 @@ import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import { TableCell } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
+// import {MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+// import DateFnsUtils from '@date-io/date-fns';
 
 export const defaultFilter: VtuberFilter = {
   channel: [],
@@ -72,7 +74,7 @@ export default function VtuberFilterDialog({
           <TableBody>
             <TableRow>
               <TableCell>Search</TableCell>
-              <TableCell>
+              <TableCell colSpan={3}>
                 <TextField
                   fullWidth
                   onChange={(e) =>
@@ -85,9 +87,49 @@ export default function VtuberFilterDialog({
                 />
               </TableCell>
             </TableRow>
+            {/*
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                    disableToolbar
+                    label="From"
+                    variant="inline"
+                    format="dd MMM yyyy"
+                    margin="normal"
+                    onChange={(date) =>
+                        setFilter({
+                          ...filter,
+                          start: date?.getTime() || filter.start,
+                        })}
+                    value={new Date(filter.start)}
+                />
+                </MuiPickersUtilsProvider>
+              </TableCell>
+              <TableCell></TableCell>
+              <TableCell>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                      disableToolbar
+                      variant="inline"
+                      label="To"
+                      format="dd MMM yyyy"
+                      margin="normal"
+                      onChange={(date) =>
+                          setFilter({
+                            ...filter,
+                            end: date?.getTime() || filter.end,
+                          })}
+                      value={new Date(filter.end)}
+                  />
+                </MuiPickersUtilsProvider>
+              </TableCell>
+            </TableRow>
+            */}
             <TableRow>
               <TableCell>Channel</TableCell>
-              <TableCell>
+              <TableCell colSpan={3}>
                 {channelList.map((channel) => (
                   <Chip
                     color={
@@ -110,7 +152,7 @@ export default function VtuberFilterDialog({
             </TableRow>
             <TableRow>
               <TableCell>Collab</TableCell>
-              <TableCell>
+              <TableCell colSpan={3}>
                 {collabList.map((collab) => (
                   <Chip
                     color={
@@ -134,7 +176,7 @@ export default function VtuberFilterDialog({
 
             <TableRow>
               <TableCell>Tags</TableCell>
-              <TableCell>
+              <TableCell colSpan={3}>
                 <Chip
                   color={filter.favorite ? 'primary' : 'default'}
                   label={'Favorite'}
