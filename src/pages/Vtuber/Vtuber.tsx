@@ -9,8 +9,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import SyncIcon from '@material-ui/icons/Sync';
 import LikeIcon from '@material-ui/icons/Grade';
 import IconButton from '@material-ui/core/IconButton';
@@ -24,6 +22,8 @@ import FilterIcon from '@material-ui/icons/FilterList';
 import VtuberFilterDialog, {
   defaultFilter,
 } from '../../components/Dialog/VtuberFilterDialog';
+import { PageSize } from '../../models/Constants';
+import Pagination from '@material-ui/lab/Pagination';
 
 const Vtuber = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -34,16 +34,19 @@ const Vtuber = (): JSX.Element => {
       ? vtuber2[1].startTime - vtuber1[1].startTime
       : vtuber2[1].endTime - vtuber1[1].endTime
   );
-  const monthList = getMonthList(sortedVtuberList.map(([, vtuber]) => vtuber));
   const channelList = getChannelList(
     sortedVtuberList.map(([, vtuber]) => vtuber)
   );
   const collabList = getCollabList(
     sortedVtuberList.map(([, vtuber]) => vtuber)
   );
-  const [page, setPage] = useState(monthList[0]);
+  const [page, setPage] = useState(1);
   const [filter, setFilter] = useState(defaultFilter);
   const [filterOpen, setFilterOpen] = useState(false);
+  const filteredSortedVtuberList = applyFilter(sortedVtuberList, filter);
+  const totalPage = Math.ceil(
+    Object.entries(filteredSortedVtuberList).length / PageSize
+  );
 
   const handleSync = async (id: string) => {
     dispatch(Action.showLoading(true));
@@ -82,29 +85,13 @@ const Vtuber = (): JSX.Element => {
               <TableCell colSpan={2}>
                 <Typography align={'center'}>Title</Typography>
               </TableCell>
-              <TableCell align={'right'}>
-                <Select
-                  onChange={(e) => setPage(e.target.value as string)}
-                  defaultValue={monthList[0]}
-                  variant={'outlined'}
-                >
-                  {/* eslint-disable @typescript-eslint/no-unsafe-assignment */}
-                  {monthList.map((month) => (
-                    <MenuItem value={month} key={month}>
-                      {month}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </TableCell>
+              <TableCell align={'right'}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {vtuberList &&
-              applyFilter(sortedVtuberList, filter)
-                .filter(
-                  ([, vtuber]) =>
-                    page === timestampToYearMonth(vtuber.startTime)
-                )
+              filteredSortedVtuberList
+                .splice(PageSize * (page - 1), PageSize)
                 .map(([id, vtuber]) => (
                   <TableRow
                     key={id}
@@ -146,11 +133,11 @@ const Vtuber = (): JSX.Element => {
                             ).toLocaleTimeString()}`
                           : ''}
                       </Typography>
-                      {vtuber.tags.split(', ').map((tag) => (
+                      {vtuber.tags.split(', ').map((tag, tagId) => (
                         <Chip
                           label={tag}
-                          style={{ margin: '0 5px' }}
-                          key={tag}
+                          style={{ margin: '2px' }}
+                          key={id + tagId.toString()}
                         />
                       ))}
                     </TableCell>
@@ -173,6 +160,16 @@ const Vtuber = (): JSX.Element => {
                     </TableCell>
                   </TableRow>
                 ))}
+            <TableRow>
+              <TableCell colSpan={4} align={'center'}>
+                <Pagination
+                  count={totalPage}
+                  page={page}
+                  onChange={(event, newPage) => setPage(newPage)}
+                  style={{ justifyContent: 'center', display: 'flex' }}
+                />
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </Container>
@@ -186,20 +183,6 @@ const Vtuber = (): JSX.Element => {
       />
     </React.Fragment>
   );
-};
-
-const timestampToYearMonth = (timestamp: number): string => {
-  const date = new Date(timestamp);
-  return date.toLocaleString('default', { month: 'long', year: 'numeric' });
-};
-
-const getMonthList = (vtuberList: VtuberType[]): string[] => {
-  const monthList: string[] = [];
-  vtuberList.forEach((vtuber) => {
-    const month = timestampToYearMonth(vtuber.startTime);
-    if (!monthList.find((m) => m === month)) monthList.push(month);
-  });
-  return monthList;
 };
 
 const getChannelList = (vtuberList: VtuberType[]): string[] => {
@@ -234,7 +217,11 @@ const applyFilter = (
   }
   if (filter.collab.length > 0) {
     filteredVtuberList = filteredVtuberList.filter(([, vtuber]) =>
-        filter.collab.reduce((isInclude, collab,) => isInclude && vtuber.collaboration.includes(collab), true as boolean)
+      filter.collab.reduce(
+        (isInclude, collab) =>
+          isInclude && vtuber.collaboration.includes(collab),
+        true as boolean
+      )
     );
   }
   return filteredVtuberList;
