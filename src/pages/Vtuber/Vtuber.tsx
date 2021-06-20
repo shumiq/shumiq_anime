@@ -113,14 +113,14 @@ const Vtuber = (): JSX.Element => {
                 .map(([id, vtuber]) => (
                   <TableRow key={id} hover selected={select === vtuber.id}>
                     <TableCell align={'center'} style={{ padding: '0' }}>
-                      {isAdmin && (
+                      {/*isAdmin && (
                         <IconButton onClick={() => handleLike({ ...vtuber })}>
                           <LikeIcon
                             color={'disabled'}
                             style={vtuber.like ? { color: 'yellowgreen' } : {}}
                           />
                         </IconButton>
-                      )}
+                      )*/}
                     </TableCell>
                     <TableCell align={'center'}>
                       <img src={vtuber.cover_url} height={80} alt={'cover'} />
@@ -138,7 +138,6 @@ const Vtuber = (): JSX.Element => {
                         color="textSecondary"
                         component="p"
                       >
-                        {vtuber.channel} -{' '}
                         {new Date(vtuber.startTime).toDateString()},{' '}
                         {new Date(vtuber.startTime).toLocaleTimeString()}{' '}
                         {vtuber.endTime - vtuber.startTime > 1000 * 60 * 60
@@ -147,11 +146,41 @@ const Vtuber = (): JSX.Element => {
                             ).toLocaleTimeString()}`
                           : ''}
                       </Typography>
+                      <Chip
+                        color={
+                          filter.channel.includes(vtuber.channel)
+                            ? 'primary'
+                            : 'default'
+                        }
+                        label={vtuber.channel}
+                        style={{ margin: '2px' }}
+                        onClick={() =>
+                          setFilter({
+                            ...filter,
+                            channel: filter.channel.includes(vtuber.channel)
+                              ? filter.channel.filter(
+                                  (ch) => ch !== vtuber.channel
+                                )
+                              : filter.channel.concat([vtuber.channel]),
+                          })
+                        }
+                      />
                       {analystTag(vtuber).map((tag, tagId) => (
                         <Chip
+                          color={
+                            filter.tag.includes(tag) ? 'primary' : 'default'
+                          }
                           label={tag}
                           style={{ margin: '2px' }}
                           key={id + tagId.toString()}
+                          onClick={() =>
+                            setFilter({
+                              ...filter,
+                              tag: filter.tag.includes(tag)
+                                ? filter.tag.filter((t) => t !== tag)
+                                : filter.tag.concat([tag]),
+                            })
+                          }
                         />
                       ))}
                     </TableCell>
@@ -194,7 +223,10 @@ const Vtuber = (): JSX.Element => {
         currentFilter={filter}
         setCurrentFilter={setFilter}
         open={filterOpen}
-        onClose={() => {setFilterOpen(false);setPage(1);}}
+        onClose={() => {
+          setFilterOpen(false);
+          setPage(1);
+        }}
         channelList={channelList}
         collabList={collabList}
       />
