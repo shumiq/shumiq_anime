@@ -82,7 +82,7 @@ export const Database = {
         episodes: Object.keys(database.sakura).length,
         files: sumSakura,
       },
-      vtuber: {links: Object.keys(database.vtuber).length}
+      vtuber: { links: Object.keys(database.vtuber).length },
     };
   },
   backup: async (database: DatabaseType): Promise<void> => {

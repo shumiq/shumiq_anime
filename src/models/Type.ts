@@ -106,3 +106,22 @@ export interface AnimePartialFilter {
   keyword?: string;
   orderBy?: number;
 }
+
+export interface VtuberFilter {
+  channel: string[];
+  keyword: string;
+  tag: (
+    | 'Minecraft'
+    | 'Game'
+    | 'Horror'
+    | 'Collab'
+    | 'Sing'
+    | 'News'
+    | 'Short Clip'
+    | 'Free Talk'
+  )[];
+  collab: string[];
+  favorite: boolean;
+  start: number;
+  end: number;
+}

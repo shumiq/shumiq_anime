@@ -17,8 +17,13 @@ import IconButton from '@material-ui/core/IconButton';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import Link from '@material-ui/core/Link';
 import YoutubeApi from '../../services/Youtube/Youtube';
-import { Vtuber as VtuberType } from '../../models/Type';
+import { Vtuber as VtuberType, VtuberFilter } from '../../models/Type';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Chip from '@material-ui/core/Chip';
+import FilterIcon from '@material-ui/icons/FilterList';
+import VtuberFilterDialog, {
+  defaultFilter,
+} from '../../components/Dialog/VtuberFilterDialog';
 
 const Vtuber = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -30,7 +35,15 @@ const Vtuber = (): JSX.Element => {
       : vtuber2[1].endTime - vtuber1[1].endTime
   );
   const monthList = getMonthList(sortedVtuberList.map(([, vtuber]) => vtuber));
+  const channelList = getChannelList(
+    sortedVtuberList.map(([, vtuber]) => vtuber)
+  );
+  const collabList = getCollabList(
+    sortedVtuberList.map(([, vtuber]) => vtuber)
+  );
   const [page, setPage] = useState(monthList[0]);
+  const [filter, setFilter] = useState(defaultFilter);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const handleSync = async (id: string) => {
     dispatch(Action.showLoading(true));
@@ -61,14 +74,17 @@ const Vtuber = (): JSX.Element => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell colSpan={3}>
+              <TableCell>
+                <IconButton onClick={() => setFilterOpen(true)}>
+                  <FilterIcon />
+                </IconButton>
+              </TableCell>
+              <TableCell colSpan={2}>
                 <Typography align={'center'}>Title</Typography>
               </TableCell>
               <TableCell align={'right'}>
                 <Select
-                  onChange={(e) =>
-                    setPage(e.target.value as string)
-                  }
+                  onChange={(e) => setPage(e.target.value as string)}
                   defaultValue={monthList[0]}
                   variant={'outlined'}
                 >
@@ -84,10 +100,17 @@ const Vtuber = (): JSX.Element => {
           </TableHead>
           <TableBody>
             {vtuberList &&
-              sortedVtuberList
-                .filter(([, vtuber]) => page === timestampToYearMonth(vtuber.startTime))
+              applyFilter(sortedVtuberList, filter)
+                .filter(
+                  ([, vtuber]) =>
+                    page === timestampToYearMonth(vtuber.startTime)
+                )
                 .map(([id, vtuber]) => (
-                  <TableRow key={id} hover selected={(new Date(vtuber.startTime)).getDay() % 6 === 0}>
+                  <TableRow
+                    key={id}
+                    hover
+                    selected={new Date(vtuber.startTime).getDay() % 6 === 0}
+                  >
                     <TableCell align={'center'} style={{ padding: '0' }}>
                       {isAdmin && (
                         <IconButton onClick={() => handleLike({ ...vtuber })}>
@@ -123,13 +146,13 @@ const Vtuber = (): JSX.Element => {
                             ).toLocaleTimeString()}`
                           : ''}
                       </Typography>
-                      <Typography
-                        variant="caption"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        {vtuber.tags}
-                      </Typography>
+                      {vtuber.tags.split(', ').map((tag) => (
+                        <Chip
+                          label={tag}
+                          style={{ margin: '0 5px' }}
+                          key={tag}
+                        />
+                      ))}
                     </TableCell>
                     <TableCell align={'center'}>
                       <Link href={vtuber.url} target={'blank'}>
@@ -153,22 +176,63 @@ const Vtuber = (): JSX.Element => {
           </TableBody>
         </Table>
       </Container>
+      <VtuberFilterDialog
+        currentFilter={filter}
+        setCurrentFilter={setFilter}
+        open={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        channelList={channelList}
+        collabList={collabList}
+      />
     </React.Fragment>
   );
 };
 
-const timestampToYearMonth = (timestamp : number) : string => {
+const timestampToYearMonth = (timestamp: number): string => {
   const date = new Date(timestamp);
   return date.toLocaleString('default', { month: 'long', year: 'numeric' });
-}
+};
 
-const getMonthList = (vtuberList : VtuberType[]) : string[] => {
-  let monthList : string[] = []
-  vtuberList.forEach(vtuber => {
+const getMonthList = (vtuberList: VtuberType[]): string[] => {
+  const monthList: string[] = [];
+  vtuberList.forEach((vtuber) => {
     const month = timestampToYearMonth(vtuber.startTime);
-    if(!monthList.find(m => m===month)) monthList.push(month);
+    if (!monthList.find((m) => m === month)) monthList.push(month);
   });
   return monthList;
-}
+};
+
+const getChannelList = (vtuberList: VtuberType[]): string[] => {
+  const channelList: string[] = [];
+  vtuberList.forEach((vtuber) => {
+    const channel = vtuber.channel;
+    if (!channelList.find((c) => c === channel)) channelList.push(channel);
+  });
+  return channelList;
+};
+
+const getCollabList = (vtuberList: VtuberType[]): string[] => {
+  const collabList: string[] = [];
+  vtuberList.forEach((vtuber) => {
+    vtuber.collaboration.split(', ').forEach((collab) => {
+      if (!collabList.find((c) => c === collab) && collab !== '')
+        collabList.push(collab);
+    });
+  });
+  return collabList;
+};
+
+const applyFilter = (
+  vtuberList: [string, VtuberType][],
+  filter: VtuberFilter
+): [string, VtuberType][] => {
+  let filteredVtuberList = [...vtuberList];
+  if (filter.channel.length > 0) {
+    filteredVtuberList = filteredVtuberList.filter(([, vtuber]) =>
+      filter.channel.includes(vtuber.channel)
+    );
+  }
+  return filteredVtuberList;
+};
 
 export default Vtuber;

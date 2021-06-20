@@ -34,7 +34,9 @@ function NavBar({ children }) {
   const isAdmin = useSelector(Selector.isAdmin);
   const location = useLocation();
   const isMedia =
-    ['/', '/sakura', '/keyaki', '/conan'].indexOf(location.pathname) >= 0;
+    ['/', '/sakura', '/keyaki', '/conan', '/anime', '/vtuber'].indexOf(
+      location.pathname
+    ) >= 0;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

@@ -123,9 +123,9 @@ const Backup = () => {
               </TableCell>
               <TableCell align={'left'}>
                 <Typography
-                    variant={'caption'}
-                    color={'textSecondary'}
-                    display={'block'}
+                  variant={'caption'}
+                  color={'textSecondary'}
+                  display={'block'}
                 >
                   Links: {currentDatabaseStatus.vtuber?.links}
                 </Typography>
@@ -228,9 +228,9 @@ const Backup = () => {
                   </TableCell>
                   <TableCell align={'left'}>
                     <Typography
-                        variant={'caption'}
-                        color={'textSecondary'}
-                        display={'block'}
+                      variant={'caption'}
+                      color={'textSecondary'}
+                      display={'block'}
                     >
                       Links: {backupFile.customMetadata.vtuberLinks}
                     </Typography>

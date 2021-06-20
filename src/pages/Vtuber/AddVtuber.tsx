@@ -28,7 +28,7 @@ const AddAnime = () => {
         const plainUrl = url.split('&')[0];
         if (url.length === 0) return;
         const id = plainUrl.split('?v=')[1];
-        if(databaseClone.vtuber[id]) return;
+        if (databaseClone.vtuber[id]) return;
         databaseClone.vtuber[id] = {
           url: plainUrl,
           channel: '',
