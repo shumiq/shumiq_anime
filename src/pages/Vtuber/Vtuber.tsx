@@ -232,6 +232,11 @@ const applyFilter = (
       filter.channel.includes(vtuber.channel)
     );
   }
+  if (filter.collab.length > 0) {
+    filteredVtuberList = filteredVtuberList.filter(([, vtuber]) =>
+        filter.collab.reduce((isInclude, collab,) => isInclude && vtuber.collaboration.includes(collab), true as boolean)
+    );
+  }
   return filteredVtuberList;
 };
 
