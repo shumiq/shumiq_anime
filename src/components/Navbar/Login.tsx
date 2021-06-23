@@ -29,7 +29,7 @@ const Login = (): JSX.Element => {
       'user',
       JSON.stringify((response as GoogleLoginResponse).profileObj)
     );
-    storage.set('accessToken', (response as GoogleLoginResponse).accessToken);
+    storage.set('access_token', (response as GoogleLoginResponse).accessToken);
     dispatch(Action.signIn(user));
     setUser(UserDetail.getUser() || {});
     Auth.signIn((response as GoogleLoginResponse).tokenId);
@@ -37,7 +37,8 @@ const Login = (): JSX.Element => {
 
   const logout = () => {
     storage.remove('user');
-    storage.remove('accessToken');
+    storage.remove('access_token');
+    storage.remove('synology_sid');
     dispatch(Action.signOut());
     setUser(UserDetail.getUser() || {});
     Auth.signOut();

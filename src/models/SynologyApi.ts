@@ -11,6 +11,9 @@ export interface ListResponse {
     offset?: number;
     total?: number;
   };
+  error?: {
+    code: number;
+  };
   success?: boolean;
 }
 

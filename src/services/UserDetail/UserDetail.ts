@@ -8,7 +8,7 @@ const userDetail = {
     return null;
   },
   getAccessToken: (): string => {
-    const accessToken = storage.get('accessToken');
+    const accessToken = storage.get('access_token');
     return accessToken || '';
   },
   isAdmin: (): boolean => {

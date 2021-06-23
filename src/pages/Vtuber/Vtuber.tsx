@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import SyncIcon from '@material-ui/icons/Sync';
-import LikeIcon from '@material-ui/icons/Grade';
+// import LikeIcon from '@material-ui/icons/Grade';
 import IconButton from '@material-ui/core/IconButton';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import Link from '@material-ui/core/Link';
@@ -62,10 +62,10 @@ const Vtuber = (): JSX.Element => {
     dispatch(Action.showLoading(false));
   };
 
-  const handleLike = (vtuber: VtuberType) => {
-    vtuber.like = !vtuber.like;
-    Database.update.vtuber(vtuber.id, vtuber);
-  };
+  // const handleLike = (vtuber: VtuberType) => {
+  //   vtuber.like = !vtuber.like;
+  //   Database.update.vtuber(vtuber.id, vtuber);
+  // };
 
   const handleDelete = (id: string) => {
     if (window.confirm(`Delete "${vtuberList[id].title}"?`)) {

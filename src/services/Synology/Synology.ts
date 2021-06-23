@@ -15,6 +15,8 @@ const sortBy = {
 };
 const forceDownload = '&mode=download';
 
+let latestErrorCode = 200;
+
 const SynologyApi = {
   signIn: async (): Promise<string> => {
     try {
@@ -35,13 +37,16 @@ const SynologyApi = {
   ): Promise<ListResponse> => {
     try {
       let sid = storage.get('synology_sid');
-      if (!sid || sid.length === 0) sid = await SynologyApi.signIn();
+      if (!sid || sid.length === 0 || latestErrorCode === 119)
+        sid = await SynologyApi.signIn();
       const reqPath = `${encodeURIComponent(path)}${
         sortByDate ? sortBy.date : sortBy.name
       }${isAdditional ? additional : ''}&_sid=${sid}`;
       const response: { data: ListResponse; status: string } = await axios.get(
         encodeURI(`${endPoint}/list?path=${encodeURIComponent(reqPath)}`)
       );
+      if (response.data.error) latestErrorCode = response.data.error.code;
+      if (response.data.success) latestErrorCode = 200;
       return response.data;
     } catch (e) {
       return { data: {}, success: false };

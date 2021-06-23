@@ -57,7 +57,7 @@ const YoutubeApi = {
         .splice(1)
         .map((ch) => ch.split(' ')[0])
         .join(', '),
-      cover_url: youtubeVideo.snippet.thumbnails.maxres.url,
+      cover_url: youtubeVideo.snippet.thumbnails?.maxres?.url || '',
       like: false,
       tags: youtubeVideo.snippet.description
         .split('\n')
