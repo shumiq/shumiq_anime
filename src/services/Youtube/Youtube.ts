@@ -47,6 +47,8 @@ const YoutubeApi = {
       ).getTime();
       endTime = new Date(
         youtubeVideo.liveStreamingDetails.actualEndTime
+          ? youtubeVideo.liveStreamingDetails.actualEndTime
+          : youtubeVideo.liveStreamingDetails.scheduledStartTime
       ).getTime();
     }
     vtuberVideo = {

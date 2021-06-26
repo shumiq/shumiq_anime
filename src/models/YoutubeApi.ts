@@ -22,7 +22,7 @@ export interface Video {
   };
   liveStreamingDetails?: {
     actualStartTime: string;
-    actualEndTime: string;
+    actualEndTime?: string;
     scheduledStartTime: string;
   };
 }
