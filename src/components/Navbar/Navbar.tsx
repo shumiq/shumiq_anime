@@ -23,6 +23,10 @@ import { Action, Selector } from '../../utils/Store/AppStore';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 import Fab from '@material-ui/core/Fab';
 import { useLocation } from 'react-router-dom';
+import BookIcon from '@material-ui/icons/ImportContacts';
+import LinkMaterial from '@material-ui/core/Link';
+import TheatersIcon from '@material-ui/icons/Theaters';
+import StorageIcon from '@material-ui/icons/Storage';
 
 export const drawerWidth = 240;
 
@@ -121,9 +125,54 @@ function NavBar({ children }) {
               </ListItemIcon>
               <ListItemText primary={'Backup'} />
             </ListItem>
+            <ListItem
+              button
+              key={'nas'}
+              component={LinkMaterial}
+              href="https://shumiq.synology.me:5001/"
+              target={'_blank'}
+              color={'initial'}
+              underline={'none'}
+            >
+              <ListItemIcon>
+                <StorageIcon />
+              </ListItemIcon>
+              <ListItemText primary={'NAS'} />
+            </ListItem>
           </List>
         </>
       )}
+      <Divider />
+      <List>
+        <ListItem
+          button
+          key={'book'}
+          component={LinkMaterial}
+          href="http://shumiq.synology.me:8083/"
+          target={'_blank'}
+          color={'initial'}
+          underline={'none'}
+        >
+          <ListItemIcon>
+            <BookIcon />
+          </ListItemIcon>
+          <ListItemText primary={'E-Books'} />
+        </ListItem>
+        <ListItem
+          button
+          key={'plex'}
+          component={LinkMaterial}
+          href="http://shumiq.synology.me:32400/"
+          target={'_blank'}
+          color={'initial'}
+          underline={'none'}
+        >
+          <ListItemIcon>
+            <TheatersIcon />
+          </ListItemIcon>
+          <ListItemText primary={'Plex'} />
+        </ListItem>
+      </List>
     </div>
   );
 
