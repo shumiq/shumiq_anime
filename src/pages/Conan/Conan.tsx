@@ -22,10 +22,10 @@ const Conan = (): JSX.Element => {
   const isRandom = useSelector(Selector.isRandom);
   const [select, setSelect] = useState(0);
   const [page, setPage] = useState(1);
-  const totalPage = Math.ceil(Object.entries(conanList).length / PageSize);
-  const sortedConanList = Object.entries(conanList).sort(
+  const totalPage = conanList ? Math.ceil(Object.entries(conanList).length / PageSize) : 0;
+  const sortedConanList = conanList ? Object.entries(conanList).sort(
     (entryA, entryB) => entryA[1].case - entryB[1].case
-  );
+  ) : [];
   const playList = sortedConanList.reduce((result, entry) => {
     if (!entry[1].episodes) return result;
     const eps = Object.keys(entry[1].episodes);

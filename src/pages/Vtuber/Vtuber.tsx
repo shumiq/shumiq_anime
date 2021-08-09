@@ -33,11 +33,11 @@ const Vtuber = (): JSX.Element => {
   const isRandom = useSelector(Selector.isRandom);
   const vtuberList = useSelector(Selector.getDatabase).vtuber;
   const [select, setSelect] = useState('');
-  const sortedVtuberList = Object.entries(vtuberList).sort((vtuber1, vtuber2) =>
+  const sortedVtuberList = vtuberList ? Object.entries(vtuberList).sort((vtuber1, vtuber2) =>
     vtuber1[1].startTime !== vtuber2[1].startTime
       ? vtuber2[1].startTime - vtuber1[1].startTime
       : vtuber2[1].endTime - vtuber1[1].endTime
-  );
+  ) : [];
   const channelList = getChannelList(
     sortedVtuberList.map(([, vtuber]) => vtuber)
   );

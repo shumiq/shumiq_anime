@@ -22,10 +22,10 @@ const Sakura = (): JSX.Element => {
   const isRandom = useSelector(Selector.isRandom);
   const [select, setSelect] = useState(0);
   const [page, setPage] = useState(1);
-  const totalPage = Math.ceil(Object.entries(sakuraList).length / PageSize);
-  const sortedSakuraList = Object.entries(sakuraList).sort(
+  const totalPage = sakuraList ? Math.ceil(Object.entries(sakuraList).length / PageSize) : 0;
+  const sortedSakuraList = sakuraList ? Object.entries(sakuraList).sort(
     (entryA, entryB) => entryA[1].ep - entryB[1].ep
-  );
+  ) : [];
   const playList = sortedSakuraList.reduce((result, entry) => {
     if (!entry[1].sub) return result;
     if (entry[1].sub['Thai'])
