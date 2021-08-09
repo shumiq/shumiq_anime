@@ -35,6 +35,10 @@ const App = (): JSX.Element => {
     const sid = storage.get('synology_sid');
     if (!sid || sid.length === 0) {
       void Synology.signIn();
+    } else {
+      Synology.list("Downloads").then(res => {
+        if(!res.data) void Synology.signIn();
+      })
     }
   }, [dispatch]);
   const darkTheme = createMuiTheme({
