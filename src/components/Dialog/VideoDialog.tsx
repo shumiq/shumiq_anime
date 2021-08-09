@@ -118,10 +118,10 @@ export default function VideoDialog() {
 
 const useStyles = makeStyles((theme) => ({
   video: {
-    width: '90vw',
-    height: '50.625vw',
-    maxHeight: '90vh',
-    maxWidth: '160vh',
+    width: '100vw',
+    height: '56.25vw',
+    maxHeight: '100vh',
+    maxWidth: '177vh',
     margin: 'auto',
   },
   customControl: {
