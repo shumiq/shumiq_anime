@@ -22,10 +22,14 @@ const Keyaki = (): JSX.Element => {
   const isRandom = useSelector(Selector.isRandom);
   const [select, setSelect] = useState(0);
   const [page, setPage] = useState(1);
-  const totalPage = keyakiList ? Math.ceil(Object.entries(keyakiList).length / PageSize) : 0;
-  const sortedKeyakiList = keyakiList ? Object.entries(keyakiList).sort(
-    (entryA, entryB) => entryA[1].ep - entryB[1].ep
-  ) : [];
+  const totalPage = keyakiList
+    ? Math.ceil(Object.entries(keyakiList).length / PageSize)
+    : 0;
+  const sortedKeyakiList = keyakiList
+    ? Object.entries(keyakiList).sort(
+        (entryA, entryB) => entryA[1].ep - entryB[1].ep
+      )
+    : [];
   const playList = sortedKeyakiList.reduce((result, entry) => {
     if (!entry[1].sub) return result;
     if (entry[1].sub['Thai'])
