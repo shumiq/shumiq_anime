@@ -62,7 +62,7 @@ const SynologyApi = {
     if (sid && sid.length > 0) return `${url}&_sid=${sid}`;
     return '';
   },
-  move: async (from: string, to: string, password: string, otp: string) => {
+  move: async (from: string, to: string, password: string) => {
     try {
       from = from.startsWith('/public_video')
         ? encodeURIComponent(from)
@@ -71,7 +71,7 @@ const SynologyApi = {
         ? encodeURIComponent(to)
         : encodeURIComponent(`/public_video${to}`);
       await axios.get(
-        `${endPoint}/move?from=${from}&to=${to}&password=${password}&otp=${otp}`
+        `${endPoint}/move?from=${from}&to=${to}&password=${password}`
       );
       return true;
     } catch (e) {

@@ -82,13 +82,11 @@ const SyncDownload = ({ active }: { active: boolean }) => {
   const handleMove = async (filePath: string) => {
     if (targetPath[filePath]?.target) {
       if (password !== null && password !== '') {
-        const otp = prompt('Please enter OTP from Authenticator') || '';
         dispatch(Action.showLoading(true));
         const success = await SynologyApi.move(
           filePath,
           targetPath[filePath].target,
-          password,
-          otp
+          password
         );
         dispatch(Action.showLoading(false));
         if (success) fetchFiles();
