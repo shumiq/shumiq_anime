@@ -32,12 +32,20 @@ const App = (): JSX.Element => {
       void Database.runAutoBackup(db, db.backup.latest_backup);
       void Database.runAutoDeleteBackup(db.backup.oldest_backup);
     });
-    const sid = storage.get('synology_sid');
-    if (!sid || sid.length === 0) {
+    const sid = storage.get('synology_sid') || '';
+    if (sid.length === 0) {
       void Synology.signIn();
     } else {
-      void Synology.list('Downloads').then((res) => {
-        if (!res.data) void Synology.signIn();
+      void Synology.testSid(sid).then((res) => {
+        if (!res.success) void Synology.signIn();
+      });
+    }
+    const adminSid = storage.get('synology_sid_admin') || '';
+    if (adminSid.length === 0) {
+      storage.remove('synology_sid_admin');
+    } else {
+      void Synology.testSid(adminSid).then((res) => {
+        if (!res.success) storage.remove('synology_sid_admin');
       });
     }
   }, [dispatch]);

@@ -93,7 +93,10 @@ const SyncDownload = ({ active }: { active: boolean }) => {
       );
       dispatch(Action.showLoading(false));
       if (success) fetchFiles();
-      else dispatch(Action.showMessage('Something wrong'));
+      else {
+        setAdminSid('');
+        dispatch(Action.showMessage('Something wrong'));
+      }
     }
   };
 

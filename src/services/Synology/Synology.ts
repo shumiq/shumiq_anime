@@ -39,6 +39,18 @@ const SynologyApi = {
       return '';
     }
   },
+  testSid: async (sid = ''): Promise<ListResponse> => {
+    try {
+      const response: { data: ListResponse; status: string } = await axios.get(
+        encodeURI(`${endPoint}/list?path=Anime&_sid=${sid}`)
+      );
+      if (response.data.error) latestErrorCode = response.data.error.code;
+      if (response.data.success) latestErrorCode = 200;
+      return response.data;
+    } catch (e) {
+      return { data: {}, success: false };
+    }
+  },
   list: async (
     path: string,
     sortByDate = false,
