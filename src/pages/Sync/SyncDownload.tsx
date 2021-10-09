@@ -10,17 +10,18 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import IconButton from '@material-ui/core/IconButton';
+import FailIcon from '@material-ui/icons/Cancel';
+import SuccessIcon from '@material-ui/icons/CheckCircle';
 import { File, ListResponse } from '../../models/SynologyApi';
 import SynologyApi from '../../services/Synology/Synology';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import storage from '../../utils/LocalStorage/LocalStorage';
 
 const SyncDownload = ({ active }: { active: boolean }) => {
   const dispatch = useDispatch();
   const db = useSelector(Selector.getDatabase);
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState<ListResponse>({
     data: {},
@@ -29,6 +30,9 @@ const SyncDownload = ({ active }: { active: boolean }) => {
   const [targetPath, setTargetPath] = useState<
     Record<string, { target: string; candidates: string[] }>
   >({});
+  const [adminSid, setAdminSid] = useState(
+    storage.get('synology_sid_admin') || ''
+  );
 
   const fetchFiles = useCallback(() => {
     setLoading(true);
@@ -81,21 +85,15 @@ const SyncDownload = ({ active }: { active: boolean }) => {
 
   const handleMove = async (filePath: string) => {
     if (targetPath[filePath]?.target) {
-      if (password !== null && password !== '') {
-        const otp = prompt('Please enter OTP from Authenticator') || '';
-        dispatch(Action.showLoading(true));
-        const success = await SynologyApi.move(
-          filePath,
-          targetPath[filePath].target,
-          password,
-          otp
-        );
-        dispatch(Action.showLoading(false));
-        if (success) fetchFiles();
-        else dispatch(Action.showMessage('Something wrong'));
-      } else {
-        dispatch(Action.showMessage('Please put your password'));
-      }
+      dispatch(Action.showLoading(true));
+      const success = await SynologyApi.move(
+        filePath,
+        targetPath[filePath].target,
+        adminSid
+      );
+      dispatch(Action.showLoading(false));
+      if (success) fetchFiles();
+      else dispatch(Action.showMessage('Something wrong'));
     }
   };
 
@@ -106,6 +104,20 @@ const SyncDownload = ({ active }: { active: boolean }) => {
     }
   };
 
+  const handleAdminSignIn = async () => {
+    const password = prompt('Please enter password for admin account') || '';
+    const otp = prompt('Please enter OTP from Authenticator') || '';
+    dispatch(Action.showLoading(true));
+    const sid = await SynologyApi.signIn({
+      isAdmin: true,
+      password: password,
+      otp: otp,
+    });
+    dispatch(Action.showLoading(false));
+    if (sid.length > 0) setAdminSid(sid);
+    else dispatch(Action.showMessage('Something wrong'));
+  };
+
   return (
     <React.Fragment>
       <Container maxWidth="lg">
@@ -114,13 +126,14 @@ const SyncDownload = ({ active }: { active: boolean }) => {
             <TableRow>
               <TableCell align={'center'}>File Name</TableCell>
               <TableCell align={'center'}>Sync to...</TableCell>
-              <TableCell align={'right'}>
-                <TextField
-                  type={'password'}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={'Password...'}
-                  style={{ maxWidth: '200px' }}
-                />
+              <TableCell align={'center'}>
+                {!adminSid || adminSid.length === 0 ? (
+                  <IconButton onClick={() => handleAdminSignIn()}>
+                    <FailIcon />
+                  </IconButton>
+                ) : (
+                  <SuccessIcon />
+                )}
               </TableCell>
             </TableRow>
           </TableHead>

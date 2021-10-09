@@ -43,10 +43,9 @@ const YoutubeApi = {
     let endTime = new Date(youtubeVideo.snippet.publishedAt).getTime();
     if (youtubeVideo.liveStreamingDetails) {
       startTime = new Date(
-          youtubeVideo.liveStreamingDetails.actualStartTime
-              ? youtubeVideo.liveStreamingDetails.actualStartTime
-              : youtubeVideo.liveStreamingDetails.scheduledStartTime
-
+        youtubeVideo.liveStreamingDetails.actualStartTime
+          ? youtubeVideo.liveStreamingDetails.actualStartTime
+          : youtubeVideo.liveStreamingDetails.scheduledStartTime
       ).getTime();
       endTime = new Date(
         youtubeVideo.liveStreamingDetails.actualEndTime
@@ -62,12 +61,13 @@ const YoutubeApi = {
         .splice(1)
         .map((ch) => ch.split(' ')[0])
         .join(', '),
-      cover_url: youtubeVideo.snippet.thumbnails?.maxres?.url
-          || youtubeVideo.snippet.thumbnails?.standard?.url 
-          || youtubeVideo.snippet.thumbnails?.high?.url
-          || youtubeVideo.snippet.thumbnails?.medium?.url
-          || youtubeVideo.snippet.thumbnails?.default?.url
-          || '',
+      cover_url:
+        youtubeVideo.snippet.thumbnails?.maxres?.url ||
+        youtubeVideo.snippet.thumbnails?.standard?.url ||
+        youtubeVideo.snippet.thumbnails?.high?.url ||
+        youtubeVideo.snippet.thumbnails?.medium?.url ||
+        youtubeVideo.snippet.thumbnails?.default?.url ||
+        '',
       like: false,
       tags: youtubeVideo.snippet.description
         .split('\n')

@@ -18,13 +18,22 @@ const forceDownload = '&mode=download';
 let latestErrorCode = 200;
 
 const SynologyApi = {
-  signIn: async (): Promise<string> => {
+  signIn: async (
+    options = { isAdmin: false, password: '', otp: '' }
+  ): Promise<string> => {
     try {
       const response: {
         data: SignInResModel;
-      } = await axios.get(encodeURI(`${endPoint}/signin`));
+      } = await axios.get(
+        encodeURI(
+          `${endPoint}/signin?admin=${options.isAdmin.toString()}&password=${
+            options.password
+          }&otp=${options.otp}`
+        )
+      );
       const sid = response.data.success ? response.data.data.sid : '';
-      storage.set('synology_sid', sid);
+      if (options.isAdmin) storage.set('synology_sid_admin', sid);
+      else storage.set('synology_sid', sid);
       return sid;
     } catch (e) {
       return '';
@@ -62,7 +71,8 @@ const SynologyApi = {
     if (sid && sid.length > 0) return `${url}&_sid=${sid}`;
     return '';
   },
-  move: async (from: string, to: string, password: string, otp: string) => {
+  move: async (from: string, to: string, sid = '') => {
+    if (sid.length === 0) sid = storage.get('synology_sid_admin') || '';
     try {
       from = from.startsWith('/public_video')
         ? encodeURIComponent(from)
@@ -70,9 +80,7 @@ const SynologyApi = {
       to = to.startsWith('/public_video')
         ? encodeURIComponent(to)
         : encodeURIComponent(`/public_video${to}`);
-      await axios.get(
-        `${endPoint}/move?from=${from}&to=${to}&password=${password}&otp=${otp}`
-      );
+      await axios.get(`${endPoint}/move?from=${from}&to=${to}&sid=${sid}`);
       return true;
     } catch (e) {
       return false;
