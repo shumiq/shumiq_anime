@@ -1,5 +1,5 @@
-require('dotenv').config({ path: '.env.local' });
-const default_url = process.env.ENDPOINT;
+require('dotenv').config({ path: '.env' });
+const default_url = process.env.REACT_APP_HOST;
 const opengraphTemplate = `<!doctype html>
 <html lang="en">
   <head>
@@ -25,7 +25,7 @@ const getMeta = (org) => {
   return og;
 };
 
-export default (anime) => {
+module.exports = (anime) => {
   let indexHTML = opengraphTemplate;
   const enumSeason = ['', 'Winter', 'Spring', 'Summer', 'Fall'];
   const openGraphPlaceholder = '<meta name="functions-insert-dynamic-og">';

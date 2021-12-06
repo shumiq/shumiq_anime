@@ -1,9 +1,11 @@
-import axios from 'axios';
+const express = require('express');
+const axios = require('axios');
+const router = express.Router();
 
 const moveUrl =
     'https://shumiq.synology.me:5001/webapi/entry.cgi?api=SYNO.FileStation.CopyMove&version=3&method=start&path=__FROM__&dest_folder_path=__TO__&remove_src=true';
 
-export default async (req, res) => {
+router.get('/', async (req, res) => {
     const sid = req.query.sid.toString();
     const from = encodeURIComponent(req.query.from.toString());
     const to = encodeURIComponent(req.query.to.toString());
@@ -12,4 +14,6 @@ export default async (req, res) => {
     );
     if(moveRes.data.success) res.status(200).send();
     res.status(400).send();
-};
+});
+
+module.exports = router;

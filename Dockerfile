@@ -6,4 +6,5 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY ./ ./
 RUN npm i
-CMD ["npm", "run", "start:react"]
+RUN npm install pm2 -g
+CMD ["npm", "run", "start:prod"]

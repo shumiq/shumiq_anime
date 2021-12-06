@@ -1,11 +1,14 @@
-import opengraphGenerator from './utils/animeOg';
-import admin, { ServiceAccount } from 'firebase-admin';
-require('dotenv').config({ path: '.env.local' });
+require('dotenv').config({ path: '.env' });
+const express = require('express');
+const router = express.Router();
+const opengraphGenerator = require('./utils/animeOg');
+const admin = require('firebase-admin');
+
 const serviceAccount = {
   type: 'service_account',
   project_id: 'shumiq-anime',
   private_key_id: '698e04aa6455b9f5702209a938a70bfb10ade19a',
-  private_key: process.env.GOOGLE_APPLICATION_PRIVATE_KEY,
+  private_key: process.env.GOOGLE_APPLICATION_PRIVATE_KEY.replace(/\\n/g, '\n'),
   client_email: 'firebase-adminsdk-gt4ye@shumiq-anime.iam.gserviceaccount.com',
   client_id: '103418106253556858172',
   auth_uri: 'https://accounts.google.com/o/oauth2/auth',
@@ -20,7 +23,7 @@ admin.initializeApp({
   databaseURL: 'https://shumiq-anime.firebaseio.com',
 });
 
-export default async (req, res) => {
+router.get('/', async (req, res) => {
   const snapshot = await admin
     .database()
     .ref('myanimelist_database/anime/' + req.query.anime.toString())
@@ -28,4 +31,6 @@ export default async (req, res) => {
   const anime = snapshot.val();
   const resHtml = opengraphGenerator(anime);
   res.send(resHtml);
-};
+});
+
+module.exports = router;

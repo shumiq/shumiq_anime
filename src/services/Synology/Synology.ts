@@ -2,9 +2,9 @@ import axios from 'axios';
 import storage from '../../utils/LocalStorage/LocalStorage';
 import { ListResponse, SignInResModel } from '../../models/SynologyApi';
 
-const hostName = 'https://shumiq.synology.me:5001';
+const hostName = process.env.REACT_APP_SYNOLOGY_ENDPOINT || 'https://home.shumiq.synology.me';
 const endPoint = `${
-  process.env.REACT_APP_API_ENDPOINT?.toString() || 'http//:localhost:3000'
+  process.env.REACT_APP_API_ENDPOINT?.toString() || 'https://anime-api.shumiq.synology.me'
 }/api/drive`;
 const downloadPath =
   '/webapi/entry.cgi?api=SYNO.FileStation.Download&version=2&method=download&path=';
