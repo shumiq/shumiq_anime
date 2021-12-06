@@ -41,6 +41,7 @@
     "typescript": "^3.9.5"
   },
   "scripts": {
+    "start:react": "react-scripts start",
     "start": "vercel dev",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
@@ -50,7 +51,10 @@
     "deploy:vercel": "vercel --prod",
     "eject": "react-scripts eject",
     "lint": "eslint src",
-    "lint:fix": "eslint --fix src"
+    "lint:fix": "eslint --fix src",
+    "docker:build": "docker build -t myanimelist:latest .",
+    "docker:push": "docker tag myanimelist:latest docker-registry.shumiq.synology.me/myanimelist && docker push docker-registry.shumiq.synology.me/myanimelist:latest",
+    "docker:run": "docker run -it -p 4001:3000 myanimelist:latest"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
