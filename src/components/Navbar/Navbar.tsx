@@ -129,7 +129,7 @@ function NavBar({ children }) {
               button
               key={'nas'}
               component={LinkMaterial}
-              href="https://shumiq.synology.me:5001/"
+              href="https://home.shumiq.synology.me/"
               target={'_blank'}
               color={'initial'}
               underline={'none'}
@@ -148,7 +148,7 @@ function NavBar({ children }) {
           button
           key={'book'}
           component={LinkMaterial}
-          href="http://shumiq.synology.me:8083/"
+          href="https://calibre.shumiq.synology.me/"
           target={'_blank'}
           color={'initial'}
           underline={'none'}
@@ -162,7 +162,7 @@ function NavBar({ children }) {
           button
           key={'plex'}
           component={LinkMaterial}
-          href="http://shumiq.synology.me:32400/"
+          href="https://plex.shumiq.synology.me/"
           target={'_blank'}
           color={'initial'}
           underline={'none'}

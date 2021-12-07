@@ -7,4 +7,6 @@ COPY package-lock.json ./
 COPY ./ ./
 RUN npm i
 RUN npm install pm2 -g
-CMD ["npm", "run", "start:prod"]
+RUN npm install serve -g
+RUN npm run build
+CMD ["npm", "run", "prod"]
