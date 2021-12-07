@@ -30,9 +30,6 @@ const SyncDownload = ({ active }: { active: boolean }) => {
   const [targetPath, setTargetPath] = useState<
     Record<string, { target: string; candidates: string[] }>
   >({});
-  const [adminSid, setAdminSid] = useState(
-    storage.get('synology_sid_admin') || ''
-  );
 
   const fetchFiles = useCallback(() => {
     setLoading(true);
@@ -88,13 +85,11 @@ const SyncDownload = ({ active }: { active: boolean }) => {
       dispatch(Action.showLoading(true));
       const success = await SynologyApi.move(
         filePath,
-        targetPath[filePath].target,
-        adminSid
+        targetPath[filePath].target
       );
       dispatch(Action.showLoading(false));
       if (success) fetchFiles();
       else {
-        setAdminSid('');
         dispatch(Action.showMessage('Something wrong'));
       }
     }
@@ -107,20 +102,6 @@ const SyncDownload = ({ active }: { active: boolean }) => {
     }
   };
 
-  const handleAdminSignIn = async () => {
-    const password = prompt('Please enter password for admin account') || '';
-    const otp = prompt('Please enter OTP from Authenticator') || '';
-    dispatch(Action.showLoading(true));
-    const sid = await SynologyApi.signIn({
-      isAdmin: true,
-      password: password,
-      otp: otp,
-    });
-    dispatch(Action.showLoading(false));
-    if (sid.length > 0) setAdminSid(sid);
-    else dispatch(Action.showMessage('Something wrong'));
-  };
-
   return (
     <React.Fragment>
       <Container maxWidth="lg">
@@ -129,15 +110,7 @@ const SyncDownload = ({ active }: { active: boolean }) => {
             <TableRow>
               <TableCell align={'center'}>File Name</TableCell>
               <TableCell align={'center'}>Sync to...</TableCell>
-              <TableCell align={'center'}>
-                {!adminSid || adminSid.length === 0 ? (
-                  <IconButton onClick={() => handleAdminSignIn()}>
-                    <FailIcon />
-                  </IconButton>
-                ) : (
-                  <SuccessIcon />
-                )}
-              </TableCell>
+              <TableCell align={'center'}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

@@ -1,10 +1,13 @@
 import axios from 'axios';
 import storage from '../../utils/LocalStorage/LocalStorage';
 import { ListResponse, SignInResModel } from '../../models/SynologyApi';
+import LocalStorage from '../../utils/LocalStorage/LocalStorage';
 
-const hostName = process.env.REACT_APP_SYNOLOGY_ENDPOINT || 'https://home.shumiq.synology.me';
+const hostName =
+  process.env.REACT_APP_SYNOLOGY_ENDPOINT || 'https://home.shumiq.synology.me';
 const endPoint = `${
-  process.env.REACT_APP_API_ENDPOINT?.toString() || 'https://anime-api.shumiq.synology.me'
+  process.env.REACT_APP_API_ENDPOINT?.toString() ||
+  'https://anime-api.shumiq.synology.me'
 }/api/drive`;
 const downloadPath =
   '/webapi/entry.cgi?api=SYNO.FileStation.Download&version=2&method=download&path=';
@@ -18,22 +21,16 @@ const forceDownload = '&mode=download';
 let latestErrorCode = 200;
 
 const SynologyApi = {
-  signIn: async (
-    options = { isAdmin: false, password: '', otp: '' }
-  ): Promise<string> => {
+  signIn: async (): Promise<string> => {
     try {
+      const firebaseIdToken = LocalStorage.get('firebase_id_token') || '';
       const response: {
         data: SignInResModel;
       } = await axios.get(
-        encodeURI(
-          `${endPoint}/signin?admin=${options.isAdmin.toString()}&password=${
-            options.password
-          }&otp=${options.otp}`
-        )
+        encodeURI(`${endPoint}/signin?token=${firebaseIdToken}`)
       );
       const sid = response.data.success ? response.data.data.sid : '';
-      if (options.isAdmin) storage.set('synology_sid_admin', sid);
-      else storage.set('synology_sid', sid);
+      storage.set('synology_sid', sid);
       return sid;
     } catch (e) {
       return '';
@@ -83,8 +80,8 @@ const SynologyApi = {
     if (sid && sid.length > 0) return `${url}&_sid=${sid}`;
     return '';
   },
-  move: async (from: string, to: string, sid = '') => {
-    if (sid.length === 0) sid = storage.get('synology_sid_admin') || '';
+  move: async (from: string, to: string) => {
+    const sid = storage.get('synology_sid') || '';
     try {
       from = from.startsWith('/public_video')
         ? encodeURIComponent(from)

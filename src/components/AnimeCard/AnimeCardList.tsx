@@ -21,7 +21,8 @@ export default function AnimeCardList({
   const handleShare = useCallback((key: string, anime: Anime) => {
     const title = anime.title;
     const host =
-      process.env.REACT_APP_API_ENDPOINT?.toString() || 'https://anime-api.shumiq.synology.me';
+      process.env.REACT_APP_API_ENDPOINT?.toString() ||
+      'https://anime-api.shumiq.synology.me';
     const url = `${host}/api/share?anime=${encodeURIComponent(key)}`;
     Share(title, url);
   }, []);

@@ -4,6 +4,7 @@ import 'firebase/auth';
 import 'firebase/storage';
 import axios from 'axios';
 import { Database } from '../../models/Type';
+import LocalStorage from '../../utils/LocalStorage/LocalStorage';
 
 const firebaseCore = {
   apiKey: 'AIzaSyC44si2Y_SRkWS8xvpODaLAm7GgMT35Xl4',
@@ -45,15 +46,25 @@ export default {
   },
   auth: {
     subscribe: (callback: () => void): void => {
-      firebase.auth().onAuthStateChanged((): void => {
+      firebase.auth().onAuthStateChanged((user): void => {
         callback();
       });
     },
     signIn: (tokenId: string): void => {
       const creds = firebase.auth.GoogleAuthProvider.credential(tokenId);
-      void firebase.auth().signInWithCredential(creds);
+      void firebase
+        .auth()
+        .signInWithCredential(creds)
+        .then((result) => {
+          result?.user
+            ? void result.user.getIdToken().then((idToken) => {
+                LocalStorage.set('firebase_id_token', idToken);
+              })
+            : LocalStorage.remove('firebase_id_token');
+        });
     },
     signOut: (): void => {
+      LocalStorage.remove('firebase_id_token');
       void firebase.auth().signOut();
     },
   },

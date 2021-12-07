@@ -1,23 +1,26 @@
+require('dotenv').config({ path: '.env' });
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
+const admin = require('../utils/firebase');
 
 const signInUrl =
-    'https://shumiq.synology.me:5001/webapi/auth.cgi?api=SYNO.API.Auth&version=3&method=login&account=shumiq_guest&passwd=santiphapsk131&session=FileStation&format=sid';
-const adminSignInUrl =
-    'https://shumiq.synology.me:5001/webapi/auth.cgi?api=SYNO.API.Auth&version=3&method=login&account=shumiq&passwd=__PASSWORD__&otp_code=__OTP__&session=FileStation&format=sid';
+    'https://shumiq.synology.me:5001/webapi/auth.cgi?api=SYNO.API.Auth&version=3&method=login&account=__USERNAME__&passwd=__PASSWORD__&session=FileStation&format=sid';
 
 router.get('/', async (req, res) => {
-  const isAdmin = req.query.admin?.toString() === "true" || false;
-  const password = req.query.password?.toString() || "";
-  const otp = req.query.otp?.toString() || "";
-  if(isAdmin) {
-    const signInRes = await axios.get(adminSignInUrl.replace("__PASSWORD__",password).replace("__OTP__",otp));
-    res.send(signInRes.data);
-  } else {
-    const signInRes = await axios.get(signInUrl);
-    res.send(signInRes.data);
+  const token = req.query.token?.toString() || "";
+  const currentUser = token === "" ? null : await admin.auth().verifyIdToken(token);
+  const adminUID = process.env.FIREBASE_ADMIN_UID || "undefined";
+  let username = process.env.SYNOLOGY_API_GUEST_USERNAME || "undefined";
+  let password = process.env.SYNOLOGY_API_GUEST_PASSWORD || "undefined";
+  let role="guest";
+  if(adminUID === currentUser?.uid) {
+    username = process.env.SYNOLOGY_API_ADMIN_USERNAME || username;
+    password = process.env.SYNOLOGY_API_ADMIN_PASSWORD || password;
+    role="admin";
   }
+  const signInRes = await axios.get(signInUrl.replace("__USERNAME__",username).replace("__PASSWORD__",password));
+  res.send({role: role, ...signInRes.data});
 });
 
 module.exports = router;
