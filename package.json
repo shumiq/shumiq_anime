@@ -46,7 +46,7 @@
     "start": "react-scripts start",
     "start:api": "node ./api/app.js",
     "start:silent": "pm2 start --name api ./api/app.js && pm2 start node_modules/react-scripts/scripts/start.js --name client",
-    "prod": "pm2 start --name api ./api/app.js && serve -s build",
+    "prod": "pm2 start --name api ./api/app.js && pm2 serve build 3000 --spa --name client && pm2 logs",
     "stop": "pm2 delete all",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
