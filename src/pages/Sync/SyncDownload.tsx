@@ -10,14 +10,11 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import IconButton from '@material-ui/core/IconButton';
-import FailIcon from '@material-ui/icons/Cancel';
-import SuccessIcon from '@material-ui/icons/CheckCircle';
 import { File, ListResponse } from '../../models/SynologyApi';
 import SynologyApi from '../../services/Synology/Synology';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import storage from '../../utils/LocalStorage/LocalStorage';
 
 const SyncDownload = ({ active }: { active: boolean }) => {
   const dispatch = useDispatch();

@@ -19,9 +19,7 @@ export default function VideoDialog() {
   const playList = useSelector(Selector.getPlayList);
   const currentVideo = playList.find((play) => play[1] === videoPath);
   const currentIndex = currentVideo ? playList.indexOf(currentVideo) : -1;
-  const videoUrl = SynologyApi.getAuthDownloadURL(
-    SynologyApi.getDownloadURL(videoPath, true)
-  );
+  const videoUrl = SynologyApi.getDownloadURL(videoPath);
   const open = videoPath !== '' && playList.length > 0 && currentIndex !== -1;
 
   const handleClose = () => {

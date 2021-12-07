@@ -9,4 +9,5 @@ app.use(cors());
 app.use('/api/drive/signin', require('./drive/signin'));
 app.use('/api/drive/list', require('./drive/list'));
 app.use('/api/drive/move', require('./drive/move'));
+app.use('/api/file/view', require('./file/view'));
 app.use('/api/share', require('./share'));

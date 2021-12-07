@@ -3,20 +3,15 @@ import storage from '../../utils/LocalStorage/LocalStorage';
 import { ListResponse, SignInResModel } from '../../models/SynologyApi';
 import LocalStorage from '../../utils/LocalStorage/LocalStorage';
 
-const hostName =
-  process.env.REACT_APP_SYNOLOGY_ENDPOINT || 'https://home.shumiq.synology.me';
 const endPoint = `${
   process.env.REACT_APP_API_ENDPOINT?.toString() ||
   'https://anime-api.shumiq.synology.me'
-}/api/drive`;
-const downloadPath =
-  '/webapi/entry.cgi?api=SYNO.FileStation.Download&version=2&method=download&path=';
+}/api`;
 const additional = '&additional=["size","time"]';
 const sortBy = {
   name: '&sort_by=name',
   date: '&sort_by=mtime&sort_direction=desc',
 };
-const forceDownload = '&mode=download';
 
 let latestErrorCode = 200;
 
@@ -27,7 +22,7 @@ const SynologyApi = {
       const response: {
         data: SignInResModel;
       } = await axios.get(
-        encodeURI(`${endPoint}/signin?token=${firebaseIdToken}`)
+        encodeURI(`${endPoint}/drive/signin?token=${firebaseIdToken}`)
       );
       const sid = response.data.success ? response.data.data.sid : '';
       storage.set('synology_sid', sid);
@@ -39,7 +34,7 @@ const SynologyApi = {
   testSid: async (sid = ''): Promise<ListResponse> => {
     try {
       const response: { data: ListResponse; status: string } = await axios.get(
-        encodeURI(`${endPoint}/list?path=Anime&_sid=${sid}`)
+        encodeURI(`${endPoint}/drive/list?path=Anime&_sid=${sid}`)
       );
       if (response.data.error) latestErrorCode = response.data.error.code;
       if (response.data.success) latestErrorCode = 200;
@@ -61,7 +56,7 @@ const SynologyApi = {
         sortByDate ? sortBy.date : sortBy.name
       }${isAdditional ? additional : ''}&_sid=${sid}`;
       const response: { data: ListResponse; status: string } = await axios.get(
-        encodeURI(`${endPoint}/list?path=${encodeURIComponent(reqPath)}`)
+        encodeURI(`${endPoint}/drive/list?path=${encodeURIComponent(reqPath)}`)
       );
       if (response.data.error) latestErrorCode = response.data.error.code;
       if (response.data.success) latestErrorCode = 200;
@@ -70,15 +65,8 @@ const SynologyApi = {
       return { data: {}, success: false };
     }
   },
-  getDownloadURL: (path: string, isDownload = false): string => {
-    return `${hostName}${downloadPath}${encodeURIComponent(path)}${
-      isDownload ? forceDownload : ''
-    }`;
-  },
-  getAuthDownloadURL: (url: string): string => {
-    const sid = storage.get('synology_sid');
-    if (sid && sid.length > 0) return `${url}&_sid=${sid}`;
-    return '';
+  getDownloadURL: (path: string): string => {
+    return `${endPoint}/file/view?path=${encodeURIComponent(path)}`;
   },
   move: async (from: string, to: string) => {
     const sid = storage.get('synology_sid') || '';
@@ -89,7 +77,9 @@ const SynologyApi = {
       to = to.startsWith('/public_video')
         ? encodeURIComponent(to)
         : encodeURIComponent(`/public_video${to}`);
-      await axios.get(`${endPoint}/move?from=${from}&to=${to}&sid=${sid}`);
+      await axios.get(
+        `${endPoint}/drive/move?from=${from}&to=${to}&sid=${sid}`
+      );
       return true;
     } catch (e) {
       return false;
