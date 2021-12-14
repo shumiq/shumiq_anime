@@ -45,7 +45,8 @@ const SyncAnime = ({ active }: { active: boolean }) => {
       //const tempDatabase = JSON.parse(JSON.stringify(database)) as DatabaseType;
       Object.entries(animeList).forEach(([key, anime]) => {
         const folder = folderList.data.files?.find(
-          (f) => f.name === anime.title
+          (f) =>
+            f.name === (anime.path ? anime.path.replace('/', '') : anime.title)
         );
         if (folder) {
           tempAnimeFolder[key] = folder;
