@@ -1,12 +1,9 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Install Dependencies
 
 You need to run these commands before start the development.
 
 ### `npm install`
-### `npm install -g firebase-tools vercel`
-### `vercel env pull .env.local`
+### `npm install -g firebase-tools pm2`
 
 ## Available Scripts
 
@@ -14,11 +11,23 @@ In the project directory, you can run:
 
 ### `npm run start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Runs the client
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### `npm run start:api`
+
+Runs the api server
+
+### `npm run start:silent`
+
+Runs both client and api server in background
+
+### `npm run stop`
+
+Stop background client and api server
+
+### `npm run prod`
+
+Runs both client and api server in background for production
 
 ### `npm test`
 
@@ -32,17 +41,21 @@ Run the coverage test
 
 Builds the app for production to the `build` folder.
 
+### `npm run docker:build`
+
+Builds docker image
+
+### `npm run docker:push`
+
+Pushes docker image to docker repository 
+
+### `npm run docker:run`
+
+Runs the built docker image
+
 ### `npm run deploy`
 
-Builds the app for production to the `build` and `lambda` folder and deploy to firebase and netlify.
-
-### `npm run deploy:firebase`
-
-Builds the app for production to the `build` folder and deploy to firebase hosting.
-
-### `npm run deploy:vercel`
-
-Builds the app for production to the `build` folder and deploy to vercel.
+Runs `docker:build` and `docker:push`
 
 ### `npm run lint`
 ### `npm run lint:fix`
