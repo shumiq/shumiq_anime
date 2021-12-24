@@ -21,9 +21,6 @@ yarn-error.log*
 lambda
 
 # Local Netlify folder
-.netlify
 src/react-app-env.d.ts
 
-.vercel
 .idea
-.env

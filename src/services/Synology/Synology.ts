@@ -5,7 +5,7 @@ import LocalStorage from '../../utils/LocalStorage/LocalStorage';
 
 const endPoint = `${
   process.env.REACT_APP_API_ENDPOINT?.toString() ||
-  'https://anime-api.shumiq.synology.me'
+  'https://app-api.shumiq.synology.me'
 }/api`;
 const additional = '&additional=["size","time"]';
 const sortBy = {
@@ -66,7 +66,7 @@ const SynologyApi = {
     }
   },
   getDownloadURL: (path: string): string => {
-    return `${endPoint}/file/view?path=${encodeURIComponent(path)}`;
+    return `${endPoint}/file/video?path=${encodeURIComponent(path)}`;
   },
   move: async (from: string, to: string) => {
     const sid = storage.get('synology_sid') || '';
