@@ -48,7 +48,7 @@ const Login = (): JSX.Element => {
     <div className="Login">
       {JSON.stringify(user) === '{}' && (
         <GoogleLogin
-          clientId="557663136777-f5pcv9r46pipto60jqmepd6btmmlp86f.apps.googleusercontent.com"
+          clientId="304485871665-3pp90o29ki9b814ung9rv7kigh59ov41.apps.googleusercontent.com"
           onSuccess={login}
           onFailure={logout}
           scope="profile email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/photoslibrary.readonly https://www.googleapis.com/auth/youtube.readonly"
@@ -87,7 +87,7 @@ const Login = (): JSX.Element => {
       )}
       {JSON.stringify(user) !== '{}' && (
         <GoogleLogout
-          clientId="557663136777-f5pcv9r46pipto60jqmepd6btmmlp86f.apps.googleusercontent.com"
+          clientId="304485871665-3pp90o29ki9b814ung9rv7kigh59ov41.apps.googleusercontent.com"
           onLogoutSuccess={logout}
           render={(renderProps) => (
             <ListItem

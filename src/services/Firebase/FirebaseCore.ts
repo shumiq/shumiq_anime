@@ -7,16 +7,16 @@ import { Database } from '../../models/Type';
 import LocalStorage from '../../utils/LocalStorage/LocalStorage';
 
 const firebaseCore = {
-  apiKey: 'AIzaSyC44si2Y_SRkWS8xvpODaLAm7GgMT35Xl4',
-  authDomain: 'shumiq-anime.firebaseapp.com',
-  databaseURL: 'https://shumiq-anime.firebaseio.com',
-  projectId: 'shumiq-anime',
-  storageBucket: 'shumiq-anime.appspot.com',
-  messagingSenderId: '557663136777',
-  appId: '1:557663136777:web:dcebbea6ee80a6bc',
+  apiKey: "AIzaSyCHAVfL72rjEZIBh_fj5OR-0QapPqKlXac",
+  authDomain: "shumiq-backend.firebaseapp.com",
+  databaseURL: "https://shumiq-backend-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "shumiq-backend",
+  storageBucket: "shumiq-backend.appspot.com",
+  messagingSenderId: "304485871665",
+  appId: "1:304485871665:web:ab63329cbbf67bd288e510",
   clientId:
-    '557663136777-f5pcv9r46pipto60jqmepd6btmmlp86f.apps.googleusercontent.com',
-  measurementId: 'G-FSM2HG5BPG',
+    '304485871665-3pp90o29ki9b814ung9rv7kigh59ov41.apps.googleusercontent.com',
+  // measurementId: 'G-FSM2HG5BPG',
   scopes: [
     'email',
     'profile',

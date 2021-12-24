@@ -1,10 +1,10 @@
 {
   "rules": {
-    ".read": "auth.uid == 'XZNuD1f3b6eG1Q5c2dkmaDRnbLP2'",
-    ".write": "auth.uid == 'XZNuD1f3b6eG1Q5c2dkmaDRnbLP2'",
+    ".read": "auth.uid == 'Daj4CQmdLxYz9mc7OyvskDZRrbt2'",
+    ".write": "auth.uid == 'Daj4CQmdLxYz9mc7OyvskDZRrbt2'",
     "myanimelist_database": {
       ".read": true,
-      ".write": "auth.uid == 'XZNuD1f3b6eG1Q5c2dkmaDRnbLP2'"
+      ".write": "auth.uid == 'Daj4CQmdLxYz9mc7OyvskDZRrbt2'"
     }
   }
 }
