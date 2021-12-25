@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build -t shumiq_anime:latest .
+    - name: Tag Docker image
+      run: docker tag shumiq_anime:latest docker-registry.shumiq.synology.me/shumiq_anime
+    - name: Push Docker image to docker-registry.shumiq.synology.me
+      run: docker push docker-registry.shumiq.synology.me/shumiq_anime:latest
