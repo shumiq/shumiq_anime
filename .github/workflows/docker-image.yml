@@ -24,6 +24,15 @@ jobs:
     - name: Build the Docker image
       run: docker build -t shumiq_anime:latest .
     - name: Tag Docker image
-      run: docker tag shumiq_anime:latest docker-registry.shumiq.synology.me/shumiq_anime
-    - name: Push Docker image to docker-registry.shumiq.synology.me
-      run: docker push docker-registry.shumiq.synology.me/shumiq_anime:latest
+      run: docker tag shumiq_anime:latest docker-registry.${{ secrets.SSH_HOST }}/shumiq_anime
+    - name: Push Docker image to docker-registry.${{ secrets.SSH_HOST }}
+      run: docker push docker-registry.${{ secrets.SSH_HOST }}/shumiq_anime:latest
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+    - name: Deploy
+      run: ssh root@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "cd /volume1/docker/shumiq_compose/ && /usr/local/bin/docker-compose pull && /usr/local/bin/docker-compose up --force-recreate -d"
