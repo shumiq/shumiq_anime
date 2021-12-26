@@ -35,4 +35,4 @@ jobs:
     - name: Adding Known Hosts
       run: ssh-keyscan -H -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
     - name: Deploy
-      run: ssh root@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "cd /volume1/docker/shumiq_compose/ && /usr/local/bin/docker-compose pull && /usr/local/bin/docker-compose up --force-recreate -d"
+      run: ssh root@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "cd /volume1/docker/shumiq_compose/ && /usr/local/bin/docker-compose pull && /usr/local/bin/docker-compose up --force-recreate -d && /usr/local/bin/docker image prune -a -f"
